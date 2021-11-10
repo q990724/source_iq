@@ -1,0 +1,8 @@
+更新时间：2021/11/19
+
+一、aliexpress
+    1、目前后台的/api/aliexpress/searchGoodsByPic接口没有接收categoryId参数（获取是其他参数名称）
+    2、经常返回搜索结果为空，跟图片无关
+    3、未登录调用上传图片接口时，返回msg为：上传失败，但code为：200
+二、1688
+    1、/api/goods/imgSearchFirst接口返回的yoloCropRegion，使用“pepper”图片返回的第一张图坐标处理后与官网不同
