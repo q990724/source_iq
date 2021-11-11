@@ -12,6 +12,8 @@ const publicData = {
             imageAddress: '',
             // 商品分类列表
             categoryList: {},
+            // 筛选列表
+            filterList: [],
             // 商品结果列表
             results: [],
             // 搜索结果相关信息 pageNum等

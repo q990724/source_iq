@@ -6,7 +6,7 @@
 					<img :src="item.product.media.coverImageUrl" alt="">
 				</div>
 				<div class="message">
-					<a class="name" :href="item.product.productUrl" target="_blank">{{item.product.displayTitle}}</a>
+					<a class="name" :href="item.product.productUrl" target="_blank" v-html="item.product.displayTitle"></a>
 					<h2 class="price">
 						<i>{{ item.product.tradePrice[0].priceText }}</i> <span v-if="item.product.tradePrice[0].unit">
 							/ {{item.product.tradePrice[0].unit}}</span>

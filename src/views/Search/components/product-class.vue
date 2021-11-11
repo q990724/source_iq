@@ -1,5 +1,5 @@
 <template>
-    <div class="product-class mt40" v-if="class_list && class_list.items && class_list.items.length > 0">
+    <div class="product-class" v-if="class_list && class_list.items && class_list.items.length > 0">
 <!--        <div class="title">{{ $t('label.productClass') }}</div>-->
         <div class="title">{{ class_list.title || $t('label.productClass') }}</div>
         <div class="more" @click="onMoreClick">
@@ -57,10 +57,6 @@ export default {
 <style scoped lang="scss">
 .product-class {
     font-size: 14px;
-    background-color: #FFF;
-    padding: 20px 10px;
-    border-radius: 10px;
-    border: 1px solid #DCDFE6;
     .title {
         float: left;
         font-weight: bold;

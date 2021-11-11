@@ -12,11 +12,11 @@ function getCookie(source) {
 		}
 		cookie = document.getElementById(id).dataset.cookie;
 	}catch(e) {
-		Message.error('请先登录Aliexpress！');
+		Message.error(`请先登录${source}！`);
 		return null;
 	}
 	if(!cookie) {
-		Message.error('请先登录Aliexpress！');
+		Message.error(`请先登录${source}！`);
 		return null;
 	}
 	return cookie;
@@ -48,12 +48,12 @@ export const alibaba = {
 		page = 1, 
 		index_area = 'product_en', 
 		language = 'en_US', 
-		tab = 'custom', 
+		tab = null, 
 		Category = null, 
 		supplierType = null, 
 		ta = null,
 		assessment_company = null,
-		replyAvgTime = 1,
+		replyAvgTime = null,
 		param_order = null,
 		freeSample = null,
 		productTag = null,

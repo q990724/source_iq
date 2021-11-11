@@ -7,7 +7,8 @@
                 </el-option>
             </el-select>
             <input type="text" class="input" placeholder="请输入关键词" v-model="input" autocomplete="off">
-            <i class="el-icon-circle-close" v-show="input" @click="onClickCloseButton"></i>
+            <!-- <i class="el-icon-circle-close" v-show="input" @click="onClickCloseButton"></i> -->
+            <i class="el-icon-camera" @click="onClickCamera"></i>
         </div>
         <div class="sbtn" @click="onClickSearchButton">搜索</div>
     </div>
@@ -30,6 +31,9 @@ export default {
         },
         onClickSearchButton() {
             this.$emit('onClickSearchButton', {search_text: this.input, index_area: this.index_area});
+        },
+        onClickCamera() {
+
         }
     }
 }
@@ -60,6 +64,7 @@ export default {
             position: absolute;
             right: 0;
             cursor: pointer;
+            font-size: 18px;
         }
     }
 }
