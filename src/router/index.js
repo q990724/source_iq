@@ -1,27 +1,48 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+
+const routerPush = VueRouter.prototype.push;
+
+VueRouter.prototype.push = function push(location) {
+    return routerPush.call(this, location).catch(error => error)
+}
 
 Vue.use(VueRouter)
 
 const routes = [
-  {
-    path: '/',
-    name: 'Home',
-    component: Home
-  },
-  {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  }
+    {
+        path: '/',
+        redirect: '/view-alibaba'
+    },
+    {
+        path: '/search',
+        name: 'SearchResult',
+        component: () => import('@/views/Search/search_result')
+    },
+    {
+        path: '/view-alibaba',
+        name: 'view-alibaba',
+        component: () => import('@/views/Search/search-views/alibaba')
+    },
+    {
+        path: '/view-yiwugo',
+        name: 'view-yiwugo',
+        component: () => import('@/views/Search/search-views/yiwugo')
+    },
+    {
+        path: '/view-aliexpress',
+        name: 'view-aliexpress',
+        component: () => import('@/views/Search/search-views/aliexpress')
+    },
+    {
+        path: '/view-1688',
+        name: 'view-1688',
+        component: () => import('@/views/Search/search-views/1688')
+    }
 ]
 
 const router = new VueRouter({
-  routes
+    routes
 })
 
 export default router

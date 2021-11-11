@@ -1,0 +1,30 @@
+{
+  "id": "",
+  "name": "",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "491487",
+      "name": "过滤",
+      "font_class": "filter",
+      "unicode": "e614",
+      "unicode_decimal": 58900
+    },
+    {
+      "icon_id": "7273519",
+      "name": "问好",
+      "font_class": "wenhao",
+      "unicode": "e615",
+      "unicode_decimal": 58901
+    },
+    {
+      "icon_id": "10167366",
+      "name": "上",
+      "font_class": "shang-copy",
+      "unicode": "e502",
+      "unicode_decimal": 58626
+    }
+  ]
+}
