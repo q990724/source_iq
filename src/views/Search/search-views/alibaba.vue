@@ -3,15 +3,14 @@
 		<source-list @onSourceItemClick="onSourceItemClick"></source-list>
 		<div class="container">
 			<div class="main-container">
-				<text-search @onClickSearchButton="onClickSearchButton"></text-search>
+				<text-search @onClickSearchButton="onClickSearchButton" @onImageUploadedSuccess="onImageUploadedSuccess" @onImageUploadedError="onImageUploadedError"></text-search>
 				<!--  图片处理区域  -->
 				<image-operation ref="image_operation" :original_image_url="originalImageUrl"
-					@onImageUploadedSuccess="onImageUploadedSuccess"
-					@onImageUploadedError="onImageUploadedError" @onClickLocalItem="onClickLocalItem"
+					@onClickLocalItem="onClickLocalItem"
 					@onClickMainImage="onClickMainImage" @onClickClear="onClickClear">
 				</image-operation>
 				<!--  筛选区域  -->
-				<div class="filter-container mt40">
+				<div class="filter-container mt40" v-if="(categoryList && categoryList.items) || (filterList && filterList.length > 0)">
 					<!-- 商品分类 -->
 					<product-class :class_list="categoryList" @onClassChange="onClassChange" style="margin-bottom:10px;"></product-class>
 					<!--  筛选区域  -->
@@ -128,8 +127,9 @@
              */
 			onClassChange(id) {
 				this.cid = id;
+				this.searchTextParams.Category = id;
 				this.page = 1;
-				this.getDataFromImage(false);
+				this.searchType === 'image' ? this.getDataFromImage(false) : this.getDataFromText(false);
 			},
 			/**
 			 * @description 点击文字搜索时触发

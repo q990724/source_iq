@@ -7,7 +7,7 @@
             <img src="@/assets/img/down-arrow.png" alt="">
         </div>
         <div class="list" :style="listStyle" v-if="class_list.items">
-            <div class="item" v-for="(item, index) in class_list.items" :key="item.id" :class="{'active': item.selected}" @click="onItemClick(item.id)">
+            <div class="item" v-for="item in class_list.items" :key="item.id" :class="{'active': item.selected}" @click="onItemClick(item.id)">
                 <span>{{ item.name }}</span>
             </div>
         </div>

@@ -1,11 +1,11 @@
 <template>
-    <div class="image-operation mt40">
-        <div class="item main-item" v-if="original_image_url" :class="{'active': mainImageActive}">
+    <div class="image-operation mt40" v-if="original_image_url">
+        <div class="item main-item" :class="{'active': mainImageActive}">
             <img :src="original_image_url" alt="" class="img" @click="onClickMainImage">
             <span @click="chooseImageBox"><img src="@/assets/img/kuangxuan.png" alt="">{{ $t('label.chooseBox') }}</span>
             <i class="clear el-icon-circle-close" @click="onClickClear"></i>
         </div>
-        <div class="item main-item default-item" v-else>
+        <!-- <div class="item main-item default-item" v-else>
             <el-upload
                 class="avatar-uploader"
                 action="https://jsonplaceholder.typicode.com/posts/"
@@ -17,7 +17,7 @@
                 :before-upload="beforeAvatarUpload">
                 <i class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
-        </div>
+        </div> -->
         <!--本地裁剪图片暂存列表-->
         <div class="local-crop-list" v-if="localCropImageList && localCropImageList.length > 0">
             <div class="scroll scrollable">
@@ -99,76 +99,6 @@ export default {
         },
         onUploadClick() {
             this.$emit('onUploadClick')
-        },
-        handleAvatarSuccess(res, file) {
-            console.log('success', res);
-            this.$emit('onImageUploadedSuccess', res);
-        },
-        handleAvatarError(err) {
-            console.log('error', res);
-            this.$message.error('上传图片错误！');
-            this.$emit('onImageUploadedError', err);
-        },
-        onUploadImage(params) {
-            console.log(params);
-            switch (this.$store.state.source_id) {
-                case SourceMap['alibaba']:
-                    alibaba.uploadPic(params.file).then(res=>{
-                        if(!res.data) {
-                        	return $message.error(res.msg);
-                        }
-                        params.onSuccess({imgUrl: res.data.domain + res.data.imageAddress, imageAddress: res.data.imageAddress})
-                    }).catch(e=>{
-                        console.log(e);
-                    })
-                    break;
-                case SourceMap['1688']:
-					_1688.uploadPicH5(params.file).then(res=>{
-					    if(!res.data) {
-					    	return; this.$message.error(res.msg);
-					    }
-						getBase64(params.file, (u) => {
-							params.onSuccess({imgUrl: u, imageAddress: res.data.imageId})
-						});
-					}).catch(e=>{
-					    console.log(e);
-					})
-                    break;
-                case SourceMap['1688global']:
-                    break;
-                case SourceMap['aliexpress']:
-					aliexpress.uploadPic(params.file).then(res=>{
-						if(!res.data) {
-							return this.$message.error(res.msg);
-						}
-						params.onSuccess({imgUrl: res.data.url, imageAddress: res.data.filename})
-					}).catch(e=>{
-						console.log(e);
-					})
-                    break;
-                case SourceMap['yiwugo']:
-                    yiwugo.uploadPic(params.file).then(res=>{
-                        if(!res.data) {
-                        	return this.$message.error(res.msg);
-                        }
-                        params.onSuccess({imgUrl: res.data.url, imageAddress: res.data.url})
-                    }).catch(e=>{
-                        console.log(e);
-                    })
-                    break;
-            }
-        },
-        beforeAvatarUpload(file) {
-            const isJPG = file.type === 'image/jpeg';
-            const isLt2M = file.size / 1024 / 1024 < 2;
-
-            if (!isJPG) {
-                this.$message.error('上传头像图片只能是 JPG 格式!');
-            }
-            if (!isLt2M) {
-                this.$message.error('上传头像图片大小不能超过 2MB!');
-            }
-            return isJPG && isLt2M;
         },
         onClickLocalItem(item, index) {
             this.localCropImageList.forEach(e=>{

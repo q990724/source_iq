@@ -11,10 +11,26 @@
             <i class="el-icon-camera" @click="onClickCamera"></i>
         </div>
         <div class="sbtn" @click="onClickSearchButton">搜索</div>
+
+        <el-upload
+            class="avatar-uploader"
+            action="https://jsonplaceholder.typicode.com/posts/"
+            :show-file-list="false"
+            accept="image/*"
+            :on-success="handleAvatarSuccess"
+            :on-error="handleAvatarError"
+            :http-request="onUploadImage"
+            :before-upload="beforeAvatarUpload"
+            style="display:none;">
+            <i slot="trigger" id='uploadButton'></i>
+        </el-upload>
     </div>
 </template>
 
 <script>
+import {alibaba, yiwugo, aliexpress, _1688} from "@/assets/js/apis";
+import SourceMap from "@/assets/js/source_map";
+import {getBase64} from "@/assets/js/utils.js";
 export default {
     name: 'text-search',
     data() {
@@ -33,8 +49,73 @@ export default {
             this.$emit('onClickSearchButton', {search_text: this.input, index_area: this.index_area});
         },
         onClickCamera() {
-
-        }
+            document.getElementById('uploadButton').click();
+        },
+        handleAvatarSuccess(res, file) {
+            console.log('success', res);
+            this.$emit('onImageUploadedSuccess', res);
+        },
+        handleAvatarError(err) {
+            console.log('error', res);
+            this.$message.error('上传图片错误！');
+            this.$emit('onImageUploadedError', err);
+        },
+        onUploadImage(params) {
+            console.log(params);
+            switch (this.$store.state.source_id) {
+                case SourceMap['alibaba']:
+                    alibaba.uploadPic(params.file).then(res=>{
+                        if(!res.data) {
+                        	return $message.error(res.msg);
+                        }
+                        params.onSuccess({imgUrl: res.data.domain + res.data.imageAddress, imageAddress: res.data.imageAddress})
+                    }).catch(e=>{
+                        console.log(e);
+                    })
+                    break;
+                case SourceMap['1688']:
+					_1688.uploadPicH5(params.file).then(res=>{
+					    if(!res.data) {
+					    	return; this.$message.error(res.msg);
+					    }
+						getBase64(params.file, (u) => {
+							params.onSuccess({imgUrl: u, imageAddress: res.data.imageId})
+						});
+					}).catch(e=>{
+					    console.log(e);
+					})
+                    break;
+                case SourceMap['1688global']:
+                    break;
+                case SourceMap['aliexpress']:
+					aliexpress.uploadPic(params.file).then(res=>{
+						if(!res.data) {
+							return this.$message.error(res.msg);
+						}
+						params.onSuccess({imgUrl: res.data.url, imageAddress: res.data.filename})
+					}).catch(e=>{
+						console.log(e);
+					})
+                    break;
+                case SourceMap['yiwugo']:
+                    yiwugo.uploadPic(params.file).then(res=>{
+                        if(!res.data) {
+                        	return this.$message.error(res.msg);
+                        }
+                        params.onSuccess({imgUrl: res.data.url, imageAddress: res.data.url})
+                    }).catch(e=>{
+                        console.log(e);
+                    })
+                    break;
+            }
+        },
+        beforeAvatarUpload(file) {
+            const isLt2M = file.size / 1024 / 1024 < 2;
+            if (!isLt2M) {
+                this.$message.error('上传头像图片大小不能超过 2MB!');
+            }
+            return isLt2M;
+        },
     }
 }
 </script>
