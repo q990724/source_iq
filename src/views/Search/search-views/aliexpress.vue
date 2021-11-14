@@ -89,7 +89,7 @@
             /**
              * @description 切换商品分类时触发
              */
-			onClassChange(id) {
+			onClassChange({id}) {
 				this.cid = id;
 				this.page = 1;
 				this.getDataFromImage(false);

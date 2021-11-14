@@ -6,7 +6,7 @@
                 <el-option v-for="item in indexAareaOptions" :key="item.value" :label="item.label" :value="item.value">
                 </el-option>
             </el-select>
-            <input type="text" class="input" placeholder="请输入关键词" v-model="input" autocomplete="off">
+            <input type="text" class="input" placeholder="请输入关键词" v-model="input" autocomplete="off" @keypress="onKeyPress">
             <!-- <i class="el-icon-circle-close" v-show="input" @click="onClickCloseButton"></i> -->
             <i class="el-icon-camera" @click="onClickCamera"></i>
         </div>
@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import {alibaba, yiwugo, aliexpress, _1688} from "@/assets/js/apis";
+import {alibaba, yiwugo, aliexpress, _1688, _1688global} from "@/assets/js/apis";
 import SourceMap from "@/assets/js/source_map";
 import {getBase64} from "@/assets/js/utils.js";
 export default {
@@ -86,6 +86,10 @@ export default {
 					})
                     break;
                 case SourceMap['1688global']:
+                    _1688global.uploadPic(params.file).then(res=>{
+                        if(!res.data) return this.$message.error(res.msg);
+                        params.onSuccess({imgUrl: res.data.imgUrl, imageAddress: res.data.imgUrl})
+                    }).catch(e=>{ console.log(e);})
                     break;
                 case SourceMap['aliexpress']:
 					aliexpress.uploadPic(params.file).then(res=>{
@@ -116,6 +120,11 @@ export default {
             }
             return isLt2M;
         },
+        onKeyPress(e) {
+            if(e.keyCode === 13)  {
+                this.onClickSearchButton();
+            }
+        }
     }
 }
 </script>

@@ -38,6 +38,11 @@ const routes = [
         path: '/view-1688',
         name: 'view-1688',
         component: () => import('@/views/Search/search-views/1688')
+    },
+    {
+        path: '/view-1688global',
+        name: 'view-1688',
+        component: () => import('@/views/Search/search-views/1688global')
     }
 ]
 

@@ -47,7 +47,7 @@ class MyCrop {
             let image = new Image();
             let e = this.location;
             image.src = this.imgPath;
-            image.setAttribute("crossOrigin",'anonymous');
+            image.setAttribute("crossOrigin",'');
             image.onload = function () {
                 canvas.width = e.w;
                 canvas.height = e.h;

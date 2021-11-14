@@ -1,4 +1,5 @@
 import SourceMap from "../../../assets/js/source_map";
+import bus from "@/assets/js/bus";
 const publicData = {
     data() {
         return {
@@ -27,6 +28,9 @@ const publicData = {
             // 搜索后获取的总页码
             totalPage: 1
         }
+    },
+    beforeDestroy() {
+        bus.$off('loadmore');
     },
     methods: {
         /**
@@ -62,6 +66,7 @@ const publicData = {
                     this.$router.push('/view-1688');
                     break;
                 case SourceMap['1688global']:
+                    this.$router.push('/view-1688global');
                     break;
                 default: 
                     this.$message.error('未知的数据源ID');

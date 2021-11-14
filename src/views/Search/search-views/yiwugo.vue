@@ -3,14 +3,18 @@
 		<source-list @onSourceItemClick="onSourceItemClick"></source-list>
 		<div class="container">
 			<div class="main-container">
+				<text-search @onClickSearchButton="onClickSearchButton" @onImageUploadedSuccess="onImageUploadedSuccess" @onImageUploadedError="onImageUploadedError"></text-search>
 				<!--  图片处理区域  -->
 				<image-operation ref="image_operation" :original_image_url="originalImageUrl"
-					@onImageUploadedSuccess="onImageUploadedSuccess"
-					@onImageUploadedError="onImageUploadedError" @onClickLocalItem="onClickLocalItem"
+					@onClickLocalItem="onClickLocalItem"
 					@onClickMainImage="onClickMainImage" @onClickClear="onClickClear">
 				</image-operation>
-				<!--  商品分类  -->
-				<product-class :class_list="categoryList" @onClassChange="onClassChange"></product-class>
+				<div class="filter-container mt40" v-if="(categoryList && categoryList.items) || (filterList && filterList.length > 0)">
+					<!--  商品分类  -->
+					<product-class :class_list="categoryList" @onClassChange="onClassChange"></product-class>
+					<!--  筛选区域  -->
+					<group-filter :filterList="filterList" @onFilterChange="onFilterChange"></group-filter>
+				</div>
 				<!--商品高级筛选-->
 				<!--<high-filtration></high-filtration>-->
 				<h2 class="mt40" v-if="results && results.length > 0">{{ $t('message.findSource') }}</h2>
@@ -24,12 +28,14 @@
 </template>
 
 <script>
+	import TextSearchComponent from "../components/text-search.vue";
 	import SourceListComponent from "../components/source-list";
 	import ImageOperationComponent from "../components/image-operation";
 	import ProductClassComponent from "../components/product-class";
 	import FiltrationComponent from "../components/filtration";
 	import ProductListComponent from "../components/product-list";
 	import HighFiltration from "../components/high-filtration";
+	import FilterComponent from "../components/group-filter.vue";
 	import { yiwugo } from "@/assets/js/apis";
 	import bus from "@/assets/js/bus";
     import publicData from "../mixins/public.js";
@@ -43,12 +49,17 @@
 			ProductClass: ProductClassComponent,
 			Filtration: FiltrationComponent,
 			ProductList: ProductListComponent,
-			HighFiltration: HighFiltration
+			HighFiltration: HighFiltration,
+			TextSearch: TextSearchComponent,
+			GroupFilter: FilterComponent
 		},
         mixins: [publicData],
 		data() {
 			return {
-
+				searchTextParams: {
+					search_text: '',
+					index_area: '',
+				}
 			}
 		},
 		mounted() {
@@ -81,10 +92,23 @@
 				this.imageAddress = this.main_imageAddress;
 				this.getDataFromImage(false);
 			},
-			onClassChange(id) {
-				this.cid = id;
+			onClassChange({id,name}) {
+				this.cid = name;
 				this.page = 1;
-				this.getDataFromImage(false);
+				this.searchTextParams.category = name;
+				this.searchType === 'image' ? this.getDataFromImage(false) : this.getDataFromText(false) ;
+			},
+			onClickSearchButton(params) {
+				this.searchType = 'text';
+				this.onClickClear();
+				this.searchTextParams = {
+					search_text: params.search_text,
+					index_area: params.index_area
+				}
+				this.getDataFromText(false);
+			},
+			onFilterChange({e, o, title}) {
+
 			},
 			async getDataFromImage(loadmore) {
 				this.$refs['product-list'].changeShowNoList(false);
@@ -103,6 +127,20 @@
 				} catch (e) {
 					this.$message.error('图片搜索出错' + e);
 				}
+			},
+			async getDataFromText(loadmore) {
+				try {
+					let result = await yiwugo.searchGoodsByText({ ...this.searchTextParams,page: this.page });
+					if(!result || !result.data) return this.$message.error('获取失败！');
+					this.categoryList = result.data.categoryList;
+					this.filterList = result.data.filterList;
+					this.resultInfo = result.data.resultInfo;
+					handleResponse(result);
+					this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
+					this.searchTextParams.search_text = result.data.searchKeywords;
+				} catch (error) {
+					console.log(error);
+				}
 			}
 		}
 	}
@@ -117,5 +155,11 @@
 				margin: auto;
 			}
 		}
+	}
+	.filter-container {
+		border-radius: 10px;
+    	border: 1px solid #DCDFE6;
+		background-color: #FFF;
+		padding: 20px 10px;
 	}
 </style>

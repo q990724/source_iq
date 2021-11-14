@@ -9,6 +9,8 @@ function getCookie(source) {
 			id = 'cookie-aliexpress'
 		}else if(source === '1688') {
 			id = 'cookie-1688'
+		}else if(source === '1688global') {
+			id = 'cookie-1688global'
 		}
 		cookie = document.getElementById(id).dataset.cookie;
 	}catch(e) {
@@ -97,7 +99,14 @@ export const yiwugo = {
                 file_url, page, page_size, lang
             }
         })
-    }
+    },
+	searchGoodsByText({search_text, page=1, language='zh', sort = 0, set_yiwu_market = 0, min_price = null, max_price = null, category = null, sub_market = null,}) {
+		return Service.get('api/yiwugoapp/searchGoodsByText', {
+            params: {
+                search_text,page,language,sort,set_yiwu_market,min_price,max_price,category,sub_market
+            }
+        })
+	}
 }
 
 export const aliexpress = {
@@ -159,6 +168,49 @@ export const _1688 = {
 	    return Service.get('api/goods/imgSearchFirst', {
 	        params: {
 	            imageId, cookie
+	        }
+	    })
+	},
+	// 文字搜索首次
+	searchGoodsFirst({type = 1, keyword = '', page = 1}) {
+		let cookie = getCookie('1688');
+		if(!cookie) return;
+	    return Service.get('api/goods/searchGoodsFirst', {
+	        params: {
+	            type, cookie, keyword, page
+	        }
+	    })
+	},
+	searchGoods({type = 1, keyword = '', page = 1, }) {
+		let cookie = getCookie('1688');
+		if(!cookie) return;
+	    return Service.get('api/goods/searchGoods', {
+	        params: {
+	            type, cookie, keyword, page
+	        }
+	    })
+	}
+}
+
+export const _1688global = {
+	uploadPic(file) {
+		let cookie = getCookie('1688global');
+		if(!cookie) return;
+	    let formData = new FormData();
+	    formData.append('file', file);
+		formData.append('cookie', cookie);
+	    return Service.post('api/goods/uploadPicKj', formData, {
+	        headers: {
+	            'Content-Type': 'multipart/form-data',
+	        }
+	    })
+	},
+	searchGoodsByPic({imgUrl, region, keyword, categoryId, location, tags, pageNo}) {
+		let cookie = getCookie('1688global');
+		if(!cookie) return;
+	    return Service.get('api/goods/imgSearchKj', {
+	        params: {
+	            imgUrl, cookie,region,keyword,categoryId,location,tags,pageNo
 	        }
 	    })
 	}

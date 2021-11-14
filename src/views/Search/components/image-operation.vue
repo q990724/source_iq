@@ -5,19 +5,6 @@
             <span @click="chooseImageBox"><img src="@/assets/img/kuangxuan.png" alt="">{{ $t('label.chooseBox') }}</span>
             <i class="clear el-icon-circle-close" @click="onClickClear"></i>
         </div>
-        <!-- <div class="item main-item default-item" v-else>
-            <el-upload
-                class="avatar-uploader"
-                action="https://jsonplaceholder.typicode.com/posts/"
-                :show-file-list="false"
-                accept="image/*"
-                :on-success="handleAvatarSuccess"
-                :on-error="handleAvatarError"
-                :http-request="onUploadImage"
-                :before-upload="beforeAvatarUpload">
-                <i class="el-icon-plus avatar-uploader-icon"></i>
-            </el-upload>
-        </div> -->
         <!--本地裁剪图片暂存列表-->
         <div class="local-crop-list" v-if="localCropImageList && localCropImageList.length > 0">
             <div class="scroll scrollable">
@@ -39,7 +26,7 @@
 </template>
 
 <script>
-import {alibaba, yiwugo, aliexpress, _1688} from "@/assets/js/apis";
+import {alibaba, yiwugo, aliexpress, _1688, _1688global} from "@/assets/js/apis";
 import SourceMap from "@/assets/js/source_map";
 import {getBase64} from "@/assets/js/utils.js";
 
@@ -121,6 +108,10 @@ export default {
 					});
                     break;
                 case SourceMap['1688global']:
+                    _1688global.uploadPic(item.file).then(res=>{
+                        if(!res.data) return this.$message.error(res.msg);
+                        this.$emit('onClickLocalItem', {imgUrl: res.data.imgUrl, imageAddress: res.data.imgUrl})
+                    }).catch(e=>{ console.log(e);})
                     break;
                 case SourceMap['aliexpress']:
 					aliexpress.uploadPic(item.file).then(res=>{

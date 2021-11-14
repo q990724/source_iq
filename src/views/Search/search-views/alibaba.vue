@@ -12,22 +12,9 @@
 				<!--  筛选区域  -->
 				<div class="filter-container mt40" v-if="(categoryList && categoryList.items) || (filterList && filterList.length > 0)">
 					<!-- 商品分类 -->
-					<product-class :class_list="categoryList" @onClassChange="onClassChange" style="margin-bottom:10px;"></product-class>
+					<product-class :class_list="categoryList" @onClassChange="onClassChange"></product-class>
 					<!--  筛选区域  -->
-					<div class="filter" v-if="filterList">
-						<template v-for="(fil, index) in filterList">
-							<div class="filter-item" v-if="fil.items && fil.items.length > 0" :key='index'>
-								<div class="filter-item_title">
-									<span>{{fil.title}}</span>
-								</div>
-								<div class="filter-item_options">
-									<div class="filter-item_option" v-for="o in fil.items" :key="o.id">
-										<el-checkbox v-model="o.selected" @change="onFilterChange($event, o, fil.title)">{{o.name}}</el-checkbox>
-									</div>
-								</div>
-							</div>
-						</template>
-					</div>
+					<group-filter :filterList="filterList" @onFilterChange="onFilterChange"></group-filter>
 					<!-- 价格区间 -->
 					<!-- 地区 -->
 				</div>
@@ -125,7 +112,7 @@
             /**
              * @description 切换商品分类时触发
              */
-			onClassChange(id) {
+			onClassChange({id}) {
 				this.cid = id;
 				this.searchTextParams.Category = id;
 				this.page = 1;
@@ -144,7 +131,7 @@
 				}
 				this.getDataFromText(false);
 			},
-			onFilterChange(e, o, title) {
+			onFilterChange({e, o, title}) {
 				let self = this;
 				function handleCheckBoxParams(key, s = ",") {
 					if(self.searchTextParams[key]) {
@@ -187,7 +174,6 @@
 					default:
 						break;
 				}
-				console.log(this.searchTextParams);
 				this.getDataFromText(false);
 			},
             /**
@@ -223,6 +209,7 @@
 					// 	index_area: this.searchTextParams.index_area,
 					// 	page: this.page
 					// });
+					console.log(this.searchTextParams);
 					let result = await alibaba.searchGoodsByText({ ...this.searchTextParams,page: this.page });
 					if(!result || !result.data) return this.$message.error('获取失败！');
 					this.categoryList = result.data.categoryList;
@@ -255,22 +242,5 @@
     	border: 1px solid #DCDFE6;
 		background-color: #FFF;
 		padding: 20px 10px;
-		.filter {
-			.filter-item {
-				margin-bottom: 10px;
-				.filter-item_title {
-					margin-bottom: 10px;
-				}
-				.filter-item_options {
-					display: flex;
-					align-items: center;
-					flex-wrap: wrap;
-					.filter-item_option {
-						margin-right: 10px;
-						margin-bottom: 10px;
-					}
-				}
-			}
-		}
 	}
 </style>
