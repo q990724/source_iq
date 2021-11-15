@@ -3,7 +3,7 @@
         <div class="input-box">
             <i class="el-icon-search"></i>
             <el-select v-model="index_area" placeholder="请选择">
-                <el-option v-for="item in indexAareaOptions" :key="item.value" :label="item.label" :value="item.value">
+                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                 </el-option>
             </el-select>
             <input type="text" class="input" placeholder="请输入关键词" v-model="input" autocomplete="off" @keypress="onKeyPress">
@@ -37,8 +37,39 @@ export default {
         return {
             input: '',
             isFocus: false,
-            index_area: 'product_en',
-            indexAareaOptions: [{label: 'Products', value: 'product_en'}, {label: 'Suppliers', value: 'company_en'}]
+            // alibaba
+            index_area: '',
+            indexAareaOptions_alibaba: [{label: 'Products', value: 'product_en'}, {label: 'Suppliers', value: 'company_en'}],
+            // yiwugo
+            options_yiwugo: [{label: 'Products', value: 'Products'}],
+            options: []
+        }
+    },
+    computed: {
+        getSourceId() {
+            switch (this.$store.state.source_id) {
+                case 1:
+                    this.options = this.indexAareaOptions_alibaba;
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    break;
+                case 5:
+                    this.options = this.options_yiwugo;
+                    break;
+                default:
+                    break;
+            }
+            this.index_area = this.options[0].value;
+            return this.$store.state.source_id;
+        }
+    },
+    watch: {
+        getSourceId() {
+            console.log(this.options);
         }
     },
     methods: {

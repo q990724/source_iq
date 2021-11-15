@@ -64,7 +64,7 @@
 <style scoped lang="scss">
 	.product-item {
 		float: left;
-		width: 265px;
+		width: 335px;
 		min-height: 450px;
 		background-color: #FFFFFF;
 		//box-shadow: 0 0 10px #DDD;
@@ -80,7 +80,7 @@
 			height: 220px;
 			overflow: hidden;
 			cursor: pointer;
-
+			padding: 20px;
 			img {
 				width: 100%;
 				height: 100%;

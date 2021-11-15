@@ -100,13 +100,22 @@ export const yiwugo = {
             }
         })
     },
+	// 搜索商品
 	searchGoodsByText({search_text, page=1, language='zh', sort = 0, set_yiwu_market = 0, min_price = null, max_price = null, category = null, sub_market = null,}) {
 		return Service.get('api/yiwugoapp/searchGoodsByText', {
             params: {
                 search_text,page,language,sort,set_yiwu_market,min_price,max_price,category,sub_market
             }
         })
-	}
+	},
+	// 搜索店铺
+	searchShopsByText({search_text, page = 1, language = 'zh', page_size = 20}) {
+        return Service.get('api/yiwugoapp/searchShopsByText', {
+            params: {
+                search_text, page, language, page_size
+            }
+        })
+    },
 }
 
 export const aliexpress = {

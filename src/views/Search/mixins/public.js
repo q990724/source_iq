@@ -52,6 +52,7 @@ const publicData = {
         onSourceItemClick(source_id) {
             if(source_id === this.$store.state.source_id) return;
             this.$store.state.source_id = source_id;
+            console.log(this.$store.state.source_id);
             switch(source_id) {
                 case SourceMap['alibaba']:
                     this.$router.push('/view-alibaba');

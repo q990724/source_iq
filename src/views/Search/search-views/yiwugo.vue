@@ -67,11 +67,15 @@
 			bus.$on('loadmore', () => {
 				console.log('触底事件触发');
 				this.page++;
-				if(this.page > this.totalPage) {
-					this.page = this.totalPage;
+				let totalPage = 1;
+				if(this.resultInfo) {
+					totalPage = Math.ceil(this.resultInfo.totalResults / this.resultInfo.pageSize);
+				}
+				if(this.page > totalPage) {
+					this.page = totalPage;
 					return;
 				};
-				this.getDataFromImage(true);
+				this.searchType === 'image' ? this.getDataFromImage(true) : this.getDataFromText(true);
 			})
 		},
 		methods: {
@@ -108,7 +112,14 @@
 				this.getDataFromText(false);
 			},
 			onFilterChange({e, o, title}) {
-
+				switch (title) {
+					case 'subMarketList':
+						e ? this.searchTextParams.sub_market = o.id : delete this.searchTextParams.sub_market;
+						break;
+					default:
+						break;
+				}
+				this.getDataFromText(false);
 			},
 			async getDataFromImage(loadmore) {
 				this.$refs['product-list'].changeShowNoList(false);
@@ -130,7 +141,13 @@
 			},
 			async getDataFromText(loadmore) {
 				try {
-					let result = await yiwugo.searchGoodsByText({ ...this.searchTextParams,page: this.page });
+					let result = null;
+					console.log(this.searchTextParams);
+					if(this.searchTextParams.index_area === 'Products') {
+						result = await yiwugo.searchGoodsByText({ ...this.searchTextParams,page: this.page });
+					}else {
+						result = await yiwugo.searchShopsByText({...this.searchTextParams, page: this.page});
+					}
 					if(!result || !result.data) return this.$message.error('获取失败！');
 					this.categoryList = result.data.categoryList;
 					this.filterList = result.data.filterList;
