@@ -143,7 +143,20 @@ export const aliexpress = {
 				'token': cookie
 			}
 	    })
-	}
+	},
+	// 文字搜索
+	searchGoodsByText({search_text, min_price, max_price, ship_from_country, sale, spend_save, free_shipping, is_favorite, sort_type, page = 1, country, language, currency}) {
+		let cookie = getCookie('aliexpress');
+		if(!cookie) return;
+	    return Service.get('api/aliexpress/searchGoodsByText', {
+	        params: {
+	            search_text, min_price, max_price, ship_from_country, sale, spend_save, free_shipping, is_favorite, sort_type, page, country, language, currency
+	        },
+			headers: {
+				'token': cookie
+			}
+	    })
+	},
 }
 
 export const _1688 = {

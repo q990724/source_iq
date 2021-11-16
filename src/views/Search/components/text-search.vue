@@ -2,7 +2,7 @@
     <div class="text-search mt40">
         <div class="input-box">
             <i class="el-icon-search"></i>
-            <el-select v-model="index_area" placeholder="请选择">
+            <el-select v-model="index_area" placeholder="请选择" v-if="options && options.length > 0">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                 </el-option>
             </el-select>
@@ -63,7 +63,9 @@ export default {
                 default:
                     break;
             }
-            this.index_area = this.options[0].value;
+            if(this.options && this.options.length > 0) {
+                this.index_area = this.options[0].value;
+            }
             return this.$store.state.source_id;
         }
     },
