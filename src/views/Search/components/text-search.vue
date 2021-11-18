@@ -79,6 +79,10 @@ export default {
             this.input = '';
         },
         onClickSearchButton() {
+            if(!this.input.trim()) {
+                this.$message.info('搜索内容不能为空！');
+                return;
+            }
             this.$emit('onClickSearchButton', {search_text: this.input, index_area: this.index_area});
         },
         onClickCamera() {

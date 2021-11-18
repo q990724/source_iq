@@ -106,7 +106,7 @@ export function getBase64FromCropImage(imagePath, regionList) {
  * @param {Object} response 接口搜索返回的数据
  */
 export function handleResponse (response) {
-	if(response && response.data) {
+	if(response && response.data && response.data.results) {
 		for (let item of response.data.results) {
 			// 对商品的封面图地址进行https加工
 			if (item.product.media.coverImageUrl && typeof item.product.media.coverImageUrl ==
