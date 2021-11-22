@@ -15,9 +15,10 @@ module.exports = {
         under: '以下',
         hour: '小时',
         shipments: '发货',
-        goodMerchant: '实力商家'
+        goodMerchant: '实力商家',
+        no_more: '暂无更多'
     },
     button: {
-        more: '更多'
+        more: '更多',
     }
 }
