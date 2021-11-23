@@ -5,7 +5,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
-        imageAddress: '', //插件跳转过来的图片地址
+        imageAddress: '', 
         source_id: 1, // 货源ID
     },
     mutations: {

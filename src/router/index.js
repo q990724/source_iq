@@ -41,7 +41,7 @@ const routes = [
     },
     {
         path: '/view-1688global',
-        name: 'view-1688',
+        name: 'view-1688global',
         component: () => import('@/views/Search/search-views/1688global')
     }
 ]

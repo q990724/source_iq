@@ -92,6 +92,22 @@ $(function() {
 		let input = document.getElementById('cookie-aliexpress');
 		let input_1688 = document.getElementById('cookie-1688');
         let input_1688global = document.getElementById('cookie-1688global');
+        let input_appSetting = document.getElementById('app-setting');
+        // app-setting
+        if(!input_appSetting) {
+            input_appSetting = document.createElement('input');
+            input_appSetting.setAttribute('type', 'hidden');
+            input_appSetting.setAttribute('id', 'app-setting');
+            chrome.storage.local.get( {app_setting: null}, function(o) {
+				input_appSetting.setAttribute('value', JSON.stringify(o.app_setting));
+			})
+            document.body.appendChild(input_appSetting);
+        }else {
+            chrome.storage.local.get( {app_setting: null}, function(o) {
+				input_appSetting.setAttribute('value', JSON.stringify(o.app_setting));
+			})
+        }
+        // aliexpress
 		if(input) {
 			chrome.storage.local.get( {aliexpress_cookie: null}, function(o) {
 				input.setAttribute('data-cookie', o.aliexpress_cookie);
@@ -105,7 +121,7 @@ $(function() {
 			input.setAttribute('type', 'hidden');
 			document.body.appendChild(input);
 		}
-		
+		// 1688
 		if(input_1688) {
 			chrome.storage.local.get( {_1688_cookie: null}, function(o) {
 				input_1688.setAttribute('data-cookie', o._1688_cookie);
@@ -119,7 +135,7 @@ $(function() {
 			input_1688.setAttribute('type', 'hidden');
 			document.body.appendChild(input_1688);
 		}
-
+        // 1688跨境
         if(input_1688global) {
             chrome.storage.local.get( {_1688global_cookie: null}, function(o) {
 				input_1688global.setAttribute('data-cookie', o._1688global_cookie);

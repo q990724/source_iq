@@ -29,8 +29,17 @@ const publicData = {
             totalPage: 1
         }
     },
+    created() {
+        bus.$on('cj_search', res => {
+            let imageAddress = res.imageAddress;
+            let imgUrl = res.imgUrl;
+            console.log(imageAddress, imgUrl);
+            if(imageAddress && imgUrl) this.onImageUploadedSuccess({imageAddress, imgUrl});   
+        })
+    },
     beforeDestroy() {
         bus.$off('loadmore');
+        bus.$off('cj_search');
     },
     methods: {
         /**

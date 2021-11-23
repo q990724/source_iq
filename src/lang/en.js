@@ -1,7 +1,7 @@
 module.exports = {
     message: {
         findSource: 'Find the following resources for you',
-        no_login: 'please log in ',
+        no_login: 'Please login ',
         get_result_error: 'Failed to obtain data',
         serach_result_from_image_error: 'Image search failed',
         upload_image_error: 'Uploading image failed'

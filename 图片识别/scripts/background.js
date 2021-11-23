@@ -51,31 +51,98 @@ function getFile(base64Data) {
 
 // 上传图片到服务器
 function uploadImage(file) {
-    let formData = new FormData();
-    formData.append('file', file);
     let urls = {
-        1688: '',
-        gj_1688: '',
+        _1688: 'http://eurotransit.acuteberry.com/api/goods/uploadPicH5',
+        _1688global: 'http://eurotransit.acuteberry.com/api/goods/uploadPicKj',
         aliexpress: 'http://eurotransit.acuteberry.com/api/aliexpress/uploadPic',
-        alibaba: 'http://eurotransit.acuteberry.com/api/aliintersite/uploadPic'
+        alibaba: 'http://eurotransit.acuteberry.com/api/aliintersite/uploadPic',
+        yiwugo: 'http://eurotransit.acuteberry.com/api/yiwugoapp/uploadPic'
     }
-    $.ajax({
-        url: urls.alibaba,
-        type: 'post',
-        data: formData,
-        contentType: false,
-        processData: false,
-        success:function(res){
-            console.log(res);
-            handleUploadedImage(res.data, 'alibaba');
+
+    function getCookie(sid) {
+        return new Promise((resolve, reject) => {
+            let key = sid == 2 ? '_1688_cookie' : sid == 3 ? '_1688global_cookie' : sid == 4 ? 'aliexpress_cookie' : '';
+            chrome.storage.local.get( {[key]: null}, function(o) {
+                if(o[key]) {
+                    resolve(o[key]);
+                }else {
+                    reject()
+                }
+            })
+        });
+    }
+
+    chrome.storage.local.get( {app_setting: null}, function(o) {
+        let id = o.app_setting.source;
+        let formData = new FormData();
+        formData.append('file', file);
+        let ajaxConfig = {
+            url: '',
+            type: 'post',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success:function(res){
+                console.log(res);
+                handleUploadedImage(res.data, id);
+            },
+            headers: {}
+        }
+        if(id == 2 || id == 3 || id == 4) {
+            getCookie(id).then(cookie=>{
+                // 1688
+                if(id == 2) {
+                    ajaxConfig.url = urls._1688;
+                    formData.append('cookie', cookie);
+                }else if(id == 3) {
+                    ajaxConfig.url = urls._1688global;
+                    formData.append('cookie', cookie);
+                }else if(id == 4) {
+                    ajaxConfig.url = urls.aliexpress;
+                    ajaxConfig.headers.token = cookie;
+                }
+                $.ajax(ajaxConfig);
+            }).catch(e=>{
+                console.log(id);
+                let sname = '';
+                if(id == 2) {
+                    sname = '1688';
+                }else if(id == 3) {
+                    sname = '1688Global'
+                }else if(id == 4) {
+                    sname = 'Aliexpress'
+                }
+                window.alert('Please login ' + sname);
+            })
+        }else {
+            if(id == 1) {
+                ajaxConfig.url = urls.alibaba;
+            }else if(5) {
+                ajaxConfig.url = urls.yiwugo;
+            }
+            $.ajax(ajaxConfig);
         }
     })
 }
 
 // 处理服务器返回上传图片结果
-function handleUploadedImage(result, type) {
-    if(type === 'alibaba') {
-        chrome.tabs.create({"url": `http://10.33.40.23:8080/?imageAddress=${result.imageAddress}#/`});
+function handleUploadedImage(result, id) {
+    console.log(result);
+    // alibaba
+    if(id == 1) {
+        chrome.tabs.create({"url": `http://192.168.0.113:8080/?imageAddress=${result.imageAddress}&imgUrl=${result.domain + result.imageAddress}#/`});
+    }else if(id == 2) {
+        // 1688
+        chrome.tabs.create({"url": `http://192.168.0.113:8080/?imageAddress=${result.imageId}&imgUrl=${result.u}#/`});
+    }else if(id == 3) {
+        // 1688Global
+        chrome.tabs.create({"url": `http://192.168.0.113:8080/?imageAddress=${result.imgUrl}&imgUrl=${result.imgUrl}#/`});
+    }else if(id == 4) {
+        // aliexpress
+        chrome.tabs.create({"url": `http://192.168.0.113:8080/?imageAddress=${result.filename}&imgUrl=${result.url}#/`});
+    }else if(id == 5) {
+        // yiwugo
+        chrome.tabs.create({"url": `http://192.168.0.113:8080/?imageAddress=${result.url}&imgUrl=${result.url}#/`});
     }
 }
 
@@ -110,6 +177,7 @@ chrome.contextMenus.create({
                 console.log('title: ' + parseTitle(info.pageUrl, info.srcUrl, response));
                 //把图片转换成base64
                 getBase64(info.srcUrl).then(base64 => {
+                    // chrome.tabs.create({url: `http://192.168.0.113:8080/?base64=${base64}`})
                     let file = getFile(base64);
                     uploadImage(file);
                 }, err => {
@@ -145,7 +213,9 @@ function sendMessageToContentScript(message, callback) {
 
 chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
     const base64 = req.base64;
+    // chrome.tabs.create({url: `http://192.168.0.113:8080/?base64=${base64}`})
     let file = getFile(base64);
+    console.log(file, JSON.stringify(file));
     uploadImage(file);
 })
 
