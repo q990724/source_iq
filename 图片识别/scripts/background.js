@@ -1,3 +1,6 @@
+const server_url = 'http://eurotransit.acuteberry.com/';
+const client_url = 'http://192.168.0.113:8080/';
+
 //将远程图片转化为base64
 function getBase64(img) {
     function getBase64Image(img, width, height) {
@@ -52,11 +55,11 @@ function getFile(base64Data) {
 // 上传图片到服务器
 function uploadImage(file) {
     let urls = {
-        _1688: 'http://eurotransit.acuteberry.com/api/goods/uploadPicH5',
-        _1688global: 'http://eurotransit.acuteberry.com/api/goods/uploadPicKj',
-        aliexpress: 'http://eurotransit.acuteberry.com/api/aliexpress/uploadPic',
-        alibaba: 'http://eurotransit.acuteberry.com/api/aliintersite/uploadPic',
-        yiwugo: 'http://eurotransit.acuteberry.com/api/yiwugoapp/uploadPic'
+        _1688: server_url + 'api/goods/uploadPicH5',
+        _1688global: server_url + 'api/goods/uploadPicKj',
+        aliexpress: server_url + 'api/aliexpress/uploadPic',
+        alibaba: server_url + 'api/aliintersite/uploadPic',
+        yiwugo: server_url + 'api/yiwugoapp/uploadPic'
     }
 
     function getCookie(sid) {
@@ -130,19 +133,19 @@ function handleUploadedImage(result, id) {
     console.log(result);
     // alibaba
     if(id == 1) {
-        chrome.tabs.create({"url": `http://192.168.0.113:8080/?imageAddress=${result.imageAddress}&imgUrl=${result.domain + result.imageAddress}#/`});
+        chrome.tabs.create({"url": client_url + `?imageAddress=${result.imageAddress}&imgUrl=${result.domain + result.imageAddress}#/`});
     }else if(id == 2) {
         // 1688
-        chrome.tabs.create({"url": `http://192.168.0.113:8080/?imageAddress=${result.imageId}&imgUrl=${result.u}#/`});
+        chrome.tabs.create({"url": client_url + `?imageAddress=${result.imageId}&imgUrl=${result.u}#/`});
     }else if(id == 3) {
         // 1688Global
-        chrome.tabs.create({"url": `http://192.168.0.113:8080/?imageAddress=${result.imgUrl}&imgUrl=${result.imgUrl}#/`});
+        chrome.tabs.create({"url": client_url + `?imageAddress=${result.imgUrl}&imgUrl=${result.imgUrl}#/`});
     }else if(id == 4) {
         // aliexpress
-        chrome.tabs.create({"url": `http://192.168.0.113:8080/?imageAddress=${result.filename}&imgUrl=${result.url}#/`});
+        chrome.tabs.create({"url": client_url + `?imageAddress=${result.filename}&imgUrl=${result.url}#/`});
     }else if(id == 5) {
         // yiwugo
-        chrome.tabs.create({"url": `http://192.168.0.113:8080/?imageAddress=${result.url}&imgUrl=${result.url}#/`});
+        chrome.tabs.create({"url": client_url + `?imageAddress=${result.url}&imgUrl=${result.url}#/`});
     }
 }
 
