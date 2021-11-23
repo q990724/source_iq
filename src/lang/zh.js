@@ -16,7 +16,7 @@ module.exports = {
         hour: '小时',
         shipments: '发货',
         goodMerchant: '实力商家',
-        no_more: '暂无更多'
+        no_more: '- 没有找到结果 -'
     },
     button: {
         more: '更多',

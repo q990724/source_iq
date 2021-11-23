@@ -12,8 +12,8 @@ Vue.use(VueI18n)
 Vue.use(ElementUI);
 
 // 创建多语言，并配置语言文件
-const i18n = new VueI18n({
-    locale: 'zh', // 默认语言标识
+export const i18n = new VueI18n({
+    locale: 'en', // 默认语言标识
     messages: {
         'zh': require('@/lang/zh'),
         'en': require('@/lang/en'),
@@ -26,3 +26,4 @@ new Vue({
     i18n,
     render: h => h(App)
 }).$mount('#app')
+

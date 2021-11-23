@@ -86,7 +86,7 @@
 				this.getDataFromImage(false);
 			},
 			onImageUploadedError(e) {
-				this.$message.error('图片上传失败！');
+				this.$message.error(this.$t('message.upload_image_error'));
 			},
 			onClickLocalItem(parmas) {
 				this.imageAddress = parmas.imageAddress;
@@ -136,7 +136,7 @@
 					}
 					this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
 				} catch (e) {
-					this.$message.error('图片搜索出错' + e);
+					this.$message.error(this.$t('message.serach_result_from_image_error') + e);
 				}
 			},
 			async getDataFromText(loadmore) {
@@ -148,7 +148,7 @@
 					}else {
 						result = await yiwugo.searchShopsByText({...this.searchTextParams, page: this.page});
 					}
-					if(!result || !result.data) return this.$message.error('获取失败！');
+					if(!result || !result.data) return this.$message.error(this.$t('message.get_result_error'));
 					this.categoryList = result.data.categoryList;
 					this.filterList = result.data.filterList;
 					this.resultInfo = result.data.resultInfo;

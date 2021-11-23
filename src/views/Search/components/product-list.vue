@@ -30,7 +30,7 @@
 		
 		<transition name="el-zoom-in-bottom">
 			<div class="no-list" v-show="showNoList">
-				<p>- 没有找到结果 -</p>
+				<p>{{$t('lable.no_more')}}</p>
 			</div>
 		</transition>
 	</div>

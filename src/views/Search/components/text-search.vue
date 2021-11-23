@@ -2,15 +2,15 @@
     <div class="text-search mt40">
         <div class="input-box">
             <i class="el-icon-search"></i>
-            <el-select v-model="index_area" placeholder="请选择" v-if="options && options.length > 0">
+            <el-select v-model="index_area" :placeholder="$t('label.select')" v-if="options && options.length > 0">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                 </el-option>
             </el-select>
-            <input type="text" class="input" placeholder="请输入关键词" v-model="input" autocomplete="off" @keypress="onKeyPress">
+            <input type="text" class="input" :placeholder="$t('label.input_placeholder')" v-model="input" autocomplete="off" @keypress="onKeyPress">
             <!-- <i class="el-icon-circle-close" v-show="input" @click="onClickCloseButton"></i> -->
             <i class="el-icon-camera" @click="onClickCamera"></i>
         </div>
-        <div class="sbtn" @click="onClickSearchButton">搜索</div>
+        <div class="sbtn" @click="onClickSearchButton">{{$t('button.search')}}</div>
 
         <el-upload
             class="avatar-uploader"
@@ -216,7 +216,7 @@ export default {
     border-radius: 0 6px 6px 0;
     font: 16.5px/2.4 Tahoma,Arial,"\5b8b\4f53",sans-serif;
     font-weight: 600;
-    letter-spacing: 5px;
+    letter-spacing: 1px;
     margin-left: -5px;
     cursor: pointer;
 }

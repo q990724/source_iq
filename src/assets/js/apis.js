@@ -1,10 +1,10 @@
 import {Service} from "@/assets/js/http";
 import { Message } from 'element-ui';
+import {i18n} from "../../main.js";
 
 function getCookie(source) {
 	let cookie = '';
-	try{
-		let id = '';
+	let id = '';
 		if(source === 'aliexpress') {
 			id = 'cookie-aliexpress'
 		}else if(source === '1688') {
@@ -12,13 +12,21 @@ function getCookie(source) {
 		}else if(source === '1688global') {
 			id = 'cookie-1688global'
 		}
-		cookie = document.getElementById(id).dataset.cookie;
-	}catch(e) {
-		Message.error(`请先登录${source}！`);
-		return null;
-	}
+		let ele = document.getElementById(id) || null;
+		cookie = ele ? ele.dataset.cookie : null;
 	if(!cookie) {
-		Message.error(`请先登录${source}！`);
+		Message.error(`${i18n.t('message.no_login')}${source}！`);
+		switch (source) {
+			case 'aliexpress':
+				window.open('https://www.aliexpress.com/','_brank')
+				break;
+			case '1688': 
+				window.open('https://login.taobao.com/?redirect_url=https%3A%2F%2Flogin.1688.com%2Fmember%2Fjump.htm%3Ftarget%3Dhttps%253A%252F%252Flogin.1688.com%252Fmember%252FmarketSigninJump.htm%253FDone%253D%25252F%25252Fwww.1688.com%25252F&style=tao_custom&from=1688web','_brank')
+				break;
+			case '1688global': 
+				window.open('https://global.1688.com/#/home','_brank')
+				break;
+		}
 		return null;
 	}
 	return cookie;
@@ -93,7 +101,7 @@ export const yiwugo = {
         })
     },
     // 图片搜索
-    searchGoodsByPic(file_url, page = 1, page_size = 10, lang = 'zh') {
+    searchGoodsByPic(file_url, page = 1, page_size = 10, lang = 'en') {
         return Service.get('api/yiwugoapp/searchGoodsByPic', {
             params: {
                 file_url, page, page_size, lang
@@ -101,7 +109,7 @@ export const yiwugo = {
         })
     },
 	// 搜索商品
-	searchGoodsByText({search_text, page=1, language='zh', sort = 0, set_yiwu_market = 0, min_price = null, max_price = null, category = null, sub_market = null,}) {
+	searchGoodsByText({search_text, page=1, language='en', sort = 0, set_yiwu_market = 0, min_price = null, max_price = null, category = null, sub_market = null,}) {
 		return Service.get('api/yiwugoapp/searchGoodsByText', {
             params: {
                 search_text,page,language,sort,set_yiwu_market,min_price,max_price,category,sub_market
@@ -109,7 +117,7 @@ export const yiwugo = {
         })
 	},
 	// 搜索店铺
-	searchShopsByText({search_text, page = 1, language = 'zh', page_size = 20}) {
+	searchShopsByText({search_text, page = 1, language = 'en', page_size = 20}) {
         return Service.get('api/yiwugoapp/searchShopsByText', {
             params: {
                 search_text, page, language, page_size
@@ -121,7 +129,7 @@ export const yiwugo = {
 export const aliexpress = {
 	uploadPic(file) {
 		let cookie = getCookie('aliexpress');
-		if(!cookie) return;
+		if(!cookie) return Promise.reject('no cookie');
 	    let formData = new FormData();
 	    formData.append('file', file);
 	    return Service.post('api/aliexpress/uploadPic', formData, {
@@ -134,7 +142,7 @@ export const aliexpress = {
 	// 图片搜索
 	searchGoodsByPic(filename, categoryId = null) {
 		let cookie = getCookie('aliexpress');
-		if(!cookie) return;
+		if(!cookie) return Promise.reject('no cookie');
 	    return Service.get('api/aliexpress/searchGoodsByPic', {
 	        params: {
 	            filename, categoryId
@@ -145,9 +153,9 @@ export const aliexpress = {
 	    })
 	},
 	// 文字搜索
-	searchGoodsByText({search_text, min_price, max_price, ship_from_country, sale, spend_save, free_shipping, is_favorite, sort_type, page = 1, country, language, currency}) {
+	searchGoodsByText({search_text, min_price, max_price, ship_from_country, sale, spend_save, free_shipping, is_favorite, sort_type, page = 1, country, language = 'en_US', currency}) {
 		let cookie = getCookie('aliexpress');
-		if(!cookie) return;
+		if(!cookie) return Promise.reject('no cookie');
 	    return Service.get('api/aliexpress/searchGoodsByText', {
 	        params: {
 	            search_text, min_price, max_price, ship_from_country, sale, spend_save, free_shipping, is_favorite, sort_type, page, country, language, currency
@@ -162,7 +170,7 @@ export const aliexpress = {
 export const _1688 = {
 	uploadPicH5(file) {
 		let cookie = getCookie('1688');
-		if(!cookie) return;
+		if(!cookie) return Promise.reject('no cookie');
 	    let formData = new FormData();
 	    formData.append('file', file);
 		formData.append('cookie', cookie);
@@ -175,7 +183,7 @@ export const _1688 = {
 	// 图片搜索
 	searchGoodsByPic({imageId, searchtype = 0, page = 2, yoloRegionSelected = true, yoloCropRegion = '', region = '', sortField = 'normal', sortType = 'asc', pailitaoCategoryId = null, }) {
 		let cookie = getCookie('1688');
-		if(!cookie) return;
+		if(!cookie) return Promise.reject('no cookie');
 	    return Service.get('api/goods/imgSearch', {
 	        params: {
 	            imageId, searchtype, page, yoloRegionSelected, yoloCropRegion, region, 
@@ -186,7 +194,7 @@ export const _1688 = {
 	// 图片搜索
 	searchGoodsByPicFirst(imageId) {
 		let cookie = getCookie('1688');
-		if(!cookie) return;
+		if(!cookie) return Promise.reject('no cookie');
 	    return Service.get('api/goods/imgSearchFirst', {
 	        params: {
 	            imageId, cookie
@@ -196,7 +204,7 @@ export const _1688 = {
 	// 文字搜索首次
 	searchGoodsFirst({type = 1, keyword = '', page = 1}) {
 		let cookie = getCookie('1688');
-		if(!cookie) return;
+		if(!cookie) return Promise.reject('no cookie');
 	    return Service.get('api/goods/searchGoodsFirst', {
 	        params: {
 	            type, cookie, keyword, page
@@ -205,7 +213,7 @@ export const _1688 = {
 	},
 	searchGoods({type = 1, keyword = '', page = 1, }) {
 		let cookie = getCookie('1688');
-		if(!cookie) return;
+		if(!cookie) return Promise.reject('no cookie');
 	    return Service.get('api/goods/searchGoods', {
 	        params: {
 	            type, cookie, keyword, page
@@ -217,7 +225,7 @@ export const _1688 = {
 export const _1688global = {
 	uploadPic(file) {
 		let cookie = getCookie('1688global');
-		if(!cookie) return;
+		if(!cookie) return Promise.reject('no cookie');
 	    let formData = new FormData();
 	    formData.append('file', file);
 		formData.append('cookie', cookie);
@@ -229,11 +237,20 @@ export const _1688global = {
 	},
 	searchGoodsByPic({imgUrl, region, keyword, categoryId, location, tags, pageNo}) {
 		let cookie = getCookie('1688global');
-		if(!cookie) return;
+		if(!cookie) return Promise.reject('no cookie');
 	    return Service.get('api/goods/imgSearchKj', {
 	        params: {
 	            imgUrl, cookie,region,keyword,categoryId,location,tags,pageNo
 	        }
 	    })
+	},
+	searchGoodsFirstKj(keywords) {
+		let cookie = getCookie('1688global');
+		if(!cookie) return Promise.reject('no cookie');
+		return Service.get('api/goods/searchGoodsFirstKj', {
+			params: {
+				keywords, cookie
+			}
+		})
 	}
 }

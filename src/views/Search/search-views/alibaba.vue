@@ -93,7 +93,7 @@
              * @description 图片上传失败后的回调函数
              */
 			onImageUploadedError(e) {
-				this.$message.error('图片上传失败！');
+				this.$message.error(this.$t('message.upload_image_error'));
 			},
             /**
              * @description 点击裁剪区域某个图片时触发
@@ -195,7 +195,7 @@
 					}
 					this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
 				} catch (e) {
-					this.$message.error('图片搜索出错' + e);
+					this.$message.error(this.$t('message.serach_result_from_image_error') + e);
 				}
 			},
 			/**
@@ -211,7 +211,7 @@
 					// });
 					console.log(this.searchTextParams);
 					let result = await alibaba.searchGoodsByText({ ...this.searchTextParams,page: this.page });
-					if(!result || !result.data) return this.$message.error('获取失败！');
+					if(!result || !result.data) return this.$message.error(this.$t('message.get_result_error'));
 					this.categoryList = result.data.categoryList;
 					this.filterList = result.data.filterList;
 					this.resultInfo = result.data.resultInfo;

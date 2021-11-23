@@ -100,7 +100,7 @@
              * @description 图片上传失败后的回调函数
              */
 			onImageUploadedError(e) {
-				this.$message.error('图片上传失败！');
+				this.$message.error(this.$t('message.upload_image_error'));
 			},
             /**
              * @description 点击裁剪区域某个图片时触发
@@ -139,7 +139,7 @@
 				this.getDataFromText(false);
 			},
 			onFilterChange({e, o, title}){
-				
+				console.log(e, o, title);
 			},
             /**
              * @description 根据图片搜索获取数据
@@ -148,9 +148,9 @@
 			async getDataFromImage(loadmore) {
 				// this.$refs['product-list'].changeShowNoList(false);
 				try {
-					let result = await _1688global.searchGoodsByPic({imgUrl: this.imageAddress, pageNo: this.page});
+					let result = await _1688global.searchGoodsByPic({imgUrl: this.imageAddress, pageNo: this.page, categoryId: this.cid});
 					console.log(result);
-					if(!result) return this.$message.error('图片搜索出错');
+					this.filterList = result.data.filterList;
 					this.categoryList = result.data.categoryList ? result.data.categoryList : null;
 					this.resultInfo = result.data.resultInfo;
 					this.totalPage = this.resultInfo.totalPages || 1;
@@ -161,22 +161,22 @@
 					}
 					this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
 				} catch (e) {
-					this.$message.error('图片搜索出错' + e);
+					this.$message.error(this.$t('message.serach_result_from_image_error') + e);
 				}
 			},
 			async getDataFromText(loadmore) {
 				let result = null;
 				try {
 					if(!loadmore) {
-						result = await _1688.searchGoodsFirst({ ...this.searchTextParams,page: this.page });
+						result = await _1688global.searchGoodsFirstKj(this.searchTextParams.search_text);
 						if(result && result.data) {
 							this.categoryList = result.data.categoryList || null;
 							this.filterList = result.data.filterList || null;
 						}						
 					}else {
-						result = await _1688.searchGoods({ ...this.searchTextParams,page: this.page });
+						result = await _1688global.searchGoods({ ...this.searchTextParams,page: this.page });
 					}
-					if(!result || !result.data) return this.$message.error('获取失败！');
+					if(!result || !result.data) return this.$message.error(this.$t('message.get_result_error'));
 					this.resultInfo = result.data.resultInfo;
 					handleResponse(result);
 					this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
