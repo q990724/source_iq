@@ -14,7 +14,10 @@ let setting = {
     source: 1
 }
 
-chrome.storage.local.get( {app_setting: null}, function(o) {    
+chrome.storage.local.get( {app_setting: null}, function(o) {
+    if(!o.app_setting) {
+        chrome.storage.local.set({app_setting: setting}, function() {});
+    }
     let options = document.getElementsByTagName('option');
     for(let item of options) {
         if(item.value == o.app_setting.source) {
