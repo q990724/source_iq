@@ -14,7 +14,7 @@
 					<p v-if="item.product.tradePrice[0].minOrder">{{item.product.tradePrice[0].minOrder}} (Min.Order)
 					</p>
 					<!-- 如果卖家节点和年份都不存在时，就不渲染此div模块-->
-					<div class="supplier" v-if="item.seller && item.seller.years && item.seller !== undefined && item.seller.years !== undefined">
+					<div class="supplier" v-if="item.seller !== undefined && item.seller.years !== undefined && item.seller && item.seller.years">
 						<div class="year">
 							<span>{{item.seller.years}}</span>
 							<sup>YRS</sup>
