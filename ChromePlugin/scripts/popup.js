@@ -16,6 +16,7 @@ let setting = {
 
 chrome.storage.local.get( {app_setting: null}, function(o) {
     if(!o.app_setting) {
+        o.app_setting = setting;
         chrome.storage.local.set({app_setting: setting}, function() {});
     }
     let options = document.getElementsByTagName('option');
