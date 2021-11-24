@@ -80,6 +80,7 @@
 		},
 		methods: {
 			onImageUploadedSuccess(res) {
+				this.searchType = 'image';
 				this.originalImageUrl = res.imgUrl;
 				this.imageAddress = res.imageAddress;
 				this.main_imageAddress = res.imageAddress;

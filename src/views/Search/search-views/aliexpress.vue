@@ -74,6 +74,7 @@
              * @description 图片上传成功后的回调函数
              */
 			onImageUploadedSuccess(res) {
+				this.searchType = 'image';
 				this.originalImageUrl = res.imgUrl;
 				this.imageAddress = res.imageAddress;
 				this.main_imageAddress = res.imageAddress;

@@ -68,11 +68,13 @@
 		mounted() {
 			// 加载更多 aliexpress图片搜索暂无加载更多
 			bus.$on('loadmore', () => {
+				let totalPage = 99;
 				console.log('触底事件触发');
-                if(this.page > this.totalPage) {
-					this.page = this.totalPage;
+                if(this.page >= totalPage) {
+					this.page = totalPage;
 					return;
 				};
+				console.log(this.page);
 				this.page++;
 				if(this.searchType === 'image') {
 					console.log(111);
@@ -87,6 +89,7 @@
              * @description 图片上传成功后的回调函数
              */
 			onImageUploadedSuccess(res) {
+				this.searchType = 'image';
 				this.originalImageUrl = res.imgUrl;
 				this.imageAddress = res.imageAddress;
 				this.main_imageAddress = res.imageAddress;
