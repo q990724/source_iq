@@ -89,17 +89,16 @@
              * @description 图片上传成功后的回调函数
              */
 			onImageUploadedSuccess(res) {
+				this.searchTextParams = {
+					keyword: '',
+					type: 1
+				}
+				this.cid = null;
 				this.searchType = 'image';
 				this.originalImageUrl = res.imgUrl;
 				this.imageAddress = res.imageAddress;
 				this.main_imageAddress = res.imageAddress;
 				this.getDataFromImage(false);
-			},
-            /**
-             * @description 图片上传失败后的回调函数
-             */
-			onImageUploadedError(e) {
-				this.$message.error(this.$t('message.upload_image_error'));
 			},
             /**
              * @description 点击裁剪区域某个图片时触发

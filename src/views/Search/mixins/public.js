@@ -34,7 +34,7 @@ const publicData = {
             let imageAddress = res.imageAddress;
             let imgUrl = res.imgUrl;
             console.log(imageAddress, imgUrl);
-            if(imageAddress && imgUrl) this.onImageUploadedSuccess({imageAddress, imgUrl});   
+            if (imageAddress && imgUrl) this.onImageUploadedSuccess({ imageAddress, imgUrl });
         })
     },
     beforeDestroy() {
@@ -59,10 +59,10 @@ const publicData = {
          * @description 切换数据源时触发
          */
         onSourceItemClick(source_id) {
-            if(source_id === this.$store.state.source_id) return;
+            if (source_id === this.$store.state.source_id) return;
             this.$store.state.source_id = source_id;
             console.log(this.$store.state.source_id);
-            switch(source_id) {
+            switch (source_id) {
                 case SourceMap['alibaba']:
                     this.$router.push('/view-alibaba');
                     break;
@@ -72,15 +72,21 @@ const publicData = {
                 case SourceMap['aliexpress']:
                     this.$router.push('/view-aliexpress');
                     break;
-                case SourceMap['1688']: 
+                case SourceMap['1688']:
                     this.$router.push('/view-1688');
                     break;
                 case SourceMap['1688global']:
                     this.$router.push('/view-1688global');
                     break;
-                default: 
+                default:
                     this.$message.error('未知的数据源ID');
             }
+        },
+        /**
+             * @description 图片上传失败后的回调函数
+             */
+        onImageUploadedError(e) {
+            this.$message.error(this.$t('message.upload_image_error'));
         },
     }
 }

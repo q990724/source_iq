@@ -80,14 +80,16 @@
 		},
 		methods: {
 			onImageUploadedSuccess(res) {
+				this.searchTextParams = {
+					search_text: '',
+					index_area: '',
+				}
+				this.cid = null;
 				this.searchType = 'image';
 				this.originalImageUrl = res.imgUrl;
 				this.imageAddress = res.imageAddress;
 				this.main_imageAddress = res.imageAddress;
 				this.getDataFromImage(false);
-			},
-			onImageUploadedError(e) {
-				this.$message.error(this.$t('message.upload_image_error'));
 			},
 			onClickLocalItem(parmas) {
 				this.imageAddress = parmas.imageAddress;
