@@ -44,7 +44,7 @@
     import { handleResponse } from "@/assets/js/utils.js";
     import publicData from "../mixins/public.js";
 	export default {
-		name: "view-alibaba",
+		name: "view-aliexpress",
 		components: {
 			SourceList: SourceListComponent,
 			ImageOperation: ImageOperationComponent,
@@ -112,6 +112,7 @@
 				this.searchTextParams = {
 					search_text: params.search_text
 				}
+				this.search_text = params.search_text;
 				this.getDataFromText(false);
 			},
 			onFilterChange({e,o,title}) {

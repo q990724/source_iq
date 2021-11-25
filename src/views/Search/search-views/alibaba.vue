@@ -129,6 +129,7 @@
 					search_text: params.search_text,
 					index_area: params.index_area
 				}
+				this.search_text = params.search_text;
 				this.getDataFromText(false);
 			},
 			onFilterChange({e, o, title}) {

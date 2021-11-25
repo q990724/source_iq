@@ -3,7 +3,7 @@
 		<source-list @onSourceItemClick="onSourceItemClick"></source-list>
 		<div class="container">
 			<div class="main-container">
-				<text-search @onClickSearchButton="onClickSearchButton" @onImageUploadedSuccess="onImageUploadedSuccess" @onImageUploadedError="onImageUploadedError"></text-search>
+				<text-search ref="text_search" @onClickSearchButton="onClickSearchButton" @onImageUploadedSuccess="onImageUploadedSuccess" @onImageUploadedError="onImageUploadedError"></text-search>
 				<!--  图片处理区域  -->
 				<image-operation ref="image_operation" :original_image_url="originalImageUrl"
 					@onClickLocalItem="onClickLocalItem"
@@ -42,7 +42,7 @@
     import publicData from "../mixins/public.js";
     import { getBase64FromCropImage } from "@/assets/js/utils.js";
 	export default {
-		name: "view-alibaba",
+		name: "view-1688",
 		components: {
 			SourceList: SourceListComponent,
 			ImageOperation: ImageOperationComponent,
@@ -134,6 +134,7 @@
 					keyword: params.search_text,
 					type: 1
 				}
+				this.search_text = params.search_text;
 				this.getDataFromText(false);
 			},
 			onFilterChange({e, o, title}){

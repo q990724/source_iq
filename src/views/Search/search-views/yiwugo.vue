@@ -42,7 +42,7 @@
     import { handleResponse } from "@/assets/js/utils.js";
 
 	export default {
-		name: "search_result",
+		name: "view-yiwugo",
 		components: {
 			SourceList: SourceListComponent,
 			ImageOperation: ImageOperationComponent,
@@ -112,6 +112,7 @@
 					search_text: params.search_text,
 					index_area: params.index_area
 				}
+				this.search_text = params.search_text;
 				this.getDataFromText(false);
 			},
 			onFilterChange({e, o, title}) {

@@ -42,7 +42,7 @@
     import publicData from "../mixins/public.js";
     import { getBase64FromCropImage } from "@/assets/js/utils.js";
 	export default {
-		name: "view-alibaba",
+		name: "view-1688global",
 		components: {
 			SourceList: SourceListComponent,
 			ImageOperation: ImageOperationComponent,
@@ -135,6 +135,7 @@
 					keyword: params.search_text,
 					type: 1
 				}
+				this.search_text = params.search_text;
 				this.getDataFromText(false);
 			},
 			onFilterChange({e, o, title}){
