@@ -153,6 +153,7 @@
 					this.categoryList = result.data.categoryList ? result.data.categoryList : null;
 					this.resultInfo = result.data.resultInfo;
 					this.totalPage = this.resultInfo.totalPages || 1;
+					this.sourceResult = result.sourceResult;
 					if (result.data.results) {
 						handleResponse(result);
 					} else {
@@ -167,16 +168,21 @@
 				let result = null;
 				try {
 					if(!loadmore) {
-						result = await _1688global.searchGoodsFirstKj(this.searchTextParams.search_text);
+						result = await _1688global.searchGoodsFirstKj(this.searchTextParams.keyword);
 						if(result && result.data) {
 							this.categoryList = result.data.categoryList || null;
 							this.filterList = result.data.filterList || null;
 						}						
 					}else {
-						result = await _1688global.searchGoods({ ...this.searchTextParams,page: this.page });
+						let sessionId = null;
+						if(this.sourceResult && this.sourceResult.data && this.sourceResult.data.window && this.sourceResult.data.window.data && this.sourceResult.data.window.data.pageMessage) {
+							sessionId = this.sourceResult.data.window.data.pageMessage.sessionId;
+						}
+						result = await _1688global.searchGoodsKj({keywords: this.searchTextParams.keyword, beginPage: this.page, sessionId: sessionId});
 					}
 					if(!result || !result.data) return this.$message.error(this.$t('message.get_result_error'));
 					this.resultInfo = result.data.resultInfo;
+					this.sourceResult = result.sourceResult;
 					handleResponse(result);
 					this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
 				} catch (error) {

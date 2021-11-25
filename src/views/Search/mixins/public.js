@@ -19,6 +19,8 @@ const publicData = {
             results: [],
             // 搜索结果相关信息 pageNum等
             resultInfo: {},
+            // 官方接口返回的数据
+            sourceResult: {},
             // 当前搜索页码
             page: 1,
             // 当前已选分类ID

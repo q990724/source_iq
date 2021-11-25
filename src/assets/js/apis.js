@@ -252,5 +252,14 @@ export const _1688global = {
 				keywords, cookie
 			}
 		})
+	},
+	searchGoodsKj({keywords, sessionId, beginPage = 2}) {
+		let cookie = getCookie('1688global');
+		if(!cookie) return Promise.reject('no cookie');
+		return Service.get('api/goods/searchGoodsKj', {
+			params: {
+				keywords, cookie, sessionId, beginPage
+			}
+		})
 	}
 }
