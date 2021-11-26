@@ -56,7 +56,7 @@ export default {
 
 <style scoped lang="scss">
 .product-class {
-    font-size: 14px;
+
     margin-bottom: 10px;
     .title {
         float: left;
@@ -65,6 +65,7 @@ export default {
         padding: 6px 0;
     }
     .list {
+        font-size: 14px;
         margin: 0 110px;
         max-height: 30px;
         overflow: hidden;

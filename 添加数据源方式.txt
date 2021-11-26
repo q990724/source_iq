@@ -4,3 +4,6 @@
 4、src -> router -> index.js 中添加新货源view的路径
 
 最后在新建的货源views里面修改具体的代码（发送请求等），公用文件在 mixins -> public.js中
+
+
+5、src->views->Search->components->source-list.vue 中添加选项卡

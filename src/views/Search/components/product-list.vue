@@ -22,8 +22,11 @@
 						<div class="supplier-name" @click="openHref(item.seller.homeUrl)">{{item.seller.name}}</div>
 					</div>
 				</div>
-				<div class="bottom" v-if="item.seller">
+				<div class="bottom" v-if="item.seller && item.seller.homeUrl && item.seller.name">
 					<span @click="openHref(item.seller.homeUrl)">{{item.seller.name}}</span>
+				</div>
+				<div class="bottom" v-else-if="item.seller">
+					<span>{{item.seller.name}}</span>
 				</div>
 			</div>
 			<div class="clear"></div>

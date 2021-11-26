@@ -1,5 +1,6 @@
 const server_url = 'http://eurotransit.acuteberry.com/';
-const client_url = 'http://192.168.0.113:8080/';
+// const server_url = 'http://artpic.la.com/';
+const client_url = 'http://10.11.30.9:8080/';
 
 //将远程图片转化为base64
 function getBase64(img) {
@@ -59,7 +60,8 @@ function uploadImage(file) {
         _1688global: server_url + 'api/goods/uploadPicKj',
         aliexpress: server_url + 'api/aliexpress/uploadPic',
         alibaba: server_url + 'api/aliintersite/uploadPic',
-        yiwugo: server_url + 'api/yiwugoapp/uploadPic'
+        yiwugo: server_url + 'api/yiwugoapp/uploadPic',
+        dhgate: server_url + 'api/dhgateapp/searchGoodsByPic'
     }
 
     function getCookie(sid) {
@@ -146,6 +148,9 @@ function handleUploadedImage(result, id) {
     }else if(id == 5) {
         // yiwugo
         chrome.tabs.create({"url": client_url + `?imageAddress=${result.url}&imgUrl=${result.url}#/`});
+    }else if(id == 6) {
+        // dhgate
+        chrome.tabs.create({"url": client_url + `?imageAddress=${result.imgUrl}&imgUrl=${result.imgUrl}#/`});
     }
 }
 

@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import {alibaba, yiwugo, aliexpress, _1688, _1688global} from "@/assets/js/apis";
+import {alibaba, yiwugo, dhgate, aliexpress, _1688, _1688global} from "@/assets/js/apis";
 import SourceMap from "@/assets/js/source_map";
 import {getBase64} from "@/assets/js/utils.js";
 export default {
@@ -144,6 +144,16 @@ export default {
                         	return this.$message.error(res.msg);
                         }
                         params.onSuccess({imgUrl: res.data.url, imageAddress: res.data.url})
+                    }).catch(e=>{
+                        console.log(e);
+                    })
+                    break;
+                case SourceMap['dhgate']:
+                    dhgate.uploadPic(params.file).then(res=>{
+                        if(!res.data) {
+                            return this.$message.error(res.msg);
+                        }
+                        params.onSuccess({imgUrl: res.sourceResult.data.data.imgUrl, imageAddress: res.sourceResult.data.data.imgUrl})
                     }).catch(e=>{
                         console.log(e);
                     })

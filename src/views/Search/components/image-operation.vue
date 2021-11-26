@@ -131,6 +131,14 @@ export default {
 						console.log(e);
 					})
 				    break;
+                case SourceMap['dhgate']:
+                    dhgate.uploadPic(params.file).then(res=>{
+                        console.log(res);
+                        this.$emit('onClickLocalItem',{imgUrl: res.sourceResult.data.data.imgUrl, imageAddress: res.sourceResult.data.data.imgUrl})
+                    }).catch(e=>{
+                        console.log(e);
+                    })
+                    break;
             }
         },
         onClickMainImage() {

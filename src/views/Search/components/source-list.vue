@@ -13,6 +13,9 @@
             <div class="item" :class="{'active': $store.state.source_id === 5}">
                 <span data-name="yiwugo">Yiwugo</span>
             </div>
+            <div class="item" :class="{'active': $store.state.source_id === 6}">
+                <span data-name="dhgate">DHgate</span>
+            </div>
             <div class="item" :class="{'active': $store.state.source_id === 1}">
                 <span data-name="alibaba">Alibaba</span>
             </div>

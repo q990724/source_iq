@@ -1,3 +1,4 @@
+import Qs from 'qs'
 import {Service} from "@/assets/js/http";
 import { Message } from 'element-ui';
 import {i18n} from "../../main.js";
@@ -262,4 +263,42 @@ export const _1688global = {
 			}
 		})
 	}
+}
+
+export const dhgate = {
+	// 图片搜索
+	uploadPic(file, page_num = 1, page_size = 10, lang = 'en', currency = 'USD') {
+		let formData = new FormData();
+		formData.append('image', file);
+		formData.append('page_num', page_num);
+		formData.append('page_size', page_size);
+		formData.append('lang', lang);
+		formData.append('currency', currency);
+		return Service.post('api/dhgateapp/searchGoodsByPic', formData, {
+			headers: {
+				'Content-Type': 'multipart/form-data'
+			}
+		})
+	},
+	// 图片搜索2
+	searchGoodsByPic(imgUrl,page_num = 1, category = null, page_size = 10, lang = 'en', currency = 'USD') {
+		const params = Qs.stringify({
+			imgUrl, page_num, page_size, lang, currency, category
+		});
+		return Service.post('api/dhgateapp/searchGoodsByPic',params, {
+			headers: {'Content-Type':'application/x-www-form-urlencoded'}
+		})
+	},
+	// 搜索商品
+	searchGoodsByText({search_text, page=1, page_size=20, lang='en', currency='USD', sort = 1, price_sort = null, min_price = null, max_price = null, category = null, at = null, freeShipping = null, inventoryLocation = null}) {
+		const params = Qs.stringify({
+			search_text, page, page_size, lang, currency, sort, price_sort, min_price, max_price, category, at, freeShipping, inventoryLocation
+		});
+		console.log(params);
+		return Service.post('api/dhgateapp/searchGoodsByText', params, {
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded'
+			},
+		})
+	},
 }

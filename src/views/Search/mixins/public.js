@@ -122,6 +122,9 @@ const publicData = {
                     case SourceMap['1688global']:
                         this.$router.push('/view-1688global');
                         break;
+                    case SourceMap['dhgate']:
+                        this.$router.push('/view-dhgate');
+                        break;
                     default:
                         this.$message.error('未知的数据源ID');
                 }
