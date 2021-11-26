@@ -1,0 +1,6 @@
+1、src -> assets -> js -> source_map.js 中的SourceMap对象添加一条记录，"货源名称": "自增长ID"
+2、src -> assets -> js -> apis.js 中创建并导出一个货源对象，里面包含了上传图片/文字搜索/图片搜索等接口
+3、src -> views -> Search -> search-views 中复制alibaba的模板并更名为新货源名称
+4、src -> router -> index.js 中添加新货源view的路径
+
+最后在新建的货源views里面修改具体的代码（发送请求等），公用文件在 mixins -> public.js中
