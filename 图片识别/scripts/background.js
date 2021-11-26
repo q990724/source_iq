@@ -215,11 +215,19 @@ function sendMessageToContentScript(message, callback) {
 }
 
 chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
-    const base64 = req.base64;
-    // chrome.tabs.create({url: `http://192.168.0.113:8080/?base64=${base64}`})
-    let file = getFile(base64);
-    console.log(file, JSON.stringify(file));
-    uploadImage(file);
+    let action = req.action,
+        value = req.value;
+    if(action === 'uploadImage') {
+        const base64 = value.base64;
+        let file = getFile(base64);
+        console.log(file, JSON.stringify(file));
+        uploadImage(file);
+    }else if(action === 'getSetting') {
+        chrome.storage.local.get( {app_setting: null}, function(o) {
+            sendResponse({app_setting: o.app_setting})
+        })
+    }
+    return true;
 })
 
 // 监听页面变化

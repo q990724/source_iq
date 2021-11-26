@@ -23,7 +23,8 @@ Service.interceptors.request.use(config => {
 // 添加响应拦截器
 Service.interceptors.response.use(response => {
     loadingInstance.close()
-    // console.log(response)
+    // if(response && response.data && response.data.)
+    console.log(response.data);
     return response.data
 }, error => {
     console.log('TCL: error', error);
