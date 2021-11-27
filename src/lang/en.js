@@ -2,9 +2,13 @@ module.exports = {
     message: {
         findSource: 'Find the following resources for you',
         no_login: 'Please login ',
+        login_timeout: 'Current login expired, Please login ',
+        un_login: 'Not logged',
+        go_login: 'Go to login',
         get_result_error: 'Failed to obtain data',
         serach_result_from_image_error: 'Image search failed',
-        upload_image_error: 'Uploading image failed'
+        upload_image_error: 'Uploading image failed',
+        network_error: 'Network Error'
     },
     label: {
         chooseBox: '框选主体',
@@ -26,6 +30,7 @@ module.exports = {
     },
     button: {
         more: 'More',
-        search: 'Search'
+        search: 'Search',
+        cancel: 'Cancel'
     }
 }

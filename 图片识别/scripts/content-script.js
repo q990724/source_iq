@@ -49,7 +49,6 @@ $(function() {
                         base64: res
                     }
                 });
-                //uploadImage(file);
             })
         },
         onChange: () => {
@@ -71,54 +70,22 @@ $(function() {
 
     });
 
-	setInterval(() => {
-		let input = document.getElementById('cookie-aliexpress');
-		let input_1688 = document.getElementById('cookie-1688');
-        let input_1688global = document.getElementById('cookie-1688global');
-
-        // aliexpress
-		if(input) {
-			chrome.storage.local.get( {aliexpress_cookie: null}, function(o) {
-				input.setAttribute('data-cookie', o.aliexpress_cookie);
-			})
-		}else {
-			input = document.createElement('input');
-			chrome.storage.local.get( {aliexpress_cookie: null}, function(o) {
-				input.setAttribute('data-cookie', o.aliexpress_cookie);
-			})
-			input.setAttribute('id', 'cookie-aliexpress');
-			input.setAttribute('type', 'hidden');
-			document.body.appendChild(input);
-		}
-		// 1688
-		if(input_1688) {
-			chrome.storage.local.get( {_1688_cookie: null}, function(o) {
-				input_1688.setAttribute('data-cookie', o._1688_cookie);
-			})
-		}else {
-			input_1688 = document.createElement('input');
-			chrome.storage.local.get( {_1688_cookie: null}, function(o) {
-				input_1688.setAttribute('data-cookie', o._1688_cookie);
-			})
-			input_1688.setAttribute('id', 'cookie-1688');
-			input_1688.setAttribute('type', 'hidden');
-			document.body.appendChild(input_1688);
-		}
-        // 1688跨境
-        if(input_1688global) {
-            chrome.storage.local.get( {_1688global_cookie: null}, function(o) {
-				input_1688global.setAttribute('data-cookie', o._1688global_cookie);
-			})
-        }else {
-            input_1688global = document.createElement('input');
-			chrome.storage.local.get( {_1688global_cookie: null}, function(o) {
-				input_1688global.setAttribute('data-cookie', o._1688global_cookie);
-			})
-			input_1688global.setAttribute('id', 'cookie-1688global');
-			input_1688global.setAttribute('type', 'hidden');
-			document.body.appendChild(input_1688global);
+    function getQueryVariable(variable) {
+        let query = window.location.search.substring(1);
+        let vars = query.split("&");
+        for (let i=0;i<vars.length;i++) {
+            let pair = vars[i].split("=");
+            if(pair[0] == variable){return pair[1];}
         }
-	}, 3000);
+        return(false);
+    }
+    let refreshUploadFile = getQueryVariable('refreshUploadFile');
+    if(refreshUploadFile === 'true') {
+        chrome.runtime.sendMessage({action: 'getUploadFile'}, function (response) {
+            window.localStorage.setItem('upload-file', response['upload-file']);
+            window.location.href = window.location.href.slice(0, window.location.href.indexOf('?'));
+        });
+    }
 })
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
@@ -141,6 +108,13 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         sendResponse($('.s-matching-dir').html())
     }else if(request.cmd == 'setting-change') {
         window.localStorage.setItem('app-setting', JSON.stringify(request.value.appSetting));
+        window.location.reload();
+    }else if(request.cmd == 'image-file') {
+        window.localStorage.setItem('upload-file', request.value.base64);
+    }else if(request.cmd == 'update-cookie') {
+        window.localStorage.setItem(`cookie-${request.value.source}`, request.value.cookie);
+    }else if(request.cmd == 'refesh-window') {
+        console.log('refesh');
         window.location.reload();
     }
     return true;

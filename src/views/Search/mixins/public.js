@@ -86,43 +86,43 @@ const publicData = {
                 if (source_id === this.$store.state.source_id) return;
                 this.$store.state.source_id = source_id;
                 console.log('当前数据源ID：', this.$store.state.source_id);
-                this.$store.state.continueSearchParams.continueSearch = false;
-                if (this.originalImageUrl || this.search_text) {
-                    this.$store.state.continueSearchParams.continueSearch = true;
-                    if (this.searchType == 'image') {
-                        this.$store.state.continueSearchParams.continueSearchType = 'image';
-                        if (this.originalImageUrl.indexOf('https') != -1 || this.originalImageUrl.indexOf('http') != -1) {
-                            this.$store.state.continueSearchParams.continueSearchImage = await this.urlOrBase64ToFile({ url: this.originalImageUrl });
-                        } else {
-                            this.$store.state.continueSearchParams.continueSearchImage = await this.urlOrBase64ToFile({ base64: this.originalImageUrl });
-                        }
-                    } else if (this.searchType == 'text') {
-                        this.$store.state.continueSearchParams.continueSearchType = 'text';
-                        this.$store.state.continueSearchParams.continueSearchText = this.search_text;
-                    }
-                }else {
-                    this.$store.state.continueSearchParams.continueSearch = false;
-                    this.$store.state.continueSearchParams.continueSearchType = 'image';
-                    this.$store.state.continueSearchParams.continueSearchText = null;
-                    this.$store.state.continueSearchParams.continueSearchImage = null;
-                }
+                // this.$store.state.continueSearchParams.continueSearch = false;
+                // if (this.originalImageUrl || this.search_text) {
+                //     this.$store.state.continueSearchParams.continueSearch = true;
+                //     if (this.searchType == 'image') {
+                //         this.$store.state.continueSearchParams.continueSearchType = 'image';
+                //         if (this.originalImageUrl.indexOf('https') != -1 || this.originalImageUrl.indexOf('http') != -1) {
+                //             this.$store.state.continueSearchParams.continueSearchImage = await this.urlOrBase64ToFile({ url: this.originalImageUrl });
+                //         } else {
+                //             this.$store.state.continueSearchParams.continueSearchImage = await this.urlOrBase64ToFile({ base64: this.originalImageUrl });
+                //         }
+                //     } else if (this.searchType == 'text') {
+                //         this.$store.state.continueSearchParams.continueSearchType = 'text';
+                //         this.$store.state.continueSearchParams.continueSearchText = this.search_text;
+                //     }
+                // }else {
+                //     this.$store.state.continueSearchParams.continueSearch = false;
+                //     this.$store.state.continueSearchParams.continueSearchType = 'image';
+                //     this.$store.state.continueSearchParams.continueSearchText = null;
+                //     this.$store.state.continueSearchParams.continueSearchImage = null;
+                // }
                 switch (source_id) {
-                    case SourceMap['alibaba']:
+                    case SourceMap['alibaba']['id']:
                         this.$router.push('/view-alibaba');
                         break;
-                    case SourceMap['yiwugo']:
+                    case SourceMap['yiwugo']['id']:
                         this.$router.push('/view-yiwugo');
                         break;
-                    case SourceMap['aliexpress']:
+                    case SourceMap['aliexpress']['id']:
                         this.$router.push('/view-aliexpress');
                         break;
-                    case SourceMap['1688']:
+                    case SourceMap['1688']['id']:
                         this.$router.push('/view-1688');
                         break;
-                    case SourceMap['1688global']:
+                    case SourceMap['1688global']['id']:
                         this.$router.push('/view-1688global');
                         break;
-                    case SourceMap['dhgate']:
+                    case SourceMap['dhgate']['id']:
                         this.$router.push('/view-dhgate');
                         break;
                     default:

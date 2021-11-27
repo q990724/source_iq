@@ -18,15 +18,8 @@ export default {
     beforeCreate() {
         // 获取app设置
         let appSetting = JSON.parse(window.localStorage.getItem('app-setting'));
-        console.log(appSetting)
         this.$store.state.source_id = appSetting.source;
         let current_path = this.$route.path;
-        this.$store.state.continueSearchParams = {
-            continueSearch: false,
-            continueSearchType: 'image',
-            continueSearchImage: null,
-            continueSearchText: null
-        }
         switch (this.$store.state.source_id) {
             case SoureMap['alibaba']:
                 if (current_path === '/view-alibaba') return;

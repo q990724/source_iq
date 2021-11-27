@@ -20,10 +20,15 @@ export function getQueryVariable(variable) {
  * @param {Image} img 
  * @param {Function} callback 
  */
-export function getBase64 (img, callback) {
-	const reader = new FileReader()
-	reader.addEventListener('load', () => callback(reader.result))
-	reader.readAsDataURL(img)
+export function getBase64 (img, callback = () =>{}) {
+	return new Promise((resolve => {
+		const reader = new FileReader()
+		reader.addEventListener('load', () => {
+			callback(reader.result)
+			resolve(reader.result);
+		})
+		reader.readAsDataURL(img)
+	}))
 }
 
 /**

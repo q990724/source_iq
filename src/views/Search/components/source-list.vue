@@ -32,7 +32,7 @@ export default {
         onItemClick(e) {
             if(e.target.nodeName == "SPAN") {
                 let name = e.target.dataset.name,
-                    source_id = SourceMap[name];
+                    source_id = SourceMap[name]['id'];
                 this.$store.state.sourceName = source_id;
                 this.$emit('onSourceItemClick', source_id);
             }

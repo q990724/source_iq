@@ -1,5 +1,9 @@
 import axios from 'axios'
-import { Message, Loading } from 'element-ui'
+import { Message, Loading, MessageBox } from 'element-ui'
+import SourceMap from "@/assets/js/source_map";
+import Store from "@/store/index";
+import {i18n} from "@/main";
+
 const ConfigBaseURL = 'http://eurotransit.acuteberry.com/' //默认路径，这里也可以使用env来判断环境
 let loadingInstance = null //这里是loading
 //使用create方法创建axios实例
@@ -24,13 +28,35 @@ Service.interceptors.request.use(config => {
 Service.interceptors.response.use(response => {
     loadingInstance.close()
     // if(response && response.data && response.data.)
-    console.log(response.data);
+    if(response.data) {
+        if(response.data.code == 40000 || response.data.data.error == 'require login') {
+            let sourceName = '',
+                loginPageUrl = '';
+            for (let key in SourceMap) {
+                if(SourceMap[key]['id'] == Store.state.source_id) {
+                    sourceName = key;
+                    loginPageUrl = SourceMap[key]['loginPageUrl']
+                    break;
+                }
+            }
+            MessageBox.confirm(i18n.t('message.login_timeout') + sourceName, i18n.t('message.un_login'), {
+                confirmButtonText: i18n.t('message.go_login'),
+                cancelButtonText: i18n.t('button.cancel'),
+                type: 'warning'
+            }).then(_=>{
+                window.open(loginPageUrl);
+            }).catch(e=>{
+                console.log(e);
+            })
+            return Promise.reject(response.data.message);
+        }
+    }
     return response.data
 }, error => {
     console.log('TCL: error', error);
     const msg = error.Message !== undefined ? error.Message : ''
     Message({
-        message: '网络错误' + msg,
+        message: i18n.t('message.network_error') + msg,
         type: 'error',
         duration: 3 * 1000
     })

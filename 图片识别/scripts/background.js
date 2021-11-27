@@ -1,6 +1,6 @@
 const server_url = 'http://eurotransit.acuteberry.com/';
 // const server_url = 'http://artpic.la.com/';
-const client_url = 'http://10.11.30.9:8080/';
+const client_url = 'http://192.168.0.113:8080/';
 
 //将远程图片转化为base64
 function getBase64(img) {
@@ -53,81 +53,24 @@ function getFile(base64Data) {
     return file;
 }
 
-// 上传图片到服务器
-function uploadImage(file) {
-    let urls = {
-        _1688: server_url + 'api/goods/uploadPicH5',
-        _1688global: server_url + 'api/goods/uploadPicKj',
-        aliexpress: server_url + 'api/aliexpress/uploadPic',
-        alibaba: server_url + 'api/aliintersite/uploadPic',
-        yiwugo: server_url + 'api/yiwugoapp/uploadPic',
-        dhgate: server_url + 'api/dhgateapp/searchGoodsByPic'
-    }
-
-    function getCookie(sid) {
-        return new Promise((resolve, reject) => {
-            let key = sid == 2 ? '_1688_cookie' : sid == 3 ? '_1688global_cookie' : sid == 4 ? 'aliexpress_cookie' : '';
-            chrome.storage.local.get( {[key]: null}, function(o) {
-                if(o[key]) {
-                    resolve(o[key]);
-                }else {
-                    reject()
-                }
-            })
-        });
-    }
-
-    chrome.storage.local.get( {app_setting: null}, function(o) {
-        let id = o.app_setting.source;
-        let formData = new FormData();
-        formData.append('file', file);
-        let ajaxConfig = {
-            url: '',
-            type: 'post',
-            data: formData,
-            contentType: false,
-            processData: false,
-            success:function(res){
-                console.log(res);
-                handleUploadedImage(res.data, id);
-            },
-            headers: {}
-        }
-        if(id == 2 || id == 3 || id == 4) {
-            getCookie(id).then(cookie=>{
-                // 1688
-                if(id == 2) {
-                    ajaxConfig.url = urls._1688;
-                    formData.append('cookie', cookie);
-                }else if(id == 3) {
-                    ajaxConfig.url = urls._1688global;
-                    formData.append('cookie', cookie);
-                }else if(id == 4) {
-                    ajaxConfig.url = urls.aliexpress;
-                    ajaxConfig.headers.token = cookie;
-                }
-                $.ajax(ajaxConfig);
-            }).catch(e=>{
-                console.log(id);
-                let sname = '';
-                if(id == 2) {
-                    sname = '1688';
-                }else if(id == 3) {
-                    sname = '1688Global'
-                }else if(id == 4) {
-                    sname = 'Aliexpress'
-                }
-                window.alert('Please login ' + sname);
-            })
+// 发送图片base64到content_script
+function uploadImage(base64) {
+    console.log(base64);
+    chrome.tabs.query({title: 'SourceIQ'}, tabs => {
+        console.log('获取项目页面', tabs);
+        if(tabs && tabs.length > 0) {
+            let tab = tabs[0];
+            sendMessageToContentScript({cmd: 'image-file', value: {base64}});
+            chrome.tabs.highlight({windowId: tab.windowId, tabs: tab.index}) // 切换到搜索页选项卡
+            chrome.windows.update(tab.windowId, {focused: true}); // 窗口得到聚焦
+            chrome.tabs.sendMessage(tab.id, {cmd: 'refesh-window'}, function (response) {});
         }else {
-            if(id == 1) {
-                ajaxConfig.url = urls.alibaba;
-            }else if(5) {
-                ajaxConfig.url = urls.yiwugo;
-            }
-            $.ajax(ajaxConfig);
+            sendMessageToContentScript({cmd: 'image-file', value: {base64}});
+            chrome.storage.local.set({'upload-file': base64}, function () {
+                chrome.tabs.create({active: true, url: client_url + '?refreshUploadFile=true'}, function (tab) {});
+            });
         }
-    })
+    });
 }
 
 // 处理服务器返回上传图片结果
@@ -174,24 +117,23 @@ chrome.contextMenus.create({
     contexts: ['all'],
     onclick: function (info, tab) {
         if (info.mediaType && info.mediaType == 'image') {
-            console.log(info);
-            sendMessageToContentScript({
-                cmd: 'parse-title',
-                value: {
-                    imgUrl: info.srcUrl,
-                    pageUrl: info.pageUrl
-                }
-            }, function (response) {
-                console.log('title: ' + parseTitle(info.pageUrl, info.srcUrl, response));
-                //把图片转换成base64
-                getBase64(info.srcUrl).then(base64 => {
-                    // chrome.tabs.create({url: `http://192.168.0.113:8080/?base64=${base64}`})
-                    let file = getFile(base64);
-                    uploadImage(file);
-                }, err => {
-                    console.log(err)
-                })
-            });
+            console.log('识别到网络图片：', info);
+            getBase64(info.srcUrl).then(base64 => {
+                uploadImage(base64);
+            }, err => {
+                console.log(err)
+            })
+            // sendMessageToContentScript({
+            //     cmd: 'parse-title',
+            //     value: {
+            //         imgUrl: info.srcUrl,
+            //         pageUrl: info.pageUrl
+            //     }
+            // }, function (response) {
+            //     // console.log('title: ' + parseTitle(info.pageUrl, info.srcUrl, response));
+            //     //把图片转换成base64
+            //
+            // });
         } else {
             chrome.tabs.captureVisibleTab(null, {
                 format: "png",
@@ -210,7 +152,6 @@ chrome.contextMenus.create({
 
 function sendMessageToContentScript(message, callback) {
     chrome.tabs.query({ }, function (tabs) {
-        console.log(tabs);
         for (let tab of tabs) {
             chrome.tabs.sendMessage(tab.id, message, function (response) {
                 if (callback) callback(response);
@@ -225,13 +166,18 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
     // 图片上传
     if(action === 'uploadImage') {
         const base64 = value.base64;
-        let file = getFile(base64);
-        console.log(file, JSON.stringify(file));
-        uploadImage(file);
+        // let file = getFile(base64);
+        // console.log(file, JSON.stringify(file));
+        uploadImage(base64);
     }else if(action === 'getSetting') {
         // 应用获取设置
         chrome.storage.local.get( {app_setting: null}, function(o) {
             sendResponse({app_setting: o.app_setting})
+        })
+    }else if(action === 'getUploadFile') {
+        // 插件获取的图片base64
+        chrome.storage.local.get( {'upload-file': null}, function(o) {
+            sendResponse({'upload-file': o['upload-file']})
         })
     }
     return true;
@@ -239,7 +185,6 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
 
 // 监听页面变化
 chrome.tabs.onUpdated.addListener(function(id, info, tab) {
-	console.log('tab更新', info);
 	let url = tab.url;
 
 	let obj2cookie = function (obj, step) {
@@ -258,12 +203,11 @@ chrome.tabs.onUpdated.addListener(function(id, info, tab) {
 				console.log(res);
 				let cookie_obj = {};
 				for(let item of res) {
-					if(item.name) {
-						cookie_obj[item.name] = item.value || '';
-					}
+					if(item.name) cookie_obj[item.name] = item.value || '';
 				}
 				let cookie = obj2cookie(cookie_obj, ';') || '';
-				chrome.storage.local.set({aliexpress_cookie: cookie}, function(){});
+				// chrome.storage.local.set({aliexpress_cookie: cookie}, function(){});
+                sendMessageToContentScript({cmd: 'update-cookie', value: {cookie: cookie, source: 'aliexpress'}});
 			}
 		})
 	}else if(url.indexOf('global.1688.com') !== -1 && info.status === 'complete') {
@@ -272,13 +216,12 @@ chrome.tabs.onUpdated.addListener(function(id, info, tab) {
 				console.log('res', res);
 				let cookie_obj = {};
 				for(let item of res) {
-					if(item.name) {
-						cookie_obj[item.name] = item.value || '';
-					}
+					if(item.name) cookie_obj[item.name] = item.value || '';
 				}
 				let cookie = obj2cookie(cookie_obj, '; ') || '';
-				console.log(cookie);
-				chrome.storage.local.set({_1688global_cookie: cookie}, function(){});
+				// console.log(cookie);
+				// chrome.storage.local.set({_1688global_cookie: cookie}, function(){});
+                sendMessageToContentScript({cmd: 'update-cookie', value: {cookie: cookie, source: '1688global'}});
 			}
 		})
 	}else if(url.indexOf('1688.com') !== -1 && info.status === 'complete') {
@@ -287,13 +230,12 @@ chrome.tabs.onUpdated.addListener(function(id, info, tab) {
 				console.log('res', res);
 				let cookie_obj = {};
 				for(let item of res) {
-					if(item.name) {
-						cookie_obj[item.name] = item.value || '';
-					}
+					if(item.name) cookie_obj[item.name] = item.value || '';
 				}
 				let cookie = obj2cookie(cookie_obj, '; ') || '';
-				console.log(cookie);
-				chrome.storage.local.set({_1688_cookie: cookie}, function(){});
+				// console.log(cookie);
+				// chrome.storage.local.set({_1688_cookie: cookie}, function(){});
+                sendMessageToContentScript({cmd: 'update-cookie', value: {cookie: cookie, source: '1688'}});
 			}
 		})
 	}

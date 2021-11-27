@@ -66,7 +66,7 @@ export default {
     }
     .list {
         font-size: 14px;
-        margin: 0 110px;
+        //margin: 0 110px;
         max-height: 30px;
         overflow: hidden;
         transition: all ease .3s;

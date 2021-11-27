@@ -1,33 +1,41 @@
 import Qs from 'qs'
 import {Service} from "@/assets/js/http";
-import { Message } from 'element-ui';
-import {i18n} from "../../main.js";
+import { Message, MessageBox } from 'element-ui';
+import {i18n} from "@/main";
+import SourceMap from "@/assets/js/source_map";
+import Store from "@/store";
 
 function getCookie(source) {
 	let cookie = '';
 	let id = '';
-		if(source === 'aliexpress') {
-			id = 'cookie-aliexpress'
-		}else if(source === '1688') {
-			id = 'cookie-1688'
-		}else if(source === '1688global') {
-			id = 'cookie-1688global'
-		}
-		let ele = document.getElementById(id) || null;
-		cookie = ele ? ele.dataset.cookie : null;
+	if(source === 'aliexpress') {
+		id = 'cookie-aliexpress'
+	}else if(source === '1688') {
+		id = 'cookie-1688'
+	}else if(source === '1688global') {
+		id = 'cookie-1688global'
+	}
+	cookie = window.localStorage.getItem(id) ? window.localStorage.getItem(id) : null;
+	console.log(source, id, cookie);
 	if(!cookie) {
-		Message.error(`${i18n.t('message.no_login')}${source}！`);
-		switch (source) {
-			case 'aliexpress':
-				window.open('https://www.aliexpress.com/','_brank')
+		let sourceName = '',
+			loginPageUrl = '';
+		for (let key in SourceMap) {
+			if(SourceMap[key]['id'] == Store.state.source_id) {
+				sourceName = key;
+				loginPageUrl = SourceMap[key]['loginPageUrl']
 				break;
-			case '1688': 
-				window.open('https://login.taobao.com/?redirect_url=https%3A%2F%2Flogin.1688.com%2Fmember%2Fjump.htm%3Ftarget%3Dhttps%253A%252F%252Flogin.1688.com%252Fmember%252FmarketSigninJump.htm%253FDone%253D%25252F%25252Fwww.1688.com%25252F&style=tao_custom&from=1688web','_brank')
-				break;
-			case '1688global': 
-				window.open('https://global.1688.com/#/home','_brank')
-				break;
+			}
 		}
+		MessageBox.confirm(i18n.t('message.no_login') + sourceName, i18n.t('message.un_login'), {
+			confirmButtonText: i18n.t('message.go_login'),
+			cancelButtonText: i18n.t('button.cancel'),
+			type: 'warning'
+		}).then(_=>{
+			window.open(loginPageUrl);
+		}).catch(e=>{
+			console.log(e);
+		})
 		return null;
 	}
 	return cookie;

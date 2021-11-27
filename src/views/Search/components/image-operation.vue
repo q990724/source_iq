@@ -154,6 +154,7 @@ export default {
             this.localCropImageList = [];
             this.mainImageActive = false;
             this.cropObject = null;
+            window.localStorage.removeItem('upload-file');
             this.$emit('onClickClear');
         },
 		setLocalImageList(list) {

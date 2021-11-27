@@ -30,7 +30,7 @@
 <script>
 import {alibaba, yiwugo, dhgate, aliexpress, _1688, _1688global} from "@/assets/js/apis";
 import SourceMap from "@/assets/js/source_map";
-import {getBase64} from "@/assets/js/utils.js";
+import {getBase64, getFileFromBase64} from "@/assets/js/utils.js";
 export default {
     name: 'text-search',
     data() {
@@ -43,6 +43,15 @@ export default {
             // yiwugo
             options_yiwugo: [{label: 'Products', value: 'Products'}],
             options: []
+        }
+    },
+    created() {
+        if(window.localStorage.getItem('upload-file')) {
+            this.onUploadImage();
+        }
+        if(window.localStorage.getItem('search-text')) {
+            this.input = window.localStorage.getItem('search-text');
+            this.onClickSearchButton();
         }
     },
     computed: {
@@ -83,6 +92,8 @@ export default {
                 this.$message.info('搜索内容不能为空！');
                 return;
             }
+            window.localStorage.setItem('search-text', this.input.trim());
+            window.localStorage.removeItem('upload-file');
             this.$emit('onClickSearchButton', {search_text: this.input, index_area: this.index_area});
         },
         onClickCamera() {
@@ -90,6 +101,7 @@ export default {
         },
         handleAvatarSuccess(res, file) {
             console.log('success', res);
+            window.localStorage.removeItem('search-text');
             this.$emit('onImageUploadedSuccess', res);
         },
         handleAvatarError(err) {
@@ -97,75 +109,64 @@ export default {
             this.$message.error('上传图片错误！');
             this.$emit('onImageUploadedError', err);
         },
-        onUploadImage(params) {
-            console.log(params);
+        onUploadImage() {
+            let base64 = window.localStorage.getItem('upload-file');
+            let file = getFileFromBase64(base64);
             switch (this.$store.state.source_id) {
-                case SourceMap['alibaba']:
-                    alibaba.uploadPic(params.file).then(res=>{
-                        if(!res.data) {
-                        	return $message.error(res.msg);
-                        }
-                        params.onSuccess({imgUrl: res.data.domain + res.data.imageAddress, imageAddress: res.data.imageAddress})
+                case SourceMap['alibaba']['id']:
+                    alibaba.uploadPic(file).then(res=>{
+                        if(!res.data) { return $message.error(res.msg); }
+                        this.handleAvatarSuccess({imgUrl: res.data.domain + res.data.imageAddress, imageAddress: res.data.imageAddress});
                     }).catch(e=>{
                         console.log(e);
                     })
                     break;
-                case SourceMap['1688']:
-					_1688.uploadPicH5(params.file).then(res=>{
-					    if(!res.data) {
-					    	return; this.$message.error(res.msg);
-					    }
-						getBase64(params.file, (u) => {
-							params.onSuccess({imgUrl: u, imageAddress: res.data.imageId})
-						});
+                case SourceMap['1688']['id']:
+					_1688.uploadPicH5(file).then(res=>{
+					    if(!res.data) return this.$message.error(res.msg);
+                        this.handleAvatarSuccess({imgUrl: base64, imageAddress: res.data.imageId})
 					}).catch(e=>{
 					    console.log(e);
 					})
                     break;
-                case SourceMap['1688global']:
-                    _1688global.uploadPic(params.file).then(res=>{
+                case SourceMap['1688global']['id']:
+                    _1688global.uploadPic(file).then(res=>{
                         if(!res.data) return this.$message.error(res.msg);
-                        params.onSuccess({imgUrl: res.data.imgUrl, imageAddress: res.data.imgUrl})
+                        this.handleAvatarSuccess({imgUrl: res.data.imgUrl, imageAddress: res.data.imgUrl})
                     }).catch(e=>{ console.log(e);})
                     break;
-                case SourceMap['aliexpress']:
-					aliexpress.uploadPic(params.file).then(res=>{
-						if(!res.data) {
-							return this.$message.error(res.msg);
-						}
-						params.onSuccess({imgUrl: res.data.url, imageAddress: res.data.filename})
+                case SourceMap['aliexpress']['id']:
+					aliexpress.uploadPic(file).then(res=>{
+						if(!res.data) return this.$message.error(res.msg);
+                        this.handleAvatarSuccess({imgUrl: res.data.url, imageAddress: res.data.filename})
 					}).catch(e=>{
 						console.log(e);
 					})
                     break;
-                case SourceMap['yiwugo']:
-                    yiwugo.uploadPic(params.file).then(res=>{
-                        if(!res.data) {
-                        	return this.$message.error(res.msg);
-                        }
-                        params.onSuccess({imgUrl: res.data.url, imageAddress: res.data.url})
+                case SourceMap['yiwugo']['id']:
+                    yiwugo.uploadPic(file).then(res=>{
+                        if(!res.data) return this.$message.error(res.msg);
+                        this.handleAvatarSuccess({imgUrl: res.data.url, imageAddress: res.data.url})
                     }).catch(e=>{
                         console.log(e);
                     })
                     break;
-                case SourceMap['dhgate']:
-                    dhgate.uploadPic(params.file).then(res=>{
-                        if(!res.data) {
-                            return this.$message.error(res.msg);
-                        }
-                        params.onSuccess({imgUrl: res.sourceResult.data.data.imgUrl, imageAddress: res.sourceResult.data.data.imgUrl})
+                case SourceMap['dhgate']['id']:
+                    dhgate.uploadPic(file).then(res=>{
+                        if(!res.data) return this.$message.error(res.msg);
+                        this.handleAvatarSuccess({imgUrl: res.sourceResult.data.data.imgUrl, imageAddress: res.sourceResult.data.data.imgUrl})
                     }).catch(e=>{
                         console.log(e);
                     })
                     break;
             }
         },
-        beforeAvatarUpload(file) {
-            const isLt2M = file.size / 1024 / 1024 < 2;
-            if (!isLt2M) {
-                this.$message.error('上传图片大小不能超过 2MB!');
-            }
-            return isLt2M;
+        async beforeAvatarUpload(file) {
+            // const isLt2M = file.size / 1024 / 1024 < 2;
+            // return isLt2M;
+            let base64 = await getBase64(file);
+            window.localStorage.setItem('upload-file', base64);
+            return true;
         },
         onKeyPress(e) {
             if(e.keyCode === 13)  {
