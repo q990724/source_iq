@@ -75,21 +75,7 @@ $(function() {
 		let input = document.getElementById('cookie-aliexpress');
 		let input_1688 = document.getElementById('cookie-1688');
         let input_1688global = document.getElementById('cookie-1688global');
-        let input_appSetting = document.getElementById('app-setting');
-        // app-setting
-        if(!input_appSetting) {
-            input_appSetting = document.createElement('input');
-            input_appSetting.setAttribute('type', 'hidden');
-            input_appSetting.setAttribute('id', 'app-setting');
-            chrome.storage.local.get( {app_setting: null}, function(o) {
-				input_appSetting.setAttribute('value', JSON.stringify(o.app_setting));
-			})
-            document.body.appendChild(input_appSetting);
-        }else {
-            chrome.storage.local.get( {app_setting: null}, function(o) {
-				input_appSetting.setAttribute('value', JSON.stringify(o.app_setting));
-			})
-        }
+
         // aliexpress
 		if(input) {
 			chrome.storage.local.get( {aliexpress_cookie: null}, function(o) {
@@ -136,7 +122,6 @@ $(function() {
 })
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-    console.log('收到消息', request.cmd);
     if (request.cmd === 'cover-image') {
         $("#source_iq_app").show();
         $("#source_iq_app").append(`
@@ -153,16 +138,15 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         `);
         $("#setImagePath").remove();
     }else if(request.cmd == 'parse-title') {
-        // sendResponse({
-        //     action: 'uploadImage',
-        //     value: $('.s-matching-dir').html()
-        // });
         sendResponse($('.s-matching-dir').html())
-        //sendResponse($(document).html());
+    }else if(request.cmd == 'setting-change') {
+        window.localStorage.setItem('app-setting', JSON.stringify(request.value.appSetting));
+        window.location.reload();
     }
     return true;
 });
 
+// 打开页面后自动获取一次当前设置
 chrome.runtime.sendMessage({action: 'getSetting'}, function (response) {
-    console.log('接收到消息：', response);
+    window.localStorage.setItem('app-setting', JSON.stringify(response.app_setting));
 });

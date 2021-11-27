@@ -209,25 +209,27 @@ chrome.contextMenus.create({
 });
 
 function sendMessageToContentScript(message, callback) {
-    chrome.tabs.query({
-        active: true,
-        currentWindow: true
-    }, function (tabs) {
-        chrome.tabs.sendMessage(tabs[0].id, message, function (response) {
-            if (callback) callback(response);
-        });
+    chrome.tabs.query({ }, function (tabs) {
+        console.log(tabs);
+        for (let tab of tabs) {
+            chrome.tabs.sendMessage(tab.id, message, function (response) {
+                if (callback) callback(response);
+            });
+        }
     });
 }
 
 chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
     let action = req.action,
         value = req.value;
+    // 图片上传
     if(action === 'uploadImage') {
         const base64 = value.base64;
         let file = getFile(base64);
         console.log(file, JSON.stringify(file));
         uploadImage(file);
     }else if(action === 'getSetting') {
+        // 应用获取设置
         chrome.storage.local.get( {app_setting: null}, function(o) {
             sendResponse({app_setting: o.app_setting})
         })
