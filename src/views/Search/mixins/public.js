@@ -47,22 +47,13 @@ const publicData = {
             // 当前已选分类ID
             cid: null,
             // 当前数据源
-            source_id: 1,
+            // source_id: 1,
             // 搜索后获取的总页码
             totalPage: 1
         }
     },
-    created() {
-        bus.$on('cj_search', res => {
-            let imageAddress = res.imageAddress;
-            let imgUrl = res.imgUrl;
-            console.log(imageAddress, imgUrl);
-            if (imageAddress && imgUrl) this.onImageUploadedSuccess({ imageAddress, imgUrl });
-        })
-    },
     beforeDestroy() {
         bus.$off('loadmore');
-        bus.$off('cj_search');
     },
     methods: {
         /**
@@ -75,8 +66,10 @@ const publicData = {
             this.categoryList = {};
             this.results = [];
             this.resultInfo = {};
+            this.filterList = [];
             this.page = 1;
             this.cid = null;
+            window.localStorage.removeItem('upload-file');
         },
         /**
          * @description 切换数据源时触发
@@ -132,11 +125,24 @@ const publicData = {
                 console.error(e);
             }
         },
+        onSelectImage() {
+            this.originalImageUrl = window.localStorage.getItem('upload-file');
+            this.main_imageAddress = this.originalImageUrl;
+            this.imageSearch(this.originalImageUrl);
+        },
         /**
-         * @description 图片上传失败后的回调函数
+         * @description 点击裁剪区域某个图片时触发
          */
-        onImageUploadedError(e) {
-            this.$message.error(this.$t('message.upload_image_error'));
+        onClickLocalItem(item) {
+            this.originalImageUrl = item.cover;
+            this.imageSearch(this.originalImageUrl);
+        },
+        /**
+         * @description 点击主图时触发
+         */
+        onClickMainImage() {
+            this.originalImageUrl = this.main_imageAddress;
+            this.imageSearch(this.originalImageUrl);
         },
         /**
          * @description 将网络地址或base64地址转为file文件

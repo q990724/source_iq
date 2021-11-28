@@ -3,7 +3,7 @@
 		<source-list @onSourceItemClick="onSourceItemClick"></source-list>
 		<div class="container">
 			<div class="main-container">
-				<text-search @onClickSearchButton="onClickSearchButton" @onImageUploadedSuccess="onImageUploadedSuccess" @onImageUploadedError="onImageUploadedError"></text-search>
+				<text-search ref="text_search" @onClickSearchButton="onClickSearchButton" @onImageUploadedSuccess="onImageUploadedSuccess" @onImageUploadedError="onImageUploadedError"></text-search>
 				<!--  图片处理区域  -->
 				<image-operation ref="image_operation" :original_image_url="originalImageUrl"
 					@onClickLocalItem="onClickLocalItem"
@@ -62,22 +62,22 @@
 				}
 			}
 		},
-		mounted() {
-			// 加载更多
-			bus.$on('loadmore', () => {
-				console.log('触底事件触发');
-				this.page++;
-				let totalPage = 1;
-				if(this.resultInfo) {
-					totalPage = Math.ceil(this.resultInfo.totalResults / this.resultInfo.pageSize);
-				}
-				if(this.page > totalPage) {
-					this.page = totalPage;
-					return;
-				};
-				this.searchType === 'image' ? this.getDataFromImage(true) : this.getDataFromText(true);
-			})
-		},
+        created() {
+            // 加载更多
+            bus.$on('loadmore', () => {
+                console.log('触底事件触发');
+                this.page++;
+                let totalPage = 1;
+                if(this.resultInfo) {
+                    totalPage = Math.ceil(this.resultInfo.totalResults / this.resultInfo.pageSize);
+                }
+                if(this.page > totalPage) {
+                    this.page = totalPage;
+                    return;
+                };
+                this.searchType === 'image' ? this.getDataFromImage(true) : this.getDataFromText(true);
+            })
+        },
 		methods: {
 			onImageUploadedSuccess(res) {
 				this.searchTextParams = {

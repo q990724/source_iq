@@ -3,9 +3,9 @@
 		<source-list @onSourceItemClick="onSourceItemClick"></source-list>
 		<div class="container">
 			<div class="main-container">
-				<text-search @onClickSearchButton="onClickSearchButton" @onImageUploadedSuccess="onImageUploadedSuccess" @onImageUploadedError="onImageUploadedError"></text-search>
+				<text-search ref="text_search" @onClickSearchButton="onClickSearchButton" @onSelectImage="onSelectImage"></text-search>
 				<!--  图片处理区域  -->
-				<image-operation ref="image_operation" :original_image_url="originalImageUrl"
+				<image-operation ref="image_operation" :main_image_url="main_imageAddress"
 					@onClickLocalItem="onClickLocalItem"
 					@onClickMainImage="onClickMainImage" @onClickClear="onClickClear">
 				</image-operation>
@@ -36,9 +36,9 @@
 	import ProductListComponent from "../components/product-list";
 	import HighFiltration from "../components/high-filtration";
 	import FilterComponent from "../components/group-filter.vue";
-	import { _1688global } from "@/assets/js/apis";
+    import {_1688global, alibaba} from "@/assets/js/apis";
 	import bus from "@/assets/js/bus";
-    import { handleResponse } from "@/assets/js/utils.js";
+    import {getFileFromBase64, handleResponse} from "@/assets/js/utils.js";
     import publicData from "../mixins/public.js";
     import { getBase64FromCropImage } from "@/assets/js/utils.js";
 	export default {
@@ -56,79 +56,59 @@
         mixins: [publicData],
 		data() {
 			return {
-                yoloCropRegion: '',
-				region: '',
-				activeLocalItemIndex: 0,
+                region: '',
 				searchTextParams: {
 					keyword: '',
 					type: 1
-				}
+				},
+                location: '',
+                tags: ''
 			}
 		},
-		mounted() {
-			// 加载更多 aliexpress图片搜索暂无加载更多
-			bus.$on('loadmore', () => {
-				console.log('触底事件触发');
+        mounted() {
+            // 加载更多
+            bus.$on('loadmore', async () => {
                 let totalPage = 1;
+                this.page++;
                 if(this.resultInfo) {
                     totalPage = Math.ceil(this.resultInfo.totalResults / this.resultInfo.pageSize);
                 }
                 if(this.page > totalPage) {
-					this.page = totalPage;
-					return;
-				};
-                this.page++;
-				if(this.searchType === 'image') {
-					this.getDataFromImage(true);
-				}else {
-					this.getDataFromText(true);
-				}
-			})
-		},
-		methods: {
-            /**
-             * @description 图片上传成功后的回调函数
-             */
-			onImageUploadedSuccess(res) {
-				this.searchTextParams = {
-					keyword: '',
-					type: 1
-				}
-				this.cid = null;
-                this.searchType = 'image';
-				this.originalImageUrl = res.imgUrl;
-				this.imageAddress = res.imageAddress;
-				this.main_imageAddress = res.imageAddress;
-				this.getDataFromImage(false);
-			},
-            /**
-             * @description 点击裁剪区域某个图片时触发
-             */
-			onClickLocalItem(parmas) {
-				console.log(parmas);
-				this.imageAddress = this.main_imageAddress;
-				this.activeLocalItemIndex = parmas.index;
-				this.getDataFromImage(false);
-			},
-            /**
-             * @description 点击主图时触发
-             */
-			onClickMainImage() {
-				this.imageAddress = this.main_imageAddress;
-				this.getDataFromImage(false);
-			},
+                    this.page = totalPage;
+                    return;
+                };
+                console.log('触底事件触发, 当前页码', this.page);
+                if(this.searchType === 'image') {
+                    this.getDataFromImage(true);
+                }else {
+                    this.results = await this.getDataFromText();
+                }
+            })
+            if(window.localStorage.getItem('upload-file')) {
+                this.onSelectImage();
+            }else if(window.localStorage.getItem('search-text')) {
+                let text = window.localStorage.getItem('search-text');
+                this.$refs['text_search'].$data.input = text;
+                this.onClickSearchButton({search_text: text})
+            }
+        },
+        methods: {
             /**
              * @description 切换商品分类时触发
              */
 			onClassChange({id}) {
-				this.cid = id;
-				this.page = 1;
-				this.getDataFromImage(false);
+                this.cid = id;
+                this.page = 1;
+                if(this.searchType === 'image') {
+                    this.imageSearch(this.originalImageUrl);
+                }else {
+                    this.getDataFromText(false)
+                }
 			},
 			/**
 			 * @description 监听文字搜索按钮点击
 			 */
-			onClickSearchButton(params) {
+			async onClickSearchButton(params) {
 				this.searchType = 'text';
 				this.onClickClear();
 				this.searchTextParams = {
@@ -136,60 +116,127 @@
 					type: 1
 				}
 				this.search_text = params.search_text;
-				this.getDataFromText(false);
+                this.results = await this.getDataFromTextFirst();
 			},
 			onFilterChange({e, o, title}){
 				console.log(e, o, title);
+                switch (title) {
+                    case '地区':
+                        this.location = e ? o.name : '';
+                        break;
+                    case '属性':
+                        if(e) {
+                            if(!Array.isArray(this.tags)) this.tags = [];
+                            this.tags.push(o.name);
+                        }else {
+                            for (let i = 0; i < this.tags.length; i++) {
+                                if(this.tags[i] == o.name) {
+                                    this.tags.splice(i, 1);
+                                }
+                            }
+                        }
+                        break;
+                }
+                this.getDataFromImage(false);
 			},
+            async imageSearch(base64) {
+                try {
+                    let file = getFileFromBase64(base64);
+                    let uploadImageResult = await _1688global.uploadPic(file);
+                    this.imageAddress = uploadImageResult.data.imgUrl;
+                    this.getDataFromImage(false);
+                }catch (e) {
+                    console.log(e);
+                    throw e;
+                }
+            },
             /**
              * @description 根据图片搜索获取数据
              * @param {Boolean} loadmore 本次搜索是否为加载更多
              */
 			async getDataFromImage(loadmore) {
-				// this.$refs['product-list'].changeShowNoList(false);
+				this.$refs['product-list'].changeShowNoList(false);
 				try {
-					let result = await _1688global.searchGoodsByPic({imgUrl: this.imageAddress, pageNo: this.page, categoryId: this.cid});
-					console.log(result);
-					this.filterList = result.data.filterList;
-					this.categoryList = result.data.categoryList ? result.data.categoryList : null;
-					this.resultInfo = result.data.resultInfo;
-					this.totalPage = this.resultInfo.totalPages || 1;
-					this.sourceResult = result.sourceResult;
+					let result = await _1688global.searchGoodsByPic({
+                        imgUrl: this.imageAddress,
+                        pageNo: this.page,
+                        categoryId: this.cid,
+                        region: this.region,
+                        location: this.location,
+                        tags: (this.tags && Array.isArray(this.tags)) ? this.tags.join(',') : null
+                    });
+					if(result && result.data) {
+                        this.filterList = result.data.filterList;
+                        this.categoryList = result.data.categoryList ? result.data.categoryList : null;
+                        this.resultInfo = result.data.resultInfo;
+                        this.region = result.data.searchImage ? result.data.searchImage.region : undefined;
+                        this.totalPage = this.resultInfo.totalPages || 1;
+                        this.sourceResult = result.sourceResult;
+                    }
 					if (result.data.results) {
-						handleResponse(result);
-					} else {
-						this.$refs['product-list'].changeShowNoList(true);
+                        if(result.data.results.length > 0) {
+                            handleResponse(result);
+                        }else {
+                            this.$refs['product-list'].changeShowNoList(true);
+                        }
 					}
 					this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
 				} catch (e) {
 					this.$message.error(this.$t('message.serach_result_from_image_error') + e);
 				}
 			},
-			async getDataFromText(loadmore) {
-				let result = null;
+			async getDataFromText() {
 				try {
-					if(!loadmore) {
-						result = await _1688global.searchGoodsFirstKj(this.searchTextParams.keyword);
-						if(result && result.data) {
-							this.categoryList = result.data.categoryList || null;
-							this.filterList = result.data.filterList || null;
-						}						
-					}else {
-						let sessionId = null;
-						if(this.sourceResult && this.sourceResult.data && this.sourceResult.data.window && this.sourceResult.data.window.data && this.sourceResult.data.window.data.pageMessage) {
-							sessionId = this.sourceResult.data.window.data.pageMessage.sessionId;
-						}
-						result = await _1688global.searchGoodsKj({keywords: this.searchTextParams.keyword, beginPage: this.page, sessionId: sessionId});
-					}
-					if(!result || !result.data) return this.$message.error(this.$t('message.get_result_error'));
-					this.resultInfo = result.data.resultInfo;
-					this.sourceResult = result.sourceResult;
-					handleResponse(result);
-					this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
+                    let sessionId = null;
+                    if(this.sourceResult && this.sourceResult.data && this.sourceResult.data.window && this.sourceResult.data.window.data && this.sourceResult.data.window.data.pageMessage) {
+                        sessionId = this.sourceResult.data.window.data.pageMessage.sessionId;
+                    }
+                    let result = await _1688global.searchGoodsKj({
+                        keywords: this.searchTextParams.keyword, beginPage: this.page, sessionId: sessionId
+                    });
+                    if(result && result.data) {
+                        this.resultInfo = result.data.resultInfo;
+                        this.sourceResult = result.sourceResult;
+                        if (result.data.results) {
+                            if(result.data.results.length > 0) {
+                                handleResponse(result);
+                            }else {
+                                this.$refs['product-list'].changeShowNoList(true);
+                            }
+                        }
+                        return result.data.results;
+                    }else {
+                        this.$message.error(this.$t('message.get_result_error'));
+                    }
 				} catch (error) {
-					console.log(error);
+					throw error;
 				}
 			},
+            async getDataFromTextFirst() {
+                try {
+                    let result = await _1688global.searchGoodsFirstKj(this.searchTextParams.keyword);
+                    if(result && result.data) {
+                        this.categoryList = result.data.categoryList || null;
+                        this.filterList = result.data.filterList || null;
+                        this.resultInfo = result.data.resultInfo;
+                        this.sourceResult = result.sourceResult;
+                        if (result.data.results) {
+                            if(result.data.results.length > 0) {
+                                handleResponse(result);
+                            }else {
+                                this.$refs['product-list'].changeShowNoList(true);
+                            }
+                        }
+                        return result.data.results;
+                    }else {
+                        this.$message.error(this.$t('message.get_result_error'))
+                    }
+                }catch (e) {
+                    console.log(e);
+                    this.$message.error(this.$t('message.get_result_error') + e);
+                    throw e;
+                }
+            }
 		}
 	}
 </script>

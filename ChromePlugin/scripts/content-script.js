@@ -81,10 +81,7 @@ $(function() {
     }
     let refreshUploadFile = getQueryVariable('refreshUploadFile');
     if(refreshUploadFile === 'true') {
-        chrome.runtime.sendMessage({action: 'getUploadFile'}, function (response) {
-            window.localStorage.setItem('upload-file', response['upload-file']);
-            window.location.href = window.location.href.slice(0, window.location.href.indexOf('?'));
-        });
+
     }
 })
 
@@ -107,15 +104,22 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     }else if(request.cmd == 'parse-title') {
         sendResponse($('.s-matching-dir').html())
     }else if(request.cmd == 'setting-change') {
+        // 收到插件设置改变消息
+        // 将新的设置写入到window缓存中
         window.localStorage.setItem('app-setting', JSON.stringify(request.value.appSetting));
-        window.location.reload();
+        // 如果当前window的title=SourceIQ，则刷新页面
+        if(window.document.title === 'SourceIQ') {
+            window.location.reload();
+        }
     }else if(request.cmd == 'image-file') {
-        window.localStorage.setItem('upload-file', request.value.base64);
+        // 收到base64更新的消息
+        // 从chrome缓存中获取最新的base64
+        chrome.storage.local.get({'upload-file': null}, function (o) {
+            // 存储到window缓存中
+            window.localStorage.setItem('upload-file', o['upload-file']);
+        });
     }else if(request.cmd == 'update-cookie') {
         window.localStorage.setItem(`cookie-${request.value.source}`, request.value.cookie);
-    }else if(request.cmd == 'refesh-window') {
-        console.log('refesh');
-        window.location.reload();
     }
     return true;
 });

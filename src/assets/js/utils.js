@@ -78,7 +78,6 @@ export function getBase64FromCropImage(imagePath, regionList) {
 			let image = new Image();
 			image.src = imagePath;
 			image.crossOrigin = '';
-			console.log(image);
 			image.onload = function(o) {
 				for(let item of regionList) {
 					let arr = item.split(',');
@@ -92,7 +91,8 @@ export function getBase64FromCropImage(imagePath, regionList) {
 					let localItem = {
 						cover: base64,
 						file: getFileFromBase64(base64),
-						selected: false
+						selected: false,
+						region: item
 					}
 					imageList.push(localItem);
 				}

@@ -3,7 +3,7 @@
 		<source-list @onSourceItemClick="onSourceItemClick"></source-list>
 		<div class="container">
 			<div class="main-container">
-				<text-search @onClickSearchButton="onClickSearchButton" @onImageUploadedSuccess="onImageUploadedSuccess" @onImageUploadedError="onImageUploadedError"></text-search>
+				<text-search ref="text_search" @onClickSearchButton="onClickSearchButton" @onImageUploadedSuccess="onImageUploadedSuccess" @onImageUploadedError="onImageUploadedError"></text-search>
 				<!--  图片处理区域  -->
 				<image-operation ref="image_operation" :original_image_url="originalImageUrl"
 					@onClickLocalItem="onClickLocalItem"
@@ -63,12 +63,12 @@
 				}
 			}
 		},
-		mounted() {
-			// 加载更多 aliexpress图片搜索暂无加载更多
-			bus.$on('loadmore', () => {
-				console.log('触底事件触发');
-			})
-		},
+        created() {
+            // 加载更多 aliexpress图片搜索暂无加载更多
+            bus.$on('loadmore', () => {
+                console.log('触底事件触发');
+            })
+        },
 		methods: {
             /**
              * @description 图片上传成功后的回调函数

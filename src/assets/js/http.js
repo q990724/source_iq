@@ -8,7 +8,7 @@ const ConfigBaseURL = 'http://eurotransit.acuteberry.com/' //默认路径，这�
 let loadingInstance = null //这里是loading
 //使用create方法创建axios实例
 export const Service = axios.create({
-    timeout: 15000, // 请求超时时间
+    timeout: 60000, // 请求超时时间
     baseURL: ConfigBaseURL,
     method: 'post',
     headers: {
@@ -29,7 +29,7 @@ Service.interceptors.response.use(response => {
     loadingInstance.close()
     // if(response && response.data && response.data.)
     if(response.data) {
-        if(response.data.code == 40000 || response.data.data.error == 'require login') {
+        if(response.data.code == 40000 || response.data.data.error == 'require login' || (response.data.ret && response.data.ret[0].indexOf('令牌过期') != -1)) {
             let sourceName = '',
                 loginPageUrl = '';
             for (let key in SourceMap) {

@@ -16,42 +16,58 @@ import SoureMap from "@/assets/js/source_map.js";
 
 export default {
     beforeCreate() {
-        // 获取app设置
-        let appSetting = JSON.parse(window.localStorage.getItem('app-setting'));
-        this.$store.state.source_id = appSetting.source;
-        let current_path = this.$route.path;
-        switch (this.$store.state.source_id) {
-            case SoureMap['alibaba']:
-                if (current_path === '/view-alibaba') return;
-                this.$router.push('/view-alibaba');
-                break;
-            case SoureMap['1688']:
-                if (current_path === '/view-1688') return;
-                this.$router.push('/view-1688');
-                break;
-            case SoureMap['1688global']:
-                if (current_path === '/view-1688global') return;
-                this.$router.push('/view-1688global');
-                break;
-            case SoureMap['aliexpress']:
-                if (current_path === '/view-aliexpress') return;
-                this.$router.push('/view-aliexpress');
-                break;
-            case SoureMap['yiwugo']:
-                if (current_path === '/view-yiwugo') return;
-                this.$router.push('/view-yiwugo');
-                break;
-            case SoureMap['dhgate']:
-                if (current_path === '/view-dhgate') return;
-                this.$router.push('/view-dhgate');
-                break;
-        }
+
+    },
+    created() {
+        this.getAppSetting();
     },
     methods: {
         load() {
+            console.log('app 收到loadmore事件');
             bus.$emit("loadmore");
         },
+        // 获取app设置
+        getAppSetting() {
+            let appSetting = JSON.parse(window.localStorage.getItem('app-setting'));
+            this.$store.state.source_id = appSetting.source;
+        }
     },
+    computed: {
+        source_id() {
+            return this.$store.state.source_id;
+        }
+    },
+    watch: {
+        source_id() {
+            let current_path = this.$route.path;
+            switch (this.$store.state.source_id) {
+                case SoureMap['alibaba']['id']:
+                    if (current_path === '/view-alibaba') return;
+                    this.$router.push('/view-alibaba');
+                    break;
+                case SoureMap['1688']['id']:
+                    if (current_path === '/view-1688') return;
+                    this.$router.push('/view-1688');
+                    break;
+                case SoureMap['1688global']['id']:
+                    if (current_path === '/view-1688global') return;
+                    this.$router.push('/view-1688global');
+                    break;
+                case SoureMap['aliexpress']['id']:
+                    if (current_path === '/view-aliexpress') return;
+                    this.$router.push('/view-aliexpress');
+                    break;
+                case SoureMap['yiwugo']['id']:
+                    if (current_path === '/view-yiwugo') return;
+                    this.$router.push('/view-yiwugo');
+                    break;
+                case SoureMap['dhgate']['id']:
+                    if (current_path === '/view-dhgate') return;
+                    this.$router.push('/view-dhgate');
+                    break;
+            }
+        }
+    }
 }
 </script>
 

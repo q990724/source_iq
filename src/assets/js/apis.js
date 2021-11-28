@@ -16,7 +16,6 @@ function getCookie(source) {
 		id = 'cookie-1688global'
 	}
 	cookie = window.localStorage.getItem(id) ? window.localStorage.getItem(id) : null;
-	console.log(source, id, cookie);
 	if(!cookie) {
 		let sourceName = '',
 			loginPageUrl = '';
@@ -190,23 +189,23 @@ export const _1688 = {
 	    })
 	},
 	// 图片搜索
-	searchGoodsByPic({imageId, searchtype = 0, page = 2, yoloRegionSelected = true, yoloCropRegion = '', region = '', sortField = 'normal', sortType = 'asc', pailitaoCategoryId = null, }) {
+	searchGoodsByPic({imageId, searchtype = 0, page = 2, yoloRegionSelected = true, yoloCropRegion = '', region = '', sortField = 'normal', sortType = 'asc', pailitaoCategoryId = null}) {
 		let cookie = getCookie('1688');
 		if(!cookie) return Promise.reject('no cookie');
 	    return Service.get('api/goods/imgSearch', {
 	        params: {
 	            imageId, searchtype, page, yoloRegionSelected, yoloCropRegion, region, 
-				cookie
+				cookie,pailitaoCategoryId
 	        }
 	    })
 	},
 	// 图片搜索
-	searchGoodsByPicFirst(imageId) {
+	searchGoodsByPicFirst({imageId, yoloRegionSelected = null, yoloCropRegion = null, region = null}) {
 		let cookie = getCookie('1688');
 		if(!cookie) return Promise.reject('no cookie');
 	    return Service.get('api/goods/imgSearchFirst', {
 	        params: {
-	            imageId, cookie
+	            imageId, cookie, yoloRegionSelected, yoloCropRegion, region
 	        }
 	    })
 	},

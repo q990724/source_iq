@@ -6,7 +6,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         imageAddress: '', 
-        source_id: 1, // 货源ID
+        source_id: null, // 货源ID
     },
     mutations: {
 

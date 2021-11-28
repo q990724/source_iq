@@ -12,18 +12,19 @@
         </div>
         <div class="sbtn" @click="onClickSearchButton">{{$t('button.search')}}</div>
 
-        <el-upload
-            class="avatar-uploader"
-            action="https://jsonplaceholder.typicode.com/posts/"
-            :show-file-list="false"
-            accept="image/*"
-            :on-success="handleAvatarSuccess"
-            :on-error="handleAvatarError"
-            :http-request="onUploadImage"
-            :before-upload="beforeAvatarUpload"
-            style="display:none;">
-            <i slot="trigger" id='uploadButton'></i>
-        </el-upload>
+<!--        <el-upload-->
+<!--            class="avatar-uploader"-->
+<!--            action="https://jsonplaceholder.typicode.com/posts/"-->
+<!--            :show-file-list="false"-->
+<!--            accept="image/*"-->
+<!--            :on-success="handleAvatarSuccess"-->
+<!--            :on-error="handleAvatarError"-->
+<!--            :http-request="onUploadImage"-->
+<!--            :before-upload="beforeAvatarUpload"-->
+<!--            style="display:none;">-->
+<!--            <i slot="trigger" id='uploadButton'></i>-->
+<!--        </el-upload>-->
+        <input type="file" accept="image/*" style="display: none" @change="selectImage" id='uploadButton'>
     </div>
 </template>
 
@@ -45,26 +46,11 @@ export default {
             options: []
         }
     },
-    created() {
-        if(window.localStorage.getItem('upload-file')) {
-            this.onUploadImage();
-        }
-        if(window.localStorage.getItem('search-text')) {
-            this.input = window.localStorage.getItem('search-text');
-            this.onClickSearchButton();
-        }
-    },
     computed: {
         getSourceId() {
             switch (this.$store.state.source_id) {
                 case 1:
                     this.options = this.indexAareaOptions_alibaba;
-                    break;
-                case 2:
-                    break;
-                case 3:
-                    break;
-                case 4:
                     break;
                 case 5:
                     this.options = this.options_yiwugo;
@@ -89,7 +75,7 @@ export default {
         },
         onClickSearchButton() {
             if(!this.input.trim()) {
-                this.$message.info('搜索内容不能为空！');
+                this.$message.info(this.$i18n.$t('message.search_text_not_null'));
                 return;
             }
             window.localStorage.setItem('search-text', this.input.trim());
@@ -99,74 +85,11 @@ export default {
         onClickCamera() {
             document.getElementById('uploadButton').click();
         },
-        handleAvatarSuccess(res, file) {
-            console.log('success', res);
-            window.localStorage.removeItem('search-text');
-            this.$emit('onImageUploadedSuccess', res);
-        },
-        handleAvatarError(err) {
-            console.log('error', res);
-            this.$message.error('上传图片错误！');
-            this.$emit('onImageUploadedError', err);
-        },
-        onUploadImage() {
-            let base64 = window.localStorage.getItem('upload-file');
-            let file = getFileFromBase64(base64);
-            switch (this.$store.state.source_id) {
-                case SourceMap['alibaba']['id']:
-                    alibaba.uploadPic(file).then(res=>{
-                        if(!res.data) { return $message.error(res.msg); }
-                        this.handleAvatarSuccess({imgUrl: res.data.domain + res.data.imageAddress, imageAddress: res.data.imageAddress});
-                    }).catch(e=>{
-                        console.log(e);
-                    })
-                    break;
-                case SourceMap['1688']['id']:
-					_1688.uploadPicH5(file).then(res=>{
-					    if(!res.data) return this.$message.error(res.msg);
-                        this.handleAvatarSuccess({imgUrl: base64, imageAddress: res.data.imageId})
-					}).catch(e=>{
-					    console.log(e);
-					})
-                    break;
-                case SourceMap['1688global']['id']:
-                    _1688global.uploadPic(file).then(res=>{
-                        if(!res.data) return this.$message.error(res.msg);
-                        this.handleAvatarSuccess({imgUrl: res.data.imgUrl, imageAddress: res.data.imgUrl})
-                    }).catch(e=>{ console.log(e);})
-                    break;
-                case SourceMap['aliexpress']['id']:
-					aliexpress.uploadPic(file).then(res=>{
-						if(!res.data) return this.$message.error(res.msg);
-                        this.handleAvatarSuccess({imgUrl: res.data.url, imageAddress: res.data.filename})
-					}).catch(e=>{
-						console.log(e);
-					})
-                    break;
-                case SourceMap['yiwugo']['id']:
-                    yiwugo.uploadPic(file).then(res=>{
-                        if(!res.data) return this.$message.error(res.msg);
-                        this.handleAvatarSuccess({imgUrl: res.data.url, imageAddress: res.data.url})
-                    }).catch(e=>{
-                        console.log(e);
-                    })
-                    break;
-                case SourceMap['dhgate']['id']:
-                    dhgate.uploadPic(file).then(res=>{
-                        if(!res.data) return this.$message.error(res.msg);
-                        this.handleAvatarSuccess({imgUrl: res.sourceResult.data.data.imgUrl, imageAddress: res.sourceResult.data.data.imgUrl})
-                    }).catch(e=>{
-                        console.log(e);
-                    })
-                    break;
-            }
-        },
-        async beforeAvatarUpload(file) {
-            // const isLt2M = file.size / 1024 / 1024 < 2;
-            // return isLt2M;
+        async selectImage(e) {
+            let file = e.target.files[0];
             let base64 = await getBase64(file);
             window.localStorage.setItem('upload-file', base64);
-            return true;
+            this.$emit('onSelectImage');
         },
         onKeyPress(e) {
             if(e.keyCode === 13)  {

@@ -3,9 +3,9 @@
 		<source-list @onSourceItemClick="onSourceItemClick"></source-list>
 		<div class="container">
 			<div class="main-container">
-				<text-search @onClickSearchButton="onClickSearchButton" @onImageUploadedSuccess="onImageUploadedSuccess" @onImageUploadedError="onImageUploadedError"></text-search>
+				<text-search ref="text_search" @onClickSearchButton="onClickSearchButton" @onSelectImage="onSelectImage"></text-search>
 				<!--  图片处理区域  -->
-				<image-operation ref="image_operation" :original_image_url="originalImageUrl"
+				<image-operation ref="image_operation" :main_image_url="main_imageAddress"
 					@onClickLocalItem="onClickLocalItem"
 					@onClickMainImage="onClickMainImage" @onClickClear="onClickClear">
 				</image-operation>
@@ -39,7 +39,7 @@
 	import FilterComponent from "../components/group-filter.vue";
 	import { alibaba } from "@/assets/js/apis";
 	import bus from "@/assets/js/bus";
-    import { handleResponse } from "@/assets/js/utils.js";
+    import { handleResponse, getFileFromBase64 } from "@/assets/js/utils.js";
     import publicData from "../mixins/public.js";
 	export default {
 		name: "view-alibaba",
@@ -62,53 +62,31 @@
 				}
 			}
 		},
-		mounted() {
-			// 加载更多
-			bus.$on('loadmore', () => {
-				console.log('触底事件触发');
-				this.page++;
-                if(this.page > 99) {
-                    this.page = 99;
+        mounted() {
+            // 加载更多
+            bus.$on('loadmore', () => {
+                console.log('触底事件触发');
+                this.page++;
+                if(this.page > 5) {
+                    this.page = 5;
                     return;
                 }
-				if(this.searchType === 'image') {
-					this.getDataFromImage(true);
-				}else {
-					this.getDataFromText(true);
-				}
-				
-			})
-		},
-		methods: {
-            /**
-             * @description 图片上传成功后的回调函数
-             */
-			onImageUploadedSuccess(res) {
-				this.searchTextParams = {
-					search_text: '',
-					index_area: '',
-				}
-				this.cid = null;
-				this.searchType = 'image';
-				this.originalImageUrl = res.imgUrl;
-				this.imageAddress = res.imageAddress;
-				this.main_imageAddress = res.imageAddress;
-				this.getDataFromImage(false);
-			},
-            /**
-             * @description 点击裁剪区域某个图片时触发
-             */
-			onClickLocalItem(parmas) {
-				this.imageAddress = parmas.imageAddress;
-				this.getDataFromImage(false);
-			},
-            /**
-             * @description 点击主图时触发
-             */
-			onClickMainImage() {
-				this.imageAddress = this.main_imageAddress;
-				this.getDataFromImage(false);
-			},
+                if(this.searchType === 'image') {
+                    this.getDataFromImage(true);
+                }else {
+                    this.getDataFromText(true);
+                }
+            })
+            if(window.localStorage.getItem('upload-file')) {
+                this.onSelectImage();
+            }else if(window.localStorage.getItem('search-text')) {
+                let text = window.localStorage.getItem('search-text');
+                this.$refs['text_search'].$data.input = text;
+                // this.getDataFromText()
+                this.onClickSearchButton({search_text: text})
+            }
+        },
+        methods: {
             /**
              * @description 切换商品分类时触发
              */
@@ -116,7 +94,11 @@
 				this.cid = id;
 				this.searchTextParams.Category = id;
 				this.page = 1;
-				this.searchType === 'image' ? this.getDataFromImage(false) : this.getDataFromText(false);
+                if(this.searchType === 'image') {
+                    this.imageSearch(this.originalImageUrl);
+                }else {
+                    this.getDataFromText(false)
+                }
 			},
 			/**
 			 * @description 点击文字搜索时触发
@@ -177,6 +159,17 @@
 				}
 				this.getDataFromText(false);
 			},
+            async imageSearch(base64) {
+                try {
+                    let file = getFileFromBase64(base64);
+                    let uploadImageResult = await alibaba.uploadPic(file);
+                    this.imageAddress = uploadImageResult.data.imageAddress;
+                    this.getDataFromImage(false);
+                }catch (e) {
+                    console.log(e);
+                    throw e;
+                }
+            },
             /**
              * @description 根据图片搜索获取数据
              * @param {Boolean} loadmore 本次搜索是否为加载更多
@@ -189,7 +182,7 @@
 					this.categoryList = result.data.categoryList ? result.data.categoryList : null;
 					this.resultInfo = result.data.resultInfo;
 					this.totalPage = this.resultInfo.totalPages || 1;
-					if (result.data.results) {
+					if (result.data.results && result.data.results.length > 0) {
 						handleResponse(result);
 					} else {
 						this.$refs['product-list'].changeShowNoList(true);
@@ -205,11 +198,6 @@
 			 */
 			async getDataFromText(loadmore) {
 				try {
-					// let result = await alibaba.searchGoodsByText({
-					// 	search_text: this.searchTextParams.search_text,
-					// 	index_area: this.searchTextParams.index_area,
-					// 	page: this.page
-					// });
 					console.log(this.searchTextParams);
 					let result = await alibaba.searchGoodsByText({ ...this.searchTextParams,page: this.page });
 					if(!result || !result.data) return this.$message.error(this.$t('message.get_result_error'));

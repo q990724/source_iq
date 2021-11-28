@@ -1,21 +1,21 @@
 <template>
-    <div class="image-operation mt40" v-if="original_image_url">
+    <div class="image-operation mt40" v-if="main_image_url">
         <div class="item main-item" :class="{'active': mainImageActive}">
-            <img :src="original_image_url" alt="" class="img" @click="onClickMainImage">
+            <img :src="main_image_url" alt="" class="img" @click="onClickMainImage">
             <span @click="chooseImageBox"><img src="@/assets/img/kuangxuan.png" alt="">{{ $t('label.chooseBox') }}</span>
             <i class="clear el-icon-circle-close" @click="onClickClear"></i>
         </div>
         <!--本地裁剪图片暂存列表-->
         <div class="local-crop-list" v-if="localCropImageList && localCropImageList.length > 0">
             <div class="scroll scrollable">
-                <div class="item main-item local-item" :class="{'active': item.selected}" v-for="(item,i) in localCropImageList" :key="i" @click="onClickLocalItem(item, i)">
+                <div class="item main-item local-item" :class="{'active': item.selected}" v-for="(item,i) in localCropImageList" :key="i" @click="onClickLocalImage(item, i)">
                     <img :src="item.cover" alt="" class="img">
                 </div>
             </div>
         </div>
         <div id="cropBox" v-show="cropBoxStatus">
             <div class="image-container">
-                <img :src="original_image_url" alt="">
+                <img :src="main_image_url" alt="">
             </div>
             <div class="foot">
                 <span @click="confirmCropBox">确定</span>
@@ -38,11 +38,11 @@ export default {
             cropBoxStatus: false,
             cropResult: null,
             localCropImageList: [],
-            mainImageActive: false
+            mainImageActive: true
         }
     },
     props: {
-        original_image_url: {
+        main_image_url: {
             type: String,
             default: ''
         }
@@ -84,62 +84,13 @@ export default {
                 this.closeCropBox();
             }
         },
-        onUploadClick() {
-            this.$emit('onUploadClick')
-        },
-        onClickLocalItem(item, index) {
+        onClickLocalImage(item, index) {
             this.localCropImageList.forEach(e=>{
                 e.selected = false;
             })
             this.mainImageActive = false;
             item.selected = true;
-            switch (this.$store.state.source_id) {
-                case SourceMap['alibaba']:
-                    alibaba.uploadPic(item.file).then(res=>{
-                        console.log(res);
-                        this.$emit('onClickLocalItem',{imgUrl: res.data.domain + res.data.imageAddress, imageAddress: res.data.imageAddress})
-                    }).catch(e=>{
-                        console.log(e);
-                    })
-                    break;
-                case SourceMap['1688']:
-					getBase64(item.file, (u) => {
-						this.$emit('onClickLocalItem',{imgUrl: u, imageAddress: '', index: index});
-					});
-                    break;
-                case SourceMap['1688global']:
-                    _1688global.uploadPic(item.file).then(res=>{
-                        if(!res.data) return this.$message.error(res.msg);
-                        this.$emit('onClickLocalItem', {imgUrl: res.data.imgUrl, imageAddress: res.data.imgUrl})
-                    }).catch(e=>{ console.log(e);})
-                    break;
-                case SourceMap['aliexpress']:
-					aliexpress.uploadPic(item.file).then(res=>{
-						if(!res.data) {
-							return this.$message.error(res.msg);
-						}
-						this.$emit('onClickLocalItem',{imgUrl: res.data.url, imageAddress: res.data.filename})
-					}).catch(e=>{
-						console.log(e);
-					})
-                    break;
-				case SourceMap['yiwugo']:
-					yiwugo.uploadPic(item.file).then(res=>{
-						console.log(res);
-						this.$emit('onClickLocalItem',{imgUrl: res.data.url, imageAddress: res.data.url})
-					}).catch(e=>{
-						console.log(e);
-					})
-				    break;
-                case SourceMap['dhgate']:
-                    dhgate.uploadPic(params.file).then(res=>{
-                        console.log(res);
-                        this.$emit('onClickLocalItem',{imgUrl: res.sourceResult.data.data.imgUrl, imageAddress: res.sourceResult.data.data.imgUrl})
-                    }).catch(e=>{
-                        console.log(e);
-                    })
-                    break;
-            }
+            this.$emit('onClickLocalItem', item);
         },
         onClickMainImage() {
             this.localCropImageList.forEach(e=>{
@@ -153,7 +104,7 @@ export default {
             this.cropResult = null
             this.localCropImageList = [];
             this.mainImageActive = false;
-            this.cropObject = null;
+            cropObject = null;
             window.localStorage.removeItem('upload-file');
             this.$emit('onClickClear');
         },

@@ -3,9 +3,9 @@
 		<source-list @onSourceItemClick="onSourceItemClick"></source-list>
 		<div class="container">
 			<div class="main-container">
-				<text-search ref="text_search" @onClickSearchButton="onClickSearchButton" @onImageUploadedSuccess="onImageUploadedSuccess" @onImageUploadedError="onImageUploadedError"></text-search>
+				<text-search ref="text_search" @onClickSearchButton="onClickSearchButton" @onSelectImage="onSelectImage"></text-search>
 				<!--  图片处理区域  -->
-				<image-operation ref="image_operation" :original_image_url="originalImageUrl"
+				<image-operation ref="image_operation" :main_image_url="main_imageAddress"
 					@onClickLocalItem="onClickLocalItem"
 					@onClickMainImage="onClickMainImage" @onClickClear="onClickClear">
 				</image-operation>
@@ -36,11 +36,10 @@
 	import ProductListComponent from "../components/product-list";
 	import HighFiltration from "../components/high-filtration";
 	import FilterComponent from "../components/group-filter.vue";
-	import { _1688 } from "@/assets/js/apis";
+    import {_1688, alibaba} from "@/assets/js/apis";
 	import bus from "@/assets/js/bus";
-    import { handleResponse } from "@/assets/js/utils.js";
+    import {getFileFromBase64, handleResponse, getBase64FromCropImage} from "@/assets/js/utils.js";
     import publicData from "../mixins/public.js";
-    import { getBase64FromCropImage } from "@/assets/js/utils.js";
 	export default {
 		name: "view-1688",
 		components: {
@@ -65,69 +64,35 @@
 				}
 			}
 		},
-		mounted() {
-			// 加载更多 aliexpress图片搜索暂无加载更多
-			bus.$on('loadmore', () => {
-				let totalPage = 99;
-				console.log('触底事件触发');
-                if(this.page >= totalPage) {
-					this.page = totalPage;
-					return;
-				};
-				console.log(this.page);
-				this.page++;
-				if(this.searchType === 'image') {
-					console.log(111);
-					this.getDataFromImage(true);
-				}else {
-					this.getDataFromText(true);
-				}
-			})
-		},
-		methods: {
-            /**
-             * @description 图片上传成功后的回调函数
-             */
-			onImageUploadedSuccess(res) {
-				this.searchTextParams = {
-					keyword: '',
-					type: 1
-				}
-				this.cid = null;
-				this.searchType = 'image';
-				this.originalImageUrl = res.imgUrl;
-				this.imageAddress = res.imageAddress;
-				this.main_imageAddress = res.imageAddress;
-				this.getDataFromImage(false);
-			},
-            /**
-             * @description 点击裁剪区域某个图片时触发
-             */
-			onClickLocalItem(parmas) {
-				console.log(parmas);
-				this.imageAddress = this.main_imageAddress;
-				this.activeLocalItemIndex = parmas.index;
-				this.getDataFromImage(false);
-			},
-            /**
-             * @description 点击主图时触发
-             */
-			onClickMainImage() {
-				this.imageAddress = this.main_imageAddress;
-				this.getDataFromImage(false);
-			},
+        mounted() {
+            // 加载更多
+            bus.$on('loadmore', this.loadmore.bind(this));
+            if(window.localStorage.getItem('upload-file')) {
+                this.onSelectImage();
+            }else if(window.localStorage.getItem('search-text')) {
+                let text = window.localStorage.getItem('search-text');
+                this.$refs['text_search'].$data.input = text;
+                this.onClickSearchButton({search_text: text})
+            }
+        },
+        methods: {
             /**
              * @description 切换商品分类时触发
              */
 			onClassChange({id}) {
-				this.cid = id;
-				this.page = 1;
-				this.getDataFromImage(false);
+                this.cid = id;
+                this.searchTextParams.Category = id;
+                this.page = 1;
+                if(this.searchType === 'image') {
+                    this.getDataFromImage();
+                }else {
+                    this.getDataFromText(false)
+                }
 			},
 			/**
 			 * @description 监听文字搜索按钮点击
 			 */
-			onClickSearchButton(params) {
+			async onClickSearchButton(params) {
 				this.searchType = 'text';
 				this.onClickClear();
 				this.searchTextParams = {
@@ -135,42 +100,63 @@
 					type: 1
 				}
 				this.search_text = params.search_text;
-				this.getDataFromText(false);
+				this.results = await this.getDataFromTextFirst();
 			},
+            /**
+             * @description 点击裁剪区域某个图片时触发
+             */
+            async onClickLocalItem(item) {
+                console.log(item);
+                this.region = item.region;
+                console.log(this.region);
+                this.originalImageUrl = item.cover;
+                this.results = await this.getDataFromImageFirst();
+            },
 			onFilterChange({e, o, title}){
 
 			},
+            async imageSearch(base64) {
+                try {
+                    let file = getFileFromBase64(base64);
+                    let uploadImageResult = await _1688.uploadPicH5(file);
+                    this.imageAddress = uploadImageResult.data.imageId;
+                    this.results = await this.getDataFromImageFirst();
+                }catch (e) {
+                    console.log(e);
+                    throw e;
+                }
+            },
+            loadmore() {
+                let totalPage = 99;
+                this.page++;
+                if(this.page >= totalPage) {
+                    this.page = totalPage;
+                    return;
+                };
+                console.log('触底事件触发, 当前页码',this.page);
+                if(this.searchType === 'image') {
+                    this.getDataFromImage().then(result=>{
+                        this.results = [...this.results, ...result];
+                    })
+                }else {
+                    this.getDataFromText().then(result=>{
+                        this.results = [...this.results, ...result];
+                    })
+                }
+            },
             /**
              * @description 根据图片搜索获取数据
-             * @param {Boolean} loadmore 本次搜索是否为加载更多
              */
-			async getDataFromImage(loadmore) {
+			async getDataFromImage() {
 				this.$refs['product-list'].changeShowNoList(false);
 				try {
-					let result = null;
-                    if(this.page === 1) {
-                        result = await _1688.searchGoodsByPicFirst(this.imageAddress);
-						this.page = 2;
-						if(result && result.data && result.data.searchImage) {
-							this.yoloCropRegion = result.data.searchImage.yoloCropRegion;
-							let regionList = result.data.searchImage.yoloCropRegion.split(';');
-							getBase64FromCropImage(this.originalImageUrl ,regionList).then(res=>{
-								console.log(res);
-								this.$refs['image_operation'].setLocalImageList(res);
-							}).catch(e=>{
-								console.log(e);
-							})
-						}
-                    }else {
-						this.region = this.yoloCropRegion.split(';')[this.activeLocalItemIndex];
-						console.log(this.yoloCropRegion, this.region);
-						result = await _1688.searchGoodsByPic({
-							imageId: this.imageAddress,
-							page: this.page,
-							yoloCropRegion: this.yoloCropRegion,
-							region: this.region
-						});
-					}
+                    let result = await _1688.searchGoodsByPic({
+                        imageId: this.imageAddress,
+                        page: this.page,
+                        yoloCropRegion: this.yoloCropRegion,
+                        region: this.region,
+                        pailitaoCategoryId: this.cid
+                    });
 					console.log(result);
 					if(!result) {
 						this.$message.error(this.$t('message.serach_result_from_image_error'));
@@ -178,36 +164,103 @@
 					this.categoryList = result.data.categoryList ? result.data.categoryList : null;
 					this.resultInfo = result.data.resultInfo;
 					this.totalPage = this.resultInfo.totalPages || 1;
-					if (result.data.results) {
+                    if (result.data.results && result.data.results.length > 0) {
 						handleResponse(result);
 					} else {
 						this.$refs['product-list'].changeShowNoList(true);
 					}
-					this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
+					return result.data.results;
 				} catch (e) {
 					this.$message.error(this.$t('message.serach_result_from_image_error') + e);
 				}
 			},
-			async getDataFromText(loadmore) {
-				let result = null;
+            /**
+             * @description 根据图片搜索首次获取数据
+             */
+            async getDataFromImageFirst() {
+                this.$refs['product-list'].changeShowNoList(false);
+                try {
+                    console.log(this.region);
+                    let result = await _1688.searchGoodsByPicFirst({
+                        imageId: this.imageAddress,
+                        yoloRegionSelected: (this.yoloCropRegion && this.region) ? true : null,
+                        yoloCropRegion: this.yoloCropRegion || null,
+                        region: this.region || null
+                    });
+                    if(result && result.data) {
+                        let regionList = null;
+                        if(result.data.searchImage) {
+                            this.yoloCropRegion = result.data.searchImage.yoloCropRegion;
+                            regionList = result.data.searchImage.yoloCropRegion.split(';');
+                        }
+                        let r = await getBase64FromCropImage(this.originalImageUrl ,regionList);
+                        this.$refs['image_operation'].setLocalImageList(r);
+                        this.categoryList = result.data.categoryList ? result.data.categoryList : null;
+                        this.resultInfo = result.data.resultInfo;
+                        this.totalPage = this.resultInfo.totalPages || 1;
+                        if (result.data.results && result.data.results.length > 0) {
+                            handleResponse(result);
+                        } else {
+                            this.$refs['product-list'].changeShowNoList(true);
+                        }
+                        return result.data.results;
+                    }else {
+                        this.$message.error(this.$t('message.serach_result_from_image_error'));
+                    }
+                }catch (e) {
+                    console.log(e);
+                    this.$message.error(this.$t('message.serach_result_from_image_error') + e);
+                    throw e
+                }
+            },
+            /**
+             * @description 根据文字搜索获取数据
+             */
+			async getDataFromText() {
+                this.$refs['product-list'].changeShowNoList(false);
 				try {
-					if(!loadmore) {
-						result = await _1688.searchGoodsFirst({ ...this.searchTextParams,page: this.page });
-						if(result && result.data) {
-							this.categoryList = result.data.categoryList || null;
-							this.filterList = result.data.filterList || null;
-						}						
-					}else {
-						result = await _1688.searchGoods({ ...this.searchTextParams,page: this.page });
-					}
-					if(!result || !result.data) return this.$message.error(this.$t('message.get_result_error'));
-					this.resultInfo = result.data.resultInfo;
-					handleResponse(result);
-					this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
+                    let result = await _1688.searchGoods({ ...this.searchTextParams,page: this.page });
+                    if(result && result.data) {
+                        this.categoryList = result.data.categoryList || null;
+                        this.filterList = result.data.filterList || null;
+                        this.resultInfo = result.data.resultInfo;
+                        if (result.data.results && result.data.results.length > 0) {
+                            handleResponse(result);
+                        }else {
+                            this.$refs['product-list'].changeShowNoList(true);
+                        }
+                    }else {
+                        this.$message.error(this.$t('message.get_result_error'));
+                    }
+                    return result.data.results;
 				} catch (error) {
 					console.log(error);
 				}
 			},
+            /**
+             * @description 根据文字搜索首次获取数据
+             */
+            async getDataFromTextFirst() {
+                this.$refs['product-list'].changeShowNoList(false);
+                try {
+                    let result = await _1688.searchGoodsFirst({ ...this.searchTextParams,page: this.page });
+                    if(result && result.data) {
+                        this.categoryList = result.data.categoryList || null;
+                        this.filterList = result.data.filterList || null;
+                        this.resultInfo = result.data.resultInfo;
+                        if (result.data.results && result.data.results.length > 0) {
+                            handleResponse(result);
+                        }else {
+                            this.$refs['product-list'].changeShowNoList(true);
+                        }
+                    }else {
+                        this.$message.error(this.$t('message.get_result_error'))
+                    }
+                    return result.data.results;
+                }catch (e) {
+                    throw e;
+                }
+            }
 		}
 	}
 </script>

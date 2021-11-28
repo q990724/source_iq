@@ -8,7 +8,8 @@ module.exports = {
         get_result_error: 'Failed to obtain data',
         serach_result_from_image_error: 'Image search failed',
         upload_image_error: 'Uploading image failed',
-        network_error: 'Network Error'
+        network_error: 'Network Error',
+        search_text_not_null: 'Search content cannot be empty!'
     },
     label: {
         chooseBox: '框选主体',

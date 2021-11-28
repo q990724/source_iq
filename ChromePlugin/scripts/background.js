@@ -55,21 +55,26 @@ function getFile(base64Data) {
 
 // 发送图片base64到content_script
 function uploadImage(base64) {
-    console.log(base64);
     chrome.tabs.query({title: 'SourceIQ'}, tabs => {
         console.log('获取项目页面', tabs);
-        if(tabs && tabs.length > 0) {
-            let tab = tabs[0];
-            sendMessageToContentScript({cmd: 'image-file', value: {base64}});
-            chrome.tabs.highlight({windowId: tab.windowId, tabs: tab.index}) // 切换到搜索页选项卡
-            chrome.windows.update(tab.windowId, {focused: true}); // 窗口得到聚焦
-            chrome.tabs.sendMessage(tab.id, {cmd: 'refesh-window'}, function (response) {});
-        }else {
-            sendMessageToContentScript({cmd: 'image-file', value: {base64}});
-            chrome.storage.local.set({'upload-file': base64}, function () {
+        // 1.将base64直接存储到chrome缓存中
+        chrome.storage.local.set({'upload-file': base64}, function () {
+            // 2. 检查是否存在SourceIQ的tab
+            if(tabs && tabs.length > 0) {
+                // 3. 如果存在tab 发送消息通知content去chrome缓存拿base64
+                sendMessageToContentScript({cmd: 'image-file'});
+                // 3.1. 切换到最后一个tab
+                chrome.tabs.highlight({windowId: tabs[tabs.length - 1].windowId, tabs: tabs[tabs.length - 1].index}) // 切换到搜索页选项卡
+                chrome.windows.update(tabs[tabs.length - 1].windowId, {focused: true}); // 窗口得到聚焦
+                // 3.2. 刷新所有的SourceIQ的tab
+                for(let tab of tabs) {
+                    chrome.tabs.reload(tab.id);
+                }
+            }else {
+                // 4. 如果不存在SourceIQ的tab，则创建一个，并传递一个get参数refreshUploadFile通知Vue页面base64刷新了
                 chrome.tabs.create({active: true, url: client_url + '?refreshUploadFile=true'}, function (tab) {});
-            });
-        }
+            }
+        });
     });
 }
 
@@ -166,18 +171,11 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
     // 图片上传
     if(action === 'uploadImage') {
         const base64 = value.base64;
-        // let file = getFile(base64);
-        // console.log(file, JSON.stringify(file));
         uploadImage(base64);
     }else if(action === 'getSetting') {
         // 应用获取设置
         chrome.storage.local.get( {app_setting: null}, function(o) {
             sendResponse({app_setting: o.app_setting})
-        })
-    }else if(action === 'getUploadFile') {
-        // 插件获取的图片base64
-        chrome.storage.local.get( {'upload-file': null}, function(o) {
-            sendResponse({'upload-file': o['upload-file']})
         })
     }
     return true;
