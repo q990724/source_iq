@@ -27,5 +27,3 @@ let v = new Vue({
     render: h => h(App)
 }).$mount('#app')
 
-window.$vue = v;
-

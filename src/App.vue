@@ -20,6 +20,11 @@ export default {
         // window.localStorage.removeItem('upload-file');
     },
     created() {
+        console.log('created');
+        this.getAppSetting();
+    },
+    mounted() {
+        console.log('mounted');
         this.getAppSetting();
     },
     methods: {

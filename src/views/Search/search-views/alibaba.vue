@@ -63,6 +63,7 @@
 			}
 		},
         mounted() {
+            console.log('view mounted');
             // 加载更多
             bus.$on('loadmore', () => {
                 console.log('触底事件触发');
