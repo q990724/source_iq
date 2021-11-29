@@ -79,9 +79,37 @@ $(function() {
         }
         return(false);
     }
+    function updateUrl( key, value){
+        var newurl = updateQueryStringParameter(key, value)
+        //向当前url添加参数，没有历史记录
+        window.history.replaceState({
+            path: newurl
+        }, '', newurl);
+    }
+
+    function updateQueryStringParameter(key, value) {
+        var uri = window.location.href
+        if(!value) {
+            return uri;
+        }
+        var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
+        var separator = uri.indexOf('?') !== -1 ? "&" : "?";
+        if (uri.match(re)) {
+            return uri.replace(re, '$1' + key + "=" + value + '$2');
+        }
+        else {
+            return uri + separator + key + "=" + value;
+        }
+    }
     let refreshUploadFile = getQueryVariable('refreshUploadFile');
     if(refreshUploadFile === 'true') {
-
+        // 从chrome缓存中获取最新的base64
+        chrome.storage.local.get({'upload-file': null}, function (o) {
+            // 存储到window缓存中
+            window.localStorage.setItem('upload-file', o['upload-file']);
+            updateUrl('refreshUploadFile', 'false');
+            window.location.reload();
+        });
     }
 })
 

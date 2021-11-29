@@ -3,9 +3,9 @@
 		<source-list @onSourceItemClick="onSourceItemClick"></source-list>
 		<div class="container">
 			<div class="main-container">
-				<text-search ref="text_search" @onClickSearchButton="onClickSearchButton" @onImageUploadedSuccess="onImageUploadedSuccess" @onImageUploadedError="onImageUploadedError"></text-search>
+				<text-search ref="text_search" @onClickSearchButton="onClickSearchButton" @onSelectImage="onSelectImage"></text-search>
 				<!--  图片处理区域  -->
-				<image-operation ref="image_operation" :original_image_url="originalImageUrl"
+				<image-operation ref="image_operation" :main_image_url="main_imageAddress"
 					@onClickLocalItem="onClickLocalItem"
 					@onClickMainImage="onClickMainImage" @onClickClear="onClickClear">
 				</image-operation>
@@ -39,9 +39,9 @@
 	import ProductListComponent from "../components/product-list";
 	import HighFiltration from "../components/high-filtration";
 	import FilterComponent from "../components/group-filter.vue";
-	import { aliexpress } from "@/assets/js/apis";
+    import {_1688global, aliexpress} from "@/assets/js/apis";
 	import bus from "@/assets/js/bus";
-    import { handleResponse } from "@/assets/js/utils.js";
+    import {getFileFromBase64, handleResponse} from "@/assets/js/utils.js";
     import publicData from "../mixins/public.js";
 	export default {
 		name: "view-aliexpress",
@@ -63,41 +63,20 @@
 				}
 			}
 		},
-        created() {
+        mounted() {
             // 加载更多 aliexpress图片搜索暂无加载更多
             bus.$on('loadmore', () => {
                 console.log('触底事件触发');
             })
+            if(window.localStorage.getItem('upload-file')) {
+                this.onSelectImage();
+            }else if(window.localStorage.getItem('search-text')) {
+                let text = window.localStorage.getItem('search-text');
+                this.$refs['text_search'].$data.input = text;
+                this.onClickSearchButton({search_text: text})
+            }
         },
-		methods: {
-            /**
-             * @description 图片上传成功后的回调函数
-             */
-			onImageUploadedSuccess(res) {
-				this.searchTextParams = {
-					search_text: ''
-				}
-				this.cid = null;
-				this.searchType = 'image';
-				this.originalImageUrl = res.imgUrl;
-				this.imageAddress = res.imageAddress;
-				this.main_imageAddress = res.imageAddress;
-				this.getDataFromImage(false);
-			},
-            /**
-             * @description 点击裁剪区域某个图片时触发
-             */
-			onClickLocalItem(parmas) {
-				this.imageAddress = parmas.imageAddress;
-				this.getDataFromImage(false);
-			},
-            /**
-             * @description 点击主图时触发
-             */
-			onClickMainImage() {
-				this.imageAddress = this.main_imageAddress;
-				this.getDataFromImage(false);
-			},
+        methods: {
             /**
              * @description 切换商品分类时触发
              */
@@ -118,6 +97,18 @@
 			onFilterChange({e,o,title}) {
 
 			},
+            async imageSearch(base64) {
+                try {
+                    let file = getFileFromBase64(base64);
+                    let uploadImageResult = await aliexpress.uploadPic(file);
+                    console.log(uploadImageResult);
+                    this.imageAddress = uploadImageResult.data.filename;
+                    this.getDataFromImage(false);
+                }catch (e) {
+                    console.log(e);
+                    throw e;
+                }
+            },
             /**
              * @description 根据图片搜索获取数据
              * @param {Boolean} loadmore 本次搜索是否为加载更多
@@ -130,7 +121,7 @@
 					this.categoryList = result.data.categoryList ? result.data.categoryList : null;
 					this.resultInfo = result.data.resultInfo;
 					this.totalPage = this.resultInfo.totalPages || 1;
-					if (result.data.results) {
+					if (result.data.results && result.data.results.length > 0) {
 						handleResponse(result);
 					} else {
 						this.$refs['product-list'].changeShowNoList(true);
@@ -142,15 +133,23 @@
 			},
 			async getDataFromText(loadmore) {
 				try {
-					console.log(this.searchTextParams);
+                    this.$refs['product-list'].changeShowNoList(false);
 					let result = await aliexpress.searchGoodsByText({ ...this.searchTextParams,page: this.page });
-					if(!result || !result.data) return this.$message.error(this.$t('message.get_result_error'));
-					this.categoryList = result.data.categoryList;
-					this.filterList = result.data.filterList;
-					this.resultInfo = result.data.resultInfo;
-					handleResponse(result);
-					this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
+                    if(result && result.data) {
+                        this.categoryList = result.data.categoryList;
+                        this.filterList = result.data.filterList;
+                        this.resultInfo = result.data.resultInfo;
+                        if(result.data.results && result.data.results.length > 0) {
+                            handleResponse(result);
+                        }else {
+                            this.$refs['product-list'].changeShowNoList(true);
+                        }
+                        this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
+                    }else {
+                        this.$refs['product-list'].changeShowNoList(true);
+                    }
 				} catch (error) {
+                    this.$message.error(this.$t('message.serach_result_from_image_error') + error);
 					console.log(error);
 				}
 			}

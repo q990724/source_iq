@@ -1,6 +1,6 @@
 const server_url = 'http://eurotransit.acuteberry.com/';
 // const server_url = 'http://artpic.la.com/';
-const client_url = 'http://192.168.0.113:8080/';
+const client_url = 'http://192.168.0.113:8081/';
 
 //将远程图片转化为base64
 function getBase64(img) {
@@ -78,44 +78,6 @@ function uploadImage(base64) {
     });
 }
 
-// 处理服务器返回上传图片结果
-function handleUploadedImage(result, id) {
-    console.log(result);
-    // alibaba
-    if(id == 1) {
-        chrome.tabs.create({"url": client_url + `?imageAddress=${result.imageAddress}&imgUrl=${result.domain + result.imageAddress}#/`});
-    }else if(id == 2) {
-        // 1688
-        chrome.tabs.create({"url": client_url + `?imageAddress=${result.imageId}&imgUrl=${result.u}#/`});
-    }else if(id == 3) {
-        // 1688Global
-        chrome.tabs.create({"url": client_url + `?imageAddress=${result.imgUrl}&imgUrl=${result.imgUrl}#/`});
-    }else if(id == 4) {
-        // aliexpress
-        chrome.tabs.create({"url": client_url + `?imageAddress=${result.filename}&imgUrl=${result.url}#/`});
-    }else if(id == 5) {
-        // yiwugo
-        chrome.tabs.create({"url": client_url + `?imageAddress=${result.url}&imgUrl=${result.url}#/`});
-    }else if(id == 6) {
-        // dhgate
-        chrome.tabs.create({"url": client_url + `?imageAddress=${result.imgUrl}&imgUrl=${result.imgUrl}#/`});
-    }
-}
-
-// 解析相关标题
-function parseTitle(domain, imgUrl, dom) {
-    try {
-        // 亚马逊 amazon
-        if(domain.indexOf('amazon') != -1) {
-            let img = $(dom).find(`img[src='${imgUrl}']`);
-            console.log(img);
-            if(img) return img.attr('alt');
-        }
-    }catch (e) {
-        return '';
-    }
-}
-
 // 右键菜单
 chrome.contextMenus.create({
     title: "图片搜索",
@@ -184,7 +146,6 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
 // 监听页面变化
 chrome.tabs.onUpdated.addListener(function(id, info, tab) {
 	let url = tab.url;
-
 	let obj2cookie = function (obj, step) {
 		if (obj.constructor == Object) {
 			var cssStr = '';
@@ -194,7 +155,6 @@ chrome.tabs.onUpdated.addListener(function(id, info, tab) {
 			return cssStr.substr(0, cssStr.length - 1);
 		}
 	}
-	
 	if(url.indexOf('aliexpress.com') !== -1 && info.status === 'complete') {
 		chrome.cookies.getAll({domain: 'aliexpress.com'}, function(res) {
 			if(res && Array.isArray(res) && res.length > 0) {
@@ -239,3 +199,17 @@ chrome.tabs.onUpdated.addListener(function(id, info, tab) {
 	}
 	
 })
+
+//初始化设置
+function initSetting() {
+    chrome.storage.local.get( {app_setting: null}, function(o) {
+        if(!o.app_setting) {
+            o.app_setting = {
+                source: 1
+            };
+            chrome.storage.local.set({app_setting: o.app_setting}, function() {});
+        }
+    })
+}
+
+initSetting();

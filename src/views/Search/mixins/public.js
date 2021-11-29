@@ -126,6 +126,7 @@ const publicData = {
             }
         },
         onSelectImage() {
+            this.searchType = 'image';
             this.originalImageUrl = window.localStorage.getItem('upload-file');
             this.main_imageAddress = this.originalImageUrl;
             this.imageSearch(this.originalImageUrl);
@@ -134,6 +135,7 @@ const publicData = {
          * @description 点击裁剪区域某个图片时触发
          */
         onClickLocalItem(item) {
+            this.searchType = 'image';
             this.originalImageUrl = item.cover;
             this.imageSearch(this.originalImageUrl);
         },
@@ -141,34 +143,10 @@ const publicData = {
          * @description 点击主图时触发
          */
         onClickMainImage() {
+            this.searchType = 'image';
             this.originalImageUrl = this.main_imageAddress;
             this.imageSearch(this.originalImageUrl);
         },
-        /**
-         * @description 将网络地址或base64地址转为file文件
-         */
-        urlOrBase64ToFile({ url, base64 }) {
-            return new Promise((resolve, reject) => {
-                let file = null;
-                if (url) {
-                    getBase64(url).then(b64 => {
-                        file = getFileFromBase64(b64);
-                        resolve(file);
-                    }).catch(e=>{
-                        reject(e);
-                    })
-                } else if (base64) {
-                    file = getFileFromBase64(base64);
-                    resolve(file);
-                } else {
-                    reject(null);
-                }
-            });
-
-        },
-        continueSearch() {
-            console.log('页面获取store继续搜索参数', this.$store.state.continueSearchParams);
-        }
     }
 }
 

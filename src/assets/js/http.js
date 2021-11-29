@@ -29,7 +29,7 @@ Service.interceptors.response.use(response => {
     loadingInstance.close()
     // if(response && response.data && response.data.)
     if(response.data) {
-        if(response.data.code == 40000 || response.data.data.error == 'require login' || (response.data.ret && response.data.ret[0].indexOf('令牌过期') != -1)) {
+        if(response.data.retcode == 40000 || response.data.code == 40000 || (response.data.data && response.data.data.error == 'require login') || (response.data.ret && response.data.ret[0].indexOf('令牌过期') != -1)) {
             let sourceName = '',
                 loginPageUrl = '';
             for (let key in SourceMap) {

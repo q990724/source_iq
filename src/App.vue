@@ -16,7 +16,8 @@ import SoureMap from "@/assets/js/source_map.js";
 
 export default {
     beforeCreate() {
-
+        window.localStorage.removeItem('search-text');
+        // window.localStorage.removeItem('upload-file');
     },
     created() {
         this.getAppSetting();
