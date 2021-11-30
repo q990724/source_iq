@@ -1,7 +1,7 @@
 <template>
-    <div class="image-operation mt40" v-if="main_image_url">
+    <div class="image-operation mt40" v-if="$store.state.mainImage">
         <div class="item main-item" :class="{'active': mainImageActive}">
-            <img :src="main_image_url" alt="" class="img" @click="onClickMainImage">
+            <img :src="$store.state.mainImage" alt="" class="img" @click="onClickMainImage">
             <span @click="chooseImageBox"><img src="@/assets/img/kuangxuan.png" alt="">{{ $t('label.chooseBox') }}</span>
             <i class="clear el-icon-circle-close" @click="onClickClear"></i>
         </div>
@@ -15,7 +15,7 @@
         </div>
         <div id="cropBox" v-show="cropBoxStatus">
             <div class="image-container">
-                <img :src="main_image_url" alt="">
+                <img :src="$store.state.mainImage" alt="">
             </div>
             <div class="foot">
                 <span @click="confirmCropBox">确定</span>
@@ -39,12 +39,6 @@ export default {
             cropResult: null,
             localCropImageList: [],
             mainImageActive: true
-        }
-    },
-    props: {
-        main_image_url: {
-            type: String,
-            default: ''
         }
     },
     methods: {
@@ -105,7 +99,6 @@ export default {
             this.localCropImageList = [];
             this.mainImageActive = false;
             cropObject = null;
-            window.localStorage.removeItem('upload-file');
             this.$emit('onClickClear');
         },
 		setLocalImageList(list) {

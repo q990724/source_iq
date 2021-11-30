@@ -7,23 +7,10 @@
                 </el-option>
             </el-select>
             <input type="text" class="input" :placeholder="$t('label.input_placeholder')" v-model="input" autocomplete="off" @keypress="onKeyPress">
-            <!-- <i class="el-icon-circle-close" v-show="input" @click="onClickCloseButton"></i> -->
-            <i class="el-icon-camera" @click="onClickCamera"></i>
+             <i class="el-icon-circle-close clear" v-show="input" @click="onClickCloseButton"></i>
+            <i class="el-icon-camera camera" @click="onClickCamera"></i>
         </div>
         <div class="sbtn" @click="onClickSearchButton">{{$t('button.search')}}</div>
-
-<!--        <el-upload-->
-<!--            class="avatar-uploader"-->
-<!--            action="https://jsonplaceholder.typicode.com/posts/"-->
-<!--            :show-file-list="false"-->
-<!--            accept="image/*"-->
-<!--            :on-success="handleAvatarSuccess"-->
-<!--            :on-error="handleAvatarError"-->
-<!--            :http-request="onUploadImage"-->
-<!--            :before-upload="beforeAvatarUpload"-->
-<!--            style="display:none;">-->
-<!--            <i slot="trigger" id='uploadButton'></i>-->
-<!--        </el-upload>-->
         <input type="file" accept="image/*" style="display: none" @change="selectImage" id='uploadButton'>
     </div>
 </template>
@@ -67,19 +54,21 @@ export default {
     watch: {
         getSourceId() {
             console.log(this.options);
+        },
+    },
+    created() {
+        this.input = this.$store.state.searchText;
+        if(this.input) {
+            this.onClickSearchButton();
         }
     },
     methods: {
         onClickCloseButton() {
             this.input = '';
+            this.$store.commit('setSearchText', this.input);
         },
         onClickSearchButton() {
-            if(!this.input.trim()) {
-                this.$message.info(this.$i18n.$t('message.search_text_not_null'));
-                return;
-            }
-            window.localStorage.setItem('search-text', this.input.trim());
-            window.localStorage.removeItem('upload-file');
+            if(!this.input.trim()) return this.$message.info(this.$t('message.search_text_not_null'));
             this.$emit('onClickSearchButton', {search_text: this.input, index_area: this.index_area});
         },
         onClickCamera() {
@@ -121,11 +110,16 @@ export default {
         display: block;
         text-align: center;
         width: 40px;
-        &:last-child {
+        &.camera, &.clear {
             position: absolute;
-            right: 0;
             cursor: pointer;
             font-size: 18px;
+        }
+        &.camera {
+            right: 0;
+        }
+        &.clear {
+            right: 28px;
         }
     }
 }

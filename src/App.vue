@@ -15,28 +15,13 @@ import {getQueryVariable, findKey} from "@/assets/js/utils.js";
 import SoureMap from "@/assets/js/source_map.js";
 
 export default {
-    beforeCreate() {
-        window.localStorage.removeItem('search-text');
-        // window.localStorage.removeItem('upload-file');
-    },
     created() {
-        console.log('created');
-        this.getAppSetting();
-    },
-    mounted() {
-        console.log('mounted');
-        this.getAppSetting();
     },
     methods: {
         load() {
             console.log('app 收到loadmore事件');
             bus.$emit("loadmore");
         },
-        // 获取app设置
-        getAppSetting() {
-            let appSetting = JSON.parse(window.localStorage.getItem('app-setting'));
-            this.$store.state.source_id = appSetting.source;
-        }
     },
     computed: {
         source_id() {

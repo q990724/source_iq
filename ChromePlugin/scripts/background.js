@@ -67,12 +67,12 @@ function uploadImage(base64) {
                 chrome.tabs.highlight({windowId: tabs[tabs.length - 1].windowId, tabs: tabs[tabs.length - 1].index}) // 切换到搜索页选项卡
                 chrome.windows.update(tabs[tabs.length - 1].windowId, {focused: true}); // 窗口得到聚焦
                 // 3.2. 刷新所有的SourceIQ的tab
-                for(let tab of tabs) {
-                    chrome.tabs.reload(tab.id);
-                }
+                // for(let tab of tabs) {
+                //     chrome.tabs.reload(tab.id);
+                // }
             }else {
-                // 4. 如果不存在SourceIQ的tab，则创建一个，并传递一个get参数refreshUploadFile通知Vue页面base64刷新了
-                chrome.tabs.create({active: true, url: client_url + '?refreshUploadFile=true'}, function (tab) {});
+                // 4. 如果不存在SourceIQ的tab，则创建一个
+                chrome.tabs.create({active: true, url: client_url}, function (tab) {});
             }
         });
     });
