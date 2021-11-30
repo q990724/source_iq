@@ -143,8 +143,14 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         // 收到base64更新的消息
         // 从chrome缓存中获取最新的base64
         chrome.storage.local.get({'upload-file': null}, function (o) {
-            // 存储到window缓存中
-            window.localStorage.setItem('upload-file', o['upload-file']);
+            chrome.storage.local.set({'upload-file': null}, function () {
+                // 存储到window缓存中
+                window.localStorage.setItem('upload-file', o['upload-file']);
+                // 如果当前window的title=SourceIQ，则刷新页面
+                if(window.document.title === 'SourceIQ') {
+                    window.location.reload();
+                }
+            })
         });
     }else if(request.cmd == 'update-cookie') {
         window.localStorage.setItem(`cookie-${request.value.source}`, request.value.cookie);
@@ -153,6 +159,15 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 });
 
 // 打开页面后自动获取一次当前设置
-chrome.runtime.sendMessage({action: 'getSetting'}, function (response) {
-    window.localStorage.setItem('app-setting', JSON.stringify(response.app_setting));
+chrome.storage.local.get( {app_setting: null}, function(o) {
+    window.localStorage.setItem('app-setting', JSON.stringify(o.app_setting));
+});
+
+// 打开页面后自动获取一次Chrome缓存图片
+chrome.storage.local.get( {'upload-file': null}, function(o) {
+    if(o['upload-file']) {
+        chrome.storage.local.set({'upload-file': null}, function () {
+            window.localStorage.setItem('upload-file', o['upload-file']);
+        })
+    }
 });

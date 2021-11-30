@@ -5,10 +5,7 @@
 			<div class="main-container">
 				<text-search ref="text_search" @onClickSearchButton="onClickSearchButton" @onSelectImage="onSelectImage"></text-search>
 				<!--  图片处理区域  -->
-				<image-operation ref="image_operation" :main_image_url="main_imageAddress"
-					@onClickLocalItem="onClickLocalItem"
-					@onClickMainImage="onClickMainImage" @onClickClear="onClickClear">
-				</image-operation>
+				<image-operation ref="image_operation" @onClickLocalItem="onClickLocalItem" @onClickMainImage="onClickMainImage" @onClickClear="onClickClear"></image-operation>
 				<!--  筛选区域  -->
 				<div class="filter-container mt40" v-if="(categoryList && categoryList.items) || (filterList && filterList.length > 0)">
 					<!-- 商品分类 -->
@@ -71,7 +68,7 @@
                     this.page = 5;
                     return;
                 }
-                if(this.searchType === 'image') {
+                if(this.$store.state.searchType === 'image') {
                     this.getDataFromImage(true);
                 }else {
                     this.getDataFromText(true);
@@ -79,11 +76,8 @@
             })
             if(window.localStorage.getItem('upload-file')) {
                 this.onSelectImage();
-            }else if(window.localStorage.getItem('search-text')) {
-                let text = window.localStorage.getItem('search-text');
-                this.$refs['text_search'].$data.input = text;
-                // this.getDataFromText()
-                this.onClickSearchButton({search_text: text})
+            }else if(this.$store.state.mainImage) {
+                this.imageSearch(this.$store.state.mainImage);
             }
         },
         methods: {
@@ -94,7 +88,7 @@
 				this.cid = id;
 				this.searchTextParams.Category = id;
 				this.page = 1;
-                if(this.searchType === 'image') {
+                if(this.$store.state.searchType === 'image') {
                     this.imageSearch(this.originalImageUrl);
                 }else {
                     this.getDataFromText(false)
@@ -105,13 +99,13 @@
 			 * @param {Object} params {search_text: 'apple', index_area: 'product_en'}
 			 */
 			onClickSearchButton(params) {
-				this.searchType = 'text';
-				this.onClickClear();
+                this.$store.commit('setSearchType', 'text');
+                this.$store.commit('setSearchText', params.search_text);
+                this.onClickClear();
 				this.searchTextParams = {
 					search_text: params.search_text,
 					index_area: params.index_area
 				}
-				this.search_text = params.search_text;
 				this.getDataFromText(false);
 			},
 			onFilterChange({e, o, title}) {
@@ -160,7 +154,9 @@
 				this.getDataFromText(false);
 			},
             async imageSearch(base64) {
+                this.$store.commit('setSearchType', 'image');
                 try {
+                    this.onClickClear();
                     let file = getFileFromBase64(base64);
                     let uploadImageResult = await alibaba.uploadPic(file);
                     this.imageAddress = uploadImageResult.data.imageAddress;

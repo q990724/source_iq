@@ -23,13 +23,13 @@ function getBase64(url) {
 const publicData = {
     data() {
         return {
-            search_text: '',
-            // 当前搜索模式 [image | text]
-            searchType: 'image',
-            // 用来显示的主图链接，有时为网络图片，有时为base64
-            originalImageUrl: '',
-            // 保留的初次搜索图片参数值 [imageId | filename | imageAddress]
-            main_imageAddress: '',
+            // search_text: '',
+            // // 当前搜索模式 [image | text]
+            // searchType: 'image',
+            // // 用来显示的主图链接，有时为网络图片，有时为base64
+            // originalImageUrl: '',
+            // // 保留的初次搜索图片参数值 [imageId | filename | imageAddress]
+            // main_imageAddress: '',
             // 当前搜索图片参数值 [imageId | filename | imageAddress]
             imageAddress: '',
             // 商品分类列表
@@ -52,6 +52,10 @@ const publicData = {
             totalPage: 1
         }
     },
+    created() {
+        console.log('view created');
+        this.$store.commit('getAppSetting');
+    },
     beforeDestroy() {
         bus.$off('loadmore');
     },
@@ -60,92 +64,40 @@ const publicData = {
          * @description 点击主图上的删除图标时触发
          */
         onClickClear() {
-            this.originalImageUrl = '';
-            this.main_imageAddress = '';
-            this.imageAddress = '';
+            // this.originalImageUrl = '';
+            // this.main_imageAddress = '';
+            // this.imageAddress = '';
             this.categoryList = {};
             this.results = [];
             this.resultInfo = {};
             this.filterList = [];
             this.page = 1;
             this.cid = null;
-            window.localStorage.removeItem('upload-file');
         },
         /**
          * @description 切换数据源时触发
          */
         async onSourceItemClick(source_id) {
-            try {
-                if (source_id === this.$store.state.source_id) return;
-                this.$store.state.source_id = source_id;
-                console.log('当前数据源ID：', this.$store.state.source_id);
-                // this.$store.state.continueSearchParams.continueSearch = false;
-                // if (this.originalImageUrl || this.search_text) {
-                //     this.$store.state.continueSearchParams.continueSearch = true;
-                //     if (this.searchType == 'image') {
-                //         this.$store.state.continueSearchParams.continueSearchType = 'image';
-                //         if (this.originalImageUrl.indexOf('https') != -1 || this.originalImageUrl.indexOf('http') != -1) {
-                //             this.$store.state.continueSearchParams.continueSearchImage = await this.urlOrBase64ToFile({ url: this.originalImageUrl });
-                //         } else {
-                //             this.$store.state.continueSearchParams.continueSearchImage = await this.urlOrBase64ToFile({ base64: this.originalImageUrl });
-                //         }
-                //     } else if (this.searchType == 'text') {
-                //         this.$store.state.continueSearchParams.continueSearchType = 'text';
-                //         this.$store.state.continueSearchParams.continueSearchText = this.search_text;
-                //     }
-                // }else {
-                //     this.$store.state.continueSearchParams.continueSearch = false;
-                //     this.$store.state.continueSearchParams.continueSearchType = 'image';
-                //     this.$store.state.continueSearchParams.continueSearchText = null;
-                //     this.$store.state.continueSearchParams.continueSearchImage = null;
-                // }
-                switch (source_id) {
-                    case SourceMap['alibaba']['id']:
-                        this.$router.push('/view-alibaba');
-                        break;
-                    case SourceMap['yiwugo']['id']:
-                        this.$router.push('/view-yiwugo');
-                        break;
-                    case SourceMap['aliexpress']['id']:
-                        this.$router.push('/view-aliexpress');
-                        break;
-                    case SourceMap['1688']['id']:
-                        this.$router.push('/view-1688');
-                        break;
-                    case SourceMap['1688global']['id']:
-                        this.$router.push('/view-1688global');
-                        break;
-                    case SourceMap['dhgate']['id']:
-                        this.$router.push('/view-dhgate');
-                        break;
-                    default:
-                        this.$message.error('未知的数据源ID');
-                }
-            } catch (e) {
-                console.error(e);
-            }
+            if (source_id === this.$store.state.source_id) return;
+            this.$store.commit('setSourceId', source_id);
+            console.log('当前数据源ID：', this.$store.state.source_id);
         },
         onSelectImage() {
-            this.searchType = 'image';
-            this.originalImageUrl = window.localStorage.getItem('upload-file');
-            this.main_imageAddress = this.originalImageUrl;
-            this.imageSearch(this.originalImageUrl);
+            this.$store.commit('setMainImage', window.localStorage.getItem('upload-file'))
+            this.imageSearch(this.$store.state.mainImage);
         },
         /**
          * @description 点击裁剪区域某个图片时触发
          */
         onClickLocalItem(item) {
-            this.searchType = 'image';
-            this.originalImageUrl = item.cover;
-            this.imageSearch(this.originalImageUrl);
+            this.$store.commit('setMainImage', item.cover);
+            this.imageSearch(this.$store.state.mainImage);
         },
         /**
          * @description 点击主图时触发
          */
         onClickMainImage() {
-            this.searchType = 'image';
-            this.originalImageUrl = this.main_imageAddress;
-            this.imageSearch(this.originalImageUrl);
+            this.imageSearch(this.$store.state.mainImage);
         },
     }
 }
