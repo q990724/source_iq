@@ -113,6 +113,7 @@
 			},
             async imageSearch(base64) {
                 try {
+                    this.initSearchResult();
                     let file = getFileFromBase64(base64);
                     let uploadImageResult = await yiwugo.uploadPic(file);
                     this.imageAddress = uploadImageResult.data.url;

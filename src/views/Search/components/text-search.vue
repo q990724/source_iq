@@ -62,8 +62,6 @@ export default {
     methods: {
         onClickCloseButton() {
             this.input = '';
-            this.$store.commit('clearSearchText');
-            this.$emit('onClickClearText');
         },
         onClickSearchButton() {
             if(!this.input.trim()) return this.$message.info(this.$t('message.search_text_not_null'));

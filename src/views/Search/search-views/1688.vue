@@ -4,7 +4,7 @@
         <div class="container">
             <div class="main-container">
                 <text-search ref="text_search" @onClickSearchButton="onClickSearchButton"
-                             @onSelectImage="onSelectImage" @onClickClearText="onClickClear"></text-search>
+                             @onSelectImage="onSelectImage"></text-search>
                 <!--  图片处理区域  -->
                 <image-operation ref="image_operation" @onClickLocalItem="onClickLocalItem" @onClickMainImage="onClickMainImage" @onClickClear="onClickClear"></image-operation>
                 <div class="filter-container mt40"
@@ -109,6 +109,7 @@ export default {
         async imageSearch(base64) {
             this.$store.commit('setSearchType', 'image');
             try {
+                this.initSearchResult();
                 let file = getFileFromBase64(base64);
                 let uploadImageResult = await _1688.uploadPicH5(file);
                 console.log(uploadImageResult);

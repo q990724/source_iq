@@ -139,6 +139,7 @@
             async imageSearch(base64) {
                 this.$store.commit('setSearchType', 'image');
                 try {
+                    this.initSearchResult();
                     this.onClickClear();
                     let file = getFileFromBase64(base64);
                     let uploadImageResult = await _1688global.uploadPic(file);

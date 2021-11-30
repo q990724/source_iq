@@ -73,6 +73,14 @@ const publicData = {
             this.filterList = [];
             this.page = 1;
             this.cid = null;
+            this.$store.commit('clearMainImage');
+        },
+        initSearchResult() {
+            this.categoryList = {};
+            this.results = [];
+            this.resultInfo = {};
+            this.filterList = [];
+            this.page = 1;
         },
         /**
          * @description 切换数据源时触发

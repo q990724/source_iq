@@ -104,6 +104,7 @@
 			},
             async imageSearch(base64) {
                 try {
+                    this.initSearchResult();
                     let file = getFileFromBase64(base64);
                     let uploadImageResult = await aliexpress.uploadPic(file);
                     console.log(uploadImageResult);

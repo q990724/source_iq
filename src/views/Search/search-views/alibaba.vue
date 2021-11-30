@@ -3,7 +3,7 @@
 		<source-list @onSourceItemClick="onSourceItemClick" v-show="(results && results.length > 0) || (filterList && filterList.length > 0) || (categoryList && categoryList.items && categoryList.items.length > 0)"></source-list>
 		<div class="container">
 			<div class="main-container">
-				<text-search ref="text_search" @onClickSearchButton="onClickSearchButton" @onSelectImage="onSelectImage" @onClickClearText="onClickClear"></text-search>
+				<text-search ref="text_search" @onClickSearchButton="onClickSearchButton" @onSelectImage="onSelectImage"></text-search>
 				<!--  图片处理区域  -->
 				<image-operation ref="image_operation" @onClickLocalItem="onClickLocalItem" @onClickMainImage="onClickMainImage" @onClickClear="onClickClear"></image-operation>
 				<!--  筛选区域  -->
@@ -160,7 +160,7 @@
             async imageSearch(base64) {
                 this.$store.commit('setSearchType', 'image');
                 try {
-                    this.onClickClear();
+                    this.initSearchResult();
                     let file = getFileFromBase64(base64);
                     let uploadImageResult = await alibaba.uploadPic(file);
                     this.imageAddress = uploadImageResult.data.imageAddress;
