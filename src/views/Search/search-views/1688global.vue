@@ -1,14 +1,11 @@
 <template>
 	<div class="search-result-container scrollable">
-		<source-list @onSourceItemClick="onSourceItemClick"></source-list>
+		<source-list @onSourceItemClick="onSourceItemClick" v-show="(results && results.length > 0) || (filterList && filterList.length > 0) || (categoryList && categoryList.items && categoryList.items.length > 0)"></source-list>
 		<div class="container">
 			<div class="main-container">
 				<text-search ref="text_search" @onClickSearchButton="onClickSearchButton" @onSelectImage="onSelectImage"></text-search>
 				<!--  图片处理区域  -->
-				<image-operation ref="image_operation" :main_image_url="main_imageAddress"
-					@onClickLocalItem="onClickLocalItem"
-					@onClickMainImage="onClickMainImage" @onClickClear="onClickClear">
-				</image-operation>
+				<image-operation ref="image_operation" @onClickLocalItem="onClickLocalItem" @onClickMainImage="onClickMainImage" @onClickClear="onClickClear"></image-operation>
 				<div class="filter-container mt40" v-if="(categoryList && categoryList.items) || (filterList && filterList.length > 0)">
 					<!--  商品分类  -->
 					<product-class :class_list="categoryList" @onClassChange="onClassChange"></product-class>
@@ -22,6 +19,7 @@
 				<!--<filtration></filtration>-->
 				<!--  商品列表  -->
 				<product-list :offer_list="results" ref="product-list"></product-list>
+                <support-source-list v-show="!((results && results.length > 0) || (filterList && filterList.length > 0) || (categoryList && categoryList.items && categoryList.items.length > 0))"></support-source-list>
 			</div>
 		</div>
 	</div>
@@ -36,11 +34,10 @@
 	import ProductListComponent from "../components/product-list";
 	import HighFiltration from "../components/high-filtration";
 	import FilterComponent from "../components/group-filter.vue";
-    import {_1688global, alibaba} from "@/assets/js/apis";
+    import {_1688global} from "@/assets/js/apis";
 	import bus from "@/assets/js/bus";
     import {getFileFromBase64, handleResponse} from "@/assets/js/utils.js";
     import publicData from "../mixins/public.js";
-    import { getBase64FromCropImage } from "@/assets/js/utils.js";
 	export default {
 		name: "view-1688global",
 		components: {
@@ -78,7 +75,7 @@
                     return;
                 };
                 console.log('触底事件触发, 当前页码', this.page);
-                if(this.searchType === 'image') {
+                if(this.$store.state.searchType === 'image') {
                     this.getDataFromImage(true);
                 }else {
                     this.results = await this.getDataFromText();
@@ -86,10 +83,10 @@
             })
             if(window.localStorage.getItem('upload-file')) {
                 this.onSelectImage();
-            }else if(window.localStorage.getItem('search-text')) {
-                let text = window.localStorage.getItem('search-text');
-                this.$refs['text_search'].$data.input = text;
-                this.onClickSearchButton({search_text: text})
+            }else if(this.$store.state.mainImage) {
+                this.imageSearch(this.$store.state.mainImage);
+            }else if(this.$store.state.searchText) {
+                this.onClickSearchButton({search_text: this.$store.state.searchText});
             }
         },
         methods: {
@@ -99,7 +96,7 @@
 			onClassChange({id}) {
                 this.cid = id;
                 this.page = 1;
-                if(this.searchType === 'image') {
+                if(this.$store.state.searchType === 'image') {
                     this.imageSearch(this.originalImageUrl);
                 }else {
                     this.getDataFromText(false)
@@ -109,13 +106,13 @@
 			 * @description 监听文字搜索按钮点击
 			 */
 			async onClickSearchButton(params) {
-				this.searchType = 'text';
-				this.onClickClear();
+                this.$store.commit('setSearchType', 'text');
+                this.$store.commit('setSearchText', params.search_text);
+                this.onClickClear();
 				this.searchTextParams = {
 					keyword: params.search_text,
 					type: 1
 				}
-				this.search_text = params.search_text;
                 this.results = await this.getDataFromTextFirst();
 			},
 			onFilterChange({e, o, title}){
@@ -140,7 +137,9 @@
                 this.getDataFromImage(false);
 			},
             async imageSearch(base64) {
+                this.$store.commit('setSearchType', 'image');
                 try {
+                    this.onClickClear();
                     let file = getFileFromBase64(base64);
                     let uploadImageResult = await _1688global.uploadPic(file);
                     this.imageAddress = uploadImageResult.data.imgUrl;
@@ -155,7 +154,6 @@
              * @param {Boolean} loadmore 本次搜索是否为加载更多
              */
 			async getDataFromImage(loadmore) {
-				this.$refs['product-list'].changeShowNoList(false);
 				try {
 					let result = await _1688global.searchGoodsByPic({
                         imgUrl: this.imageAddress,
@@ -176,8 +174,6 @@
 					if (result.data.results) {
                         if(result.data.results.length > 0) {
                             handleResponse(result);
-                        }else {
-                            this.$refs['product-list'].changeShowNoList(true);
                         }
 					}
 					this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
@@ -201,7 +197,7 @@
                             if(result.data.results.length > 0) {
                                 handleResponse(result);
                             }else {
-                                this.$refs['product-list'].changeShowNoList(true);
+                                // this.$refs['product-list'].changeShowNoList(true);
                             }
                         }
                         return result.data.results;
@@ -224,7 +220,7 @@
                             if(result.data.results.length > 0) {
                                 handleResponse(result);
                             }else {
-                                this.$refs['product-list'].changeShowNoList(true);
+                                // this.$refs['product-list'].changeShowNoList(true);
                             }
                         }
                         return result.data.results;

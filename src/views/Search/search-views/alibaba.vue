@@ -1,9 +1,9 @@
 <template>
 	<div class="search-result-container scrollable">
-		<source-list @onSourceItemClick="onSourceItemClick"></source-list>
+		<source-list @onSourceItemClick="onSourceItemClick" v-show="(results && results.length > 0) || (filterList && filterList.length > 0) || (categoryList && categoryList.items && categoryList.items.length > 0)"></source-list>
 		<div class="container">
 			<div class="main-container">
-				<text-search ref="text_search" @onClickSearchButton="onClickSearchButton" @onSelectImage="onSelectImage"></text-search>
+				<text-search ref="text_search" @onClickSearchButton="onClickSearchButton" @onSelectImage="onSelectImage" @onClickClearText="onClickClear"></text-search>
 				<!--  图片处理区域  -->
 				<image-operation ref="image_operation" @onClickLocalItem="onClickLocalItem" @onClickMainImage="onClickMainImage" @onClickClear="onClickClear"></image-operation>
 				<!--  筛选区域  -->
@@ -20,6 +20,7 @@
 				<h2 class="mt40" v-if="results && results.length > 0">{{ $t('message.findSource') }}</h2>
 				<!--  商品列表  -->
 				<product-list :offer_list="results" ref="product-list"></product-list>
+                <support-source-list v-show="!((results && results.length > 0) || (filterList && filterList.length > 0) || (categoryList && categoryList.items && categoryList.items.length > 0))"></support-source-list>
 			</div>
 		</div>
 	</div>
@@ -79,6 +80,8 @@
                 this.onSelectImage();
             }else if(this.$store.state.mainImage) {
                 this.imageSearch(this.$store.state.mainImage);
+            }else if(this.$store.state.searchText) {
+                this.onClickSearchButton({search_text: this.$store.state.searchText});
             }
         },
         methods: {
@@ -172,7 +175,7 @@
              * @param {Boolean} loadmore 本次搜索是否为加载更多
              */
 			async getDataFromImage(loadmore) {
-				this.$refs['product-list'].changeShowNoList(false);
+				// this.$refs['product-list'].changeShowNoList(false);
 				try {
 					let result = await alibaba.searchGoodsByPic(this.imageAddress, this.page, this.cid);
 					console.log(result);
@@ -182,7 +185,7 @@
 					if (result.data.results && result.data.results.length > 0) {
 						handleResponse(result);
 					} else {
-						this.$refs['product-list'].changeShowNoList(true);
+						// this.$refs['product-list'].changeShowNoList(true);
 					}
 					this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
 				} catch (e) {

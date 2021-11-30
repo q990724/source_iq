@@ -1,6 +1,6 @@
 const server_url = 'http://eurotransit.acuteberry.com/';
 // const server_url = 'http://artpic.la.com/';
-const client_url = 'http://192.168.0.113:8081/';
+const client_url = 'http://192.168.0.113:8080/';
 
 //将远程图片转化为base64
 function getBase64(img) {

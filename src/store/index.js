@@ -40,14 +40,21 @@ export default new Vuex.Store({
             state.searchText = '';
             state.mainImage = image;
         },
+        // 设置图片缓存
+        setWindowStorageUploadFile(state, base64) {
+            window.localStorage.setItem('upload-file', base64);
+        },
         // 设置搜索类型
         setSearchType(state, type) {
             state.searchType = type;
         },
         // 设置搜索文字
         setSearchText(state, text) {
-            if(!text) state.mainImage = null;
+            state.mainImage = null;
             state.searchText = text;
+        },
+        clearSearchText(state) {
+            state.searchText = '';
         }
     },
     actions: {},

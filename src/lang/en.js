@@ -25,9 +25,9 @@ module.exports = {
         hour: 'Hours',
         shipments: '发货',
         goodMerchant: '实力商家',
-        no_more: '- No results found -',
+        no_result: 'Trusted seller and official distributor for hundreds of operators',
         input_placeholder: 'Please enter a keyword',
-        select: 'Select'
+        select: 'Select',
     },
     button: {
         more: 'More',

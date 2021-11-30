@@ -13,7 +13,7 @@
           <div class="filter-item_option" v-for="o in fil.items" :key="o.id">
             <el-checkbox
               v-model="o.selected"
-              @change="onFilterChange($event, o, fil.title)"
+              @change="onFilterChange($event, o, fil.title, fil.paramName)"
               >{{ o.name }}</el-checkbox
             >
           </div>
@@ -33,8 +33,8 @@ export default {
     },
   },
   methods: {
-    onFilterChange(e, o, title) {
-      this.$emit("onFilterChange", { e, o, title });
+    onFilterChange(e, o, title, paramName) {
+      this.$emit("onFilterChange", { e, o, title, paramName });
     },
   },
 };

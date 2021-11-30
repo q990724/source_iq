@@ -1,14 +1,11 @@
 <template>
 	<div class="search-result-container scrollable">
-		<source-list @onSourceItemClick="onSourceItemClick"></source-list>
+		<source-list @onSourceItemClick="onSourceItemClick" v-show="(results && results.length > 0) || (filterList && filterList.length > 0) || (categoryList && categoryList.items && categoryList.items.length > 0)"></source-list>
 		<div class="container">
 			<div class="main-container">
 				<text-search ref="text_search" @onClickSearchButton="onClickSearchButton" @onSelectImage="onSelectImage"></text-search>
 				<!--  图片处理区域  -->
-				<image-operation ref="image_operation" :main_image_url="main_imageAddress"
-					@onClickLocalItem="onClickLocalItem"
-					@onClickMainImage="onClickMainImage" @onClickClear="onClickClear">
-				</image-operation>
+				<image-operation ref="image_operation" @onClickLocalItem="onClickLocalItem" @onClickMainImage="onClickMainImage" @onClickClear="onClickClear"></image-operation>
 				<!--  筛选区域  -->
 				<div class="filter-container mt40" v-if="(categoryList && categoryList.items) || (filterList && filterList.length > 0)">
 					<!-- 商品分类 -->
@@ -25,6 +22,7 @@
 				<!--<filtration></filtration>-->
 				<!--  商品列表  -->
 				<product-list :offer_list="results" ref="product-list"></product-list>
+                <support-source-list v-show="!((results && results.length > 0) || (filterList && filterList.length > 0) || (categoryList && categoryList.items && categoryList.items.length > 0))"></support-source-list>
 			</div>
 		</div>
 	</div>
@@ -70,10 +68,10 @@
             })
             if(window.localStorage.getItem('upload-file')) {
                 this.onSelectImage();
-            }else if(window.localStorage.getItem('search-text')) {
-                let text = window.localStorage.getItem('search-text');
-                this.$refs['text_search'].$data.input = text;
-                this.onClickSearchButton({search_text: text})
+            }else if(this.$store.state.mainImage) {
+                this.imageSearch(this.$store.state.mainImage);
+            }else if(this.$store.state.searchText) {
+                this.onClickSearchButton({search_text: this.$store.state.searchText});
             }
         },
         methods: {
@@ -83,19 +81,26 @@
 			onClassChange({id}) {
 				this.cid = id;
 				this.page = 1;
-				this.getDataFromImage(false);
+                if(this.$store.state.searchType === 'image') {
+                    this.imageSearch(this.originalImageUrl);
+                }else {
+                    this.getDataFromText(false)
+                }
 			},
 			onClickSearchButton(params) {
-				this.searchType = 'text';
+                this.$store.commit('setSearchType', 'text');
+                this.$store.commit('setSearchText', params.search_text);
 				this.onClickClear();
 				this.searchTextParams = {
 					search_text: params.search_text
 				}
-				this.search_text = params.search_text;
 				this.getDataFromText(false);
 			},
-			onFilterChange({e,o,title}) {
-
+			onFilterChange({e,o,title, paramName}) {
+                if(paramName === 'brand_id') {
+                    this.searchTextParams['paramName'] = o.paramValue;
+                }
+                this.getDataFromText(false);
 			},
             async imageSearch(base64) {
                 try {
@@ -133,7 +138,7 @@
 			},
 			async getDataFromText(loadmore) {
 				try {
-                    this.$refs['product-list'].changeShowNoList(false);
+                    // this.$refs['product-list'].changeShowNoList(false);
 					let result = await aliexpress.searchGoodsByText({ ...this.searchTextParams,page: this.page });
                     if(result && result.data) {
                         this.categoryList = result.data.categoryList;
@@ -146,7 +151,7 @@
                         }
                         this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
                     }else {
-                        this.$refs['product-list'].changeShowNoList(true);
+                        // this.$refs['product-list'].changeShowNoList(true);
                     }
 				} catch (error) {
                     this.$message.error(this.$t('message.serach_result_from_image_error') + error);

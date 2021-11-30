@@ -31,24 +31,20 @@
 			</div>
 			<div class="clear"></div>
 		</div>
-		
-		<transition name="el-zoom-in-bottom">
-			<div class="no-list" v-show="showNoList">
-				<p>{{$t('label.no_more')}}</p>
-			</div>
-		</transition>
 	</div>
 </template>
 
 <script>
+    import SourceMap from "@/assets/js/source_map";
 	export default {
 		name: "product-list",
 		data() {
 			return {
-				showNoList: false
+				showNoList: false,
+                list: []
 			}
 		},
-		props: {
+        props: {
 			offer_list: {
 				type: Array,
 				default: () => []
@@ -183,11 +179,4 @@
 			}
 		}
 	}
-	
-.no-list {
-	margin: 40px;
-	color: #666;
-	font-size: 16px;
-	text-align: center;
-}
 </style>

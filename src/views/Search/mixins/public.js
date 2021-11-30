@@ -90,7 +90,12 @@ const publicData = {
          * @description 点击裁剪区域某个图片时触发
          */
         onClickLocalItem(item) {
+            console.log(item);
             this.$store.commit('setMainImage', item.cover);
+            // 1688的时候item里面会携带region
+            if(item.region) {
+                this.region = item.region;
+            }
             this.imageSearch(this.$store.state.mainImage);
         },
         /**

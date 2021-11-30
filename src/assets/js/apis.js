@@ -161,12 +161,12 @@ export const aliexpress = {
 	    })
 	},
 	// 文字搜索
-	searchGoodsByText({search_text, min_price, max_price, ship_from_country, sale, spend_save, free_shipping, is_favorite, sort_type, page = 1, country, language = 'en_US', currency}) {
+	searchGoodsByText({search_text, min_price, max_price, ship_from_country, sale, spend_save, free_shipping, is_favorite, sort_type, page = 1, country, language = 'en_US', currency, brand_id}) {
 		let cookie = getCookie('aliexpress');
 		if(!cookie) return Promise.reject('no cookie');
 	    return Service.get('api/aliexpress/searchGoodsByText', {
 	        params: {
-	            search_text, min_price, max_price, ship_from_country, sale, spend_save, free_shipping, is_favorite, sort_type, page, country, language, currency
+	            search_text, min_price, max_price, ship_from_country, sale, spend_save, free_shipping, is_favorite, sort_type, page, country, language, currency, brand_id
 	        },
 			headers: {
 				'token': cookie

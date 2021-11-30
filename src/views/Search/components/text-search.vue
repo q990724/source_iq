@@ -58,14 +58,12 @@ export default {
     },
     created() {
         this.input = this.$store.state.searchText;
-        if(this.input) {
-            this.onClickSearchButton();
-        }
     },
     methods: {
         onClickCloseButton() {
             this.input = '';
-            this.$store.commit('setSearchText', this.input);
+            this.$store.commit('clearSearchText');
+            this.$emit('onClickClearText');
         },
         onClickSearchButton() {
             if(!this.input.trim()) return this.$message.info(this.$t('message.search_text_not_null'));
@@ -77,7 +75,7 @@ export default {
         async selectImage(e) {
             let file = e.target.files[0];
             let base64 = await getBase64(file);
-            window.localStorage.setItem('upload-file', base64);
+            this.$store.commit('setWindowStorageUploadFile', base64);
             this.$emit('onSelectImage');
         },
         onKeyPress(e) {

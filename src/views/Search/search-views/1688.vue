@@ -1,10 +1,10 @@
 <template>
     <div class="search-result-container scrollable">
-        <source-list @onSourceItemClick="onSourceItemClick"></source-list>
+        <source-list @onSourceItemClick="onSourceItemClick" v-show="(results && results.length > 0) || (filterList && filterList.length > 0) || (categoryList && categoryList.items && categoryList.items.length > 0)"></source-list>
         <div class="container">
             <div class="main-container">
                 <text-search ref="text_search" @onClickSearchButton="onClickSearchButton"
-                             @onSelectImage="onSelectImage"></text-search>
+                             @onSelectImage="onSelectImage" @onClickClearText="onClickClear"></text-search>
                 <!--  图片处理区域  -->
                 <image-operation ref="image_operation" @onClickLocalItem="onClickLocalItem" @onClickMainImage="onClickMainImage" @onClickClear="onClickClear"></image-operation>
                 <div class="filter-container mt40"
@@ -21,6 +21,7 @@
                 <!--<filtration></filtration>-->
                 <!--  商品列表  -->
                 <product-list :offer_list="results" ref="product-list"></product-list>
+                <support-source-list v-show="!((results && results.length > 0) || (filterList && filterList.length > 0) || (categoryList && categoryList.items && categoryList.items.length > 0))"></support-source-list>
             </div>
         </div>
     </div>
@@ -71,6 +72,8 @@ export default {
             this.onSelectImage();
         }else if(this.$store.state.mainImage) {
             this.imageSearch(this.$store.state.mainImage);
+        }else if(this.$store.state.searchText) {
+            this.onClickSearchButton({search_text: this.$store.state.searchText});
         }
     },
     methods: {
@@ -100,16 +103,6 @@ export default {
             }
             this.results = await this.getDataFromTextFirst();
         },
-        /**
-         * @description 点击裁剪区域某个图片时触发
-         */
-        async onClickLocalItem(item) {
-            console.log(item);
-            this.region = item.region;
-            console.log(this.region);
-            this.originalImageUrl = item.cover;
-            this.results = await this.getDataFromImageFirst();
-        },
         onFilterChange({e, o, title}) {
 
         },
@@ -118,6 +111,7 @@ export default {
             try {
                 let file = getFileFromBase64(base64);
                 let uploadImageResult = await _1688.uploadPicH5(file);
+                console.log(uploadImageResult);
                 this.imageAddress = uploadImageResult.data.imageId;
                 this.results = await this.getDataFromImageFirst();
             } catch (e) {
@@ -148,7 +142,7 @@ export default {
          * @description 根据图片搜索获取数据
          */
         async getDataFromImage() {
-            this.$refs['product-list'].changeShowNoList(false);
+            // this.$refs['product-list'].changeShowNoList(false);
             try {
                 let result = await _1688.searchGoodsByPic({
                     imageId: this.imageAddress,
@@ -157,7 +151,6 @@ export default {
                     region: this.region,
                     pailitaoCategoryId: this.cid
                 });
-                console.log(result);
                 if (!result) {
                     this.$message.error(this.$t('message.serach_result_from_image_error'));
                 }
@@ -167,7 +160,7 @@ export default {
                 if (result.data.results && result.data.results.length > 0) {
                     handleResponse(result);
                 } else {
-                    this.$refs['product-list'].changeShowNoList(true);
+                    // this.$refs['product-list'].changeShowNoList(true);
                 }
                 return result.data.results;
             } catch (e) {
@@ -178,9 +171,8 @@ export default {
          * @description 根据图片搜索首次获取数据
          */
         async getDataFromImageFirst() {
-            this.$refs['product-list'].changeShowNoList(false);
+            // this.$refs['product-list'].changeShowNoList(false);
             try {
-                console.log(this.region);
                 let result = await _1688.searchGoodsByPicFirst({
                     imageId: this.imageAddress,
                     yoloRegionSelected: (this.yoloCropRegion && this.region) ? true : null,
@@ -191,7 +183,7 @@ export default {
                     if (result.data.searchImage && result.data.searchImage.yoloCropRegion) {
                         this.yoloCropRegion = result.data.searchImage.yoloCropRegion;
                         let regionList = result.data.searchImage.yoloCropRegion.split(';');
-                        let r = await getBase64FromCropImage(this.originalImageUrl, regionList);
+                        let r = await getBase64FromCropImage(this.$store.state.mainImage, regionList);
                         this.$refs['image_operation'].setLocalImageList(r);
                     }
                     this.categoryList = result.data.categoryList ? result.data.categoryList : null;
@@ -200,7 +192,7 @@ export default {
                     if (result.data.results && result.data.results.length > 0) {
                         handleResponse(result);
                     } else {
-                        this.$refs['product-list'].changeShowNoList(true);
+                        // this.$refs['product-list'].changeShowNoList(true);
                     }
                     return result.data.results;
                 } else {
@@ -216,7 +208,7 @@ export default {
          * @description 根据文字搜索获取数据
          */
         async getDataFromText() {
-            this.$refs['product-list'].changeShowNoList(false);
+            // this.$refs['product-list'].changeShowNoList(false);
             try {
                 let result = await _1688.searchGoods({...this.searchTextParams, page: this.page});
                 if (result && result.data) {
@@ -226,7 +218,7 @@ export default {
                     if (result.data.results && result.data.results.length > 0) {
                         handleResponse(result);
                     } else {
-                        this.$refs['product-list'].changeShowNoList(true);
+                        // this.$refs['product-list'].changeShowNoList(true);
                     }
                 } else {
                     this.$message.error(this.$t('message.get_result_error'));
@@ -240,7 +232,7 @@ export default {
          * @description 根据文字搜索首次获取数据
          */
         async getDataFromTextFirst() {
-            this.$refs['product-list'].changeShowNoList(false);
+            // this.$refs['product-list'].changeShowNoList(false);
             try {
                 let result = await _1688.searchGoodsFirst({...this.searchTextParams, page: this.page});
                 if (result && result.data) {
@@ -250,7 +242,7 @@ export default {
                     if (result.data.results && result.data.results.length > 0) {
                         handleResponse(result);
                     } else {
-                        this.$refs['product-list'].changeShowNoList(true);
+                        // this.$refs['product-list'].changeShowNoList(true);
                     }
                 } else {
                     this.$message.error(this.$t('message.get_result_error'))

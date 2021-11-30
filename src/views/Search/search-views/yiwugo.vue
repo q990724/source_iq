@@ -1,14 +1,11 @@
 <template>
 	<div class="search-result-container scrollable">
-		<source-list @onSourceItemClick="onSourceItemClick"></source-list>
+		<source-list @onSourceItemClick="onSourceItemClick" v-show="(results && results.length > 0) || (filterList && filterList.length > 0) || (categoryList && categoryList.items && categoryList.items.length > 0)"></source-list>
 		<div class="container">
 			<div class="main-container">
 				<text-search ref="text_search" @onClickSearchButton="onClickSearchButton" @onSelectImage="onSelectImage"></text-search>
 				<!--  图片处理区域  -->
-				<image-operation ref="image_operation" :main_image_url="main_imageAddress"
-					@onClickLocalItem="onClickLocalItem"
-					@onClickMainImage="onClickMainImage" @onClickClear="onClickClear">
-				</image-operation>
+				<image-operation ref="image_operation" @onClickLocalItem="onClickLocalItem" @onClickMainImage="onClickMainImage" @onClickClear="onClickClear"></image-operation>
 				<div class="filter-container mt40" v-if="(categoryList && categoryList.items) || (filterList && filterList.length > 0)">
 					<!--  商品分类  -->
 					<product-class :class_list="categoryList" @onClassChange="onClassChange"></product-class>
@@ -22,6 +19,7 @@
 				<!--<filtration></filtration>-->
 				<!--  商品列表  -->
 				<product-list :offer_list="results" ref="product-list"></product-list>
+                <support-source-list v-show="!((results && results.length > 0) || (filterList && filterList.length > 0) || (categoryList && categoryList.items && categoryList.items.length > 0))"></support-source-list>
 			</div>
 		</div>
 	</div>
@@ -75,15 +73,15 @@
                     this.page = totalPage;
                     return;
                 };
-                this.searchType === 'image' ? this.getDataFromImage(true) : this.getDataFromText(true);
+                this.$store.state.searchType === 'image' ? this.getDataFromImage(true) : this.getDataFromText(true);
             })
 
             if(window.localStorage.getItem('upload-file')) {
                 this.onSelectImage();
-            }else if(window.localStorage.getItem('search-text')) {
-                let text = window.localStorage.getItem('search-text');
-                this.$refs['text_search'].$data.input = text;
-                this.onClickSearchButton({search_text: text, index_area: 'Products'})
+            }else if(this.$store.state.mainImage) {
+                this.imageSearch(this.$store.state.mainImage);
+            }else if(this.$store.state.searchText) {
+                this.onClickSearchButton({search_text: this.$store.state.searchText, index_area: 'Products'});
             }
         },
 		methods: {
@@ -91,16 +89,16 @@
 				this.cid = name;
 				this.page = 1;
 				this.searchTextParams.category = name;
-				this.searchType === 'image' ? this.getDataFromImage(false) : this.getDataFromText(false) ;
+                this.$store.state.searchType === 'image' ? this.getDataFromImage(false) : this.getDataFromText(false) ;
 			},
 			onClickSearchButton(params) {
-				this.searchType = 'text';
+                this.$store.commit('setSearchType', 'text');
+                this.$store.commit('setSearchText', params.search_text);
 				this.onClickClear();
 				this.searchTextParams = {
 					search_text: params.search_text,
 					index_area: params.index_area
 				}
-				this.search_text = params.search_text;
 				this.getDataFromText(false);
 			},
 			onFilterChange({e, o, title}) {
@@ -125,7 +123,7 @@
                 }
             },
 			async getDataFromImage(loadmore) {
-				this.$refs['product-list'].changeShowNoList(false);
+				// this.$refs['product-list'].changeShowNoList(false);
 				try {
 					let result = await yiwugo.searchGoodsByPic(this.imageAddress, this.page);
 					if(result && result.data) {
@@ -135,7 +133,7 @@
                         if (result.data.results && result.data.results.length > 0) {
                             handleResponse(result);
                         } else {
-                            this.$refs['product-list'].changeShowNoList(true);
+                            // this.$refs['product-list'].changeShowNoList(true);
                         }
                         this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
                     }else {
@@ -161,7 +159,7 @@
                         if(result.data.results && result.data.results.length > 0) {
                             handleResponse(result);
                         }else {
-                            this.$refs['product-list'].changeShowNoList(true);
+                            // this.$refs['product-list'].changeShowNoList(true);
                         }
                         this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
                     }else {

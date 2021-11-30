@@ -1,4 +1,18 @@
 console.log("注入js完成");
+// 打开页面后自动获取一次当前设置
+chrome.storage.local.get( {app_setting: null}, function(o) {
+    window.localStorage.setItem('app-setting', JSON.stringify(o.app_setting));
+});
+
+// 打开页面后自动获取一次Chrome缓存图片
+chrome.storage.local.get( {'upload-file': null}, function(o) {
+    if(o['upload-file']) {
+        chrome.storage.local.set({'upload-file': null}, function () {
+            window.localStorage.setItem('upload-file', o['upload-file']);
+        })
+    }
+});
+
 $(document.body).append(`
     <div id="source_iq_app">
         <div class="cover-image">
@@ -156,18 +170,4 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         window.localStorage.setItem(`cookie-${request.value.source}`, request.value.cookie);
     }
     return true;
-});
-
-// 打开页面后自动获取一次当前设置
-chrome.storage.local.get( {app_setting: null}, function(o) {
-    window.localStorage.setItem('app-setting', JSON.stringify(o.app_setting));
-});
-
-// 打开页面后自动获取一次Chrome缓存图片
-chrome.storage.local.get( {'upload-file': null}, function(o) {
-    if(o['upload-file']) {
-        chrome.storage.local.set({'upload-file': null}, function () {
-            window.localStorage.setItem('upload-file', o['upload-file']);
-        })
-    }
 });
