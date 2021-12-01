@@ -122,6 +122,7 @@ function sendMessageToContentScript(message, callback) {
         for (let tab of tabs) {
             chrome.tabs.sendMessage(tab.id, message, function (response) {
                 if (callback) callback(response);
+                return true;
             });
         }
     });
@@ -197,7 +198,7 @@ chrome.tabs.onUpdated.addListener(function(id, info, tab) {
 			}
 		})
 	}
-	
+	return true;
 })
 
 //初始化设置

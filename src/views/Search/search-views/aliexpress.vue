@@ -64,7 +64,7 @@
         mounted() {
             // 加载更多 aliexpress图片搜索暂无加载更多
             bus.$on('loadmore', () => {
-                console.log('触底事件触发');
+                this.page++;
             })
             if(window.localStorage.getItem('upload-file')) {
                 this.onSelectImage();

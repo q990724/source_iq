@@ -169,5 +169,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     }else if(request.cmd == 'update-cookie') {
         window.localStorage.setItem(`cookie-${request.value.source}`, request.value.cookie);
     }
+    sendResponse({});
     return true;
 });
