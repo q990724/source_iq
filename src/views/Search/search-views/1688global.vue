@@ -1,12 +1,12 @@
 <template>
 	<div class="search-result-container scrollable">
-		<source-list @onSourceItemClick="onSourceItemClick" v-show="(results && results.length > 0) || (filterList && filterList.length > 0) || (categoryList && categoryList.items && categoryList.items.length > 0)"></source-list>
 		<div class="container">
 			<div class="main-container">
 				<text-search ref="text_search" @onClickSearchButton="onClickSearchButton" @onSelectImage="onSelectImage"></text-search>
 				<!--  图片处理区域  -->
 				<image-operation ref="image_operation" @onClickLocalItem="onClickLocalItem" @onClickMainImage="onClickMainImage" @onClickClear="onClickClear"></image-operation>
-				<div class="filter-container mt40" v-if="(categoryList && categoryList.items) || (filterList && filterList.length > 0)">
+				<div class="filter-container mt40" v-if="(categoryList && categoryList.items) || (filterList && filterList.length > 0) || $store.state.searchState !== 'none'">
+                    <source-list @onSourceItemClick="onSourceItemClick" v-show="$store.state.searchState !== 'none'"></source-list>
 					<!--  商品分类  -->
 					<product-class :class_list="categoryList" @onClassChange="onClassChange"></product-class>
 					<!--  筛选区域  -->
@@ -19,7 +19,7 @@
 				<!--<filtration></filtration>-->
 				<!--  商品列表  -->
 				<product-list :offer_list="results" ref="product-list"></product-list>
-                <support-source-list v-show="!((results && results.length > 0) || (filterList && filterList.length > 0) || (categoryList && categoryList.items && categoryList.items.length > 0))"></support-source-list>
+                <support-source-list v-show="$store.state.searchState === 'none'"></support-source-list>
 			</div>
 		</div>
 	</div>
@@ -143,10 +143,12 @@
                     this.onClickClear();
                     let file = getFileFromBase64(base64);
                     let uploadImageResult = await _1688global.uploadPic(file);
+                    this.$store.commit('setSearchState', 'success');
                     this.imageAddress = uploadImageResult.data.imgUrl;
                     this.getDataFromImage(false);
                 }catch (e) {
                     console.log(e);
+                    this.$store.commit('setSearchState', 'error');
                     throw e;
                 }
             },
@@ -164,6 +166,7 @@
                         location: this.location,
                         tags: (this.tags && Array.isArray(this.tags)) ? this.tags.join(',') : null
                     });
+                    this.$store.commit('setSearchState', 'success');
 					if(result && result.data) {
                         this.filterList = result.data.filterList;
                         this.categoryList = result.data.categoryList ? result.data.categoryList : null;
@@ -179,6 +182,7 @@
 					}
 					this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
 				} catch (e) {
+                    this.$store.commit('setSearchState', 'error');
 					this.$message.error(this.$t('message.serach_result_from_image_error') + e);
 				}
 			},
@@ -191,6 +195,7 @@
                     let result = await _1688global.searchGoodsKj({
                         keywords: this.searchTextParams.keyword, beginPage: this.page, sessionId: sessionId
                     });
+                    this.$store.commit('setSearchState', 'success');
                     if(result && result.data) {
                         this.resultInfo = result.data.resultInfo;
                         this.sourceResult = result.sourceResult;
@@ -206,12 +211,14 @@
                         this.$message.error(this.$t('message.get_result_error'));
                     }
 				} catch (error) {
+                    this.$store.commit('setSearchState', 'error');
 					throw error;
 				}
 			},
             async getDataFromTextFirst() {
                 try {
                     let result = await _1688global.searchGoodsFirstKj(this.searchTextParams.keyword);
+                    this.$store.commit('setSearchState', 'success');
                     if(result && result.data) {
                         this.categoryList = result.data.categoryList || null;
                         this.filterList = result.data.filterList || null;
@@ -230,6 +237,7 @@
                     }
                 }catch (e) {
                     console.log(e);
+                    this.$store.commit('setSearchState', 'error');
                     this.$message.error(this.$t('message.get_result_error') + e);
                     throw e;
                 }

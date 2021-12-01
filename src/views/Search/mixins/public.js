@@ -64,16 +64,18 @@ const publicData = {
          * @description 点击主图上的删除图标时触发
          */
         onClickClear() {
-            // this.originalImageUrl = '';
-            // this.main_imageAddress = '';
-            // this.imageAddress = '';
             this.categoryList = {};
             this.results = [];
             this.resultInfo = {};
             this.filterList = [];
             this.page = 1;
             this.cid = null;
+            this.totalPage = 1;
+            this.imageAddress = '';
+            this.$store.commit('clearOriginImage');
             this.$store.commit('clearMainImage');
+            this.$store.commit('clearSearchText');
+            this.$store.commit('setSearchState', 'none');
         },
         initSearchResult() {
             this.categoryList = {};
@@ -88,10 +90,12 @@ const publicData = {
         async onSourceItemClick(source_id) {
             if (source_id === this.$store.state.source_id) return;
             this.$store.commit('setSourceId', source_id);
+            this.$store.commit('setSearchState', 'none');
             console.log('当前数据源ID：', this.$store.state.source_id);
         },
         onSelectImage() {
-            this.$store.commit('setMainImage', window.localStorage.getItem('upload-file'))
+            this.$store.commit('setOriginImage', window.localStorage.getItem('upload-file'))
+            this.$store.commit('setMainImage', this.$store.state.originImage);
             this.imageSearch(this.$store.state.mainImage);
         },
         /**
@@ -110,6 +114,7 @@ const publicData = {
          * @description 点击主图时触发
          */
         onClickMainImage() {
+            this.$store.commit('setMainImage', this.$store.state.originImage);
             this.imageSearch(this.$store.state.mainImage);
         },
     }

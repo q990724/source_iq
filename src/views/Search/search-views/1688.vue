@@ -1,14 +1,13 @@
 <template>
     <div class="search-result-container scrollable">
-        <source-list @onSourceItemClick="onSourceItemClick" v-show="(results && results.length > 0) || (filterList && filterList.length > 0) || (categoryList && categoryList.items && categoryList.items.length > 0)"></source-list>
         <div class="container">
             <div class="main-container">
                 <text-search ref="text_search" @onClickSearchButton="onClickSearchButton"
                              @onSelectImage="onSelectImage"></text-search>
                 <!--  图片处理区域  -->
                 <image-operation ref="image_operation" @onClickLocalItem="onClickLocalItem" @onClickMainImage="onClickMainImage" @onClickClear="onClickClear"></image-operation>
-                <div class="filter-container mt40"
-                     v-if="(categoryList && categoryList.items) || (filterList && filterList.length > 0)">
+                <div class="filter-container mt40" v-if="(categoryList && categoryList.items) || (filterList && filterList.length > 0) || $store.state.searchState !== 'none'">
+                    <source-list @onSourceItemClick="onSourceItemClick" v-show="$store.state.searchState !== 'none'"></source-list>
                     <!--  商品分类  -->
                     <product-class :class_list="categoryList" @onClassChange="onClassChange"></product-class>
                     <!--  筛选区域  -->
@@ -21,7 +20,7 @@
                 <!--<filtration></filtration>-->
                 <!--  商品列表  -->
                 <product-list :offer_list="results" ref="product-list"></product-list>
-                <support-source-list v-show="!((results && results.length > 0) || (filterList && filterList.length > 0) || (categoryList && categoryList.items && categoryList.items.length > 0))"></support-source-list>
+                <support-source-list v-show="$store.state.searchState === 'none'"></support-source-list>
             </div>
         </div>
     </div>
@@ -112,11 +111,13 @@ export default {
                 this.initSearchResult();
                 let file = getFileFromBase64(base64);
                 let uploadImageResult = await _1688.uploadPicH5(file);
+                this.$store.commit('setSearchState', 'success');
                 console.log(uploadImageResult);
                 this.imageAddress = uploadImageResult.data.imageId;
                 this.results = await this.getDataFromImageFirst();
             } catch (e) {
                 console.log(e);
+                this.$store.commit('setSearchState', 'error');
                 throw e;
             }
         },
@@ -152,6 +153,7 @@ export default {
                     region: this.region,
                     pailitaoCategoryId: this.cid
                 });
+                this.$store.commit('setSearchState', 'success');
                 if (!result) {
                     this.$message.error(this.$t('message.serach_result_from_image_error'));
                 }
@@ -165,6 +167,7 @@ export default {
                 }
                 return result.data.results;
             } catch (e) {
+                this.$store.commit('setSearchState', 'error');
                 this.$message.error(this.$t('message.serach_result_from_image_error') + e);
             }
         },
@@ -180,6 +183,7 @@ export default {
                     yoloCropRegion: this.yoloCropRegion || null,
                     region: this.region || null
                 });
+                this.$store.commit('setSearchState', 'success');
                 if (result && result.data) {
                     if (result.data.searchImage && result.data.searchImage.yoloCropRegion) {
                         this.yoloCropRegion = result.data.searchImage.yoloCropRegion;
@@ -201,6 +205,7 @@ export default {
                 }
             } catch (e) {
                 console.log(e);
+                this.$store.commit('setSearchState', 'error');
                 this.$message.error(this.$t('message.serach_result_from_image_error') + e);
                 throw e
             }
@@ -212,6 +217,7 @@ export default {
             // this.$refs['product-list'].changeShowNoList(false);
             try {
                 let result = await _1688.searchGoods({...this.searchTextParams, page: this.page});
+                this.$store.commit('setSearchState', 'success');
                 if (result && result.data) {
                     this.categoryList = result.data.categoryList || null;
                     this.filterList = result.data.filterList || null;
@@ -226,6 +232,7 @@ export default {
                 }
                 return result.data.results;
             } catch (error) {
+                this.$store.commit('setSearchState', 'error');
                 console.log(error);
             }
         },
@@ -236,6 +243,7 @@ export default {
             // this.$refs['product-list'].changeShowNoList(false);
             try {
                 let result = await _1688.searchGoodsFirst({...this.searchTextParams, page: this.page});
+                this.$store.commit('setSearchState', 'success');
                 if (result && result.data) {
                     this.categoryList = result.data.categoryList || null;
                     this.filterList = result.data.filterList || null;
@@ -250,6 +258,7 @@ export default {
                 }
                 return result.data.results;
             } catch (e) {
+                this.$store.commit('setSearchState', 'error');
                 throw e;
             }
         }

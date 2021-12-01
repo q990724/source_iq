@@ -1,17 +1,17 @@
 <template>
 	<div class="search-result-container scrollable">
-		<source-list @onSourceItemClick="onSourceItemClick" v-show="(results && results.length > 0) || (filterList && filterList.length > 0) || (categoryList && categoryList.items && categoryList.items.length > 0)"></source-list>
 		<div class="container">
 			<div class="main-container">
 				<text-search ref="text_search" @onClickSearchButton="onClickSearchButton" @onSelectImage="onSelectImage"></text-search>
 				<!--  图片处理区域  -->
 				<image-operation ref="image_operation" @onClickLocalItem="onClickLocalItem" @onClickMainImage="onClickMainImage" @onClickClear="onClickClear"></image-operation>
 				<!--  筛选区域  -->
-				<div class="filter-container mt40" v-if="(categoryList && categoryList.items) || (filterList && filterList.length > 0)">
+				<div class="filter-container mt40" v-if="(categoryList && categoryList.items) || (filterList && filterList.length > 0) || $store.state.searchState !== 'none'">
+                    <source-list @onSourceItemClick="onSourceItemClick" v-show="$store.state.searchState !== 'none'"></source-list>
 					<!-- 商品分类 -->
-					<product-class :class_list="categoryList" @onClassChange="onClassChange"></product-class>
+					<product-class v-if="categoryList && categoryList.items" :class_list="categoryList" @onClassChange="onClassChange"></product-class>
 					<!--  筛选区域  -->
-					<group-filter :filterList="filterList" @onFilterChange="onFilterChange"></group-filter>
+					<group-filter v-if="filterList && filterList.length > 0" :filterList="filterList" @onFilterChange="onFilterChange"></group-filter>
 					<!-- 价格区间 -->
 					<!-- 地区 -->
 				</div>
@@ -20,7 +20,7 @@
 				<h2 class="mt40" v-if="results && results.length > 0">{{ $t('message.findSource') }}</h2>
 				<!--  商品列表  -->
 				<product-list :offer_list="results" ref="product-list"></product-list>
-                <support-source-list v-show="!((results && results.length > 0) || (filterList && filterList.length > 0) || (categoryList && categoryList.items && categoryList.items.length > 0))"></support-source-list>
+                <support-source-list v-show="$store.state.searchState === 'none'"></support-source-list>
 			</div>
 		</div>
 	</div>
@@ -163,10 +163,12 @@
                     this.initSearchResult();
                     let file = getFileFromBase64(base64);
                     let uploadImageResult = await alibaba.uploadPic(file);
+                    this.$store.commit('setSearchState', 'success');
                     this.imageAddress = uploadImageResult.data.imageAddress;
                     this.getDataFromImage(false);
                 }catch (e) {
                     console.log(e);
+                    this.$store.commit('setSearchState', 'error');
                     throw e;
                 }
             },
@@ -178,6 +180,7 @@
 				// this.$refs['product-list'].changeShowNoList(false);
 				try {
 					let result = await alibaba.searchGoodsByPic(this.imageAddress, this.page, this.cid);
+					this.$store.commit('setSearchState', 'success');
 					console.log(result);
 					this.categoryList = result.data.categoryList ? result.data.categoryList : null;
 					this.resultInfo = result.data.resultInfo;
@@ -189,6 +192,7 @@
 					}
 					this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
 				} catch (e) {
+                    this.$store.commit('setSearchState', 'error');
 					this.$message.error(this.$t('message.serach_result_from_image_error') + e);
 				}
 			},
@@ -200,6 +204,7 @@
 				try {
 					console.log(this.searchTextParams);
 					let result = await alibaba.searchGoodsByText({ ...this.searchTextParams,page: this.page });
+                    this.$store.commit('setSearchState', 'success');
 					if(!result || !result.data) return this.$message.error(this.$t('message.get_result_error'));
 					this.categoryList = result.data.categoryList;
 					this.filterList = result.data.filterList;
@@ -208,6 +213,7 @@
 					this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
 					this.searchTextParams.search_text = result.data.searchKeywords;
 				} catch (error) {
+                    this.$store.commit('setSearchState', 'error');
 					console.log(error);
 				}
 			}

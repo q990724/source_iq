@@ -19,7 +19,6 @@
             <div class="item" :class="{'active': $store.state.source_id === 1}">
                 <span data-name="alibaba">Alibaba</span>
             </div>
-            <div class="clear"></div>
         </div>
     </div>
 </template>
@@ -43,16 +42,21 @@ export default {
 
 <style scoped lang="scss">
 .source-list {
-    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     background-color: #FFF;
+    margin-bottom: 10px;
     .content {
-        width: 1390px;
+        flex: 1;
+        width: 100%;
         margin: auto;
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
         .item {
-            float: left;
-            width: 220px;
             font-size: 20px;
-            margin-right: 10px;
+            margin-right: 60px;
             &.active {
                 color: #FF4000;
                 font-weight: bold;

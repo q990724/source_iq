@@ -1,26 +1,31 @@
 <template>
-    <div class="image-operation mt40" v-if="$store.state.mainImage">
-        <div class="item main-item" :class="{'active': mainImageActive}">
-            <img :src="$store.state.mainImage" alt="" class="img" @click="onClickMainImage">
-            <span @click="chooseImageBox"><img src="@/assets/img/kuangxuan.png" alt="">{{ $t('label.chooseBox') }}</span>
-            <i class="clear el-icon-circle-close" @click="onClickClear"></i>
-        </div>
-        <!--本地裁剪图片暂存列表-->
-        <div class="local-crop-list" v-if="localCropImageList && localCropImageList.length > 0">
-            <div class="scroll scrollable">
-                <div class="item main-item local-item" :class="{'active': item.selected}" v-for="(item,i) in localCropImageList" :key="i" @click="onClickLocalImage(item, i)">
-                    <img :src="item.cover" alt="" class="img">
+    <div class="image-operation mt40" v-if="$store.state.originImage">
+        <div class="left">
+            <div class="item main-item" :class="{'active': mainImageActive}">
+                <img :src="$store.state.originImage" alt="" class="img" @click="onClickMainImage">
+                <span @click="chooseImageBox"><img src="@/assets/img/kuangxuan.png" alt="">{{ $t('label.chooseBox') }}</span>
+            </div>
+            <!--本地裁剪图片暂存列表-->
+            <div class="local-crop-list" v-if="localCropImageList && localCropImageList.length > 0">
+                <div class="scroll scrollable">
+                    <div class="item main-item local-item" :class="{'active': item.selected}" v-for="(item,i) in localCropImageList" :key="item.id">
+                        <img :src="item.cover" alt="" class="img" @click="onClickLocalImage(item, i)">
+                        <i class="clear el-icon-circle-close" @click="onClickLocalItemClear(item, i)"></i>
+                    </div>
+                </div>
+            </div>
+            <div id="cropBox" v-show="cropBoxStatus">
+                <div class="image-container">
+                    <img :src="$store.state.originImage" alt="">
+                </div>
+                <div class="foot">
+                    <span @click="confirmCropBox">确定</span>
+                    <span @click="closeCropBox">取消</span>
                 </div>
             </div>
         </div>
-        <div id="cropBox" v-show="cropBoxStatus">
-            <div class="image-container">
-                <img :src="$store.state.mainImage" alt="">
-            </div>
-            <div class="foot">
-                <span @click="confirmCropBox">确定</span>
-                <span @click="closeCropBox">取消</span>
-            </div>
+        <div class="right">
+            <div class="reset" @click="onClickClear">清空搜索</div>
         </div>
     </div>
 </template>
@@ -66,6 +71,7 @@ export default {
         confirmCropBox() {
             try {
                 let localItem = {
+                    id: new Date().getTime(),
                     file: this.cropResult.file,
                     cover: '',
                     selected: false
@@ -101,6 +107,9 @@ export default {
             cropObject = null;
             this.$emit('onClickClear');
         },
+        onClickLocalItemClear(item, index) {
+            this.localCropImageList.splice(index, 1);
+        },
 		setLocalImageList(list) {
 			this.localCropImageList = list;
 		}
@@ -112,107 +121,126 @@ export default {
 .image-operation {
     position: relative;
     display: flex;
-    align-items: flex-end;
+    align-items: center;
+    justify-content: space-between;
     background-color: #FFF;
     padding: 20px 10px;
     border-radius: 10px;
     border: 1px solid #DCDFE6;
-    .item {
-        box-sizing: border-box;
-        position: relative;
-        width: 90px;
-        height: 90px;
-        margin-right: 20px;
-        cursor: pointer;
-        border: 1px solid transparent;
-        padding: 5px;
-        & > img.img {
+    .left {
+        flex: 1;
+        display: flex;
+        align-items: flex-end;
+        .item {
+            box-sizing: border-box;
+            position: relative;
+            width: 90px;
+            height: 90px;
+            margin-right: 20px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            padding: 5px;
+            & > img.img {
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+                background-color: #FFF;
+            }
+            &:hover {
+                border-color: #FF4000;
+            }
+            &.active {
+                border: 1px solid #FF4000;
+                span.right-top-triangle, img.chose {
+                    display: block;
+                }
+            }
+            span.right-top-triangle {
+                display: none;
+                position: absolute;
+                top: 0;
+                right: 0;
+                width: 0;
+                height: 0;
+                border-width: 10px;
+                border-style: solid;
+                border-color: #FF4000 #FF4000 transparent transparent;
+                color: #FF4000;
+            }
+            img.chose {
+                display: none;
+                position: absolute;
+                top: 3px;
+                right: 1.5px;
+                transform: scale(1.1);
+            }
+        }
+        .local-crop-list {
             width: 100%;
-            height: 100%;
-            object-fit: contain;
-            background-color: #FFF;
+            overflow: hidden;
+            .scroll {
+                white-space: nowrap;
+                overflow: auto;
+            }
+            .local-item {
+                display: inline-block;
+                width: 80px;
+                height: 80px;
+            }
         }
-        &:hover {
-            border-color: #FF4000;
-        }
-        &.active {
-            border: 1px solid #FF4000;
-            span.right-top-triangle, img.chose {
+        .main-item {
+            width: 110px;
+            height: 110px;
+            & > span {
+                display: flex;
+                align-items: center;
+                position: absolute;
+                right: 0;
+                bottom: 0;
+                background-color: #FF4000;
+                color: #FFF;
+                font-size: 12px;
+                padding: 2px 5px;
+                img {
+                    width: 15px;
+                    height: 15px;
+                    margin-right: 4px;
+                }
+            }
+            & > i.clear {
+                display: none;
+                position: absolute;
+                top: 0;
+                right: 0;
+                font-size: 18px;
+                &:hover {
+                    color: #FF4000;
+                }
+            }
+            &:hover > i.clear {
                 display: block;
             }
         }
-        span.right-top-triangle {
-            display: none;
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 0;
-            height: 0;
-            border-width: 10px;
-            border-style: solid;
-            border-color: #FF4000 #FF4000 transparent transparent;
-            color: #FF4000;
-        }
-        img.chose {
-            display: none;
-            position: absolute;
-            top: 3px;
-            right: 1.5px;
-            transform: scale(1.1);
-        }
-    }
-    .local-crop-list {
-        width: 100%;
-        overflow: hidden;
-        .scroll {
-            white-space: nowrap;
-            overflow: auto;
-        }
-        .local-item {
-            display: inline-block;
-            width: 80px;
-            height: 80px;
-        }
-    }
-    .main-item {
-        width: 110px;
-        height: 110px;
-        & > span {
+        .default-item {
             display: flex;
             align-items: center;
-            position: absolute;
-            right: 0;
-            bottom: 0;
-            background-color: #FF4000;
-            color: #FFF;
-            font-size: 12px;
-            padding: 2px 5px;
-            img {
-                width: 15px;
-                height: 15px;
-                margin-right: 4px;
-            }
-        }
-        & > i.clear {
-            display: none;
-            position: absolute;
-            top: 0;
-            right: 0;
-            font-size: 18px;
-            &:hover {
-                color: #FF4000;
-            }
-        }
-        &:hover > i.clear {
-            display: block;
+            justify-content: center;
+            border: 1px solid #DDD;
         }
     }
-    .default-item {
-        display: flex;
-        align-items: center;
-        justify-content: center;
+    .right {
+        width: 100px;
+        padding: 5px 0;
+        text-align: center;
         border: 1px solid #DDD;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-left: 20px;
+        &:hover {
+            color: #FF4000;
+        }
     }
+
 }
 
 #cropBox {
@@ -249,27 +277,4 @@ export default {
     }
 }
 
-.avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-}
-.avatar-uploader .el-upload:hover {
-    border-color: #409EFF;
-}
-.avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 178px;
-    height: 178px;
-    line-height: 178px;
-    text-align: center;
-}
-.avatar {
-    width: 178px;
-    height: 178px;
-    display: block;
-}
 </style>

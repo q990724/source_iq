@@ -89,6 +89,7 @@ export function getBase64FromCropImage(imagePath, regionList) {
 					ctx.drawImage(image, sx, sw, sy, sh, 0, 0, image.width, image.height);
 					let base64 = canvas.toDataURL('image/jpg');
 					let localItem = {
+						id: new Date().getTime(),
 						cover: base64,
 						file: getFileFromBase64(base64),
 						selected: false,

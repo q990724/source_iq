@@ -71,10 +71,14 @@ export default {
             document.getElementById('uploadButton').click();
         },
         async selectImage(e) {
-            let file = e.target.files[0];
-            let base64 = await getBase64(file);
-            this.$store.commit('setWindowStorageUploadFile', base64);
-            this.$emit('onSelectImage');
+            console.log(e);
+            if(e.target.files && e.target.files.length > 0) {
+                let file = e.target.files[0];
+                e.target.value = '';
+                let base64 = await getBase64(file);
+                this.$store.commit('setWindowStorageUploadFile', base64);
+                this.$emit('onSelectImage');
+            }
         },
         onKeyPress(e) {
             if(e.keyCode === 13)  {
