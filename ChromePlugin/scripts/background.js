@@ -106,7 +106,7 @@ chrome.contextMenus.create({
                 format: "png",
                 quality: 100
             }, function (data) {
-                sendMessageToContentScript({
+                sendMessageToActiveTabContentScript({
                     cmd: 'cover-image',
                     value: data
                 }, function (response) {
@@ -116,7 +116,15 @@ chrome.contextMenus.create({
         }
     }
 });
-
+// 发送消息给当前选中窗口的ContentScript.js
+function sendMessageToActiveTabContentScript(message, callback) {
+    chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, message, function (response) {
+            if (callback) callback(response);
+        });
+    });
+}
+// 发送消息给所有窗口的ContentScript.js
 function sendMessageToContentScript(message, callback) {
     chrome.tabs.query({ }, function (tabs) {
         for (let tab of tabs) {

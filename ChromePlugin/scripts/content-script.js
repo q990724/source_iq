@@ -47,7 +47,7 @@ function coverImage(e) {
 
 $(function() {
     $('.confirm').hide();
-
+    let coverImageRes = '';
     $('#ele').Jcrop({
         bgColor: '#000',
         bgOpticy: '0.4',
@@ -57,12 +57,12 @@ $(function() {
             $(".confirm").css('top', e.y + e.h + 10 + 'px');
             $(".confirm").css('left', e.x + 'px');
             coverImage(e).then(res=>{
-                chrome.runtime.sendMessage({
+                coverImageRes = {
                     action: 'uploadImage',
                     value: {
                         base64: res
                     }
-                });
+                };
             })
         },
         onChange: () => {
@@ -81,6 +81,7 @@ $(function() {
 
     $('.confirm > span').click(function() {
         $('#source_iq_app').hide();
+        chrome.runtime.sendMessage(coverImageRes);
 
     });
 
