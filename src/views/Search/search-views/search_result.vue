@@ -1,20 +1,17 @@
 <template>
     <div class="search-result-container scrollable">
-        <source-list @onSourceItemClick="onSourceItemClick"></source-list>
         <div class="container">
             <div class="main-container">
-                <text-search @onClickSearchButton="onClickSearchButton" @onImageUploadedSuccess="onImageUploadedSuccess" @onImageUploadedError="onImageUploadedError"></text-search>
+                <text-search ref="text_search" @onClickSearchButton="onClickSearchButton" @onSelectImage="onSelectImage"></text-search>
                 <!--  图片处理区域  -->
-                <image-operation ref="image_operation" :original_image_url="originalImageUrl"
-                                 @onClickLocalItem="onClickLocalItem"
-                                 @onClickMainImage="onClickMainImage" @onClickClear="onClickClear">
-                </image-operation>
+                <image-operation ref="image_operation" @onClickLocalItem="onClickLocalItem" @onClickMainImage="onClickMainImage" @onClickClear="onClickClear"></image-operation>
                 <!--  筛选区域  -->
-                <div class="filter-container mt40" v-if="(categoryList && categoryList.items) || (filterList && filterList.length > 0)">
+                <div class="filter-container mt40" v-if="(categoryList && categoryList.items) || (filterList && filterList.length > 0) || $store.state.searchState !== 'none'">
+                    <source-list @onSourceItemClick="onSourceItemClick" v-show="$store.state.searchState !== 'none'"></source-list>
                     <!-- 商品分类 -->
-                    <product-class :class_list="categoryList" @onClassChange="onClassChange"></product-class>
+                    <product-class v-if="categoryList && categoryList.items" :class_list="categoryList" @onClassChange="onClassChange"></product-class>
                     <!--  筛选区域  -->
-                    <group-filter :filterList="filterList" @onFilterChange="onFilterChange"></group-filter>
+                    <group-filter v-if="filterList && filterList.length > 0" :filterList="filterList" @onFilterChange="onFilterChange"></group-filter>
                     <!-- 价格区间 -->
                     <!-- 地区 -->
                 </div>
@@ -23,6 +20,7 @@
                 <h2 class="mt40" v-if="results && results.length > 0">{{ $t('message.findSource') }}</h2>
                 <!--  商品列表  -->
                 <product-list :offer_list="results" ref="product-list"></product-list>
+                <support-source-list v-show="$store.state.searchState === 'none'"></support-source-list>
             </div>
         </div>
     </div>
@@ -39,7 +37,7 @@
     import FilterComponent from "../components/group-filter.vue";
     import { dhgate } from "@/assets/js/apis";
     import bus from "@/assets/js/bus";
-    import { handleResponse } from "@/assets/js/utils.js";
+    import { handleResponse, getFileFromBase64 } from "@/assets/js/utils.js";
     import publicData from "../mixins/public.js";
     export default {
         name: "view-dhgate",
@@ -62,6 +60,7 @@
             }
         },
         mounted() {
+            console.log('view mounted');
             // 加载更多
             bus.$on('loadmore', () => {
                 console.log('触底事件触发');
@@ -70,43 +69,22 @@
                     this.page = 99;
                     return;
                 }
-                if(this.searchType === 'image') {
+                if(this.$store.state.searchType === 'image') {
                     this.getDataFromImage(true);
                 }else {
                     this.getDataFromText(true);
                 }
 
             })
+            if(window.localStorage.getItem('upload-file')) {
+                this.onSelectImage();
+            }else if(this.$store.state.mainImage) {
+                this.imageSearch(this.$store.state.mainImage);
+            }else if(this.$store.state.searchText) {
+                this.onClickSearchButton({search_text: this.$store.state.searchText});
+            }
         },
         methods: {
-            /**
-             * @description 图片上传成功后的回调函数
-             */
-            onImageUploadedSuccess(res) {
-                this.searchTextParams = {
-                    search_text: '',
-                }
-                this.cid = null;
-                this.searchType = 'image';
-                this.originalImageUrl = res.imgUrl;
-                this.imageAddress = res.imageAddress;
-                this.main_imageAddress = res.imageAddress;
-                this.getDataFromImage(false);
-            },
-            /**
-             * @description 点击裁剪区域某个图片时触发
-             */
-            onClickLocalItem(parmas) {
-                this.imageAddress = parmas.imageAddress;
-                this.getDataFromImage(false);
-            },
-            /**
-             * @description 点击主图时触发
-             */
-            onClickMainImage() {
-                this.imageAddress = this.main_imageAddress;
-                this.getDataFromImage(false);
-            },
             /**
              * @description 切换商品分类时触发
              */
@@ -114,25 +92,25 @@
                 this.cid = id;
                 this.searchTextParams.category = id;
                 this.page = 1;
-                this.searchType === 'image' ? this.getDataFromImage(false) : this.getDataFromText(false);
+                if(this.$store.state.searchType === 'image') {
+                    this.imageSearch(this.originalImageUrl);
+                }else {
+                    this.getDataFromText(false)
+                }
             },
             /**
              * @description 点击文字搜索时触发
              * @param {Object} params {search_text: 'apple', index_area: 'product_en'}
              */
             onClickSearchButton(params) {
-                this.searchType = 'text';
-                this.onClickClear();
+                this.$store.commit('setSearchType', 'text');
+                this.$store.commit('setSearchText', params.search_text);
                 this.searchTextParams = {
                     search_text: params.search_text,
                 }
-                this.search_text = params.search_text;
                 this.getDataFromText(false);
             },
             onFilterChange({e, o, title}) {
-                console.log(e);
-                console.log(o);
-                console.log(title);
                 let self = this;
                 function handleCheckBoxParams(key, s = ",") {
                     if(self.searchTextParams[key]) {
@@ -158,6 +136,20 @@
                 }
                 this.getDataFromText(false);
             },
+            async imageSearch(base64) {
+                this.$store.commit('setSearchType', 'image');
+                try {
+                    this.initSearchResult();
+                    let file = getFileFromBase64(base64);
+                    let uploadImageResult = await dhgate.uploadPic(file);
+                    this.imageAddress = uploadImageResult.sourceResult.data.data.imgUrl;
+                    this.getDataFromImage(false);
+                }catch (e) {
+                    console.log(e);
+                    this.$store.commit('setSearchState', 'error');
+                    throw e;
+                }
+            },
             /**
              * @description 根据图片搜索获取数据
              * @param {Boolean} loadmore 本次搜索是否为加载更多
@@ -166,17 +158,24 @@
                 this.$refs['product-list'].changeShowNoList(false);
                 try {
                     let result = await dhgate.searchGoodsByPic(this.imageAddress, this.page, this.cid);
-                    console.log(result);
-                    this.categoryList = result.data.categoryList ? result.data.categoryList : null;
-                    this.resultInfo = result.data.resultInfo;
-                    this.totalPage = this.resultInfo.totalPages || 1;
-                    if (result.data.results) {
-                        handleResponse(result);
-                    } else {
-                        this.$refs['product-list'].changeShowNoList(true);
+                    this.$store.commit('setSearchState', 'success');
+                    if(result && result.data) {
+                        this.categoryList = result.data.categoryList ? result.data.categoryList : null;
+                        this.resultInfo = result.data.resultInfo;
+                        this.totalPage = this.resultInfo.totalPages || 1;
+                        if (result.data.results && result.data.results.length > 0) {
+                            handleResponse(result);
+                            return this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
+                        } else {
+                            this.$store.commit('setSearchState', 'null');
+                        }
+                    }else {
+                        this.$message.error(this.$t('message.serach_result_from_image_error'));
+                        this.$store.commit('setSearchState', 'error');
                     }
-                    this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
+                    this.results = loadmore ? [...this.results, ...[]] : [];
                 } catch (e) {
+                    this.$store.commit('setSearchState', 'error');
                     this.$message.error(this.$t('message.serach_result_from_image_error') + e);
                 }
             },
@@ -186,22 +185,27 @@
              */
             async getDataFromText(loadmore) {
                 try {
-                    // let result = await alibaba.searchGoodsByText({
-                    // 	search_text: this.searchTextParams.search_text,
-                    // 	index_area: this.searchTextParams.index_area,
-                    // 	page: this.page
-                    // });
                     console.log(this.searchTextParams);
                     let result = await dhgate.searchGoodsByText({ ...this.searchTextParams,page: this.page });
-                    if(!result || !result.data) return this.$message.error(this.$t('message.get_result_error'));
-                    this.categoryList = result.data.categoryList;
-                    this.filterList = result.data.filterList;
-                    this.resultInfo = result.data.resultInfo;
-                    handleResponse(result);
-                    this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
-                    this.searchTextParams.search_text = result.data.searchKeywords;
+                    this.$store.commit('setSearchState', 'success');
+                    if(result && result.data) {
+                        this.categoryList = result.data.categoryList || null;
+                        this.filterList = result.data.filterList || null;
+                        this.resultInfo = result.data.resultInfo || null;
+                        if(result.data.results && result.data.results.length > 0) {
+                            handleResponse(result);
+                            return this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
+                        }else {
+                            this.$store.commit('setSearchState', 'null');
+                        }
+                    }else {
+                        this.$message.error(this.$t('message.serach_result_from_text_error'));
+                        this.$store.commit('setSearchState', 'error');
+                    }
+                    this.results = loadmore ? [...this.results, ...[]] : [];
                 } catch (error) {
-                    console.log(error);
+                    this.$store.commit('setSearchState', 'error');
+                    this.$message.error(this.$t('message.serach_result_from_text_error'));
                 }
             }
         }

@@ -62,7 +62,7 @@ export default {
         float: left;
         font-weight: bold;
         line-height: 1.5;
-        padding: 6px 0;
+        padding: 4px 0;
     }
     .list {
         font-size: 14px;
