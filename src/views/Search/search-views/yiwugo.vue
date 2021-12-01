@@ -94,7 +94,6 @@
 			onClickSearchButton(params) {
                 this.$store.commit('setSearchType', 'text');
                 this.$store.commit('setSearchText', params.search_text);
-				this.onClickClear();
 				this.searchTextParams = {
 					search_text: params.search_text,
 					index_area: params.index_area
@@ -136,13 +135,14 @@
                         this.totalPage = this.resultInfo.totalPages || 1;
                         if (result.data.results && result.data.results.length > 0) {
                             handleResponse(result);
+                            return this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
                         } else {
-                            // this.$refs['product-list'].changeShowNoList(true);
+                            this.$store.commit('setSearchState', 'null');
                         }
-                        this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
                     }else {
                         this.$message.error(this.$t('message.get_result_error'));
                     }
+                    this.results = loadmore ? [...this.results, ...[]] : [];
 				} catch (e) {
                     this.$store.commit('setSearchState', 'error');
 					this.$message.error(this.$t('message.serach_result_from_image_error') + e);
@@ -164,13 +164,14 @@
                         this.resultInfo = result.data.resultInfo;
                         if(result.data.results && result.data.results.length > 0) {
                             handleResponse(result);
+                            return this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
                         }else {
-                            // this.$refs['product-list'].changeShowNoList(true);
+                            this.$store.commit('setSearchState', 'null');
                         }
-                        this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
                     }else {
                         this.$message.error(this.$t('message.get_result_error'));
                     }
+                    this.results = loadmore ? [...this.results, ...[]] : [];
 				} catch (error) {
                     this.$store.commit('setSearchState', 'error');
 					console.log(error);

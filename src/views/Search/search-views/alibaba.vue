@@ -105,7 +105,6 @@
 			onClickSearchButton(params) {
                 this.$store.commit('setSearchType', 'text');
                 this.$store.commit('setSearchText', params.search_text);
-                this.onClickClear();
 				this.searchTextParams = {
 					search_text: params.search_text,
 					index_area: params.index_area
@@ -163,7 +162,6 @@
                     this.initSearchResult();
                     let file = getFileFromBase64(base64);
                     let uploadImageResult = await alibaba.uploadPic(file);
-                    this.$store.commit('setSearchState', 'success');
                     this.imageAddress = uploadImageResult.data.imageAddress;
                     this.getDataFromImage(false);
                 }catch (e) {
@@ -181,16 +179,21 @@
 				try {
 					let result = await alibaba.searchGoodsByPic(this.imageAddress, this.page, this.cid);
 					this.$store.commit('setSearchState', 'success');
-					console.log(result);
-					this.categoryList = result.data.categoryList ? result.data.categoryList : null;
-					this.resultInfo = result.data.resultInfo;
-					this.totalPage = this.resultInfo.totalPages || 1;
-					if (result.data.results && result.data.results.length > 0) {
-						handleResponse(result);
-					} else {
-						// this.$refs['product-list'].changeShowNoList(true);
-					}
-					this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
+					if(result && result.data) {
+                        this.categoryList = result.data.categoryList ? result.data.categoryList : null;
+                        this.resultInfo = result.data.resultInfo;
+                        this.totalPage = this.resultInfo.totalPages || 1;
+                        if (result.data.results && result.data.results.length > 0) {
+                            handleResponse(result);
+                            return this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
+                        } else {
+                            this.$store.commit('setSearchState', 'null');
+                        }
+                    }else {
+                        this.$message.error(this.$t('message.serach_result_from_image_error'));
+                        this.$store.commit('setSearchState', 'error');
+                    }
+                    this.results = loadmore ? [...this.results, ...[]] : [];
 				} catch (e) {
                     this.$store.commit('setSearchState', 'error');
 					this.$message.error(this.$t('message.serach_result_from_image_error') + e);
@@ -205,16 +208,24 @@
 					console.log(this.searchTextParams);
 					let result = await alibaba.searchGoodsByText({ ...this.searchTextParams,page: this.page });
                     this.$store.commit('setSearchState', 'success');
-					if(!result || !result.data) return this.$message.error(this.$t('message.get_result_error'));
-					this.categoryList = result.data.categoryList;
-					this.filterList = result.data.filterList;
-					this.resultInfo = result.data.resultInfo;
-					handleResponse(result);
-					this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
-					this.searchTextParams.search_text = result.data.searchKeywords;
+                    if(result && result.data) {
+                        this.categoryList = result.data.categoryList || null;
+                        this.filterList = result.data.filterList || null;
+                        this.resultInfo = result.data.resultInfo || null;
+                        if(result.data.results && result.data.results.length > 0) {
+                            handleResponse(result);
+                            return this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
+                        }else {
+                            this.$store.commit('setSearchState', 'null');
+                        }
+                    }else {
+                        this.$message.error(this.$t('message.serach_result_from_text_error'));
+                        this.$store.commit('setSearchState', 'error');
+                    }
+                    this.results = loadmore ? [...this.results, ...[]] : [];
 				} catch (error) {
                     this.$store.commit('setSearchState', 'error');
-					console.log(error);
+                    this.$message.error(this.$t('message.serach_result_from_text_error'));
 				}
 			}
 		}

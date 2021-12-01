@@ -62,6 +62,7 @@ export default new Vuex.Store({
         // 设置搜索文字
         setSearchText(state, text) {
             state.mainImage = null;
+            state.originImage = null;
             state.searchText = text;
         },
         clearSearchText(state) {

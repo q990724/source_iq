@@ -90,7 +90,6 @@
 			onClickSearchButton(params) {
                 this.$store.commit('setSearchType', 'text');
                 this.$store.commit('setSearchText', params.search_text);
-				this.onClickClear();
 				this.searchTextParams = {
 					search_text: params.search_text
 				}
@@ -122,28 +121,31 @@
              * @param {Boolean} loadmore 本次搜索是否为加载更多
              */
 			async getDataFromImage(loadmore) {
-				this.$refs['product-list'].changeShowNoList(false);
 				try {
 					let result = await aliexpress.searchGoodsByPic(this.imageAddress, this.cid);
                     this.$store.commit('setSearchState', 'success');
-					console.log(result);
-					this.categoryList = result.data.categoryList ? result.data.categoryList : null;
-					this.resultInfo = result.data.resultInfo;
-					this.totalPage = this.resultInfo.totalPages || 1;
-					if (result.data.results && result.data.results.length > 0) {
-						handleResponse(result);
-					} else {
-						this.$refs['product-list'].changeShowNoList(true);
-					}
-					this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
+                    if(result && result.data) {
+                        this.categoryList = result.data.categoryList ? result.data.categoryList : null;
+                        this.resultInfo = result.data.resultInfo;
+                        this.totalPage = this.resultInfo.totalPages || 1;
+                        if (result.data.results && result.data.results.length > 0) {
+                            handleResponse(result);
+                            return this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
+                        } else {
+                            this.$store.commit('setSearchState', 'null');
+                        }
+                    }else {
+                        this.$store.commit('setSearchState', 'error');
+                        this.$message.error(this.$t('message.serach_result_from_image_error'));
+                    }
+                    this.results = loadmore ? [...this.results, ...[]] : [];
 				} catch (e) {
                     this.$store.commit('setSearchState', 'error');
-					this.$message.error(this.$t('message.serach_result_from_image_error') + e);
+					this.$message.error(this.$t('message.serach_result_from_image_error'));
 				}
 			},
 			async getDataFromText(loadmore) {
 				try {
-                    // this.$refs['product-list'].changeShowNoList(false);
 					let result = await aliexpress.searchGoodsByText({ ...this.searchTextParams,page: this.page });
                     this.$store.commit('setSearchState', 'success');
                     if(result && result.data) {
@@ -152,16 +154,18 @@
                         this.resultInfo = result.data.resultInfo;
                         if(result.data.results && result.data.results.length > 0) {
                             handleResponse(result);
+                            return this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
                         }else {
-                            this.$refs['product-list'].changeShowNoList(true);
+                            this.$store.commit('setSearchState', 'null');
                         }
-                        this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
                     }else {
-                        // this.$refs['product-list'].changeShowNoList(true);
+                        this.$message.error(this.$t('message.serach_result_from_text_error'));
+                        this.$store.commit('setSearchState', 'error');
                     }
+                    this.results = loadmore ? [...this.results, ...[]] : [];
 				} catch (error) {
                     this.$store.commit('setSearchState', 'error');
-                    this.$message.error(this.$t('message.serach_result_from_image_error') + error);
+                    this.$message.error(this.$t('message.serach_result_from_text_error'));
 					console.log(error);
 				}
 			}

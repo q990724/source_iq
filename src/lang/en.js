@@ -7,9 +7,12 @@ module.exports = {
         go_login: 'Go to login',
         get_result_error: 'Failed to obtain data',
         serach_result_from_image_error: 'Image search failed',
+        serach_result_from_text_error: 'Text search failed',
         upload_image_error: 'Uploading image failed',
         network_error: 'Network Error',
-        search_text_not_null: 'Search content cannot be empty!'
+        search_text_not_null: 'Search content cannot be empty!',
+        no_result_found: '- No Results Found -',
+        unknown_error: 'Unknown error occurred ',
     },
     label: {
         chooseBox: '框选主体',

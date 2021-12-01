@@ -95,7 +95,6 @@ export default {
         async onClickSearchButton(params) {
             this.$store.commit('setSearchType', 'text');
             this.$store.commit('setSearchText', params.search_text);
-            this.onClickClear();
             this.searchTextParams = {
                 keyword: params.search_text,
                 type: 1
@@ -111,7 +110,6 @@ export default {
                 this.initSearchResult();
                 let file = getFileFromBase64(base64);
                 let uploadImageResult = await _1688.uploadPicH5(file);
-                this.$store.commit('setSearchState', 'success');
                 console.log(uploadImageResult);
                 this.imageAddress = uploadImageResult.data.imageId;
                 this.results = await this.getDataFromImageFirst();
@@ -154,18 +152,21 @@ export default {
                     pailitaoCategoryId: this.cid
                 });
                 this.$store.commit('setSearchState', 'success');
-                if (!result) {
+                if(result && result.data) {
+                    this.categoryList = result.data.categoryList ? result.data.categoryList : null;
+                    this.resultInfo = result.data.resultInfo;
+                    this.totalPage = this.resultInfo.totalPages || 1;
+                    if (result.data.results && result.data.results.length > 0) {
+                        handleResponse(result);
+                        return result.data.results;
+                    } else {
+                        this.$store.commit('setSearchState', 'null');
+                    }
+                }else {
+                    this.$store.commit('setSearchState', 'error');
                     this.$message.error(this.$t('message.serach_result_from_image_error'));
                 }
-                this.categoryList = result.data.categoryList ? result.data.categoryList : null;
-                this.resultInfo = result.data.resultInfo;
-                this.totalPage = this.resultInfo.totalPages || 1;
-                if (result.data.results && result.data.results.length > 0) {
-                    handleResponse(result);
-                } else {
-                    // this.$refs['product-list'].changeShowNoList(true);
-                }
-                return result.data.results;
+                return [];
             } catch (e) {
                 this.$store.commit('setSearchState', 'error');
                 this.$message.error(this.$t('message.serach_result_from_image_error') + e);
@@ -179,7 +180,7 @@ export default {
             try {
                 let result = await _1688.searchGoodsByPicFirst({
                     imageId: this.imageAddress,
-                    yoloRegionSelected: (this.yoloCropRegion && this.region) ? true : null,
+                    yoloRegionSelected: this.yoloCropRegion && this.region,
                     yoloCropRegion: this.yoloCropRegion || null,
                     region: this.region || null
                 });
@@ -190,19 +191,21 @@ export default {
                         let regionList = result.data.searchImage.yoloCropRegion.split(';');
                         let r = await getBase64FromCropImage(this.$store.state.mainImage, regionList);
                         this.$refs['image_operation'].setLocalImageList(r);
+                        this.categoryList = result.data.categoryList ? result.data.categoryList : null;
+                        this.resultInfo = result.data.resultInfo;
+                        this.totalPage = this.resultInfo.totalPages || 1;
                     }
-                    this.categoryList = result.data.categoryList ? result.data.categoryList : null;
-                    this.resultInfo = result.data.resultInfo;
-                    this.totalPage = this.resultInfo.totalPages || 1;
                     if (result.data.results && result.data.results.length > 0) {
                         handleResponse(result);
+                        return result.data.results;
                     } else {
-                        // this.$refs['product-list'].changeShowNoList(true);
+                        this.$store.commit('setSearchState', 'null');
                     }
-                    return result.data.results;
                 } else {
+                    this.$store.commit('setSearchState', 'error');
                     this.$message.error(this.$t('message.serach_result_from_image_error'));
                 }
+                return [];
             } catch (e) {
                 console.log(e);
                 this.$store.commit('setSearchState', 'error');
@@ -224,15 +227,18 @@ export default {
                     this.resultInfo = result.data.resultInfo;
                     if (result.data.results && result.data.results.length > 0) {
                         handleResponse(result);
+                        return result.data.results;
                     } else {
-                        // this.$refs['product-list'].changeShowNoList(true);
+                        this.$store.commit('setSearchState', 'null');
                     }
                 } else {
-                    this.$message.error(this.$t('message.get_result_error'));
+                    this.$store.commit('setSearchState', 'error');
+                    this.$message.error(this.$t('message.serach_result_from_text_error'));
                 }
-                return result.data.results;
+                return [];
             } catch (error) {
                 this.$store.commit('setSearchState', 'error');
+                this.$message.error(this.$t('message.serach_result_from_text_error'));
                 console.log(error);
             }
         },
@@ -250,15 +256,18 @@ export default {
                     this.resultInfo = result.data.resultInfo;
                     if (result.data.results && result.data.results.length > 0) {
                         handleResponse(result);
+                        return result.data.results;
                     } else {
-                        // this.$refs['product-list'].changeShowNoList(true);
+                        this.$store.commit('setSearchState', 'null');
                     }
                 } else {
-                    this.$message.error(this.$t('message.get_result_error'))
+                    this.$store.commit('setSearchState', 'error');
+                    this.$message.error(this.$t('message.serach_result_from_text_error'));
                 }
-                return result.data.results;
+                return [];
             } catch (e) {
                 this.$store.commit('setSearchState', 'error');
+                this.$message.error(this.$t('message.serach_result_from_text_error'));
                 throw e;
             }
         }

@@ -108,7 +108,6 @@
 			async onClickSearchButton(params) {
                 this.$store.commit('setSearchType', 'text');
                 this.$store.commit('setSearchText', params.search_text);
-                this.onClickClear();
 				this.searchTextParams = {
 					keyword: params.search_text,
 					type: 1
@@ -140,15 +139,13 @@
                 this.$store.commit('setSearchType', 'image');
                 try {
                     this.initSearchResult();
-                    this.onClickClear();
                     let file = getFileFromBase64(base64);
                     let uploadImageResult = await _1688global.uploadPic(file);
-                    this.$store.commit('setSearchState', 'success');
                     this.imageAddress = uploadImageResult.data.imgUrl;
                     this.getDataFromImage(false);
                 }catch (e) {
-                    console.log(e);
                     this.$store.commit('setSearchState', 'error');
+                    this.$message.error(this.$t('message.serach_result_from_image_error'));
                     throw e;
                 }
             },
@@ -174,16 +171,19 @@
                         this.region = result.data.searchImage ? result.data.searchImage.region : undefined;
                         this.totalPage = this.resultInfo.totalPages || 1;
                         this.sourceResult = result.sourceResult;
-                    }
-					if (result.data.results) {
-                        if(result.data.results.length > 0) {
+                        if (result.data.results && result.data.results.length > 0) {
                             handleResponse(result);
+                        }else {
+                            this.$store.commit('setSearchState', 'null');
                         }
-					}
+                    }else {
+                        this.$message.error(this.$t('message.serach_result_from_image_error'));
+                        this.$store.commit('setSearchState', 'error');
+                    }
 					this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
 				} catch (e) {
                     this.$store.commit('setSearchState', 'error');
-					this.$message.error(this.$t('message.serach_result_from_image_error') + e);
+					this.$message.error(this.$t('message.serach_result_from_image_error'));
 				}
 			},
 			async getDataFromText() {
@@ -199,19 +199,20 @@
                     if(result && result.data) {
                         this.resultInfo = result.data.resultInfo;
                         this.sourceResult = result.sourceResult;
-                        if (result.data.results) {
-                            if(result.data.results.length > 0) {
-                                handleResponse(result);
-                            }else {
-                                // this.$refs['product-list'].changeShowNoList(true);
-                            }
+                        if (result.data.results && result.data.results.length > 0) {
+                            handleResponse(result);
+                            return result.data.results;
+                        }else {
+                            this.$store.commit('setSearchState', 'null');
                         }
-                        return result.data.results;
                     }else {
-                        this.$message.error(this.$t('message.get_result_error'));
+                        this.$message.error(this.$t('message.serach_result_from_text_error'));
+                        this.$store.commit('setSearchState', 'error');
+                        return [];
                     }
 				} catch (error) {
                     this.$store.commit('setSearchState', 'error');
+                    this.$message.error(this.$t('message.serach_result_from_text_error'));
 					throw error;
 				}
 			},
@@ -224,21 +225,21 @@
                         this.filterList = result.data.filterList || null;
                         this.resultInfo = result.data.resultInfo;
                         this.sourceResult = result.sourceResult;
-                        if (result.data.results) {
-                            if(result.data.results.length > 0) {
-                                handleResponse(result);
-                            }else {
-                                // this.$refs['product-list'].changeShowNoList(true);
-                            }
+                        if (result.data.results && result.data.results.length > 0) {
+                            handleResponse(result);
+                            return result.data.results;
+                        }else {
+                            this.$store.commit('setSearchState', 'null');
                         }
-                        return result.data.results;
                     }else {
-                        this.$message.error(this.$t('message.get_result_error'))
+                        this.$message.error(this.$t('message.serach_result_from_text_error'));
+                        this.$store.commit('setSearchState', 'error');
                     }
+                    return [];
                 }catch (e) {
                     console.log(e);
                     this.$store.commit('setSearchState', 'error');
-                    this.$message.error(this.$t('message.get_result_error') + e);
+                    this.$message.error(this.$t('message.serach_result_from_text_error'));
                     throw e;
                 }
             }

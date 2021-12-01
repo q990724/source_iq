@@ -10,7 +10,6 @@ let loadingInstance = null //这里是loading
 export const Service = axios.create({
     timeout: 60000, // 请求超时时间
     baseURL: ConfigBaseURL,
-    method: 'post',
     headers: {
         'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
     }
@@ -27,9 +26,15 @@ Service.interceptors.request.use(config => {
 // 添加响应拦截器
 Service.interceptors.response.use(response => {
     loadingInstance.close()
-    // if(response && response.data && response.data.)
     if(response.data) {
-        if(response.data.retcode == 40000 || response.data.code == 40000 || (response.data.data && response.data.data.error == 'require login') || (response.data.ret && response.data.ret[0].indexOf('令牌过期') != -1)) {
+        if(response.data.retcode == 0 || response.data.retcode == 200 || response.data.code == 200) {
+            return response.data
+        }else if(
+            response.data.retcode == 40000 ||
+            response.data.code == 40000 ||
+            (response.data.data && response.data.data.error == 'require login') ||
+            (response.data.ret && response.data.ret[0].indexOf('令牌过期') != -1))
+        {
             let sourceName = '',
                 loginPageUrl = '';
             for (let key in SourceMap) {
@@ -48,15 +53,18 @@ Service.interceptors.response.use(response => {
             }).catch(e=>{
                 console.log(e);
             })
-            return Promise.reject(response.data.message);
+        }else {
+            if(response.data.message) {
+                Message.error(response.data.message);
+            }
+            return Promise.reject(response.data.message || '');
         }
     }
-    return response.data
 }, error => {
     console.log('TCL: error', error);
     const msg = error.Message !== undefined ? error.Message : ''
     Message({
-        message: i18n.t('message.network_error') + msg,
+        message: i18n.t('message.unknown_error') + msg,
         type: 'error',
         duration: 3 * 1000
     })

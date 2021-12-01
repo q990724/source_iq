@@ -31,6 +31,9 @@
 			</div>
 			<div class="clear"></div>
 		</div>
+        <div class="no-result" v-if="$store.state.searchState === 'null'">
+            <p>{{$t('message.no_result_found')}}</p>
+        </div>
 	</div>
 </template>
 
@@ -179,4 +182,8 @@
 			}
 		}
 	}
+    .no-result {
+        text-align: center;
+        margin: 40px 0;
+    }
 </style>
