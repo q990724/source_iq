@@ -77,7 +77,6 @@ export default new Vuex.Store({
         // 设置搜索状态
         setSearchState(state, s) {
             state.searchState = s;
-            console.log(s)
         },
         // 设置图片上传状态
         setImageUploadState(state, s) {

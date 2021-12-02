@@ -1,6 +1,6 @@
 <template>
     <div id="app" v-infinite-scroll="load" infinite-scroll-immediate="false">
-        <router-view/>
+        <router-view :key="key"></router-view>
     </div>
 </template>
 
@@ -21,6 +21,9 @@ export default {
     computed: {
         source_id() {
             return this.$store.state.source_id;
+        },
+        key() {
+            return this.$route.name !== undefined? this.$route.name +new Date(): this.$route +new Date()
         }
     },
     watch: {
