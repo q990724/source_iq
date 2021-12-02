@@ -1,6 +1,6 @@
 <template>
 	<div class="search-result-container scrollable">
-		<div class="container">
+		<div class="container" >
 			<div class="main-container">
 				<text-search ref="text_search" @onClickSearchButton="onClickSearchButton" @onSelectImage="onSelectImage"></text-search>
 				<!--  图片处理区域  -->
@@ -63,19 +63,7 @@
         mounted() {
             console.log('view mounted');
             // 加载更多
-            bus.$on('loadmore', () => {
-                console.log('触底事件触发');
-                this.page++;
-                if(this.page > 5) {
-                    this.page = 5;
-                    return;
-                }
-                if(this.$store.state.searchType === 'image') {
-                    this.getDataFromImage(true);
-                }else {
-                    this.getDataFromText(true);
-                }
-            })
+            bus.$on('loadmore', this.loadmore.bind(this));
             if(window.localStorage.getItem('upload-file')) {
                 this.onSelectImage();
             }else if(this.$store.state.mainImage) {
@@ -85,6 +73,9 @@
             }
         },
         methods: {
+            onScroll(e) {
+                console.log(e);
+            },
             /**
              * @description 切换商品分类时触发
              */
@@ -156,6 +147,21 @@
 				}
 				this.getDataFromText(false);
 			},
+            async loadmore() {
+			    if(this.$store.state.firstSearchState === 'success') {
+                    console.log('触底事件触发');
+                    if(this.page >= 5) {
+                        this.page = 5;
+                        return;
+                    }
+                    this.page++;
+                    if(this.$store.state.searchType === 'image' && this.$store.state.imageUploadState === 'uploaded') {
+                        this.getDataFromImage(true);
+                    }else {
+                        this.getDataFromText(true);
+                    }
+                }
+            },
             async imageSearch(base64) {
                 this.$store.commit('setSearchType', 'image');
                 try {
@@ -163,10 +169,12 @@
                     let file = getFileFromBase64(base64);
                     let uploadImageResult = await alibaba.uploadPic(file);
                     this.imageAddress = uploadImageResult.data.imageAddress;
+                    this.$store.commit('setImageUploadState', 'uploaded');
                     this.getDataFromImage(false);
                 }catch (e) {
                     console.log(e);
                     this.$store.commit('setSearchState', 'error');
+                    this.$store.commit('setImageUploadState', 'error');
                     throw e;
                 }
             },
@@ -185,6 +193,7 @@
                         this.totalPage = this.resultInfo.totalPages || 1;
                         if (result.data.results && result.data.results.length > 0) {
                             handleResponse(result);
+                            this.$store.commit('setFirstSearchState', 'success');
                             return this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
                         } else {
                             this.$store.commit('setSearchState', 'null');
@@ -192,10 +201,12 @@
                     }else {
                         this.$message.error(this.$t('message.serach_result_from_image_error'));
                         this.$store.commit('setSearchState', 'error');
+                        this.$store.commit('setFirstSearchState', 'error');
                     }
                     this.results = loadmore ? [...this.results, ...[]] : [];
 				} catch (e) {
                     this.$store.commit('setSearchState', 'error');
+                    this.$store.commit('setFirstSearchState', 'error');
 					this.$message.error(this.$t('message.serach_result_from_image_error') + e);
 				}
 			},
@@ -214,6 +225,7 @@
                         this.resultInfo = result.data.resultInfo || null;
                         if(result.data.results && result.data.results.length > 0) {
                             handleResponse(result);
+                            this.$store.commit('setFirstSearchState', 'success');
                             return this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
                         }else {
                             this.$store.commit('setSearchState', 'null');

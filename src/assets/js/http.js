@@ -6,6 +6,13 @@ import {i18n} from "@/main";
 
 const ConfigBaseURL = 'http://eurotransit.acuteberry.com/' //默认路径，这里也可以使用env来判断环境
 let loadingInstance = null //这里是loading
+
+function clearCookie() {
+    window.localStorage.removeItem('cookie-1688');
+    window.localStorage.removeItem('cookie-aliexpress');
+    window.localStorage.removeItem('cookie-1688global');
+}
+
 //使用create方法创建axios实例
 export const Service = axios.create({
     timeout: 60000, // 请求超时时间
@@ -35,6 +42,8 @@ Service.interceptors.response.use(response => {
             (response.data.data && response.data.data.error == 'require login') ||
             (response.data.ret && response.data.ret[0].indexOf('令牌过期') != -1))
         {
+            // cookie过期后，清除cookie
+            clearCookie();
             let sourceName = '',
                 loginPageUrl = '';
             for (let key in SourceMap) {

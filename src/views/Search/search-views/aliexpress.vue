@@ -63,9 +63,7 @@
 		},
         mounted() {
             // 加载更多 aliexpress图片搜索暂无加载更多
-            bus.$on('loadmore', () => {
-                this.page++;
-            })
+            bus.$on('loadmore', this.loadmore.bind(this))
             if(window.localStorage.getItem('upload-file')) {
                 this.onSelectImage();
             }else if(this.$store.state.mainImage) {
@@ -101,6 +99,18 @@
                 }
                 this.getDataFromText(false);
 			},
+            async loadmore() {
+			    console.log(this.$store.state.searchType, this.$store.state.firstSearchState, this.totalPage);
+			    if(this.$store.state.searchType === 'text' && this.$store.state.firstSearchState === 'success') {
+			        if(this.totalPage) {
+			            if(this.page >= this.totalPage) {
+                            return this.page = this.totalPage;
+                        }
+                        this.page++;
+                        this.getDataFromText(true);
+                    }
+                }
+            },
             async imageSearch(base64) {
                 try {
                     this.initSearchResult();
@@ -109,6 +119,7 @@
                     this.$store.commit('setSearchState', 'success');
                     console.log(uploadImageResult);
                     this.imageAddress = uploadImageResult.data.filename;
+                    this.$store.commit('setImageUploadState', 'loaded');
                     this.getDataFromImage(false);
                 }catch (e) {
                     console.log(e);
@@ -130,17 +141,20 @@
                         this.totalPage = this.resultInfo.totalPages || 1;
                         if (result.data.results && result.data.results.length > 0) {
                             handleResponse(result);
+                            this.$store.commit('setFirstSearchState', 'success');
                             return this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
                         } else {
                             this.$store.commit('setSearchState', 'null');
                         }
                     }else {
                         this.$store.commit('setSearchState', 'error');
+                        this.$store.commit('setFirstSearchState', 'error');
                         this.$message.error(this.$t('message.serach_result_from_image_error'));
                     }
                     this.results = loadmore ? [...this.results, ...[]] : [];
 				} catch (e) {
                     this.$store.commit('setSearchState', 'error');
+                    this.$store.commit('setFirstSearchState', 'error');
 					this.$message.error(this.$t('message.serach_result_from_image_error'));
 				}
 			},
@@ -152,8 +166,12 @@
                         this.categoryList = result.data.categoryList;
                         this.filterList = result.data.filterList;
                         this.resultInfo = result.data.resultInfo;
+                        if(this.resultInfo && this.resultInfo.totalResults && this.resultInfo.pageSize) {
+                            this.totalPage = Math.ceil(Number(this.resultInfo.totalResults / this.resultInfo.pageSize));
+                        }
                         if(result.data.results && result.data.results.length > 0) {
                             handleResponse(result);
+                            this.$store.commit('setFirstSearchState', 'success');
                             return this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
                         }else {
                             this.$store.commit('setSearchState', 'null');
@@ -161,10 +179,12 @@
                     }else {
                         this.$message.error(this.$t('message.serach_result_from_text_error'));
                         this.$store.commit('setSearchState', 'error');
+                        this.$store.commit('setFirstSearchState', 'error');
                     }
                     this.results = loadmore ? [...this.results, ...[]] : [];
 				} catch (error) {
                     this.$store.commit('setSearchState', 'error');
+                    this.$store.commit('setFirstSearchState', 'error');
                     this.$message.error(this.$t('message.serach_result_from_text_error'));
 					console.log(error);
 				}

@@ -12,6 +12,8 @@ export default new Vuex.Store({
         searchText: '', // 当前搜索文字
         searchType: 'image', // 当前搜索模式
         searchState: 'none', // 搜索状态 none：未发起搜索/搜索结果被清空，success: 正常收到相应，error：搜索出错/接口返回错误，null: 搜索结果为空
+        firstSearchState: 'none', // none：未发起首次搜索，success: 首次搜索成功，error：首次搜索失败
+        imageUploadState: 'none', // 图片上传状态 none: 未发起上传/上传未完成, uploaded: 图片上传完成, error: 图片上传失败
     },
     mutations: {
         // 获取插件设置
@@ -65,11 +67,20 @@ export default new Vuex.Store({
             state.originImage = null;
             state.searchText = text;
         },
+        // 清空搜索词
         clearSearchText(state) {
             state.searchText = '';
         },
+        // 设置搜索状态
         setSearchState(state, s) {
             state.searchState = s;
+        },
+        // 设置图片上传状态
+        setImageUploadState(state, s) {
+            state.imageUploadState = s;
+        },
+        setFirstSearchState(state, s) {
+            state.firstSearchState = s;
         }
     },
     actions: {},

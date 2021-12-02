@@ -55,9 +55,21 @@ const publicData = {
     created() {
         console.log('view created');
         this.$store.commit('getAppSetting');
+        this.$store.commit('setImageUploadState', 'none');
+        this.$store.commit('setFirstSearchState', 'none');
     },
     beforeDestroy() {
         bus.$off('loadmore');
+    },
+    watch: {
+        source_type() {
+            this.page = 1;
+        }
+    },
+    computed: {
+        source_type() {
+            return this.$store.state.searchType;
+        }
     },
     methods: {
         /**
@@ -76,6 +88,8 @@ const publicData = {
             this.$store.commit('clearMainImage');
             this.$store.commit('clearSearchText');
             this.$store.commit('setSearchState', 'none');
+            this.$store.commit('setImageUploadState', 'none');
+            this.$store.commit('setFirstSearchState', 'none');
         },
         initSearchResult() {
             this.categoryList = {};

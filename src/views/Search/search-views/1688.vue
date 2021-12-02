@@ -109,40 +109,42 @@ export default {
             try {
                 this.initSearchResult();
                 let file = getFileFromBase64(base64);
+                this.$store.commit('setImageUploadState', 'none');
                 let uploadImageResult = await _1688.uploadPicH5(file);
-                console.log(uploadImageResult);
                 this.imageAddress = uploadImageResult.data.imageId;
+                this.$store.commit('setImageUploadState', 'uploaded');
                 this.results = await this.getDataFromImageFirst();
             } catch (e) {
                 console.log(e);
                 this.$store.commit('setSearchState', 'error');
+                this.$store.commit('setImageUploadState', 'error');
                 throw e;
             }
         },
         loadmore() {
-            let totalPage = 99;
-            this.page++;
-            if (this.page >= totalPage) {
-                this.page = totalPage;
-                return;
-            }
-            ;
             console.log('触底事件触发, 当前页码', this.page);
-            if (this.$store.state.searchType === 'image') {
-                this.getDataFromImage().then(result => {
-                    this.results = [...this.results, ...result];
-                })
-            } else {
-                this.getDataFromText().then(result => {
-                    this.results = [...this.results, ...result];
-                })
+            if(this.$store.state.firstSearchState === 'success') {
+                let totalPage = 99;
+                if (this.page >= totalPage) {
+                    this.page = totalPage;
+                    return;
+                }
+                this.page++;
+                if (this.$store.state.searchType === 'image' && this.$store.state.imageUploadState === 'uploaded') {
+                    this.getDataFromImage().then(result => {
+                        this.results = [...this.results, ...result];
+                    })
+                } else {
+                    this.getDataFromText().then(result => {
+                        this.results = [...this.results, ...result];
+                    })
+                }
             }
         },
         /**
          * @description 根据图片搜索获取数据
          */
         async getDataFromImage() {
-            // this.$refs['product-list'].changeShowNoList(false);
             try {
                 let result = await _1688.searchGoodsByPic({
                     imageId: this.imageAddress,
@@ -170,6 +172,7 @@ export default {
             } catch (e) {
                 this.$store.commit('setSearchState', 'error');
                 this.$message.error(this.$t('message.serach_result_from_image_error') + e);
+                return [];
             }
         },
         /**
@@ -188,6 +191,7 @@ export default {
                 if (result && result.data) {
                     if (result.data.searchImage && result.data.searchImage.yoloCropRegion) {
                         this.yoloCropRegion = result.data.searchImage.yoloCropRegion;
+                        this.region = result.data.searchImage.region;
                         let regionList = result.data.searchImage.yoloCropRegion.split(';');
                         let r = await getBase64FromCropImage(this.$store.state.mainImage, regionList);
                         this.$refs['image_operation'].setLocalImageList(r);
@@ -197,18 +201,21 @@ export default {
                     }
                     if (result.data.results && result.data.results.length > 0) {
                         handleResponse(result);
+                        this.$store.commit('setFirstSearchState', 'success');
                         return result.data.results;
                     } else {
                         this.$store.commit('setSearchState', 'null');
                     }
                 } else {
                     this.$store.commit('setSearchState', 'error');
+                    this.$store.commit('setFirstSearchState', 'error');
                     this.$message.error(this.$t('message.serach_result_from_image_error'));
                 }
                 return [];
             } catch (e) {
                 console.log(e);
                 this.$store.commit('setSearchState', 'error');
+                this.$store.commit('setFirstSearchState', 'error');
                 this.$message.error(this.$t('message.serach_result_from_image_error') + e);
                 throw e
             }
@@ -256,17 +263,20 @@ export default {
                     this.resultInfo = result.data.resultInfo;
                     if (result.data.results && result.data.results.length > 0) {
                         handleResponse(result);
+                        this.$store.commit('setFirstSearchState', 'success');
                         return result.data.results;
                     } else {
                         this.$store.commit('setSearchState', 'null');
                     }
                 } else {
                     this.$store.commit('setSearchState', 'error');
+                    this.$store.commit('setFirstSearchState', 'error');
                     this.$message.error(this.$t('message.serach_result_from_text_error'));
                 }
                 return [];
             } catch (e) {
                 this.$store.commit('setSearchState', 'error');
+                this.$store.commit('setFirstSearchState', 'error');
                 this.$message.error(this.$t('message.serach_result_from_text_error'));
                 throw e;
             }

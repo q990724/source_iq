@@ -1,10 +1,5 @@
 <template>
-    <div
-        id="app"
-        v-infinite-scroll="load"
-        infinite-scroll-immediate="false"
-        style="overflow: auto; height: 100vh"
-    >
+    <div id="app" v-infinite-scroll="load" infinite-scroll-immediate="false">
         <router-view/>
     </div>
 </template>
@@ -75,6 +70,11 @@ body {
     color: #6a6c6f;
     font-size: 16px;
     background-color: #efeff4;
+}
+
+#app {
+    overflow-y: auto;
+    height: 100vh;
 }
 
 .scrollable::-webkit-scrollbar {

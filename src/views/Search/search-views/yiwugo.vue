@@ -62,19 +62,7 @@
 		},
         mounted() {
             // 加载更多
-            bus.$on('loadmore', () => {
-                console.log('触底事件触发');
-                this.page++;
-                let totalPage = 1;
-                if(this.resultInfo) {
-                    totalPage = Math.ceil(this.resultInfo.totalResults / this.resultInfo.pageSize);
-                }
-                if(this.page > totalPage) {
-                    this.page = totalPage;
-                    return;
-                };
-                this.$store.state.searchType === 'image' ? this.getDataFromImage(true) : this.getDataFromText(true);
-            })
+            bus.$on('loadmore', this.loadmore.bind(this));
 
             if(window.localStorage.getItem('upload-file')) {
                 this.onSelectImage();
@@ -110,6 +98,25 @@
 				}
 				this.getDataFromText(false);
 			},
+            async loadmore() {
+                console.log('触底事件触发');
+                if(this.$store.state.firstSearchState === 'success') {
+                    let totalPage = 1;
+                    if(this.resultInfo) {
+                        totalPage = Math.ceil(this.resultInfo.totalResults / this.resultInfo.pageSize);
+                    }
+                    if(this.page > totalPage) {
+                        this.page = totalPage;
+                        return;
+                    };
+                    this.page++;
+                    if(this.$store.state.searchType === 'image' && this.$store.state.imageUploadState === 'uploaded') {
+                        this.getDataFromImage(true);
+                    }else {
+                        this.getDataFromText(true);
+                    }
+                }
+            },
             async imageSearch(base64) {
                 try {
                     this.initSearchResult();
@@ -117,10 +124,12 @@
                     let uploadImageResult = await yiwugo.uploadPic(file);
                     this.$store.commit('setSearchState', 'success');
                     this.imageAddress = uploadImageResult.data.url;
+                    this.$store.commit('setImageUploadState', 'loaded');
                     this.getDataFromImage(false);
                 }catch (e) {
                     console.log(e);
                     this.$store.commit('setSearchState', 'error');
+                    this.$store.commit('setImageUploadState', 'error');
                     throw e;
                 }
             },
@@ -135,16 +144,19 @@
                         this.totalPage = this.resultInfo.totalPages || 1;
                         if (result.data.results && result.data.results.length > 0) {
                             handleResponse(result);
+                            this.$store.commit('setFirstSearchState', 'success');
                             return this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
                         } else {
                             this.$store.commit('setSearchState', 'null');
                         }
                     }else {
+                        this.$store.commit('setFirstSearchState', 'error');
                         this.$message.error(this.$t('message.get_result_error'));
                     }
                     this.results = loadmore ? [...this.results, ...[]] : [];
 				} catch (e) {
                     this.$store.commit('setSearchState', 'error');
+                    this.$store.commit('setFirstSearchState', 'error');
 					this.$message.error(this.$t('message.serach_result_from_image_error') + e);
 				}
 			},
@@ -164,15 +176,18 @@
                         this.resultInfo = result.data.resultInfo;
                         if(result.data.results && result.data.results.length > 0) {
                             handleResponse(result);
+                            this.$store.commit('setFirstSearchState', 'success');
                             return this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
                         }else {
                             this.$store.commit('setSearchState', 'null');
                         }
                     }else {
                         this.$message.error(this.$t('message.get_result_error'));
+                        this.$store.commit('setFirstSearchState', 'error');
                     }
                     this.results = loadmore ? [...this.results, ...[]] : [];
 				} catch (error) {
+                    this.$store.commit('setFirstSearchState', 'error');
                     this.$store.commit('setSearchState', 'error');
 					console.log(error);
 				}
