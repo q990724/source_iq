@@ -160,7 +160,7 @@
 			},
 			async getDataFromText(loadmore) {
 				try {
-					let result = await aliexpress.searchGoodsByText({ ...this.searchTextParams,page: this.page });
+					let result = await aliexpress.searchGoodsByText({ ...this.searchTextParams,cat_id: this.cid,page: this.page });
                     this.$store.commit('setSearchState', 'success');
                     if(result && result.data) {
                         this.categoryList = result.data.categoryList;
