@@ -1,5 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import SoureMap from "@/assets/js/source_map.js";
+import { dhgate } from "@/assets/js/apis"
+import { mic } from "@/assets/js/apis"
 
 Vue.use(Vuex)
 
@@ -74,6 +77,7 @@ export default new Vuex.Store({
         // 设置搜索状态
         setSearchState(state, s) {
             state.searchState = s;
+            console.log(s)
         },
         // 设置图片上传状态
         setImageUploadState(state, s) {
@@ -83,7 +87,94 @@ export default new Vuex.Store({
             state.firstSearchState = s;
         }
     },
-    actions: {},
+    actions: {
+        // 点击筛选条件发请求筛选
+        filterChange(content,payload){
+            function handleCheckBoxParams(self, key, s = ",", e, o) {
+                let arr = [];
+                if(self.searchTextParams[key]) {
+                    arr = self.searchTextParams[key].split(s);
+                }
+                if(e) {
+                    arr.push(o.id);
+                }else if(arr.includes(o.id)) {
+                    arr.splice(arr.indexOf(o.id), 1);
+                }
+                self.searchTextParams[key] = arr.join(s);
+                if(arr.length <= 0) {
+                    delete self.searchTextParams[key];
+                }
+            }
+            return new Promise((resolve)=>{
+                switch (this.state.source_id) {
+                    case SoureMap['dhgate']['id']:
+                        switch (payload.title) {
+                            case 'Ship from':
+                                handleCheckBoxParams(payload.self, 'inventoryLocation', ";", payload.e, payload.o);
+                                break;
+                            default:
+                                handleCheckBoxParams(payload.self, 'at', ',', payload.e, payload.o);
+                        }
+                        break;
+                    case SoureMap['mic']['id']:
+                        switch (payload.title) {
+                            case 'Location':
+                                handleCheckBoxParams(payload.self, 'location', "", payload.e, payload.o);
+                                break;
+                            case 'Member Type':
+                                handleCheckBoxParams(payload.self, 'memberType', "", payload.e, payload.o);
+                                break;
+                            case 'Color':
+                                handleCheckBoxParams(payload.self, 'color', "", payload.e, payload.o);
+                                break;
+                            default:
+                                handleCheckBoxParams(payload.self, 'property', ',', payload.e, payload.o);
+                        }
+                        break;
+                }
+                resolve()
+            })
+        },
+        searchText(content,payload){
+            return new Promise((resolve)=>{
+                switch (this.state.source_id) {
+                    case SoureMap['dhgate']['id']:
+                        resolve(dhgate.searchGoodsByText({ ...payload.searchTextParams,page_num: payload.page }))
+                        break;
+                    case SoureMap['mic']['id']:
+                        resolve(mic.searchGoodsByText({ ...payload.searchTextParams,page: payload.page }))
+                        break;
+                }
+            })
+        },
+         uploadPic(content,payload){
+             return new Promise(async (resolve)=>{
+                switch (this.state.source_id) {
+                    case SoureMap['dhgate']['id']:
+                        var res = await dhgate.uploadPic( payload )
+                        resolve(res.sourceResult.data.data.imgUrl)
+                        break;
+                    case SoureMap['mic']['id']:
+                        var res =  await mic.uploadPic( payload )
+                        resolve(res.sourceResult.data.content.imgId)
+                        break;
+                }
+            })
+        },
+        searchPic(content,payload){
+            return new Promise((resolve)=>{
+                // let file = getFileFromBase64(payload.imageAddress);
+                switch (this.state.source_id) {
+                    case SoureMap['dhgate']['id']:
+                        resolve(dhgate.searchGoodsByPic( payload.imageAddress,payload.page, payload.cid ))
+                        break;
+                    case SoureMap['mic']['id']:
+                        resolve(mic.searchGoodsByPic( payload.imageAddress, payload.page , payload.cid ))
+                        break;
+                }
+            })
+        },
+    },
     modules: {},
 
 })

@@ -51,6 +51,10 @@ export default {
                     if (current_path === '/view-dhgate') return;
                     this.$router.push('/view-dhgate');
                     break;
+                case SoureMap['mic']['id']:
+                    if (current_path === '/view-mic') return;
+                    this.$router.push('/view-mic');
+                    break;
             }
         }
     }

@@ -35,12 +35,18 @@
     import ProductListComponent from "../components/product-list";
     import HighFiltration from "../components/high-filtration";
     import FilterComponent from "../components/group-filter.vue";
-    import { dhgate } from "@/assets/js/apis";
     import bus from "@/assets/js/bus";
     import { handleResponse, getFileFromBase64 } from "@/assets/js/utils.js";
     import publicData from "../mixins/public.js";
+    // for (let key in SourceMap) {
+    //     if(SourceMap[key] === Store.state.source_id) {
+    //         Vue.prototype.$siteName = SourceMap[key]['siteName'];
+    //     //
+    //     }
+    // }
+    // import { $siteName } from "@/assets/js/apis";
     export default {
-        name: "view-dhgate",
+        name: "view-",
         components: {
             SourceList: SourceListComponent,
             ImageOperation: ImageOperationComponent,
@@ -111,38 +117,18 @@
                 this.getDataFromText(false);
             },
             onFilterChange({e, o, title}) {
-                let self = this;
-                function handleCheckBoxParams(key, s = ",") {
-                    if(self.searchTextParams[key]) {
-                        arr = self.searchTextParams[key].split(s);
-                    }
-                    if(e) {
-                        arr.push(o.id);
-                    }else if(arr.includes(o.id)) {
-                        arr.splice(arr.indexOf(o.id), 1);
-                    }
-                    self.searchTextParams[key] = arr.join(s);
-                    if(arr.length <= 0) {
-                        delete self.searchTextParams[key];
-                    }
-                }
-                let arr = [];
-                switch (title) {
-                    case 'Ship from':
-                        handleCheckBoxParams('inventoryLocation', ";");
-                        break;
-                    default:
-                        handleCheckBoxParams('at', ',');
-                }
+                this.$store.dispatch('filterChange',{title:title,self:this,e:e,o:o})
                 this.getDataFromText(false);
             },
+
             async imageSearch(base64) {
                 this.$store.commit('setSearchType', 'image');
                 try {
                     this.initSearchResult();
                     let file = getFileFromBase64(base64);
-                    let uploadImageResult = await dhgate.uploadPic(file);
-                    this.imageAddress = uploadImageResult.sourceResult.data.data.imgUrl;
+                    // let uploadImageResult = await dhgate.uploadPic(file);
+                    let uploadImageResult = await this.$store.dispatch('uploadPic',file);
+                    this.imageAddress = uploadImageResult;
                     this.getDataFromImage(false);
                 }catch (e) {
                     console.log(e);
@@ -157,7 +143,9 @@
             async getDataFromImage(loadmore) {
                 this.$refs['product-list'].changeShowNoList(false);
                 try {
-                    let result = await dhgate.searchGoodsByPic(this.imageAddress, this.page, this.cid);
+                    // let result = await dhgate.searchGoodsByPic(this.imageAddress, this.page, this.cid);
+                    let result = await this.$store.dispatch('searchPic',{imageAddress: this.imageAddress, page: this.page, cid: this.cid});
+                    // let result = await this.$store.dispatch('searchPic',{page: this.page, cid: this.cid});
                     this.$store.commit('setSearchState', 'success');
                     if(result && result.data) {
                         this.categoryList = result.data.categoryList ? result.data.categoryList : null;
@@ -186,7 +174,7 @@
             async getDataFromText(loadmore) {
                 try {
                     console.log(this.searchTextParams);
-                    let result = await dhgate.searchGoodsByText({ ...this.searchTextParams,page: this.page });
+                    let result = await this.$store.dispatch('searchText',{searchTextParams:this.searchTextParams,page: this.page});
                     this.$store.commit('setSearchState', 'success');
                     if(result && result.data) {
                         this.categoryList = result.data.categoryList || null;
@@ -207,7 +195,8 @@
                     this.$store.commit('setSearchState', 'error');
                     this.$message.error(this.$t('message.serach_result_from_text_error'));
                 }
-            }
+            },
+
         }
     }
 </script>

@@ -50,6 +50,11 @@ const routes = [
         name: 'view-dhgate',
         component: () => import('@/views/Search/search-views/search_result')
     },
+    {
+        path: '/view-mic',
+        name: 'view-mic',
+        component: () => import('@/views/Search/search-views/search_result')
+    },
 ]
 
 const router = new VueRouter({

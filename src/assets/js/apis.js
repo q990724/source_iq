@@ -309,3 +309,33 @@ export const dhgate = {
 		})
 	},
 }
+
+export const mic = {
+	// 图片搜索
+	uploadPic(file, page_num = 1, page_size = 10) {
+		let formData = new FormData();
+		formData.append('image', file);
+		formData.append('page_num', page_num);
+		formData.append('page_size', page_size);
+		return Service.post('api/micapp/searchGoodsByPic', formData, {
+			headers: {
+				'Content-Type': 'multipart/form-data'
+			}
+		})
+	},
+	// 图片搜索2
+	searchGoodsByPic(imgId,page_num = 1, category = null, color = null, page_size = 20) {
+		const params = Qs.stringify({
+			imgId, page_num, page_size, category, color
+		});
+		return Service.post('api/micapp/searchGoodsByPic',params)
+	},
+	// 搜索商品
+	searchGoodsByText({search_text, page=1, page_size=36, lang='en', currency='USD', min_price = null, max_price = null, category = null, location = null, memberType = null, property = null}) {
+		return Service.get('api/micapp/searchGoodsByText',{
+			params: {
+				search_text, page, page_size, lang, currency, min_price, max_price, category, location, memberType, property
+			},
+		})
+	},
+}

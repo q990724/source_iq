@@ -16,6 +16,9 @@
             <div class="item" :class="{'active': $store.state.source_id === 6}">
                 <span data-name="dhgate">DHgate</span>
             </div>
+            <div class="item" :class="{'active': $store.state.source_id === 7}">
+                <span data-name="mic">Made-in-China</span>
+            </div>
             <div class="item" :class="{'active': $store.state.source_id === 1}">
                 <span data-name="alibaba">Alibaba</span>
             </div>

@@ -41,6 +41,13 @@ const SourceMap = {
         logo: require('@/assets/img/source/dhgate.png'),
         name: 'DHGate'
     },
+    'mic': {
+        id: 7,
+        loginPageUrl: 'https://secure.dhgate.com/passport/login?service=http%3A%2F%2Fseller.dhgate.com%2Fmerchant%2Flogin%2Fssologin.do%3FreturnUrl%3DaHR0cDovL3NlbGxlci5kaGdhdGUuY29tL21lcmNoYW50L2xvZ2luL2xvZ2luc2lnbi5kbw..#hp-head-1',
+        needCookie: false,
+        logo: require('@/assets/img/source/dhgate.png'),
+        name: 'Made-in-China'
+    },
 }
 
 export default SourceMap;
