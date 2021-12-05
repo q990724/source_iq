@@ -1,5 +1,6 @@
 window.onload = function() {
     function sendMessageToContentScript(message, callback) {
+		//TBD: 改成定向消息，避免广播给第三方页面
         chrome.tabs.query({ }, function (tabs) {
             console.log(tabs);
             for (let tab of tabs) {
