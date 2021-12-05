@@ -94,6 +94,7 @@
 			 * @param {Object} params {search_text: 'apple', index_area: 'product_en'}
 			 */
 			onClickSearchButton(params) {
+				this.initSearchResult();
                 this.$store.commit('setSearchType', 'text');
                 this.$store.commit('setSearchText', params.search_text);
 				this.searchTextParams = {
@@ -150,6 +151,7 @@
             async loadmore() {
 			    if(this.$store.state.firstSearchState === 'success') {
                     console.log('触底事件触发');
+					//TBD: 分页到底的逻辑还是写死的，应该统一改成按照总页数判断
                     if(this.page >= 5) {
                         this.page = 5;
                         return;
@@ -157,9 +159,12 @@
                     this.page++;
                     if(this.$store.state.searchType === 'image' && this.$store.state.imageUploadState === 'uploaded') {
                         this.getDataFromImage(true);
-                    }else {
+                    }else if(this.$store.state.searchType === 'text') {
                         this.getDataFromText(true);
-                    }
+                    }else {
+						//TBD: 应该做异常处理
+						console.log("loadmore状态未知");
+					}
                 }
             },
             async imageSearch(base64) {
