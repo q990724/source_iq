@@ -1,9 +1,12 @@
 console.log("注入js完成");
 // 打开页面后自动获取一次当前设置
 chrome.storage.local.get( {app_setting: null}, function(o) {
+	//不清空chrome缓存的app-setting状态，只是COPY一份到window缓存
     window.localStorage.setItem('app-setting', JSON.stringify(o.app_setting));
 });
 
+//TBD：需要“自我识别”，限制只有当前页面是搜索页才可以获取upload-file。目前如果多个content运行会有“race”争抢读写问题
+//TBD：当前假设当前content所在页面是被background创建或者消息唤醒；如果是用户自己打开搜索页，不应该获取upload-file发起搜索
 // 打开页面后自动获取一次Chrome缓存图片
 chrome.storage.local.get( {'upload-file': null}, function(o) {
     if(o['upload-file']) {
@@ -57,6 +60,7 @@ $(function() {
             $(".confirm").css('top', e.y + e.h + 10 + 'px');
             $(".confirm").css('left', e.x + 'px');
             coverImage(e).then(res=>{
+				//TBD：需要检查截图是否成功，成功再uploadImage，失败做异常处理
                 coverImageRes = {
                     action: 'uploadImage',
                     value: {
@@ -76,11 +80,13 @@ $(function() {
     });
 
     $('.confirm > i').click(function() {
+		//TBD：需要检查截图是否成功，成功再uploadImage，失败做异常处理
         $('#source_iq_app').hide();
     });
 
     $('.confirm > span').click(function() {
         $('#source_iq_app').hide();
+		//TBD：需要检查截图是否成功，成功再uploadImage，失败做异常处理
         chrome.runtime.sendMessage(coverImageRes);
 
     });
@@ -158,6 +164,8 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         // 收到base64更新的消息
         // 从chrome缓存中获取最新的base64
         chrome.storage.local.get({'upload-file': null}, function (o) {
+			//TBD：需要“自我识别”，限制只有当前页面是搜索页才可以获取upload-file。目前如果多个content运行会有“race”争抢读写问题
+			//TBD：当前假设当前content所在页面是被background创建或者消息唤醒；如果是用户自己打开搜索页，不应该获取upload-file发起搜索
             chrome.storage.local.set({'upload-file': null}, function () {
                 // 存储到window缓存中
                 window.localStorage.setItem('upload-file', o['upload-file']);

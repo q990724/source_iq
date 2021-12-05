@@ -55,6 +55,7 @@ function getFile(base64Data) {
 
 // 发送图片base64到content_script
 function uploadImage(base64) {
+	//TBD：目前依赖“title”值判断是否为搜索页，而且“多选一”挑选某个搜索页；这2条规则都不够鲁棒需要改进
     chrome.tabs.query({title: 'SourceIQ'}, tabs => {
         console.log('获取项目页面', tabs);
         // 1.将base64直接存储到chrome缓存中
@@ -86,6 +87,7 @@ chrome.contextMenus.create({
         if (info.mediaType && info.mediaType == 'image') {
             console.log('识别到网络图片：', info);
             getBase64(info.srcUrl).then(base64 => {
+				//TBD: 需要检查图片只有获取“成功”才发起uploadImage，否则异常处理（失败=为空、残缺图等）
                 uploadImage(base64);
             }, err => {
                 console.log(err)
@@ -106,6 +108,7 @@ chrome.contextMenus.create({
                 format: "png",
                 quality: 100
             }, function (data) {
+				//TBD: 需要检查图片只有获取“成功”才发起uploadImage，否则异常处理（失败=为空、残缺图等）
                 sendMessageToActiveTabContentScript({
                     cmd: 'cover-image',
                     value: data
@@ -152,6 +155,7 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
     return true;
 })
 
+//TBD：如果跳转到登录页，登录页是“已经登录”状态，然后切换到搜索页，这时cookie没有重新获取更新；可以监听切换到搜索页事件更新cookie
 // 监听页面变化
 chrome.tabs.onUpdated.addListener(function(id, info, tab) {
 	let url = tab.url;
@@ -209,6 +213,7 @@ chrome.tabs.onUpdated.addListener(function(id, info, tab) {
 	return true;
 })
 
+//TBD：如果插件没有安装执行，直接打开搜索页，搜索页必需也独立有initSetting的逻辑，否则就会出现undefined状态
 //初始化设置
 function initSetting() {
     chrome.storage.local.get( {app_setting: null}, function(o) {
