@@ -86,6 +86,7 @@
                 }
 			},
 			onClickSearchButton(params) {
+				this.initSearchResult();
                 this.$store.commit('setSearchType', 'text');
                 this.$store.commit('setSearchText', params.search_text);
 				this.searchTextParams = {
@@ -101,6 +102,7 @@
 			},
             async loadmore() {
 			    console.log(this.$store.state.searchType, this.$store.state.firstSearchState, this.totalPage);
+				//TBD: 此处假设aliexpress图搜接口没有分页功能，所以没有加上图片分页搜索的逻辑
 			    if(this.$store.state.searchType === 'text' && this.$store.state.firstSearchState === 'success') {
 			        if(this.totalPage) {
 			            if(this.page >= this.totalPage) {
@@ -119,7 +121,7 @@
                     this.$store.commit('setSearchState', 'success');
                     console.log(uploadImageResult);
                     this.imageAddress = uploadImageResult.data.filename;
-                    this.$store.commit('setImageUploadState', 'loaded');
+                    this.$store.commit('setImageUploadState', 'uploaded');
                     this.getDataFromImage(false);
                 }catch (e) {
                     console.log(e);
