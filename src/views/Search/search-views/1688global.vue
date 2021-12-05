@@ -90,6 +90,7 @@
 			 * @description 监听文字搜索按钮点击
 			 */
 			async onClickSearchButton(params) {
+				this.initSearchResult();
                 this.$store.commit('setSearchType', 'text');
                 this.$store.commit('setSearchText', params.search_text);
 				this.searchTextParams = {
@@ -133,10 +134,13 @@
                     console.log('触底事件触发, 当前页码', this.page);
                     if(this.$store.state.searchType === 'image' && this.$store.state.imageUploadState === 'uploaded') {
                         this.getDataFromImage(true);
-                    }else {
+                    }else if(this.$store.state.searchType === 'text') {
                         let res = await this.getDataFromText();
                         this.results = [...this.results, ...res];
-                    }
+                    }else {
+						//TBD: 应该做异常处理
+						console.log("loadmore状态未知");
+					}	
                 }
             },
             async imageSearch(base64) {
