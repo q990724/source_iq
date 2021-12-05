@@ -93,6 +93,7 @@ export default {
          * @description 监听文字搜索按钮点击
          */
         async onClickSearchButton(params) {
+			this.initSearchResult();
             this.$store.commit('setSearchType', 'text');
             this.$store.commit('setSearchText', params.search_text);
             this.searchTextParams = {
@@ -124,6 +125,7 @@ export default {
         loadmore() {
             console.log('触底事件触发, 当前页码', this.page);
             if(this.$store.state.firstSearchState === 'success') {
+				//TBD: 此处代码写死了分页到底的逻辑，需要修复
                 let totalPage = 99;
                 if (this.page >= totalPage) {
                     this.page = totalPage;
@@ -134,11 +136,14 @@ export default {
                     this.getDataFromImage().then(result => {
                         this.results = [...this.results, ...result];
                     })
-                } else {
+                } else if(this.$store.state.searchType === 'text') {
                     this.getDataFromText().then(result => {
                         this.results = [...this.results, ...result];
                     })
-                }
+                }else {
+						//TBD: 应该做异常处理
+						console.log("loadmore状态未知");
+				}
             }
         },
         /**
