@@ -80,6 +80,7 @@
                 this.$store.state.searchType === 'image' ? this.getDataFromImage(false) : this.getDataFromText(false) ;
 			},
 			onClickSearchButton(params) {
+				this.initSearchResult();
                 this.$store.commit('setSearchType', 'text');
                 this.$store.commit('setSearchText', params.search_text);
 				this.searchTextParams = {
@@ -112,9 +113,12 @@
                     this.page++;
                     if(this.$store.state.searchType === 'image' && this.$store.state.imageUploadState === 'uploaded') {
                         this.getDataFromImage(true);
-                    }else {
+                    }else if(this.$store.state.searchType === 'text') {
                         this.getDataFromText(true);
-                    }
+                    }else {
+						//TBD: 应该做异常处理
+						console.log("loadmore状态未知");
+					}
                 }
             },
             async imageSearch(base64) {
@@ -124,7 +128,7 @@
                     let uploadImageResult = await yiwugo.uploadPic(file);
                     this.$store.commit('setSearchState', 'success');
                     this.imageAddress = uploadImageResult.data.url;
-                    this.$store.commit('setImageUploadState', 'loaded');
+                    this.$store.commit('setImageUploadState', 'uploaded');
                     this.getDataFromImage(false);
                 }catch (e) {
                     console.log(e);
