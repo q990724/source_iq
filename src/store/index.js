@@ -8,17 +8,50 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
+		source_id: null, // 货源ID
+		searchType: null, // 当前搜索模式，‘image’、‘text’
+		// 搜索参数
         imageAddress: '',
-        source_id: null, // 货源ID
         originImage: null, // 首次搜索时上传/接收的图片
         mainImage: null, // 当前搜索的图片(base64)
         searchText: '', // 当前搜索文字
-        searchType: 'image', // 当前搜索模式
+		// 图片上传状态
+		imageUploadState: 'none', // 图片上传状态 none: 未发起上传, uploaded: 图片上传完成, error: 图片上传失败
+		//搜索状态
         searchState: 'none', // 搜索状态 none：未发起搜索/搜索结果被清空，success: 正常收到相应，error：搜索出错/接口返回错误，null: 搜索结果为空
         firstSearchState: 'none', // none：未发起首次搜索，success: 首次搜索成功，error：首次搜索失败
-        imageUploadState: 'none', // 图片上传状态 none: 未发起上传/上传未完成, uploaded: 图片上传完成, error: 图片上传失败
     },
     mutations: {
+		// 重置全部，包括搜索模式、搜索参数、图片上传状态、搜索状态；“source_id"初始化责任在content和vue.mounted两处
+		resetAll() {
+			this.state.searchType = null;
+			this.commit('resetSearchParams','image');
+			this.commit('resetSearchParams','text');
+			this.commit('resetUploadState');
+			this.commit('resetSearchState');
+		},
+		// 根据搜索模式参数，重置搜索参数
+		resetSearchParams(searchType) {
+			if(searchType == 'image') {
+				this.state.originImage = null;
+				this.state.mainImage = null;
+				this.state.imageAddress = '';
+				// 如果图片搜索参数重置，那么图片上传状态也要重置
+				imageUploadState = 'none';
+			} else if(searchType == 'text') {
+				this.state.searchText = '';
+			}
+		},
+		// 重置图片上传状态
+		resetUploadState() {
+			this.state.imageUploadState = 'none';
+		},
+		// 重置搜索状态
+		resetSearchState() {
+			// 清除之前一切搜索状态（等于搜索从未发生过）
+			this.state.searchState = 'none';
+			this.state.firstSearchState = 'none';
+		},
         // 获取插件设置
         getAppSetting(state) {
             if(window.localStorage.getItem('app-setting')) {
