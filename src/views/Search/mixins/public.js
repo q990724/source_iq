@@ -31,6 +31,7 @@ const publicData = {
             // // 保留的初次搜索图片参数值 [imageId | filename | imageAddress]
             // main_imageAddress: '',
             // 当前搜索图片参数值 [imageId | filename | imageAddress]
+			// TBD：应该统一使用store里面的imageAddress
             imageAddress: '',
             // 商品分类列表
             categoryList: {},
@@ -104,11 +105,15 @@ const publicData = {
         async onSourceItemClick(source_id) {
             if (source_id === this.$store.state.source_id) return;
             this.$store.commit('setSourceId', source_id);
-            this.$store.commit('setSearchState', 'none');
+			// 切换站点无权决定改变setSearchState，只能跟随上一次搜索的setSearchState
+            // this.$store.commit('setSearchState', 'none');
             console.log('当前数据源ID：', this.$store.state.source_id);
         },
         onSelectImage() {
+			//TBD: 需要增加upload-file图片是否正常的鲁棒性检查
             this.$store.commit('setOriginImage', window.localStorage.getItem('upload-file'))
+			// 从window缓存拿到插件或者本地文件上传的图片后，需要清除upload-file状态，否则下次页面刷新还会发起旧图的搜索
+			this.$store.commit('clearWindowStorageUploadFile');
             this.$store.commit('setMainImage', this.$store.state.originImage);
             this.imageSearch(this.$store.state.mainImage);
         },

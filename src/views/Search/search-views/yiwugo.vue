@@ -66,9 +66,9 @@
 
             if(window.localStorage.getItem('upload-file')) {
                 this.onSelectImage();
-            }else if(this.$store.state.mainImage) {
+            }else if(this.$store.state.mainImage && this.$store.state.searchType === 'image') {
                 this.imageSearch(this.$store.state.mainImage);
-            }else if(this.$store.state.searchText) {
+            }else if(this.$store.state.searchText && this.$store.state.searchType === 'text') {
                 this.onClickSearchButton({search_text: this.$store.state.searchText, index_area: 'Products'});
             }
         },
@@ -124,6 +124,7 @@
             async imageSearch(base64) {
                 try {
                     this.initSearchResult();
+					this.$store.commit('setSearchType', 'image');
                     let file = getFileFromBase64(base64);
                     let uploadImageResult = await yiwugo.uploadPic(file);
                     this.$store.commit('setSearchState', 'success');
