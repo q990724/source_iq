@@ -82,6 +82,7 @@ const publicData = {
             this.$store.commit('resetAll');
         },
         initSearchResult() {
+			// this.cid = null;
             this.categoryList = {};
             this.results = [];
             this.resultInfo = {};

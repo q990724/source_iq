@@ -80,6 +80,7 @@
              * @description 切换商品分类时触发
              */
             onClassChange({id}) {
+				this.$store.commit('resetSearchState');
                 this.cid = id;
                 this.searchTextParams.category = id;
                 this.page = 1;
@@ -115,11 +116,10 @@
             async loadmore() {
                 if(this.$store.state.firstSearchState === 'success') {
                     console.log('触底事件触发');
-                    if(this.totalPage) {
-                        if (this.page >= this.totalPage) {
-                            return this.page = this.totalPage;
-                        }
-                        this.page++;
+					this.page++;
+                    if(this.page > this.totalPage) {
+						this.$store.commit('setSearchState', 'null');
+						return;						  
                     }
                     if(this.$store.state.searchType === 'image' && this.$store.state.imageUploadState === 'uploaded') {
                         this.getDataFromImage(this.$store.state.mainImage, true);
@@ -181,7 +181,13 @@
                     this.$store.commit('setSearchState', 'success');
                     console.log(result);
                     if(result && result.data) {
-                        this.categoryList = result.data.categoryList ? result.data.categoryList : null;
+						// 如果是首次搜索，保存接口返回的商品分类、筛选和排序条件
+						if(this.$store.state.firstSearchState == 'none') {
+							this.categoryList = result.data.categoryList || null;
+							this.filterList = result.data.filterList || null;
+							// this.sortList = result.data.sortList || null;
+						}
+
                         this.resultInfo = result.data.resultInfo;
                         this.totalPage = this.resultInfo.totalPages || 1;
                         if (result.data.results && result.data.results.length > 0) {
@@ -216,8 +222,12 @@
                     let result = await this.$store.dispatch('searchText',{searchTextParams:this.searchTextParams,page: this.page});
                     this.$store.commit('setSearchState', 'success');
                     if(result && result.data) {
-                        this.categoryList = result.data.categoryList || null;
-                        this.filterList = result.data.filterList || null;
+						// 如果是首次搜索，保存接口返回的商品分类、筛选和排序条件
+						if(this.$store.state.firstSearchState == 'none') {
+							this.categoryList = result.data.categoryList || null;
+							this.filterList = result.data.filterList || null;
+							// this.sortList = result.data.sortList || null;
+						}
                         this.resultInfo = result.data.resultInfo || null;
                         if(this.resultInfo && this.resultInfo.totalResults && this.resultInfo.pageSize) {
                             this.totalPage = this.resultInfo.totalPages
