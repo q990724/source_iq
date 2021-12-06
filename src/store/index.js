@@ -228,15 +228,15 @@ export default new Vuex.Store({
                 switch (this.state.source_id) {
                     case SoureMap['dhgate']['id']:
                         var res = await dhgate.searchGoodsByPic(is_file, file,resImg,payload.page, payload.cid )
-                        resolve({res:res, resImageAddress:res.sourceResult.data.data.imgUrl})
+                        resolve({result:res, resImageAddress:res.sourceResult.data.data.imgUrl})
                         break;
                     case SoureMap['mic']['id']:
                         var res = await mic.searchGoodsByPic(is_file, file,resImg, payload.page , payload.cid )
-                        resolve({res:res, resImageAddress:res.sourceResult.data.content.imgId})
+                        resolve({result:res, resImageAddress:res.sourceResult.data.content.imgId})
                         break;
                     case SoureMap['cjds']['id']:
                         var res = await cjds.searchGoodsByPic( file )
-                        resolve({res:res})
+                        resolve({result:res})
                         break;
                 }
             })

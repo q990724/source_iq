@@ -13,7 +13,7 @@ module.exports = {
         search_text_not_null: 'Search content cannot be empty!',
         no_result_found: '- No Results Found -',
         unknown_error: 'Unknown error occurred ',
-        not_has_search_image: 'No images are searched on the current site!',
+        no_search_image_api: 'Image Search not supported!',
     },
     label: {
         chooseBox: '框选主体',

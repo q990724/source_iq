@@ -79,7 +79,6 @@ const publicData = {
         onClickClear() {
             this.initSearchResult();
             this.imageAddress = '';
-            this.$store.commit('resetSearchParams',this.$store.state.searchType);
             this.$store.commit('resetAll');
         },
         initSearchResult() {

@@ -66,9 +66,9 @@
             bus.$on('loadmore', this.loadmore.bind(this))
             if(window.localStorage.getItem('upload-file')) {
                 this.onSelectImage();
-            }else if(this.$store.state.mainImage) {
+            }else if(this.$store.state.mainImage && this.$store.state.searchType === 'image') {
                 this.imageSearch(this.$store.state.mainImage);
-            }else if(this.$store.state.searchText) {
+            }else if(this.$store.state.searchText && this.$store.state.searchType === 'text') {
                 this.onClickSearchButton({search_text: this.$store.state.searchText});
             }
         },
@@ -84,9 +84,10 @@
                 this.searchTextParams.category = id;
                 this.page = 1;
                 if(this.$store.state.searchType === 'image') {
-                    this.imageSearch(this.originalImageUrl, false);
-                }else {
-                    this.getDataFromText(false)
+					// 切换商品分类，不需要重新发起图片上传
+					this.imageSearch(this.$store.state.mainImage, false);
+                }else if(this.$store.state.searchType === 'text') {
+                    this.getDataFromText(false);
                 }
             },
             /**
@@ -105,9 +106,10 @@
             onFilterChange({e, o, title}) {
                 this.$store.dispatch('filterChange',{title:title,self:this,e:e,o:o})
                 if(this.$store.state.searchType === 'image') {
-                    this.imageSearch(this.originalImageUrl, false);
-                }else {
-                    this.getDataFromText(false)
+					// 切换筛选条件，不需要重新发起图片上传
+                    this.imageSearch(this.$store.state.mainImage, false);
+                }else if(this.$store.state.searchType === 'text') {
+                    this.getDataFromText(false);
                 }
             },
             async loadmore() {
@@ -120,7 +122,7 @@
                         this.page++;
                     }
                     if(this.$store.state.searchType === 'image' && this.$store.state.imageUploadState === 'uploaded') {
-                        this.getDataFromImage(true);
+                        this.getDataFromImage(this.$store.state.mainImage, true);
                     }else if(this.$store.state.searchType === 'text') {
                         this.getDataFromText(true);
                     }else {
@@ -129,51 +131,51 @@
                     }
                 }
             },
+			// reUpload：true 需要重新上传图片；false 不需要重新上传图片，可以复用当前的imageAddress
             async imageSearch(base64, reUpload = true) {
+				// 如果当前站点接口配置不支持图片搜索，就直接提示用户并返回
                 let source = getSource(this.$store.state.source_id);
-                if (source.hasSearchPic !== false) {
-                    try {
-                        // reUpload ? this.$store.commit('setFirstSearchState', 'none') : this.initSearchResult();
-                        reUpload ? this.$store.commit('resetAll') : this.initSearchResult();
-                        console.log(this.$store.state.imageUploadState);
-                        this.$store.commit('setSearchType', 'image');
-                        if (source.hasUpload !== false) {
-                            console.log('hasUpload');
-                            // 如果没有上传成功图片的状态，就传文件
-                            if (this.$store.state.imageUploadState !== 'uploaded') {
-                                let file = getFileFromBase64(base64);
-                                let uploadImageResult = await this.$store.dispatch('uploadPic', file);
-                                this.imageAddress = uploadImageResult;
-                                this.$store.commit('setImageUploadState', 'uploaded');
-                            }
-                        } else {
-                            console.log('notHasUpload');
-                            // 如果没有上传成功图片的状态，就传文件（base）
-                            if (this.$store.state.imageUploadState !== 'uploaded') {
-                                this.imageAddress = base64;
-                            }
-                        }
-                        this.getDataFromImage(false);
+                if (source.hasSearchPic == false) {
+					this.$message.error(this.$t('message.no_search_image_api'));
+					return;
+				}
+				try {
+					// reUpload ? this.$store.commit('setFirstSearchState', 'none') : this.initSearchResult();
+					// 如果需要重新上传图片，就重置全部搜索状态和搜索结果；否则只重置搜索结果，搜索参数和搜索状态不变
+					reUpload ? this.onClickClear() : this.initSearchResult();
+					console.log(this.$store.state.imageUploadState);
+					this.$store.commit('setSearchType', 'image');
+					// 如果当前站点有单独的图品上传接口，并且图片当前=没有上传成功状态，就上传图片
+					if (source.hasUpload !== false && this.$store.state.imageUploadState !== 'uploaded') {
+						console.log('hasUpload');
+						let file = getFileFromBase64(base64);
+						let uploadImageResult = await this.$store.dispatch('uploadPic', file);
+						this.imageAddress = uploadImageResult;
+						this.$store.commit('setImageUploadState', 'uploaded');
+					} 
+					this.getDataFromImage(base64,false);
+				} catch (e) {
+					console.log(e);
+					this.$store.commit('setSearchState', 'error');
+					this.$store.commit('setImageUploadState', 'error');
+					throw e;
+				}
 
-                    } catch (e) {
-                        console.log(e);
-                        this.$store.commit('setSearchState', 'error');
-                        this.$store.commit('setImageUploadState', 'error');
-                        throw e;
-                    }
-                }else{
-                    this.$message.error(this.$t('message.not_has_search_image'));
-                }
             },
             /**
              * @description 根据图片搜索获取数据
              * @param {Boolean} loadmore 本次搜索是否为加载更多
              */
-            async getDataFromImage(loadmore) {
+            async getDataFromImage(base64,loadmore) {
                 // this.$refs['product-list'].changeShowNoList(false);
                 try {
+					let source = getSource(this.$store.state.source_id);
+					if (source.hasUpload == false && this.$store.state.imageUploadState !== 'uploaded') {
+						this.imageAddress = base64;
+					}
+					//TBD: 切换筛选发起搜索时没有传参
                     let res = await this.$store.dispatch('searchPic',{imageAddress: this.imageAddress, page: this.page, cid: this.cid});
-                    let result = res.res;
+                    let result = res.result;
                     this.imageAddress = res.resImageAddress ?? null;
                     this.$store.commit('setImageUploadState', 'uploaded');
                     this.$store.commit('setSearchState', 'success');
