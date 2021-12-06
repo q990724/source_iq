@@ -1,9 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import SoureMap from "@/assets/js/source_map.js";
-import { dhgate } from "@/assets/js/apis"
-import { mic } from "@/assets/js/apis"
-
+import { dhgate , mic , cjds ,litbox } from "@/assets/js/apis"
+import { getFileFromBase64 } from "@/assets/js/utils.js";
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -37,7 +36,7 @@ export default new Vuex.Store({
 				this.state.mainImage = null;
 				this.state.imageAddress = '';
 				// 如果图片搜索参数重置，那么图片上传状态也要重置
-				imageUploadState = 'none';
+                this.commit('resetUploadState');
 			} else if(searchType == 'text') {
 				this.state.searchText = '';
 			}
@@ -122,7 +121,7 @@ export default new Vuex.Store({
     actions: {
         // 点击筛选条件发请求筛选
         filterChange(content,payload){
-            function handleCheckBoxParams(self, key, s = ",", e, o) {
+            function handleCheckBoxParams(self, e, o, key, s = ",") {
                 let arr = [];
                 if(self.searchTextParams[key]) {
                     arr = self.searchTextParams[key].split(s);
@@ -142,25 +141,40 @@ export default new Vuex.Store({
                     case SoureMap['dhgate']['id']:
                         switch (payload.title) {
                             case 'Ship from':
-                                handleCheckBoxParams(payload.self, 'inventoryLocation', ";", payload.e, payload.o);
+                                handleCheckBoxParams(payload.self, payload.e, payload.o, 'inventoryLocation', ";");
                                 break;
                             default:
-                                handleCheckBoxParams(payload.self, 'at', ',', payload.e, payload.o);
+                                handleCheckBoxParams(payload.self, payload.e, payload.o, 'at');
                         }
                         break;
                     case SoureMap['mic']['id']:
                         switch (payload.title) {
                             case 'Location':
-                                handleCheckBoxParams(payload.self, 'location', "", payload.e, payload.o);
+                                handleCheckBoxParams(payload.self, payload.e, payload.o, 'location');
                                 break;
                             case 'Member Type':
-                                handleCheckBoxParams(payload.self, 'memberType', "", payload.e, payload.o);
+                                handleCheckBoxParams(payload.self, payload.e, payload.o, 'memberType');
                                 break;
                             case 'Color':
-                                handleCheckBoxParams(payload.self, 'color', "", payload.e, payload.o);
+                                handleCheckBoxParams(payload.self, payload.e, payload.o, 'color');
                                 break;
                             default:
-                                handleCheckBoxParams(payload.self, 'property', ',', payload.e, payload.o);
+                                handleCheckBoxParams(payload.self, payload.e, payload.o, 'property');
+                        }
+                        break;
+                    case SoureMap['cjds']['id']:
+                        switch (payload.title) {
+                            case 'Ship From':
+                                handleCheckBoxParams(payload.self, payload.e, payload.o, 'country');
+                                break;
+                            case 'Filter by Types':
+                                handleCheckBoxParams(payload.self, payload.e, payload.o, 'productType');
+                                break;
+                            case 'Special Services & Discount':
+                                handleCheckBoxParams(payload.self, payload.e, payload.o, 'addMarkStatus');
+                                break;
+                            default:
+                                handleCheckBoxParams(payload.self, payload.e, payload.o, 'property');
                         }
                         break;
                 }
@@ -168,40 +182,61 @@ export default new Vuex.Store({
             })
         },
         searchText(content,payload){
-            return new Promise((resolve)=>{
+            return new Promise(async(resolve)=>{
                 switch (this.state.source_id) {
                     case SoureMap['dhgate']['id']:
-                        resolve(dhgate.searchGoodsByText({ ...payload.searchTextParams,page_num: payload.page }))
+                        resolve(await dhgate.searchGoodsByText({ ...payload.searchTextParams,page: payload.page }))
                         break;
                     case SoureMap['mic']['id']:
-                        resolve(mic.searchGoodsByText({ ...payload.searchTextParams,page: payload.page }))
+                        resolve(await mic.searchGoodsByText({ ...payload.searchTextParams,page: payload.page }))
+                        break;
+                    case SoureMap['cjds']['id']:
+                        resolve(await cjds.searchGoodsByText({ ...payload.searchTextParams,page: payload.page }))
+                        break;
+                    case SoureMap['litbox']['id']:
+                        resolve(await litbox.searchGoodsByText({ ...payload.searchTextParams,page: payload.page }))
                         break;
                 }
             })
         },
+
          uploadPic(content,payload){
              return new Promise(async (resolve)=>{
-                switch (this.state.source_id) {
-                    case SoureMap['dhgate']['id']:
-                        var res = await dhgate.uploadPic( payload )
-                        resolve(res.sourceResult.data.data.imgUrl)
-                        break;
-                    case SoureMap['mic']['id']:
-                        var res =  await mic.uploadPic( payload )
-                        resolve(res.sourceResult.data.content.imgId)
-                        break;
-                }
+                 switch (this.state.source_id) {
+                     case SoureMap['dhgate']['id']:
+                         var res = await dhgate.uploadPic( payload )
+                         resolve(res.sourceResult.data.data.imgUrl)
+                         break;
+                 }
             })
         },
+
         searchPic(content,payload){
-            return new Promise((resolve)=>{
-                // let file = getFileFromBase64(payload.imageAddress);
+            console.log(payload);
+            return new Promise(async (resolve)=>{
+                var file = null;
+                var resImg = '';
+                var is_file = true;
+                //如果没有上传图片成功的状态就先将base64转图片传递，否则直接传上传成功后的返回值
+                if(this.state.imageUploadState !== 'uploaded') {
+                    file = getFileFromBase64(payload.imageAddress);
+                }else{
+                    resImg = payload.imageAddress;
+                    is_file = false
+                }
+
                 switch (this.state.source_id) {
                     case SoureMap['dhgate']['id']:
-                        resolve(dhgate.searchGoodsByPic( payload.imageAddress,payload.page, payload.cid ))
+                        var res = await dhgate.searchGoodsByPic(is_file, file,resImg,payload.page, payload.cid )
+                        resolve({res:res, resImageAddress:res.sourceResult.data.data.imgUrl})
                         break;
                     case SoureMap['mic']['id']:
-                        resolve(mic.searchGoodsByPic( payload.imageAddress, payload.page , payload.cid ))
+                        var res = await mic.searchGoodsByPic(is_file, file,resImg, payload.page , payload.cid )
+                        resolve({res:res, resImageAddress:res.sourceResult.data.content.imgId})
+                        break;
+                    case SoureMap['cjds']['id']:
+                        var res = await cjds.searchGoodsByPic( file )
+                        resolve({res:res})
                         break;
                 }
             })

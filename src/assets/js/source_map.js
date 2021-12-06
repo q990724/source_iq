@@ -39,15 +39,47 @@ const SourceMap = {
         loginPageUrl: 'https://secure.dhgate.com/passport/login?service=http%3A%2F%2Fseller.dhgate.com%2Fmerchant%2Flogin%2Fssologin.do%3FreturnUrl%3DaHR0cDovL3NlbGxlci5kaGdhdGUuY29tL21lcmNoYW50L2xvZ2luL2xvZ2luc2lnbi5kbw..#hp-head-1',
         needCookie: false,
         logo: require('@/assets/img/source/dhgate.png'),
-        name: 'DHGate'
+        name: 'DHGate',
+        hasUpload: false,
+        hasSearchPic: true,
     },
     'mic': {
         id: 7,
-        loginPageUrl: 'https://secure.dhgate.com/passport/login?service=http%3A%2F%2Fseller.dhgate.com%2Fmerchant%2Flogin%2Fssologin.do%3FreturnUrl%3DaHR0cDovL3NlbGxlci5kaGdhdGUuY29tL21lcmNoYW50L2xvZ2luL2xvZ2luc2lnbi5kbw..#hp-head-1',
+        loginPageUrl: 'https://login.made-in-china.com/sign-in/?baseNextPage=http%3A%2F%2Fwww.made-in-china.com%2F',
         needCookie: false,
-        logo: require('@/assets/img/source/dhgate.png'),
-        name: 'Made-in-China'
+        logo: require('@/assets/img/source/mic.png'),
+        name: 'Made-in-China',
+        hasUpload: false,
+        hasSearchPic: true,
+    },
+    'cjds': {
+        id: 8,
+        loginPageUrl: 'https://cjdropshipping.com/login.html?target=aHR0cHM6Ly9jamRyb3BzaGlwcGluZy5jb20v',
+        needCookie: false,
+        logo: require('@/assets/img/source/cjds.png'),
+        name: 'CJdropshipping',
+        hasUpload: false,
+        hasSearchPic: true,
+    },
+    'litbox': {
+        id: 9,
+        loginPageUrl: 'https://gw.lightinthebox.com/index.php?main_page=login&src=mainLoginLink&targetUrl=https%3A%2F%2Fgw.lightinthebox.com%2Findex.php%3Fmain_page%3Daccount%26prm%3D1.1.177.0&prm=1.1.74.0&prm=1.1.177.0&_ga=2.43912865.564672115.1638637091-371976819.1635928539',
+        needCookie: false,
+        logo: require('@/assets/img/source/litbox.jpg'),
+        name: 'LightInTheBox',
+        hasUpload: false,
+        hasSearchPic: false,
     },
 }
 
 export default SourceMap;
+
+export function getSource(sourceId){
+    var res = [];
+    for (let key in SourceMap) {
+        if (SourceMap[key]['id'] === sourceId){
+            res = SourceMap[key];
+        }
+    }
+    return res;
+}

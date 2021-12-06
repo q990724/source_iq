@@ -8,7 +8,7 @@
             </el-select>
             <input type="text" class="input" :placeholder="$t('label.input_placeholder')" v-model="input" autocomplete="off" @keypress="onKeyPress">
              <i class="el-icon-circle-close clear" v-show="input" @click="onClickCloseButton"></i>
-            <i class="el-icon-camera camera" @click="onClickCamera"></i>
+            <i class="el-icon-camera camera" v-show="camera" @click="onClickCamera"></i>
         </div>
         <div class="sbtn" @click="onClickSearchButton">{{$t('button.search')}}</div>
         <input type="file" accept="image/*" style="display: none" @change="selectImage" id='uploadButton'>
@@ -16,8 +16,8 @@
 </template>
 
 <script>
-import {alibaba, yiwugo, dhgate, mic, aliexpress, _1688, _1688global} from "@/assets/js/apis";
-import SourceMap from "@/assets/js/source_map";
+import {alibaba, yiwugo, dhgate, mic, cjds, litbox, aliexpress, _1688, _1688global} from "@/assets/js/apis";
+import { getSource } from "@/assets/js/source_map";
 import {getBase64, getFileFromBase64} from "@/assets/js/utils.js";
 export default {
     name: 'text-search',
@@ -30,7 +30,8 @@ export default {
             indexAareaOptions_alibaba: [{label: 'Products', value: 'product_en'}, {label: 'Suppliers', value: 'company_en'}],
             // yiwugo
             options_yiwugo: [{label: 'Products', value: 'Products'}],
-            options: []
+            options: [],
+            camera: true,
         }
     },
     computed: {
@@ -47,6 +48,10 @@ export default {
             }
             if(this.options && this.options.length > 0) {
                 this.index_area = this.options[0].value;
+            }
+            let source = getSource(this.$store.state.source_id);
+            if (source.hasSearchPic === false) {
+                this.camera = false
             }
             return this.$store.state.source_id;
         }

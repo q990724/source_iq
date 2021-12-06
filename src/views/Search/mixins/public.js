@@ -77,20 +77,10 @@ const publicData = {
          * @description 点击主图上的删除图标时触发
          */
         onClickClear() {
-            this.categoryList = {};
-            this.results = [];
-            this.resultInfo = {};
-            this.filterList = [];
-            this.page = 1;
-            this.cid = null;
-            this.totalPage = 1;
+            this.initSearchResult();
             this.imageAddress = '';
-            this.$store.commit('clearOriginImage');
-            this.$store.commit('clearMainImage');
-            this.$store.commit('clearSearchText');
-            this.$store.commit('setSearchState', 'none');
-            this.$store.commit('setImageUploadState', 'none');
-            this.$store.commit('setFirstSearchState', 'none');
+            this.$store.commit('resetSearchParams',this.$store.state.searchType);
+            this.$store.commit('resetAll');
         },
         initSearchResult() {
             this.categoryList = {};
@@ -98,6 +88,7 @@ const publicData = {
             this.resultInfo = {};
             this.filterList = [];
             this.page = 1;
+            this.totalPage = 1;
         },
         /**
          * @description 切换数据源时触发

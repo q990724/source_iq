@@ -38,13 +38,8 @@
     import bus from "@/assets/js/bus";
     import { handleResponse, getFileFromBase64 } from "@/assets/js/utils.js";
     import publicData from "../mixins/public.js";
-    // for (let key in SourceMap) {
-    //     if(SourceMap[key] === Store.state.source_id) {
-    //         Vue.prototype.$siteName = SourceMap[key]['siteName'];
-    //     //
-    //     }
-    // }
-    // import { $siteName } from "@/assets/js/apis";
+    import { getSource } from "@/assets/js/source_map.js";
+
     export default {
         name: "view-",
         components: {
@@ -68,20 +63,7 @@
         mounted() {
             console.log('view mounted');
             // 加载更多
-            bus.$on('loadmore', () => {
-                console.log('触底事件触发');
-                this.page++;
-                if(this.page > 99) {
-                    this.page = 99;
-                    return;
-                }
-                if(this.$store.state.searchType === 'image') {
-                    this.getDataFromImage(true);
-                }else {
-                    this.getDataFromText(true);
-                }
-
-            })
+            bus.$on('loadmore', this.loadmore.bind(this))
             if(window.localStorage.getItem('upload-file')) {
                 this.onSelectImage();
             }else if(this.$store.state.mainImage) {
@@ -91,6 +73,9 @@
             }
         },
         methods: {
+            onScroll(e) {
+                console.log(e);
+            },
             /**
              * @description 切换商品分类时触发
              */
@@ -99,7 +84,7 @@
                 this.searchTextParams.category = id;
                 this.page = 1;
                 if(this.$store.state.searchType === 'image') {
-                    this.imageSearch(this.originalImageUrl);
+                    this.imageSearch(this.originalImageUrl, false);
                 }else {
                     this.getDataFromText(false)
                 }
@@ -109,6 +94,7 @@
              * @param {Object} params {search_text: 'apple', index_area: 'product_en'}
              */
             onClickSearchButton(params) {
+                this.initSearchResult();
                 this.$store.commit('setSearchType', 'text');
                 this.$store.commit('setSearchText', params.search_text);
                 this.searchTextParams = {
@@ -118,22 +104,65 @@
             },
             onFilterChange({e, o, title}) {
                 this.$store.dispatch('filterChange',{title:title,self:this,e:e,o:o})
-                this.getDataFromText(false);
+                if(this.$store.state.searchType === 'image') {
+                    this.imageSearch(this.originalImageUrl, false);
+                }else {
+                    this.getDataFromText(false)
+                }
             },
+            async loadmore() {
+                if(this.$store.state.firstSearchState === 'success') {
+                    console.log('触底事件触发');
+                    if(this.totalPage) {
+                        if (this.page >= this.totalPage) {
+                            return this.page = this.totalPage;
+                        }
+                        this.page++;
+                    }
+                    if(this.$store.state.searchType === 'image' && this.$store.state.imageUploadState === 'uploaded') {
+                        this.getDataFromImage(true);
+                    }else if(this.$store.state.searchType === 'text') {
+                        this.getDataFromText(true);
+                    }else {
+                        //TBD: 应该做异常处理
+                        console.log("loadmore状态未知");
+                    }
+                }
+            },
+            async imageSearch(base64, reUpload = true) {
+                let source = getSource(this.$store.state.source_id);
+                if (source.hasSearchPic !== false) {
+                    try {
+                        // reUpload ? this.$store.commit('setFirstSearchState', 'none') : this.initSearchResult();
+                        reUpload ? this.$store.commit('resetAll') : this.initSearchResult();
+                        console.log(this.$store.state.imageUploadState);
+                        this.$store.commit('setSearchType', 'image');
+                        if (source.hasUpload !== false) {
+                            console.log('hasUpload');
+                            // 如果没有上传成功图片的状态，就传文件
+                            if (this.$store.state.imageUploadState !== 'uploaded') {
+                                let file = getFileFromBase64(base64);
+                                let uploadImageResult = await this.$store.dispatch('uploadPic', file);
+                                this.imageAddress = uploadImageResult;
+                                this.$store.commit('setImageUploadState', 'uploaded');
+                            }
+                        } else {
+                            console.log('notHasUpload');
+                            // 如果没有上传成功图片的状态，就传文件（base）
+                            if (this.$store.state.imageUploadState !== 'uploaded') {
+                                this.imageAddress = base64;
+                            }
+                        }
+                        this.getDataFromImage(false);
 
-            async imageSearch(base64) {
-                this.$store.commit('setSearchType', 'image');
-                try {
-                    this.initSearchResult();
-                    let file = getFileFromBase64(base64);
-                    // let uploadImageResult = await dhgate.uploadPic(file);
-                    let uploadImageResult = await this.$store.dispatch('uploadPic',file);
-                    this.imageAddress = uploadImageResult;
-                    this.getDataFromImage(false);
-                }catch (e) {
-                    console.log(e);
-                    this.$store.commit('setSearchState', 'error');
-                    throw e;
+                    } catch (e) {
+                        console.log(e);
+                        this.$store.commit('setSearchState', 'error');
+                        this.$store.commit('setImageUploadState', 'error');
+                        throw e;
+                    }
+                }else{
+                    this.$message.error(this.$t('message.not_has_search_image'));
                 }
             },
             /**
@@ -141,18 +170,21 @@
              * @param {Boolean} loadmore 本次搜索是否为加载更多
              */
             async getDataFromImage(loadmore) {
-                this.$refs['product-list'].changeShowNoList(false);
+                // this.$refs['product-list'].changeShowNoList(false);
                 try {
-                    // let result = await dhgate.searchGoodsByPic(this.imageAddress, this.page, this.cid);
-                    let result = await this.$store.dispatch('searchPic',{imageAddress: this.imageAddress, page: this.page, cid: this.cid});
-                    // let result = await this.$store.dispatch('searchPic',{page: this.page, cid: this.cid});
+                    let res = await this.$store.dispatch('searchPic',{imageAddress: this.imageAddress, page: this.page, cid: this.cid});
+                    let result = res.res;
+                    this.imageAddress = res.resImageAddress ?? null;
+                    this.$store.commit('setImageUploadState', 'uploaded');
                     this.$store.commit('setSearchState', 'success');
+                    console.log(result);
                     if(result && result.data) {
                         this.categoryList = result.data.categoryList ? result.data.categoryList : null;
                         this.resultInfo = result.data.resultInfo;
                         this.totalPage = this.resultInfo.totalPages || 1;
                         if (result.data.results && result.data.results.length > 0) {
                             handleResponse(result);
+                            this.$store.commit('setFirstSearchState', 'success');
                             return this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
                         } else {
                             this.$store.commit('setSearchState', 'null');
@@ -160,9 +192,14 @@
                     }else {
                         this.$message.error(this.$t('message.serach_result_from_image_error'));
                         this.$store.commit('setSearchState', 'error');
+                        this.$store.commit('setFirstSearchState', 'error');
                     }
                     this.results = loadmore ? [...this.results, ...[]] : [];
                 } catch (e) {
+                    let source = getSource(this.$store.state.source_id);
+                    if(source.hasUpload !== false) {
+                        this.$store.commit('setImageUploadState', 'error');
+                    }
                     this.$store.commit('setSearchState', 'error');
                     this.$message.error(this.$t('message.serach_result_from_image_error') + e);
                 }
@@ -180,8 +217,12 @@
                         this.categoryList = result.data.categoryList || null;
                         this.filterList = result.data.filterList || null;
                         this.resultInfo = result.data.resultInfo || null;
+                        if(this.resultInfo && this.resultInfo.totalResults && this.resultInfo.pageSize) {
+                            this.totalPage = this.resultInfo.totalPages
+                        }
                         if(result.data.results && result.data.results.length > 0) {
                             handleResponse(result);
+                            this.$store.commit('setFirstSearchState', 'success');
                             return this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
                         }else {
                             this.$store.commit('setSearchState', 'null');

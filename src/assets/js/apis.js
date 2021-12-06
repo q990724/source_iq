@@ -274,34 +274,35 @@ export const _1688global = {
 
 export const dhgate = {
 	// 图片搜索
-	uploadPic(file, page_num = 1, page_size = 10, lang = 'en', currency = 'USD') {
-		let formData = new FormData();
-		formData.append('image', file);
-		formData.append('page_num', page_num);
-		formData.append('page_size', page_size);
-		formData.append('lang', lang);
-		formData.append('currency', currency);
-		return Service.post('api/dhgateapp/searchGoodsByPic', formData, {
-			headers: {
-				'Content-Type': 'multipart/form-data'
-			}
-		})
+	searchGoodsByPic(is_file, file, resImg, page_num = 1, category = null, page_size = 10, lang = 'en', currency = 'USD') {
+		if(is_file === true){
+			let formData = new FormData();
+			formData.append('image', file);
+			formData.append('page_num', page_num);
+			formData.append('page_size', page_size);
+			formData.append('lang', lang);
+			formData.append('currency', currency);
+			return Service.post('api/dhgateapp/searchGoodsByPic', formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data'
+				}
+			})
+		}else{
+			const params = Qs.stringify({
+				imgUrl:resImg, page_num, page_size, lang, currency, category
+			});
+			return Service.post('api/dhgateapp/searchGoodsByPic',params, {
+				headers: {'Content-Type':'application/x-www-form-urlencoded'}
+			})
+		}
+
 	},
-	// 图片搜索2
-	searchGoodsByPic(imgUrl,page_num = 1, category = null, page_size = 10, lang = 'en', currency = 'USD') {
-		const params = Qs.stringify({
-			imgUrl, page_num, page_size, lang, currency, category
-		});
-		return Service.post('api/dhgateapp/searchGoodsByPic',params, {
-			headers: {'Content-Type':'application/x-www-form-urlencoded'}
-		})
-	},
+
 	// 搜索商品
 	searchGoodsByText({search_text, page=1, page_size=20, lang='en', currency='USD', sort = 1, price_sort = null, min_price = null, max_price = null, category = null, at = null, freeShipping = null, inventoryLocation = null}) {
 		const params = Qs.stringify({
 			search_text, page, page_size, lang, currency, sort, price_sort, min_price, max_price, category, at, freeShipping, inventoryLocation
 		});
-		console.log(params);
 		return Service.post('api/dhgateapp/searchGoodsByText', params, {
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded'
@@ -312,29 +313,62 @@ export const dhgate = {
 
 export const mic = {
 	// 图片搜索
-	uploadPic(file, page_num = 1, page_size = 10) {
-		let formData = new FormData();
-		formData.append('image', file);
-		formData.append('page_num', page_num);
-		formData.append('page_size', page_size);
-		return Service.post('api/micapp/searchGoodsByPic', formData, {
-			headers: {
-				'Content-Type': 'multipart/form-data'
-			}
-		})
+	searchGoodsByPic(is_file, file, resImg, page_num = 1,category = '', color = 0, page_size = 20) {
+		if(is_file === true) {
+			let formData = new FormData();
+			formData.append('image', file);
+			formData.append('page_num', page_num);
+			formData.append('page_size', page_size);
+			// formData.append('category', category);
+			return Service.post('api/micapp/searchGoodsByPic', formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data'
+				}
+			})
+		}else{
+			const params = Qs.stringify({
+				imgId:resImg, page_num, page_size, category, color
+			});
+			return Service.post('api/micapp/searchGoodsByPic',params)
+		}
 	},
-	// 图片搜索2
-	searchGoodsByPic(imgId,page_num = 1, category = null, color = null, page_size = 20) {
-		const params = Qs.stringify({
-			imgId, page_num, page_size, category, color
-		});
-		return Service.post('api/micapp/searchGoodsByPic',params)
-	},
+
 	// 搜索商品
 	searchGoodsByText({search_text, page=1, page_size=36, lang='en', currency='USD', min_price = null, max_price = null, category = null, location = null, memberType = null, property = null}) {
 		return Service.get('api/micapp/searchGoodsByText',{
 			params: {
 				search_text, page, page_size, lang, currency, min_price, max_price, category, location, memberType, property
+			},
+		})
+	},
+}
+export const cjds = {
+	// 图片搜索
+	searchGoodsByPic(file) {
+		let formData = new FormData();
+		formData.append('image', file);
+		return Service.post('api/cjdsapp/searchGoodsByPic', formData)
+	},
+
+	// 搜索商品
+	searchGoodsByText({search_text, page=1, page_size=20, category = null, country = null, productType = null, addMarkStatus = null, sort = null, price_sort = null}) {
+		const params = Qs.stringify({
+			search_text, page, page_size, category, country, productType, addMarkStatus, sort, price_sort
+		});
+		return Service.post('api/cjdsapp/searchGoodsByText',params,{
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded'
+			},
+		})
+	},
+}
+
+export const litbox = {
+	// 搜索商品
+	searchGoodsByText({search_text, page=1, page_size=36, lang='en', country='CHN', country_code='CN', currency='CNY', searchType=3, category = null, brand = '0', sort = '6d', filters = []}) {
+		return Service.get('api/litboxapp/searchGoodsByText',{
+			params: {
+				search_text, page, page_size, lang, country, country_code, currency, searchType, category, brand, sort, filters
 			},
 		})
 	},

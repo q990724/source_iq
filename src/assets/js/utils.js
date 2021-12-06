@@ -38,9 +38,10 @@ export function getBase64 (img, callback = () =>{}) {
  */
 export function getFileFromBase64(base64Data) {
 	// base64转blob
-	const base64ToBlob = function(base64Data) {
+	const base64ToBlob = function(base64Data ,fileName = 'file') {
 	    let arr = base64Data.split(','),
 	        fileType = arr[0].match(/:(.*?);/)[1],
+			suffix = fileType.split("/")[1],
 	        bstr = atob(arr[1]),
 	        l = bstr.length,
 	        u8Arr = new Uint8Array(l);
@@ -48,21 +49,25 @@ export function getFileFromBase64(base64Data) {
 	    while (l--) {
 	        u8Arr[l] = bstr.charCodeAt(l);
 	    }
-	    return new Blob([u8Arr], {
+	    // return new Blob([u8Arr], {
+	    //     type: fileType
+	    // });
+		suffix = (suffix === 'jpeg') ? 'jpg' : suffix;
+	    return new File([u8Arr], fileName + '.' + suffix, {
 	        type: fileType
 	    });
 	};
 	// blob转file
-	const blobToFile = function(newBlob, fileName) {
-	    newBlob.lastModifiedDate = new Date();
-	    newBlob.name = fileName;
-	    return newBlob;
-	};
+	// const blobToFile = function(newBlob, fileName) {
+	//     newBlob.lastModifiedDate = new Date();
+	//     newBlob.name = fileName;
+	//     return newBlob;
+	// };
 		
 	// 调用
 	const blob = base64ToBlob(base64Data);
-	const file = blobToFile(blob, 'file');
-	return file;
+	// const file = blobToFile(blob, 'file');
+	return blob;
 }
 
 /**

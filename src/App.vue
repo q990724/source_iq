@@ -58,6 +58,14 @@ export default {
                     if (current_path === '/view-mic') return;
                     this.$router.push('/view-mic');
                     break;
+                case SoureMap['cjds']['id']:
+                    if (current_path === '/view-cjds') return;
+                    this.$router.push('/view-cjds');
+                    break;
+                case SoureMap['litbox']['id']:
+                    if (current_path === '/view-litbox') return;
+                    this.$router.push('/view-litbox');
+                    break;
             }
         }
     }

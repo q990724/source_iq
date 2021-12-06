@@ -19,6 +19,12 @@
             <div class="item" :class="{'active': $store.state.source_id === 7}">
                 <span data-name="mic">Made-in-China</span>
             </div>
+            <div class="item" :class="{'active': $store.state.source_id === 8}">
+                <span data-name="cjds">CJdropshipping</span>
+            </div>
+            <div class="item" :class="{'active': $store.state.source_id === 9}">
+                <span data-name="litbox">LightInTheBox</span>
+            </div>
             <div class="item" :class="{'active': $store.state.source_id === 1}">
                 <span data-name="alibaba">Alibaba</span>
             </div>

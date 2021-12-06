@@ -55,6 +55,16 @@ const routes = [
         name: 'view-mic',
         component: () => import('@/views/Search/search-views/search_result')
     },
+    {
+        path: '/view-cjds',
+        name: 'view-cjds',
+        component: () => import('@/views/Search/search-views/search_result')
+    },
+    {
+        path: '/view-litbox',
+        name: 'view-litbox',
+        component: () => import('@/views/Search/search-views/search_result')
+    },
 ]
 
 const router = new VueRouter({
