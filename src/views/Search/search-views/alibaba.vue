@@ -66,9 +66,9 @@
             bus.$on('loadmore', this.loadmore.bind(this));
             if(window.localStorage.getItem('upload-file')) {
                 this.onSelectImage();
-            }else if(this.$store.state.mainImage) {
+            }else if(this.$store.state.mainImage && this.$store.state.searchType === 'image') {
                 this.imageSearch(this.$store.state.mainImage);
-            }else if(this.$store.state.searchText) {
+            }else if(this.$store.state.searchText && this.$store.state.searchType === 'text') {
                 this.onClickSearchButton({search_text: this.$store.state.searchText});
             }
         },
@@ -84,9 +84,10 @@
 				this.searchTextParams.Category = id;
 				this.page = 1;
                 if(this.$store.state.searchType === 'image') {
-                    this.imageSearch(this.originalImageUrl);
-                }else {
-                    this.getDataFromText(false)
+					this.imageSearch(this.$store.state.mainImage);
+                    // this.imageSearch(this.originalImageUrl);
+                }else if(this.$store.state.searchType === 'text'){
+                    this.getDataFromText(false);
                 }
 			},
 			/**
