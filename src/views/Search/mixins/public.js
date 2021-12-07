@@ -131,6 +131,7 @@ const publicData = {
          * @description 点击主图时触发
          */
         onClickMainImage() {
+			this.$store.commit('resetSearchState');
             this.$store.commit('setMainImage', this.$store.state.originImage);
             this.imageSearch(this.$store.state.mainImage);
         },
