@@ -29,7 +29,8 @@ const routes = [
     {
         path: '/view-aliexpress',
         name: 'view-aliexpress',
-        component: () => import('@/views/Search/search-views/aliexpress')
+        // component: () => import('@/views/Search/search-views/aliexpress')
+        component: () => import('@/views/Search/search-views/search_result')
     },
     {
         path: '/view-1688',

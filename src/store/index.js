@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import { getSource } from "@/assets/js/source_map.js";
 import SourceMap from "@/assets/js/source_map.js";
-import { alibaba, yiwugo, dhgate, mic, cjds, litbox } from "@/assets/js/apis"
+import { alibaba, aliexpress,  yiwugo, dhgate, mic, cjds, litbox } from "@/assets/js/apis"
 import { getFileFromBase64 } from "@/assets/js/utils.js";
 Vue.use(Vuex)
 
@@ -178,6 +178,13 @@ export default new Vuex.Store({
                                 break;
                         }
                         break;
+                    case SourceMap['aliexpress']['id']:
+                        switch (payload.title) {
+                            case 'Brands':
+                                payload.self.searchTextParams.brand_id = payload.o.paramValue;
+                                break;
+                        }
+                        break;
                     case SourceMap['yiwugo']['id']:
                         switch (payload.title) {
                             case '市场':
@@ -235,6 +242,9 @@ export default new Vuex.Store({
                     case SourceMap['alibaba']['id']:
                         resolve(await alibaba.searchGoodsByText({ ...payload.searchTextParams,page: payload.page }))
                         break;
+                    case SourceMap['aliexpress']['id']:
+                        resolve(await aliexpress.searchGoodsByText({ ...payload.searchTextParams,page: payload.page }))
+                        break;
                     case SourceMap['yiwugo']['id']:
                         resolve(await yiwugo.searchGoodsByText({ ...payload.searchTextParams,page: payload.page }))
                         break;
@@ -264,6 +274,14 @@ export default new Vuex.Store({
                          result.message = res.msg
                          result.data = {}
                          result.data.imageAddress = res.data.imageAddress
+                         resolve(result)
+                         break;
+                     case SourceMap['aliexpress']['id']:
+                         res = await aliexpress.uploadPic( payload )
+                         result.retcode = res.code
+                         result.message = res.msg
+                         result.data = {}
+                         result.data.imageAddress = res.data.filename
                          resolve(result)
                          break;
                      case SourceMap['yiwugo']['id']:
@@ -297,6 +315,10 @@ export default new Vuex.Store({
                 switch (this.state.source_id) {
                     case SourceMap['alibaba']['id']:
                         res = await alibaba.searchGoodsByPic( payload.imageAddress,payload.page, payload.cid )
+                        resolve(res)
+                        break;
+                    case SourceMap['aliexpress']['id']:
+                        res = await aliexpress.searchGoodsByPic( payload.imageAddress, payload.cid )
                         resolve(res)
                         break;
                     case SourceMap['yiwugo']['id']:

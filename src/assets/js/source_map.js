@@ -27,7 +27,9 @@ const SourceMap = {
         loginPageUrl: 'https://www.aliexpress.com/',
         needCookie: true,
         logo: require('@/assets/img/source/aliexpress.png'),
-        name: "AliExpress"
+        name: "AliExpress",
+        hasUpload: true,
+        hasSearchPic: true,
     },
     'yiwugo': {
         id: 5,
