@@ -45,6 +45,8 @@ const publicData = {
             sourceResult: {},
             // 当前搜索页码
             page: 1,
+			// 搜索后获取的总页码
+			totalPage: 1,
             // 当前已选分类ID
             cid: null,
             //1688或1688跨境切图所需
@@ -56,15 +58,13 @@ const publicData = {
             sessionId: '',
             // 当前数据源
             // source_id: 1,
-            // 搜索后获取的总页码
-            totalPage: 1
         }
     },
     created() {
         console.log('view created');
         this.$store.commit('getAppSetting');
-        this.$store.commit('setImageUploadState', 'none');
-        this.$store.commit('setFirstSearchState', 'none');
+        this.$store.commit('resetUploadState');
+        this.$store.commit('resetSearchState');
     },
     beforeDestroy() {
         bus.$off('loadmore');
@@ -84,10 +84,12 @@ const publicData = {
          * @description 点击主图上的删除图标时触发
          */
         onClickClear() {
+			this.$store.commit('dumpAll',"before onClickClear");
             this.initSearchResult();
 			this.clearSearchParams();
             this.imageAddress = '';
             this.$store.commit('resetAll');
+			this.$store.commit('dumpAll',"after onClickClear");
         },
 		clearSearchParams() {
 			this.cid = null;
@@ -109,6 +111,7 @@ const publicData = {
          * @description 切换数据源时触发
          */
         async onSourceItemClick(source_id) {
+			console.log("onSourceItemClick");
             if (source_id === this.$store.state.source_id) return;
             this.$store.commit('setSourceId', source_id);
 			// 切换站点无权决定改变setSearchState，只能跟随上一次搜索的setSearchState
@@ -116,32 +119,45 @@ const publicData = {
             console.log('当前数据源ID：', this.$store.state.source_id);
         },
         onSelectImage() {
+			console.log("onSelectImage");
+			//TBD：新上传图片（插件或本地文件）发起新搜索，清空之前所有搜索参数和搜索状态，暂时不支持图片+上次搜索参数组合
+			this.onClickClear();
+			this.$store.commit('setSearchType', 'image');
 			//TBD: 需要增加upload-file图片是否正常的鲁棒性检查
             this.$store.commit('setOriginImage', window.localStorage.getItem('upload-file'))
 			// 从window缓存拿到插件或者本地文件上传的图片后，需要清除upload-file状态，否则下次页面刷新还会发起旧图的搜索
 			this.$store.commit('clearWindowStorageUploadFile');
             this.$store.commit('setMainImage', this.$store.state.originImage);
-            this.imageSearch(this.$store.state.mainImage);
+            this.imageSearch(this.$store.state.mainImage, true);
         },
         /**
          * @description 点击裁剪区域某个图片时触发
          */
         onClickLocalItem(item) {
+			console.log("onClickLocalItem")
+			//TBD：新上传图片（插件或本地文件）发起新搜索，清空之前所有搜索参数和搜索状态，暂时不支持图片+上次搜索参数组合
+			this.onClickClear();
+			this.$store.commit('setSearchType', 'image');
             console.log(item);
             this.$store.commit('setMainImage', item.cover);
             // 1688的时候item里面会携带region
             if(item.region) {
                 this.region = item.region;
             }
-            this.imageSearch(this.$store.state.mainImage);
+            this.imageSearch(this.$store.state.mainImage, true);
         },
         /**
          * @description 点击主图时触发
          */
         onClickMainImage() {
-			this.$store.commit('resetSearchState');
+			console.log("onClickMainImage");
+			let originImage = this.$store.state.originImage;
+			//TBD：新上传图片（插件或本地文件）发起新搜索，清空之前所有搜索参数和搜索状态，暂时不支持图片+上次搜索参数组合
+			this.onClickClear();
+			this.$store.commit('setSearchType', 'image');
+			this.$store.commit('setOriginImage', originImage);
             this.$store.commit('setMainImage', this.$store.state.originImage);
-            this.imageSearch(this.$store.state.mainImage);
+            this.imageSearch(this.$store.state.mainImage, true);
         },
     }
 }

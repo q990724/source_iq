@@ -8,13 +8,13 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
-		source_id: null, // 货源ID
+		source_id: 1, // 货源ID
 		searchType: null, // 当前搜索模式，‘image’、‘text’
 		// 搜索参数
-        imageAddress: '',
+        imageAddress: null,
         originImage: null, // 首次搜索时上传/接收的图片
         mainImage: null, // 当前搜索的图片(base64)
-        searchText: '', // 当前搜索文字
+        searchText: null, // 当前搜索文字
 		// 图片上传状态
 		imageUploadState: 'none', // 图片上传状态 none: 未发起上传, uploaded: 图片上传完成, error: 图片上传失败
 		//搜索状态
@@ -31,15 +31,15 @@ export default new Vuex.Store({
 			this.commit('resetSearchState');
 		},
 		// 根据搜索模式参数，重置搜索参数
-		resetSearchParams(searchType) {
+		resetSearchParams(state,searchType) {
 			if(searchType == 'image') {
 				this.state.originImage = null;
 				this.state.mainImage = null;
-				this.state.imageAddress = '';
+				this.state.imageAddress = null;
 				// 如果图片搜索参数重置，那么图片上传状态也要重置
                 this.commit('resetUploadState');
 			} else if(searchType == 'text') {
-				this.state.searchText = '';
+				this.state.searchText = null;
 			}
 		},
 		// 重置图片上传状态
@@ -52,7 +52,8 @@ export default new Vuex.Store({
 			this.state.searchState = 'none';
 			this.state.firstSearchState = 'none';
 		},
-		dumpAll() {
+		dumpAll(state, msg) {
+			console.log(msg);
 			console.log("source_id:", this.state.source_id);
 			console.log("searchType:", this.state.searchType);
 			console.log("imageAddress:", this.state.imageAddress);

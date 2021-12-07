@@ -67,7 +67,10 @@
             if(window.localStorage.getItem('upload-file')) {
                 this.onSelectImage();
             }else if(this.$store.state.mainImage && this.$store.state.searchType === 'image') {
-                this.imageSearch(this.$store.state.mainImage);
+				// //TBD：新上传图片（插件或本地文件）发起新搜索，清空之前所有搜索参数和搜索状态，暂时不支持图片+上次搜索参数组合
+				// this.onClickClear();
+				// this.$store.commit('setSearchType', 'image');
+                this.imageSearch(this.$store.state.mainImage, true);
             }else if(this.$store.state.searchText && this.$store.state.searchType === 'text') {
                 this.onClickSearchButton({search_text: this.$store.state.searchText});
             }
@@ -96,8 +99,7 @@
              * @param {Object} params {search_text: 'apple', index_area: 'product_en'}
              */
             onClickSearchButton(params) {
-				this.$store.commit('resetSearchState');
-                this.initSearchResult();
+				this.onClickClear();	
                 this.$store.commit('setSearchType', 'text');
                 this.$store.commit('setSearchText', params.search_text);
                 this.searchTextParams = {
@@ -116,8 +118,7 @@
                 }
             },
             async loadmore() {
-				console.log("发起分页请求loadmore前：");
-				this.$store.commit('dumpAll');
+				this.$store.commit('dumpAll', "发起分页请求loadmore前：");
                 if(this.$store.state.firstSearchState === 'success') {
                     console.log('触底事件触发');
 					this.page++;
@@ -145,11 +146,10 @@
 				}
 				// reUpload ? this.$store.commit('setFirstSearchState', 'none') : this.initSearchResult();
 				// 如果需要重新上传图片，就重置全部搜索状态和搜索结果；否则只重置搜索结果，搜索参数和搜索状态不变
-				reUpload ? this.onClickClear() : this.initSearchResult();
-				this.$store.commit('setSearchType', 'image');
+				// reUpload ? this.onClickClear() : this.initSearchResult();
+				// this.$store.commit('setSearchType', 'image');
 				
-				console.log("发起imageSearch前：");
-				this.$store.commit('dumpAll');
+				this.$store.commit('dumpAll', "发起imageSearch前：");
 				try {
 					// 如果当前站点有单独的图品上传接口，并且图片当前=没有上传成功状态，就上传图片
 					if (source.hasUpload !== false && this.$store.state.imageUploadState !== 'uploaded') {
@@ -159,8 +159,7 @@
 						this.imageAddress = uploadImageResult.data.imageAddress;
 						console.log(uploadImageResult);
 						this.$store.commit('setImageUploadState', 'uploaded');
-						console.log("发起uploadPic后：");
-						this.$store.commit('dumpAll');
+						this.$store.commit('dumpAll', "发起uploadPic后：");
 					} 
 					this.getDataFromImage(base64,false);
 				} catch (e) {
@@ -176,8 +175,6 @@
              * @param {Boolean} loadmore 本次搜索是否为加载更多
              */
             async getDataFromImage(base64,loadmore) {
-				console.log("发起getDataFromImage前：");
-				this.$store.commit('dumpAll');
                 // this.$refs['product-list'].changeShowNoList(false);
                 try {
 					let source = getSource(this.$store.state.source_id);
@@ -217,6 +214,7 @@
                         if (result.data.results && result.data.results.length > 0) {
                             handleResponse(result);
                             if(!loadmore) {this.$store.commit('setFirstSearchState', 'success')};
+							this.$store.commit('dumpAll', "发起getDataFromImage后：");
                             return this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
                         } else {
                             this.$store.commit('setSearchState', 'null');
@@ -234,16 +232,15 @@
 					if (!loadmore) {this.$store.commit('setFirstSearchState', 'error')};
                     this.$message.error(this.$t('message.serach_result_from_image_error') + e);
                 }
-				console.log("发起getDataFromImage后：");
-				this.$store.commit('dumpAll');
+				this.$store.commit('dumpAll', "发起getDataFromImage后：");
+				
             },
             /**
              * @description 根据文字搜索获取数据
              * @param {Boolean} loadmore 本次搜索是否为加载更多
              */
             async getDataFromText(loadmore) {
-				console.log("发起getDataFromText前：");
-				this.$store.commit('dumpAll');
+				this.$store.commit('dumpAll', "发起getDataFromText前：");
                 try {
                     console.log(this.searchTextParams);
                     let result = null;
@@ -275,6 +272,7 @@
                         if(result.data.results && result.data.results.length > 0) {
                             handleResponse(result);
                             if(!loadmore) {this.$store.commit('setFirstSearchState', 'success')};
+							this.$store.commit('dumpAll', "发起getDataFromText后：");
                             return this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
                         }else {
                             this.$store.commit('setSearchState', 'null');
@@ -290,8 +288,7 @@
 					if(!loadmore) {this.$store.commit('setFirstSearchState', 'error')};
                     this.$message.error(this.$t('message.serach_result_from_text_error'));
                 }
-				console.log("发起getDataFromText后：");
-				this.$store.commit('dumpAll');
+				this.$store.commit('dumpAll', "发起getDataFromText后：");
             },
 
         }
