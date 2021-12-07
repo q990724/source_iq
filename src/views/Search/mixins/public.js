@@ -50,6 +50,10 @@ const publicData = {
             //1688或1688跨境切图所需
             yoloCropRegion: '',
             region: '',
+            //1688筛选所需参数和每次搜索接口返回的sessionId
+            location: '',
+            tags: '',
+            sessionId: '',
             // 当前数据源
             // source_id: 1,
             // 搜索后获取的总页码

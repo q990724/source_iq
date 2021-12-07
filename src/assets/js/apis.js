@@ -208,7 +208,7 @@ export const _1688global = {
 	        }
 	    })
 	},
-	searchGoodsByPic({imgUrl, region, keyword, categoryId, location, tags, pageNo}) {
+	searchGoodsByPic(imgUrl, pageNo, region, categoryId, location, tags, keyword) {
 		let cookie = getCookie('1688global');
 		if(!cookie) return Promise.reject('no cookie');
 	    return Service.get('api/goods/imgSearchKj', {
@@ -217,21 +217,21 @@ export const _1688global = {
 	        }
 	    })
 	},
-	searchGoodsFirstKj(keywords) {
+	searchGoodsFirstKj({search_text}) {
 		let cookie = getCookie('1688global');
 		if(!cookie) return Promise.reject('no cookie');
 		return Service.get('api/goods/searchGoodsFirstKj', {
 			params: {
-				keywords, cookie
+				keywords:search_text, cookie
 			}
 		})
 	},
-	searchGoodsKj({keywords, sessionId, beginPage = 2}) {
+	searchGoodsKj({search_text, sessionId, page = 1}) {
 		let cookie = getCookie('1688global');
 		if(!cookie) return Promise.reject('no cookie');
 		return Service.get('api/goods/searchGoodsKj', {
 			params: {
-				keywords, cookie, sessionId, beginPage
+				keywords: search_text, cookie, page, sessionId
 			}
 		})
 	}

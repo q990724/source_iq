@@ -184,7 +184,7 @@
                     if(!loadmore && source.hasFirstSearchPic === true){
                         result = await this.$store.dispatch('firstSearchPic',{imageAddress: this.imageAddress, yoloRegionSelected: this.yoloCropRegion && this.region, yoloCropRegion: this.yoloCropRegion || null, region: this.region || null});
                     }else{
-                        result = await this.$store.dispatch('searchPic',{imageAddress: this.imageAddress, page: this.page, yoloCropRegion: this.yoloCropRegion, region: this.region, cid: this.cid});
+                        result = await this.$store.dispatch('searchPic',{imageAddress: this.imageAddress, page: this.page, yoloCropRegion: this.yoloCropRegion, region: this.region, cid: this.cid, location: this.location, tags: (this.tags && Array.isArray(this.tags)) ? this.tags.join(',') : null});
                     }
                     if (source.hasUpload == false) {
                         this.imageAddress = result.data.searchImage.imageAddress ?? null;
@@ -246,7 +246,7 @@
                     if(!loadmore && source.hasFirstSearchText === true){
                         result = await this.$store.dispatch('firstSearchText', { searchTextParams: this.searchTextParams, page: this.page });
                     }else{
-                        result = await this.$store.dispatch('searchText', { searchTextParams: this.searchTextParams, page: this.page });
+                        result = await this.$store.dispatch('searchText', { searchTextParams: this.searchTextParams, page: this.page, sessionId: this.sessionId });
                     }
 
                     this.$store.commit('setSearchState', 'success');
@@ -256,8 +256,13 @@
 							this.categoryList = result.data.categoryList || null;
 							this.filterList = result.data.filterList || null;
 							// this.sortList = result.data.sortList || null;
+                            if(result.sourceResult && result.sourceResult.data && result.sourceResult.data.window && result.sourceResult.data.window.data && result.sourceResult.data.window.data.pageMessage) {
+                                this.sessionId = result.sourceResult.data.window.data.pageMessage.sessionId;
+                                console.log(this.sessionId)
+                            }
 						}
                         this.resultInfo = result.data.resultInfo || null;
+
                         if(this.resultInfo && this.resultInfo.totalResults && this.resultInfo.pageSize) {
                             this.totalPage = this.resultInfo.totalPages
                         }
