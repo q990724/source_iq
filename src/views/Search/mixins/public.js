@@ -85,11 +85,19 @@ const publicData = {
          */
         onClickClear() {
             this.initSearchResult();
+			this.clearSearchParams();
             this.imageAddress = '';
             this.$store.commit('resetAll');
         },
+		clearSearchParams() {
+			this.cid = null;
+			this.yoloCropRegion = '';
+			this.region = '';
+			this.location = '';
+			this.tags = '';
+			this.sessionId= '';
+		},
         initSearchResult() {
-			// this.cid = null;
             this.categoryList = {};
             this.results = [];
             this.resultInfo = {};
