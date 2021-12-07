@@ -7,20 +7,30 @@ const SourceMap = {
         name: 'Alibaba',
         hasUpload: true,
         hasSearchPic: true,
+        hasFirstSearchText: false,
+        hasFirstSearchPic: false,
     },
     '1688': {
         id: 2,
         loginPageUrl: 'https://login.taobao.com/?redirect_url=https%3A%2F%2Flogin.1688.com%2Fmember%2Fjump.htm%3Ftarget%3Dhttps%253A%252F%252Flogin.1688.com%252Fmember%252FmarketSigninJump.htm%253FDone%253D%25252F%25252Fwww.1688.com%25252F&style=tao_custom&from=1688web',
         needCookie: true,
         logo: require('@/assets/img/source/1688.png'),
-        name: "1688"
+        name: "1688",
+        hasUpload: true,
+        hasSearchPic: true,
+        hasFirstSearchText: true,
+        hasFirstSearchPic: true,
     },
     '1688global': {
         id: 3,
         loginPageUrl: 'https://login.taobao.com/?redirect_url=https://global.1688.com/',
         needCookie: true,
         logo: require('@/assets/img/source/1688global.png'),
-        name: '1688跨境专供'
+        name: '1688跨境专供',
+        hasUpload: true,
+        hasSearchPic: true,
+        hasFirstSearchText: true,
+        hasFirstSearchPic: false,
     },
     'aliexpress': {
         id: 4,
@@ -30,6 +40,8 @@ const SourceMap = {
         name: "AliExpress",
         hasUpload: true,
         hasSearchPic: true,
+        hasFirstSearchText: false,
+        hasFirstSearchPic: false,
     },
     'yiwugo': {
         id: 5,
@@ -39,6 +51,8 @@ const SourceMap = {
         name: '义乌购',
         hasUpload: true,
         hasSearchPic: true,
+        hasFirstSearchText: false,
+        hasFirstSearchPic: false,
     },
     'dhgate': {
         id: 6,
@@ -48,6 +62,8 @@ const SourceMap = {
         name: 'DHgate',
         hasUpload: false,
         hasSearchPic: true,
+        hasFirstSearchText: false,
+        hasFirstSearchPic: false,
     },
     'mic': {
         id: 7,
@@ -57,6 +73,8 @@ const SourceMap = {
         name: 'Made-in-China',
         hasUpload: false,
         hasSearchPic: true,
+        hasFirstSearchText: false,
+        hasFirstSearchPic: false,
     },
     'cjds': {
         id: 8,
@@ -66,6 +84,8 @@ const SourceMap = {
         name: 'CJdropshipping',
         hasUpload: false,
         hasSearchPic: true,
+        hasFirstSearchText: false,
+        hasFirstSearchPic: false,
     },
     'litbox': {
         id: 9,
@@ -75,6 +95,8 @@ const SourceMap = {
         name: 'LightInTheBox',
         hasUpload: false,
         hasSearchPic: false,
+        hasFirstSearchText: false,
+        hasFirstSearchPic: false,
     },
 }
 

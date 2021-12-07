@@ -153,18 +153,18 @@ export const _1688 = {
 	    })
 	},
 	// 图片搜索
-	searchGoodsByPic({imageId, searchtype = 0, page = 2, yoloRegionSelected = true, yoloCropRegion = '', region = '', sortField = 'normal', sortType = 'asc', pailitaoCategoryId = null}) {
+	searchGoodsByPic(imageId, page = 2, yoloRegionSelected = true, yoloCropRegion = '', region = '', pailitaoCategoryId = null, searchtype = 0, sortField = 'normal', sortType = 'asc') {
 		let cookie = getCookie('1688');
 		if(!cookie) return Promise.reject('no cookie');
 	    return Service.get('api/goods/imgSearch', {
 	        params: {
 	            imageId, searchtype, page, yoloRegionSelected, yoloCropRegion, region, 
-				cookie,pailitaoCategoryId
+				cookie,pailitaoCategoryId,sortField,sortType
 	        }
 	    })
 	},
 	// 图片搜索
-	searchGoodsByPicFirst({imageId, yoloRegionSelected = null, yoloCropRegion = null, region = null}) {
+	searchGoodsByPicFirst(imageId, yoloRegionSelected = null, yoloCropRegion = null, region = null) {
 		let cookie = getCookie('1688');
 		if(!cookie) return Promise.reject('no cookie');
 	    return Service.get('api/goods/imgSearchFirst', {
@@ -174,21 +174,22 @@ export const _1688 = {
 	    })
 	},
 	// 文字搜索首次
-	searchGoodsFirst({type = 1, keyword = '', page = 1}) {
+	searchGoodsFirst({search_text, page = 1}) {
+		console.log(search_text)
 		let cookie = getCookie('1688');
 		if(!cookie) return Promise.reject('no cookie');
 	    return Service.get('api/goods/searchGoodsFirst', {
 	        params: {
-	            type, cookie, keyword, page
+	            type: 1, cookie, keyword: search_text, page
 	        }
 	    })
 	},
-	searchGoods({type = 1, keyword = '', page = 1, }) {
+	searchGoods({ search_text, page = 1 }) {
 		let cookie = getCookie('1688');
 		if(!cookie) return Promise.reject('no cookie');
 	    return Service.get('api/goods/searchGoods', {
 	        params: {
-	            type, cookie, keyword, page
+	            type: 1, cookie, keyword: search_text, page
 	        }
 	    })
 	}

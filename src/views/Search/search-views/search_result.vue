@@ -36,7 +36,7 @@
     import HighFiltration from "../components/high-filtration";
     import FilterComponent from "../components/group-filter.vue";
     import bus from "@/assets/js/bus";
-    import { handleResponse, getFileFromBase64 } from "@/assets/js/utils.js";
+    import { getBase64FromCropImage, handleResponse, getFileFromBase64 } from "@/assets/js/utils.js";
     import publicData from "../mixins/public.js";
     import { getSource } from "@/assets/js/source_map.js";
 
@@ -180,7 +180,12 @@
 						this.imageAddress = base64;
 					}
 					//TBD: 切换筛选发起搜索时没有传参
-                    let result = await this.$store.dispatch('searchPic',{imageAddress: this.imageAddress, page: this.page, cid: this.cid});
+                    let result = null;
+                    if(!loadmore && source.hasFirstSearchPic === true){
+                        result = await this.$store.dispatch('firstSearchPic',{imageAddress: this.imageAddress, yoloRegionSelected: this.yoloCropRegion && this.region, yoloCropRegion: this.yoloCropRegion || null, region: this.region || null});
+                    }else{
+                        result = await this.$store.dispatch('searchPic',{imageAddress: this.imageAddress, page: this.page, yoloCropRegion: this.yoloCropRegion, region: this.region, cid: this.cid});
+                    }
                     if (source.hasUpload == false) {
                         this.imageAddress = result.data.searchImage.imageAddress ?? null;
                     }
@@ -193,6 +198,13 @@
 							this.categoryList = result.data.categoryList || null;
 							this.filterList = result.data.filterList || null;
 							// this.sortList = result.data.sortList || null;
+                            if (result.data.searchImage && result.data.searchImage.yoloCropRegion) {
+                                this.yoloCropRegion = result.data.searchImage.yoloCropRegion;
+                                this.region = result.data.searchImage.region;
+                                let regionList = result.data.searchImage.yoloCropRegion.split(';');
+                                let r = await getBase64FromCropImage(this.$store.state.mainImage, regionList);
+                                this.$refs['image_operation'].setLocalImageList(r);
+                            }
 						}
 
                         this.resultInfo = result.data.resultInfo;
@@ -228,7 +240,15 @@
 				this.$store.commit('dumpAll');
                 try {
                     console.log(this.searchTextParams);
-                    let result = await this.$store.dispatch('searchText',{searchTextParams:this.searchTextParams,page: this.page});
+                    let result = null;
+                    let source = getSource(this.$store.state.source_id);
+
+                    if(!loadmore && source.hasFirstSearchText === true){
+                        result = await this.$store.dispatch('firstSearchText', { searchTextParams: this.searchTextParams, page: this.page });
+                    }else{
+                        result = await this.$store.dispatch('searchText', { searchTextParams: this.searchTextParams, page: this.page });
+                    }
+
                     this.$store.commit('setSearchState', 'success');
                     if(result && result.data) {
 						// 如果是首次搜索，保存接口返回的商品分类、筛选和排序条件
