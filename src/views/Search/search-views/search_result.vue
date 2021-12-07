@@ -96,6 +96,7 @@
              * @param {Object} params {search_text: 'apple', index_area: 'product_en'}
              */
             onClickSearchButton(params) {
+				this.$store.commit('resetSearchState');
                 this.initSearchResult();
                 this.$store.commit('setSearchType', 'text');
                 this.$store.commit('setSearchText', params.search_text);
@@ -105,6 +106,7 @@
                 this.getDataFromText(false);
             },
             onFilterChange({e, o, title}) {
+				this.$store.commit('resetSearchState');
                 this.$store.dispatch('filterChange',{title:title,self:this,e:e,o:o})
                 if(this.$store.state.searchType === 'image') {
 					// 切换筛选条件，不需要重新发起图片上传
@@ -114,6 +116,7 @@
                 }
             },
             async loadmore() {
+				this.$store.commit('dumpAll');
                 if(this.$store.state.firstSearchState === 'success') {
                     console.log('触底事件触发');
 					this.page++;
@@ -133,6 +136,7 @@
             },
 			// reUpload：true 需要重新上传图片；false 不需要重新上传图片，可以复用当前的imageAddress
             async imageSearch(base64, reUpload = true) {
+				this.$store.commit('dumpAll');
 				// 如果当前站点接口配置不支持图片搜索，就直接提示用户并返回
                 let source = getSource(this.$store.state.source_id);
                 if (source.hasSearchPic == false) {
@@ -167,6 +171,7 @@
              * @param {Boolean} loadmore 本次搜索是否为加载更多
              */
             async getDataFromImage(base64,loadmore) {
+				this.$store.commit('dumpAll');
                 // this.$refs['product-list'].changeShowNoList(false);
                 try {
 					let source = getSource(this.$store.state.source_id);
@@ -182,7 +187,7 @@
                     console.log(result);
                     if(result && result.data) {
 						// 如果是首次搜索，保存接口返回的商品分类、筛选和排序条件
-						if(this.$store.state.firstSearchState == 'none') {
+						if(loadmore) {	//this.$store.state.firstSearchState == 'none'
 							this.categoryList = result.data.categoryList || null;
 							this.filterList = result.data.filterList || null;
 							// this.sortList = result.data.sortList || null;
@@ -192,7 +197,7 @@
                         this.totalPage = this.resultInfo.totalPages || 1;
                         if (result.data.results && result.data.results.length > 0) {
                             handleResponse(result);
-                            this.$store.commit('setFirstSearchState', 'success');
+                            if(!loadmore) {this.$store.commit('setFirstSearchState', 'success')};
                             return this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
                         } else {
                             this.$store.commit('setSearchState', 'null');
@@ -200,7 +205,7 @@
                     }else {
                         this.$message.error(this.$t('message.serach_result_from_image_error'));
                         this.$store.commit('setSearchState', 'error');
-                        this.$store.commit('setFirstSearchState', 'error');
+                        if(!loadmore) {this.$store.commit('setFirstSearchState', 'error')};
                     }
                     this.results = loadmore ? [...this.results, ...[]] : [];
                 } catch (e) {
@@ -209,6 +214,7 @@
                         this.$store.commit('setImageUploadState', 'error');
                     }
                     this.$store.commit('setSearchState', 'error');
+					if (!loadmore) {this.$store.commit('setFirstSearchState', 'error')};
                     this.$message.error(this.$t('message.serach_result_from_image_error') + e);
                 }
             },
@@ -217,13 +223,14 @@
              * @param {Boolean} loadmore 本次搜索是否为加载更多
              */
             async getDataFromText(loadmore) {
+				this.$store.commit('dumpAll');
                 try {
                     console.log(this.searchTextParams);
                     let result = await this.$store.dispatch('searchText',{searchTextParams:this.searchTextParams,page: this.page});
                     this.$store.commit('setSearchState', 'success');
                     if(result && result.data) {
 						// 如果是首次搜索，保存接口返回的商品分类、筛选和排序条件
-						if(this.$store.state.firstSearchState == 'none') {
+						if(loadmore) {	//this.$store.state.firstSearchState == 'none'
 							this.categoryList = result.data.categoryList || null;
 							this.filterList = result.data.filterList || null;
 							// this.sortList = result.data.sortList || null;
@@ -234,7 +241,7 @@
                         }
                         if(result.data.results && result.data.results.length > 0) {
                             handleResponse(result);
-                            this.$store.commit('setFirstSearchState', 'success');
+                            if(!loadmore) {this.$store.commit('setFirstSearchState', 'success')};
                             return this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
                         }else {
                             this.$store.commit('setSearchState', 'null');
@@ -242,10 +249,12 @@
                     }else {
                         this.$message.error(this.$t('message.serach_result_from_text_error'));
                         this.$store.commit('setSearchState', 'error');
+						if(!loadmore) {this.$store.commit('setFirstSearchState', 'error')};
                     }
                     this.results = loadmore ? [...this.results, ...[]] : [];
                 } catch (error) {
                     this.$store.commit('setSearchState', 'error');
+					if(!loadmore) {this.$store.commit('setFirstSearchState', 'error')};
                     this.$message.error(this.$t('message.serach_result_from_text_error'));
                 }
             },

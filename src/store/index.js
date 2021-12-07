@@ -51,6 +51,17 @@ export default new Vuex.Store({
 			this.state.searchState = 'none';
 			this.state.firstSearchState = 'none';
 		},
+		dumpAll() {
+			console.log("source_id:", this.state.source_id);
+			console.log("searchType:", this.state.searchType);
+			console.log("imageAddress:", this.state.imageAddress);
+			console.log("originImage:", this.state.originImage);
+			console.log("mainImage:", this.state.mainImage);
+			console.log("searchText:", this.state.searchText);
+			console.log("imageUploadState:", this.state.imageUploadState);
+			console.log("searchState:", this.state.searchState);
+			console.log("firstSearchState:", this.state.firstSearchState);				
+		},
         // 获取插件设置
         getAppSetting(state) {
             if(window.localStorage.getItem('app-setting')) {
