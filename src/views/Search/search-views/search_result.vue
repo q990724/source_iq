@@ -194,7 +194,7 @@
                     if (source.hasUpload == false) {
                         this.imageAddress = result.data.searchImage.imageAddress ?? null;
                     }
-                    this.$store.commit('setImageUploadState', 'uploaded');
+                    if(!source.hasUpload&&!loadmore) {this.$store.commit('setImageUploadState', 'uploaded')};
                     this.$store.commit('setSearchState', 'success');
                     console.log(result);
                     if(result && result.data) {
@@ -229,7 +229,7 @@
                     this.results = loadmore ? [...this.results, ...[]] : [];
                 } catch (e) {
                     let source = getSource(this.$store.state.source_id);
-                    if(!source.hasUpload) {this.$store.commit('setImageUploadState', 'error')};
+                    if(!source.hasUpload&&!loadmore) {this.$store.commit('setImageUploadState', 'error')};
                     this.$store.commit('setSearchState', 'error');
 					if (!loadmore) {this.$store.commit('setFirstSearchState', 'error')};
                     this.$message.error(this.$t('message.serach_result_from_image_error') + e);
