@@ -98,42 +98,6 @@ export const alibaba = {
 	}
 }
 
-export const yiwugo = {
-    uploadPic(file) {
-        let formData = new FormData();
-        formData.append('file', file);
-        return Service.post('api/yiwugoapp/uploadPic', formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        })
-    },
-    // 图片搜索
-    searchGoodsByPic(file_url, page = 1, page_size = 10, lang = 'en') {
-        return Service.get('api/yiwugoapp/searchGoodsByPic', {
-            params: {
-                file_url, page, page_size, lang
-            }
-        })
-    },
-	// 搜索商品
-	searchGoodsByText({search_text, page=1, language='en', sort = 0, set_yiwu_market = 0, min_price = null, max_price = null, category = null, sub_market = null,}) {
-		return Service.get('api/yiwugoapp/searchGoodsByText', {
-            params: {
-                search_text,page,language,sort,set_yiwu_market,min_price,max_price,category,sub_market
-            }
-        })
-	},
-	// 搜索店铺
-	searchShopsByText({search_text, page = 1, language = 'en', page_size = 20}) {
-        return Service.get('api/yiwugoapp/searchShopsByText', {
-            params: {
-                search_text, page, language, page_size
-            }
-        })
-    },
-}
-
 export const aliexpress = {
 	uploadPic(file) {
 		let cookie = getCookie('aliexpress');
@@ -270,6 +234,42 @@ export const _1688global = {
 			}
 		})
 	}
+}
+
+export const yiwugo = {
+	uploadPic(file) {
+		let formData = new FormData();
+		formData.append('file', file);
+		return Service.post('api/yiwugoapp/uploadPic', formData, {
+			headers: {
+				'Content-Type': 'multipart/form-data'
+			}
+		})
+	},
+	// 图片搜索
+	searchGoodsByPic(file_url, page = 1, page_size = 10, lang = 'en') {
+		return Service.get('api/yiwugoapp/searchGoodsByPic', {
+			params: {
+				file_url, page, page_size, lang
+			}
+		})
+	},
+	// 搜索商品
+	searchGoodsByText({search_text, page=1, lang='en', sort = 0, set_yiwu_market = 0, min_price = null, max_price = null, category = null, sub_market = null,}) {
+		return Service.get('api/yiwugoapp/searchGoodsByText', {
+			params: {
+				search_text,page,lang,sort,set_yiwu_market,min_price,max_price,category,sub_market
+			}
+		})
+	},
+	// 搜索店铺
+	searchShopsByText({search_text, page = 1, language = 'en', page_size = 20}) {
+		return Service.get('api/yiwugoapp/searchShopsByText', {
+			params: {
+				search_text, page, language, page_size
+			}
+		})
+	},
 }
 
 export const dhgate = {

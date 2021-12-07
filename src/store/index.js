@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import SoureMap from "@/assets/js/source_map.js";
-import { dhgate , mic , cjds ,litbox } from "@/assets/js/apis"
+import { getSource } from "@/assets/js/source_map.js";
+import SourceMap from "@/assets/js/source_map.js";
+import { yiwugo, dhgate, mic, cjds, litbox } from "@/assets/js/apis"
 import { getFileFromBase64 } from "@/assets/js/utils.js";
 Vue.use(Vuex)
 
@@ -149,7 +150,14 @@ export default new Vuex.Store({
             }
             return new Promise((resolve)=>{
                 switch (this.state.source_id) {
-                    case SoureMap['dhgate']['id']:
+                    case SourceMap['yiwugo']['id']:
+                        switch (payload.title) {
+                            case '市场':
+                                handleCheckBoxParams(payload.self, payload.e, payload.o, 'sub_market');
+                                break;
+                        }
+                        break;
+                    case SourceMap['dhgate']['id']:
                         switch (payload.title) {
                             case 'Ship from':
                                 handleCheckBoxParams(payload.self, payload.e, payload.o, 'inventoryLocation', ";");
@@ -158,7 +166,7 @@ export default new Vuex.Store({
                                 handleCheckBoxParams(payload.self, payload.e, payload.o, 'at');
                         }
                         break;
-                    case SoureMap['mic']['id']:
+                    case SourceMap['mic']['id']:
                         switch (payload.title) {
                             case 'Location':
                                 handleCheckBoxParams(payload.self, payload.e, payload.o, 'location');
@@ -173,7 +181,7 @@ export default new Vuex.Store({
                                 handleCheckBoxParams(payload.self, payload.e, payload.o, 'property');
                         }
                         break;
-                    case SoureMap['cjds']['id']:
+                    case SourceMap['cjds']['id']:
                         switch (payload.title) {
                             case 'Ship From':
                                 handleCheckBoxParams(payload.self, payload.e, payload.o, 'country');
@@ -192,19 +200,23 @@ export default new Vuex.Store({
                 resolve()
             })
         },
+
         searchText(content,payload){
             return new Promise(async(resolve)=>{
                 switch (this.state.source_id) {
-                    case SoureMap['dhgate']['id']:
+                    case SourceMap['yiwugo']['id']:
+                        resolve(await yiwugo.searchGoodsByText({ ...payload.searchTextParams,page: payload.page }))
+                        break;
+                    case SourceMap['dhgate']['id']:
                         resolve(await dhgate.searchGoodsByText({ ...payload.searchTextParams,page: payload.page }))
                         break;
-                    case SoureMap['mic']['id']:
+                    case SourceMap['mic']['id']:
                         resolve(await mic.searchGoodsByText({ ...payload.searchTextParams,page: payload.page }))
                         break;
-                    case SoureMap['cjds']['id']:
+                    case SourceMap['cjds']['id']:
                         resolve(await cjds.searchGoodsByText({ ...payload.searchTextParams,page: payload.page }))
                         break;
-                    case SoureMap['litbox']['id']:
+                    case SourceMap['litbox']['id']:
                         resolve(await litbox.searchGoodsByText({ ...payload.searchTextParams,page: payload.page }))
                         break;
                 }
@@ -212,11 +224,16 @@ export default new Vuex.Store({
         },
 
          uploadPic(content,payload){
+            let res = null, result = {};
              return new Promise(async (resolve)=>{
                  switch (this.state.source_id) {
-                     case SoureMap['dhgate']['id']:
-                         var res = await dhgate.uploadPic( payload )
-                         resolve(res.sourceResult.data.data.imgUrl)
+                     case SourceMap['yiwugo']['id']:
+                         res = await yiwugo.uploadPic( payload )
+                         result.retcode = res.code
+                         result.message = res.msg
+                         result.data = {}
+                         result.data.imageAddress = res.data.url
+                         resolve(result)
                          break;
                  }
             })
@@ -224,10 +241,10 @@ export default new Vuex.Store({
 
         searchPic(content,payload){
             console.log(payload);
-            return new Promise(async (resolve)=>{
-                var file = null;
-                var resImg = '';
-                var is_file = true;
+            let file = null, resImg = '', is_file = true, res = null, result = {};
+
+            let source = getSource(this.state.source_id);
+            if (source.hasUpload === false) {
                 //如果没有上传图片成功的状态就先将base64转图片传递，否则直接传上传成功后的返回值
                 if(this.state.imageUploadState !== 'uploaded') {
                     file = getFileFromBase64(payload.imageAddress);
@@ -235,19 +252,27 @@ export default new Vuex.Store({
                     resImg = payload.imageAddress;
                     is_file = false
                 }
+            }
 
+            return new Promise(async (resolve)=>{
                 switch (this.state.source_id) {
-                    case SoureMap['dhgate']['id']:
-                        var res = await dhgate.searchGoodsByPic(is_file, file,resImg,payload.page, payload.cid )
-                        resolve({result:res, resImageAddress:res.sourceResult.data.data.imgUrl})
+                    case SourceMap['yiwugo']['id']:
+                        res = await yiwugo.searchGoodsByPic( payload.imageAddress )
+                        resolve(res)
                         break;
-                    case SoureMap['mic']['id']:
-                        var res = await mic.searchGoodsByPic(is_file, file,resImg, payload.page , payload.cid )
-                        resolve({result:res, resImageAddress:res.sourceResult.data.content.imgId})
+                    case SourceMap['dhgate']['id']:
+                        res = await dhgate.searchGoodsByPic( is_file, file, resImg, payload.page, payload.cid )
+                        res.data.searchImage.imageAddress = res.sourceResult.data.data.imgUrl
+                        resolve(res)
                         break;
-                    case SoureMap['cjds']['id']:
-                        var res = await cjds.searchGoodsByPic( file )
-                        resolve({result:res})
+                    case SourceMap['mic']['id']:
+                        res = await mic.searchGoodsByPic( is_file, file, resImg, payload.page , payload.cid )
+                        res.data.searchImage.imageAddress = res.sourceResult.data.content.imgId
+                        resolve(res)
+                        break;
+                    case SourceMap['cjds']['id']:
+                        res = await cjds.searchGoodsByPic( file )
+                        resolve(res)
                         break;
                 }
             })

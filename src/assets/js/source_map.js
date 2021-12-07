@@ -32,14 +32,16 @@ const SourceMap = {
         loginPageUrl: 'https://cas.yiwugo.com/cas/login?service=http%3A%2F%2Fwork.yiwugo.com%2Findex.htm%3Fspm%3Dd3d3Lnlpd3Vnby5jb20v',
         needCookie: false,
         logo: require('@/assets/img/source/yiwugo.png'),
-        name: '义乌购'
+        name: '义乌购',
+        hasUpload: true,
+        hasSearchPic: true,
     },
     'dhgate': {
         id: 6,
         loginPageUrl: 'https://secure.dhgate.com/passport/login?service=http%3A%2F%2Fseller.dhgate.com%2Fmerchant%2Flogin%2Fssologin.do%3FreturnUrl%3DaHR0cDovL3NlbGxlci5kaGdhdGUuY29tL21lcmNoYW50L2xvZ2luL2xvZ2luc2lnbi5kbw..#hp-head-1',
         needCookie: false,
         logo: require('@/assets/img/source/dhgate.png'),
-        name: 'DHGate',
+        name: 'DHgate',
         hasUpload: false,
         hasSearchPic: true,
     },
