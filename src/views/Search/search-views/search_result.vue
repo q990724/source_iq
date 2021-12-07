@@ -150,7 +150,8 @@
 						console.log('hasUpload');
 						let file = getFileFromBase64(base64);
 						let uploadImageResult = await this.$store.dispatch('uploadPic', file);
-						this.imageAddress = uploadImageResult;
+						this.imageAddress = uploadImageResult.data.imageAddress;
+						console.log(uploadImageResult);
 						this.$store.commit('setImageUploadState', 'uploaded');
 					} 
 					this.getDataFromImage(base64,false);
@@ -174,9 +175,8 @@
 						this.imageAddress = base64;
 					}
 					//TBD: 切换筛选发起搜索时没有传参
-                    let res = await this.$store.dispatch('searchPic',{imageAddress: this.imageAddress, page: this.page, cid: this.cid});
-                    let result = res.result;
-                    this.imageAddress = res.resImageAddress ?? null;
+                    let result = await this.$store.dispatch('searchPic',{imageAddress: this.imageAddress, page: this.page, cid: this.cid});
+                    this.imageAddress = result.data.searchImage.imageAddress ?? null;
                     this.$store.commit('setImageUploadState', 'uploaded');
                     this.$store.commit('setSearchState', 'success');
                     console.log(result);
