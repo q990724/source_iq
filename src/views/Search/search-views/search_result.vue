@@ -187,7 +187,7 @@
                     console.log(result);
                     if(result && result.data) {
 						// 如果是首次搜索，保存接口返回的商品分类、筛选和排序条件
-						if(loadmore) {	//this.$store.state.firstSearchState == 'none'
+						if(!loadmore) {	//this.$store.state.firstSearchState == 'none'
 							this.categoryList = result.data.categoryList || null;
 							this.filterList = result.data.filterList || null;
 							// this.sortList = result.data.sortList || null;
@@ -230,7 +230,7 @@
                     this.$store.commit('setSearchState', 'success');
                     if(result && result.data) {
 						// 如果是首次搜索，保存接口返回的商品分类、筛选和排序条件
-						if(loadmore) {	//this.$store.state.firstSearchState == 'none'
+						if(!loadmore) {	//this.$store.state.firstSearchState == 'none'
 							this.categoryList = result.data.categoryList || null;
 							this.filterList = result.data.filterList || null;
 							// this.sortList = result.data.sortList || null;

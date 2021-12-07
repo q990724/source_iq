@@ -2,10 +2,10 @@
     <div class="text-search mt40">
         <div class="input-box">
             <i class="el-icon-search"></i>
-            <el-select v-model="index_area" :placeholder="$t('label.select')" v-if="options && options.length > 0">
+<!--            <el-select v-model="index_area" :placeholder="$t('label.select')" v-if="options && options.length > 0">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                 </el-option>
-            </el-select>
+            </el-select> -->
             <input type="text" class="input" :placeholder="$t('label.input_placeholder')" v-model="input" autocomplete="off" @keypress="onKeyPress">
              <i class="el-icon-circle-close clear" v-show="input" @click="onClickCloseButton"></i>
             <i class="el-icon-camera camera" v-show="camera" @click="onClickCamera"></i>
