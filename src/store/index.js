@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import { getSource } from "@/assets/js/source_map.js";
 import SourceMap from "@/assets/js/source_map.js";
-import { yiwugo, dhgate, mic, cjds, litbox } from "@/assets/js/apis"
+import { alibaba, yiwugo, dhgate, mic, cjds, litbox } from "@/assets/js/apis"
 import { getFileFromBase64 } from "@/assets/js/utils.js";
 Vue.use(Vuex)
 
@@ -150,6 +150,34 @@ export default new Vuex.Store({
             }
             return new Promise((resolve)=>{
                 switch (this.state.source_id) {
+                    case SourceMap['alibaba']['id']:
+                        switch (payload.title) {
+                            case 'Shipping':
+                                handleCheckBoxParams(payload.self, payload.e, payload.o, 'productTag', ";");
+                                break;
+                            case 'Sample Order':
+                                payload.self.searchTextParams.param_order="IFS-1";
+                                payload.self.searchTextParams.freeSample = payload.o.id;
+                                break;
+                            case 'Management Certification':
+                                handleCheckBoxParams(payload.self, payload.e, payload.o, 'companyAuthTag');
+                                break;
+                            case 'Product Certification':
+                                handleCheckBoxParams(payload.self, payload.e, payload.o, 'productAuthTag');
+                                break;
+                            case 'Supplier Country/Region':
+                                handleCheckBoxParams(payload.self, payload.e, payload.o, 'Country');
+                                break;
+                            case 'Past Export Countries':
+                                handleCheckBoxParams(payload.self, payload.e, payload.o, 'exportCountry');
+                                break;
+                            case 'Supplier Types':
+                                payload.e ? payload.self.searchTextParams[payload.o.param] = payload.o.id : delete payload.self.searchTextParams[payload.o.param];
+                                break;
+                            default:
+                                break;
+                        }
+                        break;
                     case SourceMap['yiwugo']['id']:
                         switch (payload.title) {
                             case '市场':
@@ -204,6 +232,9 @@ export default new Vuex.Store({
         searchText(content,payload){
             return new Promise(async(resolve)=>{
                 switch (this.state.source_id) {
+                    case SourceMap['alibaba']['id']:
+                        resolve(await alibaba.searchGoodsByText({ ...payload.searchTextParams,page: payload.page }))
+                        break;
                     case SourceMap['yiwugo']['id']:
                         resolve(await yiwugo.searchGoodsByText({ ...payload.searchTextParams,page: payload.page }))
                         break;
@@ -227,6 +258,14 @@ export default new Vuex.Store({
             let res = null, result = {};
              return new Promise(async (resolve)=>{
                  switch (this.state.source_id) {
+                     case SourceMap['alibaba']['id']:
+                         res = await alibaba.uploadPic( payload )
+                         result.retcode = res.code
+                         result.message = res.msg
+                         result.data = {}
+                         result.data.imageAddress = res.data.imageAddress
+                         resolve(result)
+                         break;
                      case SourceMap['yiwugo']['id']:
                          res = await yiwugo.uploadPic( payload )
                          result.retcode = res.code
@@ -256,6 +295,10 @@ export default new Vuex.Store({
 
             return new Promise(async (resolve)=>{
                 switch (this.state.source_id) {
+                    case SourceMap['alibaba']['id']:
+                        res = await alibaba.searchGoodsByPic( payload.imageAddress,payload.page, payload.cid )
+                        resolve(res)
+                        break;
                     case SourceMap['yiwugo']['id']:
                         res = await yiwugo.searchGoodsByPic( payload.imageAddress )
                         resolve(res)

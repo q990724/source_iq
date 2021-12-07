@@ -23,7 +23,8 @@ const routes = [
     {
         path: '/view-alibaba',
         name: 'view-alibaba',
-        component: () => import('@/views/Search/search-views/alibaba')
+        // component: () => import('@/views/Search/search-views/alibaba')
+        component: () => import('@/views/Search/search-views/search_result')
     },
     {
         path: '/view-aliexpress',

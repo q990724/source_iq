@@ -4,7 +4,9 @@ const SourceMap = {
         loginPageUrl: 'https://passport.alibaba.com/icbu_login.htm?spm=a2700.8293689.scGlobalHomeHeader.6.2ce267afQnDloI&tracelog=hd_signin',
         needCookie: false,
         logo: require('@/assets/img/source/alibaba.png'),
-        name: 'Alibaba'
+        name: 'Alibaba',
+        hasUpload: true,
+        hasSearchPic: true,
     },
     '1688': {
         id: 2,

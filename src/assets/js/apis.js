@@ -53,7 +53,7 @@ export const alibaba = {
     },
     // 图片搜索
     searchGoodsByPic(imageAddress, beginPage = 1, categoryId = null) {
-        beginPage = beginPage > 5 ? 5 : beginPage;
+        // beginPage = beginPage > 5 ? 5 : beginPage;
         return Service.get('api/aliintersite/searchGoodsByPic', {
             params: {
                 imageAddress, beginPage, categoryId
@@ -67,7 +67,7 @@ export const alibaba = {
 		index_area = 'product_en', 
 		language = 'en_US', 
 		tab = null, 
-		Category = null, 
+		category = null,
 		supplierType = null, 
 		ta = null,
 		assessment_company = null,
@@ -89,7 +89,7 @@ export const alibaba = {
 		return Service.get('api/aliintersite/searchGoodsByText2', {
             params: {
                 search_text, page, index_area,language,tab,
-				Category,supplierType,ta,assessment_company,
+				Category:category,supplierType,ta,assessment_company,
 				replyAvgTime,param_order,freeSample,productTag,
 				moqf,moqt,pricef,pricet,Country,exportCountry,
 				companyAuthTag,productAuthTag,refine_attr_value

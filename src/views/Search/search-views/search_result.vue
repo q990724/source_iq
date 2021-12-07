@@ -181,7 +181,9 @@
 					}
 					//TBD: 切换筛选发起搜索时没有传参
                     let result = await this.$store.dispatch('searchPic',{imageAddress: this.imageAddress, page: this.page, cid: this.cid});
-                    this.imageAddress = result.data.searchImage.imageAddress ?? null;
+                    if (source.hasUpload == false) {
+                        this.imageAddress = result.data.searchImage.imageAddress ?? null;
+                    }
                     this.$store.commit('setImageUploadState', 'uploaded');
                     this.$store.commit('setSearchState', 'success');
                     console.log(result);
