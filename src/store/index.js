@@ -45,6 +45,7 @@ export default new Vuex.Store({
 		// 重置图片上传状态
 		resetUploadState() {
 			this.state.imageUploadState = 'none';
+			this.state.imageAddress = null;
 		},
 		// 重置搜索状态
 		resetSearchState() {
@@ -82,6 +83,14 @@ export default new Vuex.Store({
                 window.localStorage.removeItem('upload-file');
             }
         },
+		// 设置当前搜索图片原站返回的图片地址
+		setImageAddress(state, imageAddress) {
+		    state.imageAddress = imageAddress;
+		},
+		// 清空当前搜索图片原站返回的图片地址
+		clearImageAddress(state) {
+		    state.imageAddress = null;
+		},
         // 清除搜索图片
         clearMainImage(state) {
             state.mainImage = null;
@@ -394,7 +403,7 @@ export default new Vuex.Store({
                         resolve(res)
                         break;
                     case SourceMap['yiwugo']['id']:
-                        res = await yiwugo.searchGoodsByPic( payload.imageAddress )
+                        res = await yiwugo.searchGoodsByPic( payload.imageAddress, payload.page)
                         resolve(res)
                         break;
                     case SourceMap['dhgate']['id']:

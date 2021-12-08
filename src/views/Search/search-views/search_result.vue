@@ -156,12 +156,17 @@
 						console.log('hasUpload');
 						let file = getFileFromBase64(base64);
 						let uploadImageResult = await this.$store.dispatch('uploadPic', file);
-						this.imageAddress = uploadImageResult.data.imageAddress;
 						console.log(uploadImageResult);
-						this.$store.commit('setImageUploadState', 'uploaded');
+						//TBD：需要对上传图片异常（错误代码或者data=null处理
+						if(uploadImageResult.data && uploadImageResult.data.imageAddress) {
+							this.$store.commit('setImageAddress', uploadImageResult.data.imageAddress);
+							this.$store.commit('setImageUploadState', 'uploaded');
+							this.getDataFromImage(base64,false);
+						} else {
+							throw e;
+						}
 						this.$store.commit('dumpAll', "发起uploadPic后：");
 					} 
-					this.getDataFromImage(base64,false);
 				} catch (e) {
 					console.log(e);
 					this.$store.commit('setSearchState', 'error');
@@ -175,24 +180,28 @@
              * @param {Boolean} loadmore 本次搜索是否为加载更多
              */
             async getDataFromImage(base64,loadmore) {
+				// console.log(this);
                 // this.$refs['product-list'].changeShowNoList(false);
                 try {
 					let source = getSource(this.$store.state.source_id);
+					let imageAddr = null;
 					if (source.hasUpload == false && this.$store.state.imageUploadState !== 'uploaded') {
-						this.imageAddress = base64;
+						imageAddr = base64;
+					} else {
+						imageAddr = this.$store.state.imageAddress;
 					}
 					//TBD: 切换筛选发起搜索时没有传参
                     let result = null;
                     if(!loadmore && source.hasFirstSearchPic === true){
-                        result = await this.$store.dispatch('firstSearchPic',{imageAddress: this.imageAddress, yoloRegionSelected: this.yoloCropRegion && this.region, yoloCropRegion: this.yoloCropRegion || null, region: this.region || null});
+                        result = await this.$store.dispatch('firstSearchPic',{imageAddress: imageAddr, yoloRegionSelected: this.yoloCropRegion && this.region, yoloCropRegion: this.yoloCropRegion || null, region: this.region || null});
                     }else{
-                        result = await this.$store.dispatch('searchPic',{imageAddress: this.imageAddress, page: this.page, yoloCropRegion: this.yoloCropRegion, region: this.region, cid: this.cid, location: this.location, tags: (this.tags && Array.isArray(this.tags)) ? this.tags.join(',') : null});
+                        result = await this.$store.dispatch('searchPic',{imageAddress: imageAddr, page: this.page, yoloCropRegion: this.yoloCropRegion, region: this.region, cid: this.cid, location: this.location, tags: (this.tags && Array.isArray(this.tags)) ? this.tags.join(',') : null});
                     }
-                    if (source.hasUpload == false) {
-                        this.imageAddress = result.data.searchImage.imageAddress ?? null;
+                    if (source.hasUpload==false &&!loadmore && result.data && result.data.searchImage && result.data.searchImage.imageAddress) {
+                        this.store.commit('setImageAddress',result.data.searchImage.imageAddress);
+						this.$store.commit('setImageUploadState', 'uploaded');
                     }
-                    if(!source.hasUpload&&!loadmore) {this.$store.commit('setImageUploadState', 'uploaded')};
-                    this.$store.commit('setSearchState', 'success');
+					this.$store.commit('setSearchState', 'success');
                     console.log(result);
                     if(result && result.data) {
 						// 如果是首次搜索，保存接口返回的商品分类、筛选和排序条件

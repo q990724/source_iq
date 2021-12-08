@@ -32,7 +32,7 @@ const publicData = {
             // main_imageAddress: '',
             // 当前搜索图片参数值 [imageId | filename | imageAddress]
 			// TBD：应该统一使用store里面的imageAddress
-            imageAddress: '',
+            // imageAddress: '',
             // 商品分类列表
             categoryList: {},
             // 筛选列表
@@ -87,7 +87,7 @@ const publicData = {
 			this.$store.commit('dumpAll',"before onClickClear");
             this.initSearchResult();
 			this.clearSearchParams();
-            this.imageAddress = '';
+            // this.imageAddress = '';
             this.$store.commit('resetAll');
 			this.$store.commit('dumpAll',"after onClickClear");
         },
@@ -114,8 +114,13 @@ const publicData = {
 			console.log("onSourceItemClick");
             if (source_id === this.$store.state.source_id) return;
             this.$store.commit('setSourceId', source_id);
-			// 切换站点无权决定改变setSearchState，只能跟随上一次搜索的setSearchState
+			// 切换站点要复用当前的searchType，和搜索参数（图片或者关键词），清空其它一切状态
             // this.$store.commit('setSearchState', 'none');
+			this.initSearchResult();
+			this.clearSearchParams();
+			// this.imageAddress = '';
+			this.$store.commit('resetUploadState');
+			this.$store.commit('resetSearchState');
             console.log('当前数据源ID：', this.$store.state.source_id);
         },
         onSelectImage() {
