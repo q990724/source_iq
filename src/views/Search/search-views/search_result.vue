@@ -65,13 +65,16 @@
             // 加载更多
             bus.$on('loadmore', this.loadmore.bind(this))
             if(window.localStorage.getItem('upload-file')) {
+				console.log("mounted->onSelectImage");
                 this.onSelectImage();
             }else if(this.$store.state.mainImage && this.$store.state.searchType === 'image') {
 				// //TBD：新上传图片（插件或本地文件）发起新搜索，清空之前所有搜索参数和搜索状态，暂时不支持图片+上次搜索参数组合
 				// this.onClickClear();
 				// this.$store.commit('setSearchType', 'image');
+				console.log("mounted->imageSearch");
                 this.imageSearch(this.$store.state.mainImage, true);
             }else if(this.$store.state.searchText && this.$store.state.searchType === 'text') {
+				console.log("mounted->onClickSearchButton");
                 this.onClickSearchButton({search_text: this.$store.state.searchText});
             }
         },
@@ -161,12 +164,12 @@
 						if(uploadImageResult.data && uploadImageResult.data.imageAddress) {
 							this.$store.commit('setImageAddress', uploadImageResult.data.imageAddress);
 							this.$store.commit('setImageUploadState', 'uploaded');
-							this.getDataFromImage(base64,false);
 						} else {
 							throw e;
 						}
 						this.$store.commit('dumpAll', "发起uploadPic后：");
 					} 
+					this.getDataFromImage(base64,false);
 				} catch (e) {
 					console.log(e);
 					this.$store.commit('setSearchState', 'error');
@@ -198,7 +201,7 @@
                         result = await this.$store.dispatch('searchPic',{imageAddress: imageAddr, page: this.page, yoloCropRegion: this.yoloCropRegion, region: this.region, cid: this.cid, location: this.location, tags: (this.tags && Array.isArray(this.tags)) ? this.tags.join(',') : null});
                     }
                     if (source.hasUpload==false &&!loadmore && result.data && result.data.searchImage && result.data.searchImage.imageAddress) {
-                        this.store.commit('setImageAddress',result.data.searchImage.imageAddress);
+                        this.$store.commit('setImageAddress',result.data.searchImage.imageAddress);
 						this.$store.commit('setImageUploadState', 'uploaded');
                     }
 					this.$store.commit('setSearchState', 'success');

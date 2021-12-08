@@ -113,7 +113,7 @@ const publicData = {
         async onSourceItemClick(source_id) {
 			console.log("onSourceItemClick");
             if (source_id === this.$store.state.source_id) return;
-            this.$store.commit('setSourceId', source_id);
+
 			// 切换站点要复用当前的searchType，和搜索参数（图片或者关键词），清空其它一切状态
             // this.$store.commit('setSearchState', 'none');
 			this.initSearchResult();
@@ -121,6 +121,7 @@ const publicData = {
 			// this.imageAddress = '';
 			this.$store.commit('resetUploadState');
 			this.$store.commit('resetSearchState');
+			this.$store.commit('setSourceId', source_id);
             console.log('当前数据源ID：', this.$store.state.source_id);
         },
         onSelectImage() {
