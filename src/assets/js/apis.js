@@ -125,12 +125,12 @@ export const aliexpress = {
 	    })
 	},
 	// 文字搜索
-	searchGoodsByText({search_text, category, min_price, max_price, ship_from_country, sale, spend_save, free_shipping, is_favorite, sort_type, page = 1, country, language = 'en_US', currency, brand_id}) {
+	searchGoodsByText({search_text, category, min_price, max_price, ship_from_country, sale, spend_save, free_shipping, is_favorite, sort_type, page = 1, country, language = 'en_US', currency, brand_id, pvid}) {
 		let cookie = getCookie('aliexpress');
 		if(!cookie) return Promise.reject('no cookie');
 	    return Service.get('api/aliexpress/searchGoodsByText', {
 	        params: {
-	            search_text, cat_id:category, min_price, max_price, ship_from_country, sale, spend_save, free_shipping, is_favorite, sort_type, page, country, language, currency, brand_id
+	            search_text, cat_id:category, min_price, max_price, ship_from_country, sale, spend_save, free_shipping, is_favorite, sort_type, page, country, language, currency, brand_id, pvid
 	        },
 			headers: {
 				'token': cookie
@@ -153,43 +153,43 @@ export const _1688 = {
 	    })
 	},
 	// 图片搜索
-	searchGoodsByPic(imageId, page = 2, yoloRegionSelected = true, yoloCropRegion = '', region = '', pailitaoCategoryId = null, searchtype = 0, sortField = 'normal', sortType = 'asc') {
+	searchGoodsByPic(imageId, page = 2, yoloRegionSelected = true, yoloCropRegion = '', region = '', pailitaoCategoryId = null, searchtype = 0, sortField = 'normal', sortType = 'asc',priceStart,priceEnd,quantityBegin,gmtCreate,province,city,dis) {
 		let cookie = getCookie('1688');
 		if(!cookie) return Promise.reject('no cookie');
 	    return Service.get('api/goods/imgSearch', {
 	        params: {
 	            imageId, searchtype, page, yoloRegionSelected, yoloCropRegion, region, 
-				cookie,pailitaoCategoryId,sortField,sortType
+				cookie,pailitaoCategoryId,sortField,sortType,priceStart,priceEnd,quantityBegin,gmtCreate,province,city,dis
 	        }
 	    })
 	},
 	// 图片搜索
-	searchGoodsByPicFirst(imageId, yoloRegionSelected = null, yoloCropRegion = null, region = null) {
+	searchGoodsByPicFirst(imageId, yoloRegionSelected = null, yoloCropRegion = null, region = null,pailitaoCategoryId,sortField,sortType,priceStart,priceEnd,quantityBegin,gmtCreate,province,city,dis) {
 		let cookie = getCookie('1688');
 		if(!cookie) return Promise.reject('no cookie');
 	    return Service.get('api/goods/imgSearchFirst', {
 	        params: {
-	            imageId, cookie, yoloRegionSelected, yoloCropRegion, region
+	            imageId, cookie, yoloRegionSelected, yoloCropRegion, region,pailitaoCategoryId,sortField,sortType,priceStart,priceEnd,quantityBegin,gmtCreate,province,city,dis
 	        }
 	    })
 	},
 	// 文字搜索首次
-	searchGoodsFirst({search_text, page = 1}) {
+	searchGoodsFirst({search_text, page = 1, featurePair, sortType, descendOrder, priceStart, priceEnd, quantityBegin, province, city, biztype, tagsZ, tese, filt, factorySize, employeesCount}) {
 		console.log(search_text)
 		let cookie = getCookie('1688');
 		if(!cookie) return Promise.reject('no cookie');
 	    return Service.get('api/goods/searchGoodsFirst', {
 	        params: {
-	            type: 1, cookie, keyword: search_text, page
+	            type: 1, cookie, keyword: search_text, page, featurePair, sortType, descendOrder, priceStart, priceEnd, quantityBegin, province, city, biztype, tagsZ, tese, filt, factorySize, employeesCount
 	        }
 	    })
 	},
-	searchGoods({ search_text, page = 1 }) {
+	searchGoods({ search_text, page = 1, featurePair, sortType, descendOrder, priceStart, priceEnd, quantityBegin, province, city, biztype, tagsZ, tese, filt, factorySize, employeesCount }) {
 		let cookie = getCookie('1688');
 		if(!cookie) return Promise.reject('no cookie');
 	    return Service.get('api/goods/searchGoods', {
 	        params: {
-	            type: 1, cookie, keyword: search_text, page
+	            type: 1, cookie, keyword: search_text, page, featurePair, sortType, descendOrder, priceStart, priceEnd, quantityBegin, province, city, biztype, tagsZ, tese, filt, factorySize, employeesCount
 	        }
 	    })
 	}
@@ -217,21 +217,21 @@ export const _1688global = {
 	        }
 	    })
 	},
-	searchGoodsFirstKj({search_text}) {
+	searchGoodsFirstKj({search_text,featurePair,category}) {
 		let cookie = getCookie('1688global');
 		if(!cookie) return Promise.reject('no cookie');
 		return Service.get('api/goods/searchGoodsFirstKj', {
 			params: {
-				keywords:search_text, cookie
+				keywords:search_text, cookie,featurePair, category
 			}
 		})
 	},
-	searchGoodsKj({search_text, sessionId, page = 1}) {
+	searchGoodsKj({search_text, featurePair, sessionId, page = 1, sortType, descendOrder, priceStart, priceEnd, quantityBegin, province, city, biztype, tagsZ, tese, filt, factorySize, employeesCount,category}) {
 		let cookie = getCookie('1688global');
 		if(!cookie) return Promise.reject('no cookie');
 		return Service.get('api/goods/searchGoodsKj', {
 			params: {
-				keywords: search_text, cookie, page, sessionId
+				keywords: search_text, cookie, page, sessionId, featurePair, sortType, descendOrder, priceStart, priceEnd, quantityBegin, province, city, biztype, tagsZ, tese, filt, factorySize, employeesCount,category
 			}
 		})
 	}

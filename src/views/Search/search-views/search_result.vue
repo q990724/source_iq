@@ -112,11 +112,12 @@
                 }
                 this.getDataFromText(false);
             },
-            onFilterChange({e, o, title}) {
-				this.initSearchResult();
-				// this.clearSearchParams();
+
+            onFilterChange({e, o, title, paramName}) {
+                this.initSearchResult();
+                // this.clearSearchParams();
 				this.$store.commit('resetSearchState');
-                this.$store.dispatch('filterChange',{title:title,self:this,e:e,o:o})
+                this.$store.dispatch('filterChange',{title:title,self:this,e:e,o:o,paramName:paramName})
                 if(this.$store.state.searchType === 'image') {
 					// 切换筛选条件，不需要重新发起图片上传
                     this.imageSearch(this.$store.state.mainImage, false);
@@ -229,7 +230,7 @@
                         this.totalPage = this.resultInfo.totalPages || 1;
                         if (result.data.results && result.data.results.length > 0) {
                             handleResponse(result);
-                            if(!loadmore) {this.$store.commit('setFirstSearchState', 'success')};
+                            if(!loadmore) {this.$store.commit('setFirstSearchState', 'success')}
 							this.$store.commit('dumpAll', "发起getDataFromImage后：");
                             return this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
                         } else {
@@ -301,7 +302,7 @@
                     this.results = loadmore ? [...this.results, ...[]] : [];
                 } catch (error) {
                     this.$store.commit('setSearchState', 'error');
-					if(!loadmore) {this.$store.commit('setFirstSearchState', 'error')};
+					if(!loadmore) {this.$store.commit('setFirstSearchState', 'error')}
                     this.$message.error(this.$t('message.serach_result_from_text_error'));
                 }
 				this.$store.commit('dumpAll', "发起getDataFromText后：");

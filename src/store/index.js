@@ -150,9 +150,9 @@ export default new Vuex.Store({
                     arr = self.searchTextParams[key].split(s);
                 }
                 if(e) {
-                    arr.push(o.id);
-                }else if(arr.includes(o.id)) {
-                    arr.splice(arr.indexOf(o.id), 1);
+                    arr.push(o.paramValue);
+                }else if(arr.includes(o.paramValue)) {
+                    arr.splice(arr.indexOf(o.paramValue), 1);
                 }
                 self.searchTextParams[key] = arr.join(s);
                 if(arr.length <= 0) {
@@ -170,31 +170,13 @@ export default new Vuex.Store({
                                 payload.self.searchTextParams.param_order="IFS-1";
                                 payload.self.searchTextParams.freeSample = payload.o.id;
                                 break;
-                            case 'Management Certification':
-                                handleCheckBoxParams(payload.self, payload.e, payload.o, 'companyAuthTag');
-                                break;
-                            case 'Product Certification':
-                                handleCheckBoxParams(payload.self, payload.e, payload.o, 'productAuthTag');
-                                break;
-                            case 'Supplier Country/Region':
-                                handleCheckBoxParams(payload.self, payload.e, payload.o, 'Country');
-                                break;
-                            case 'Past Export Countries':
-                                handleCheckBoxParams(payload.self, payload.e, payload.o, 'exportCountry');
-                                break;
-                            case 'Supplier Types':
-                                payload.e ? payload.self.searchTextParams[payload.o.param] = payload.o.id : delete payload.self.searchTextParams[payload.o.param];
-                                break;
                             default:
+                                handleCheckBoxParams(payload.self, payload.e, payload.o, payload.paramName);
                                 break;
                         }
                         break;
                     case SourceMap['1688']['id']:
-                        switch (payload.title) {
-                            case 'Brands':
-                                payload.self.searchTextParams.brand_id = payload.o.paramValue;
-                                break;
-                        }
+                        handleCheckBoxParams(payload.self, payload.e, payload.o, payload.paramName, ';');
                         break;
                     case SourceMap['1688global']['id']:
                         switch (payload.title) {
@@ -213,6 +195,9 @@ export default new Vuex.Store({
                                     }
                                 }
                                 break;
+                            default:
+                                handleCheckBoxParams(payload.self, payload.e, payload.o, 'featurePair', ';');
+                                break;
                         }
                         break;
                     case SourceMap['aliexpress']['id']:
@@ -220,14 +205,14 @@ export default new Vuex.Store({
                             case 'Brands':
                                 payload.self.searchTextParams.brand_id = payload.o.paramValue;
                                 break;
-                        }
-                        break;
-                    case SourceMap['yiwugo']['id']:
-                        switch (payload.title) {
-                            case '市场':
-                                handleCheckBoxParams(payload.self, payload.e, payload.o, 'sub_market');
+                            default:
+                                handleCheckBoxParams(payload.self, payload.e, payload.o, payload.paramName,';');
                                 break;
                         }
+
+                        break;
+                    case SourceMap['yiwugo']['id']:
+                        handleCheckBoxParams(payload.self, payload.e, payload.o, payload.paramName);
                         break;
                     case SourceMap['dhgate']['id']:
                         switch (payload.title) {
@@ -235,38 +220,14 @@ export default new Vuex.Store({
                                 handleCheckBoxParams(payload.self, payload.e, payload.o, 'inventoryLocation', ";");
                                 break;
                             default:
-                                handleCheckBoxParams(payload.self, payload.e, payload.o, 'at');
+                                handleCheckBoxParams(payload.self, payload.e, payload.o, payload.paramName);
                         }
                         break;
                     case SourceMap['mic']['id']:
-                        switch (payload.title) {
-                            case 'Location':
-                                handleCheckBoxParams(payload.self, payload.e, payload.o, 'location');
-                                break;
-                            case 'Member Type':
-                                handleCheckBoxParams(payload.self, payload.e, payload.o, 'memberType');
-                                break;
-                            case 'Color':
-                                handleCheckBoxParams(payload.self, payload.e, payload.o, 'color');
-                                break;
-                            default:
-                                handleCheckBoxParams(payload.self, payload.e, payload.o, 'property');
-                        }
+                        handleCheckBoxParams(payload.self, payload.e, payload.o, payload.paramName);
                         break;
                     case SourceMap['cjds']['id']:
-                        switch (payload.title) {
-                            case 'Ship From':
-                                handleCheckBoxParams(payload.self, payload.e, payload.o, 'country');
-                                break;
-                            case 'Filter by Types':
-                                handleCheckBoxParams(payload.self, payload.e, payload.o, 'productType');
-                                break;
-                            case 'Special Services & Discount':
-                                handleCheckBoxParams(payload.self, payload.e, payload.o, 'addMarkStatus');
-                                break;
-                            default:
-                                handleCheckBoxParams(payload.self, payload.e, payload.o, 'property');
-                        }
+                        handleCheckBoxParams(payload.self, payload.e, payload.o, payload.paramName);
                         break;
                 }
                 resolve()
@@ -429,7 +390,7 @@ export default new Vuex.Store({
             return new Promise(async (resolve)=>{
                 switch (this.state.source_id) {
                     case SourceMap['1688']['id']:
-                        resolve(await _1688.searchGoodsByPicFirst( payload.imageAddress, payload.yoloRegionSelected, payload.yoloCropRegion, payload.region ))
+                        resolve(await _1688.searchGoodsByPicFirst( payload.imageAddress, payload.yoloRegionSelected, payload.yoloCropRegion, payload.region, payload.cid ))
                         break;
                 }
             })
