@@ -141,9 +141,11 @@ const publicData = {
          */
         onClickLocalItem(item) {
 			console.log("onClickLocalItem")
+			let originImage = this.$store.state.originImage;
 			//TBD：新上传图片（插件或本地文件）发起新搜索，清空之前所有搜索参数和搜索状态，暂时不支持图片+上次搜索参数组合
 			this.onClickClear();
 			this.$store.commit('setSearchType', 'image');
+			this.$store.commit('setOriginImage', originImage);
             console.log(item);
             this.$store.commit('setMainImage', item.cover);
             // 1688的时候item里面会携带region
