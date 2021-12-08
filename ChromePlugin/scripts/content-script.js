@@ -1,6 +1,7 @@
 console.log("注入js完成");
 // 打开页面后自动获取一次当前设置
 chrome.storage.local.get( {app_setting: null}, function(o) {
+	console.log("content.js->app-setting",JSON.stringify(o.app_setting));
 	//不清空chrome缓存的app-setting状态，只是COPY一份到window缓存
     window.localStorage.setItem('app-setting', JSON.stringify(o.app_setting));
 });
@@ -9,12 +10,15 @@ chrome.storage.local.get( {app_setting: null}, function(o) {
 //TBD：当前假设当前content所在页面是被background创建或者消息唤醒；如果是用户自己打开搜索页，不应该获取upload-file发起搜索
 // 打开页面后自动获取一次Chrome缓存图片
 chrome.storage.local.get( {'upload-file': null}, function(o) {
+	console.log("content.js->up-loadfile",o['upload-file']);
     if(o['upload-file']) {
         chrome.storage.local.set({'upload-file': null}, function () {
             window.localStorage.setItem('upload-file', o['upload-file']);
         })
     }
 });
+console.log("content.js加载完成");
+
 
 $(document.body).append(`
     <div id="source_iq_app">
@@ -153,6 +157,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     }else if(request.cmd == 'parse-title') {
         sendResponse($('.s-matching-dir').html())
     }else if(request.cmd == 'setting-change') {
+		console.log("content收到setting-change，马上reload");
         // 收到插件设置改变消息
         // 将新的设置写入到window缓存中
         window.localStorage.setItem('app-setting', JSON.stringify(request.value.appSetting));
@@ -171,6 +176,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
                 window.localStorage.setItem('upload-file', o['upload-file']);
                 // 如果当前window的title=SourceIQ，则刷新页面
                 if(window.document.title === 'SourceIQ') {
+					console.log("content收到upload-file，马上reload");
                     window.location.reload();
                 }
             })

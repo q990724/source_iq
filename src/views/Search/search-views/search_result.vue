@@ -61,9 +61,11 @@
             }
         },
         mounted() {
-            console.log('view mounted');
+            console.log('search_result.vue mounted');
+			console.log(this.$store.state.source_id);
             // 加载更多
             bus.$on('loadmore', this.loadmore.bind(this))
+			console.log(window.localStorage.getItem('upload-file'));
             if(window.localStorage.getItem('upload-file')) {
 				console.log("mounted->onSelectImage");
                 this.onSelectImage();

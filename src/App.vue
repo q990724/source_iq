@@ -11,7 +11,11 @@ import SoureMap from "@/assets/js/source_map.js";
 
 export default {
     created() {
+		console.log('app.vue created');
     },
+	mounted() {
+		console.log('app.vue mounted');
+	},
     methods: {
         load() {
             console.log('app 收到loadmore事件');
@@ -28,6 +32,7 @@ export default {
     },
     watch: {
         source_id() {
+			console.log("app.vue watch source_id",this.$store.state.source_id);
             let current_path = this.$route.path;
             switch (this.$store.state.source_id) {
                 case SoureMap['alibaba']['id']:

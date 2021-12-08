@@ -61,7 +61,7 @@ const publicData = {
         }
     },
     created() {
-        console.log('view created');
+        console.log('public.js created');
         this.$store.commit('getAppSetting');
         this.$store.commit('resetUploadState');
         this.$store.commit('resetSearchState');
