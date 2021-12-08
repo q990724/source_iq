@@ -8,7 +8,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
-		source_id: 1, // 货源ID
+		source_id: null, // 货源ID
 		searchType: null, // 当前搜索模式，‘image’、‘text’
 		// 搜索参数
         imageAddress: null,
@@ -69,6 +69,7 @@ export default new Vuex.Store({
         getAppSetting(state) {
             if(window.localStorage.getItem('app-setting')) {
                 let appSetting = JSON.parse(window.localStorage.getItem('app-setting'));
+				//TBD: 要检查app-setting是否为NULL，并做好异步处理
                 state.source_id = appSetting.source;
             }
             window.localStorage.removeItem('app-setting');
