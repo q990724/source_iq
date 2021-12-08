@@ -241,7 +241,7 @@ export default new Vuex.Store({
                         resolve(await alibaba.searchGoodsByText({ ...payload.searchTextParams,page: payload.page }))
                         break;
                     case SourceMap['1688']['id']:
-                        resolve(await _1688.searchGoods({ ...payload.searchTextParams, page: payload.page }))
+                        resolve(await _1688.searchGoods({ ...payload.searchTextParams, page: payload.page, sessionId: payload.sessionId}))
                         break;
                     case SourceMap['1688global']['id']:
                         resolve(await _1688global.searchGoodsKj({ ...payload.searchTextParams, page: payload.page, sessionId: payload.sessionId }))
@@ -353,7 +353,7 @@ export default new Vuex.Store({
                         resolve(res)
                         break;
                     case SourceMap['1688']['id']:
-                        res = await _1688.searchGoodsByPic( payload.imageAddress,payload.page, payload.yoloRegionSelected, payload.yoloCropRegion, payload.region, payload.cid )
+                        res = await _1688.searchGoodsByPic({imageId:payload.imageAddress,page:payload.page, yoloRegionSelected:payload.yoloRegionSelected, yoloCropRegion:payload.yoloCropRegion, region:payload.region, pailitaoCategoryId:payload.cid, sessionId:payload.sessionId, requestId:payload.requestId })
                         resolve(res)
                         break;
                     case SourceMap['1688global']['id']:
@@ -390,7 +390,7 @@ export default new Vuex.Store({
             return new Promise(async (resolve)=>{
                 switch (this.state.source_id) {
                     case SourceMap['1688']['id']:
-                        resolve(await _1688.searchGoodsByPicFirst( payload.imageAddress, payload.yoloRegionSelected, payload.yoloCropRegion, payload.region, payload.cid ))
+                        resolve(await _1688.searchGoodsByPicFirst( {imageId:payload.imageAddress, yoloRegionSelected:payload.yoloRegionSelected, yoloCropRegion:payload.yoloCropRegion, region:payload.region, pailitaoCategoryId:payload.cid } ))
                         break;
                 }
             })

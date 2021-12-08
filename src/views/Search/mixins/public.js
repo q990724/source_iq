@@ -56,6 +56,7 @@ const publicData = {
             location: '',
             tags: '',
             sessionId: '',
+            requestId: '',
             // 当前数据源
             // source_id: 1,
         }
@@ -98,6 +99,7 @@ const publicData = {
 			this.location = '';
 			this.tags = '';
 			this.sessionId= '';
+			this.requestId= '';
 		},
         initSearchResult() {
             this.categoryList = {};

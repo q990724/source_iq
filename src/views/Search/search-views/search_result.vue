@@ -207,7 +207,7 @@
                     if(!loadmore && source.hasFirstSearchPic === true){
                         result = await this.$store.dispatch('firstSearchPic',{imageAddress: imageAddr, yoloRegionSelected: this.yoloCropRegion && this.region, yoloCropRegion: this.yoloCropRegion || null, region: this.region || null});
                     }else{
-                        result = await this.$store.dispatch('searchPic',{imageAddress: imageAddr, page: this.page, yoloCropRegion: this.yoloCropRegion, region: this.region, cid: this.cid, location: this.location, tags: (this.tags && Array.isArray(this.tags)) ? this.tags.join(',') : null});
+                        result = await this.$store.dispatch('searchPic',{imageAddress: imageAddr, page: this.page, yoloCropRegion: this.yoloCropRegion, region: this.region, cid: this.cid, location: this.location, tags: (this.tags && Array.isArray(this.tags)) ? this.tags.join(',') : null, requestId: this.requestId, sessionId: this.sessionId});
                     }
                     if (!source.hasUpload&&!loadmore) {
 						if (result.data && result.data.searchImage && result.data.searchImage.imageAddress) {
@@ -237,6 +237,12 @@
                                 let regionList = result.data.searchImage.yoloCropRegion.split(';');
                                 let r = await getBase64FromCropImage(this.$store.state.mainImage, regionList);
                                 this.$refs['image_operation'].setLocalImageList(r);
+                            }
+                            if(result.sourceResult && result.sourceResult.data && result.sourceResult.data.window && result.sourceResult.data.window.data && result.sourceResult.data.window.data.pageMessage && result.sourceResult.data.window.data.pageConfigData && result.sourceResult.data.window.data.pageConfigData.data) {
+                                this.sessionId = result.sourceResult.data.window.data.pageMessage.sessionId;
+                                this.requestId = result.sourceResult.data.window.data.pageConfigData.data.requestId;
+                                console.log(this.sessionId)
+                                console.log(this.requestId)
                             }
 						}
 

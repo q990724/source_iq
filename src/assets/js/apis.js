@@ -153,23 +153,23 @@ export const _1688 = {
 	    })
 	},
 	// 图片搜索
-	searchGoodsByPic(imageId, page = 2, yoloRegionSelected = true, yoloCropRegion = '', region = '', pailitaoCategoryId = null, searchtype = 0, sortField = 'normal', sortType = 'asc',priceStart,priceEnd,quantityBegin,gmtCreate,province,city,dis) {
+	searchGoodsByPic({imageId, page = 1, yoloRegionSelected = true, yoloCropRegion = '', region = '', pailitaoCategoryId = null, searchtype = 0, sortField = 'normal', sortType = 'asc',priceStart,priceEnd,quantityBegin,gmtCreate,province,city,dis,sessionId, requestId,}) {
 		let cookie = getCookie('1688');
 		if(!cookie) return Promise.reject('no cookie');
 	    return Service.get('api/goods/imgSearch', {
 	        params: {
-	            imageId, searchtype, page, yoloRegionSelected, yoloCropRegion, region, 
+	            imageId, searchtype, page, yoloRegionSelected, yoloCropRegion, region, sessionId, requestId,
 				cookie,pailitaoCategoryId,sortField,sortType,priceStart,priceEnd,quantityBegin,gmtCreate,province,city,dis
 	        }
 	    })
 	},
 	// 图片搜索
-	searchGoodsByPicFirst(imageId, yoloRegionSelected = null, yoloCropRegion = null, region = null,pailitaoCategoryId,sortField,sortType,priceStart,priceEnd,quantityBegin,gmtCreate,province,city,dis) {
+	searchGoodsByPicFirst({imageId, yoloRegionSelected = null, yoloCropRegion = null, region = null, pailitaoCategoryId, searchtype = 0, sortField,sortType,priceStart,priceEnd,quantityBegin,gmtCreate,province,city,dis}) {
 		let cookie = getCookie('1688');
 		if(!cookie) return Promise.reject('no cookie');
 	    return Service.get('api/goods/imgSearchFirst', {
 	        params: {
-	            imageId, cookie, yoloRegionSelected, yoloCropRegion, region,pailitaoCategoryId,sortField,sortType,priceStart,priceEnd,quantityBegin,gmtCreate,province,city,dis
+	            imageId, cookie, searchtype, yoloRegionSelected, yoloCropRegion, region,pailitaoCategoryId,sortField,sortType,priceStart,priceEnd,quantityBegin,gmtCreate,province,city,dis
 	        }
 	    })
 	},
@@ -184,12 +184,12 @@ export const _1688 = {
 	        }
 	    })
 	},
-	searchGoods({ search_text, page = 1, featurePair, sortType, descendOrder, priceStart, priceEnd, quantityBegin, province, city, biztype, tagsZ, tese, filt, factorySize, employeesCount }) {
+	searchGoods({ search_text, page = 1, sessionId, featurePair, sortType, descendOrder, priceStart, priceEnd, quantityBegin, province, city, biztype, tagsZ, tese, filt, factorySize, employeesCount }) {
 		let cookie = getCookie('1688');
 		if(!cookie) return Promise.reject('no cookie');
 	    return Service.get('api/goods/searchGoods', {
 	        params: {
-	            type: 1, cookie, keyword: search_text, page, featurePair, sortType, descendOrder, priceStart, priceEnd, quantityBegin, province, city, biztype, tagsZ, tese, filt, factorySize, employeesCount
+	            type: 1, cookie, keyword: search_text, page, sessionId, featurePair, sortType, descendOrder, priceStart, priceEnd, quantityBegin, province, city, biztype, tagsZ, tese, filt, factorySize, employeesCount
 	        }
 	    })
 	}
