@@ -129,7 +129,9 @@
 				this.$store.commit('dumpAll', "发起分页请求loadmore前：");
                 if(this.$store.state.firstSearchState === 'success') {
                     console.log('触底事件触发');
-					this.page++;
+					console.log("page", this.page);
+					console.log("totalPage:", this.totalPage);
+					// this.page++;
                     if(this.page > this.totalPage) {
 						this.$store.commit('setSearchState', 'null');
 						return;						  
@@ -170,7 +172,9 @@
 							this.$store.commit('setImageAddress', uploadImageResult.data.imageAddress);
 							this.$store.commit('setImageUploadState', 'uploaded');
 						} else {
-							throw e;
+							// throw e;
+							this.$store.commit('setSearchState', 'error');
+							this.$store.commit('setImageUploadState', 'error');
 						}
 						this.$store.commit('dumpAll', "发起uploadPic后：");
 					} 
@@ -205,11 +209,17 @@
                     }else{
                         result = await this.$store.dispatch('searchPic',{imageAddress: imageAddr, page: this.page, yoloCropRegion: this.yoloCropRegion, region: this.region, cid: this.cid, location: this.location, tags: (this.tags && Array.isArray(this.tags)) ? this.tags.join(',') : null});
                     }
-                    if (source.hasUpload==false &&!loadmore && result.data && result.data.searchImage && result.data.searchImage.imageAddress) {
-                        this.$store.commit('setImageAddress',result.data.searchImage.imageAddress);
-						this.$store.commit('setImageUploadState', 'uploaded');
-                    }
-					this.$store.commit('setSearchState', 'success');
+                    if (!source.hasUpload&&!loadmore) {
+						if (result.data && result.data.searchImage && result.data.searchImage.imageAddress) {
+							this.$store.commit('setImageAddress',result.data.searchImage.imageAddress);
+							this.$store.commit('setImageUploadState', 'uploaded');
+						} else {
+							// throw e;
+							this.$store.commit('setImageUploadState', 'error');
+							this.$store.commit('setSearchState', 'error');
+							// if (!loadmore) {this.$store.commit('setFirstSearchState', 'error')};
+						}
+					}
                     console.log(result);
                     if(result && result.data) {
 						// 如果是首次搜索，保存接口返回的商品分类、筛选和排序条件
@@ -217,6 +227,10 @@
 							this.categoryList = result.data.categoryList || null;
 							this.filterList = result.data.filterList || null;
 							// this.sortList = result.data.sortList || null;
+							if(result.data && result.data.resultInfo && result.data.resultInfo.totalPages) {
+								this.resultInfo = result.data.resultInfo;
+								this.totalPage = this.resultInfo.totalPages || 1;
+							}
                             if (result.data.searchImage && result.data.searchImage.yoloCropRegion) {
                                 this.yoloCropRegion = result.data.searchImage.yoloCropRegion;
                                 this.region = result.data.searchImage.region;
@@ -226,11 +240,13 @@
                             }
 						}
 
-                        this.resultInfo = result.data.resultInfo;
-                        this.totalPage = this.resultInfo.totalPages || 1;
+                        // this.resultInfo = result.data.resultInfo;
+                        // this.totalPage = this.resultInfo.totalPages || 1;
                         if (result.data.results && result.data.results.length > 0) {
                             handleResponse(result);
                             if(!loadmore) {this.$store.commit('setFirstSearchState', 'success')}
+							this.$store.commit('setSearchState', 'success');
+							if(loadmore || (!loadmore&&source.hasFirstSearchPic === false)) this.page++;
 							this.$store.commit('dumpAll', "发起getDataFromImage后：");
                             return this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
                         } else {
@@ -260,35 +276,41 @@
 				this.$store.commit('dumpAll', "发起getDataFromText前：");
                 try {
                     console.log(this.searchTextParams);
+					let source = getSource(this.$store.state.source_id);
                     let result = null;
-                    let source = getSource(this.$store.state.source_id);
 
                     if(!loadmore && source.hasFirstSearchText === true){
                         result = await this.$store.dispatch('firstSearchText', { searchTextParams: this.searchTextParams, page: this.page });
                     }else{
                         result = await this.$store.dispatch('searchText', { searchTextParams: this.searchTextParams, page: this.page, sessionId: this.sessionId });
                     }
-
-                    this.$store.commit('setSearchState', 'success');
+					
+					console.log(result);
                     if(result && result.data) {
 						// 如果是首次搜索，保存接口返回的商品分类、筛选和排序条件
 						if(!loadmore) {	//this.$store.state.firstSearchState == 'none'
 							this.categoryList = result.data.categoryList || null;
 							this.filterList = result.data.filterList || null;
 							// this.sortList = result.data.sortList || null;
+							if(result.data && result.data.resultInfo && result.data.resultInfo.totalPages) {
+								this.resultInfo = result.data.resultInfo;
+								this.totalPage = this.resultInfo.totalPages || 1;
+							}
+							
                             if(result.sourceResult && result.sourceResult.data && result.sourceResult.data.window && result.sourceResult.data.window.data && result.sourceResult.data.window.data.pageMessage) {
                                 this.sessionId = result.sourceResult.data.window.data.pageMessage.sessionId;
                                 console.log(this.sessionId)
                             }
 						}
-                        this.resultInfo = result.data.resultInfo || null;
-
-                        if(this.resultInfo && this.resultInfo.totalResults && this.resultInfo.pageSize) {
-                            this.totalPage = this.resultInfo.totalPages
-                        }
+                        // this.resultInfo = result.data.resultInfo || null;
+                        // if(this.resultInfo && this.resultInfo.totalResults && this.resultInfo.pageSize) {
+                        //     this.totalPage = this.resultInfo.totalPages
+                        // }
                         if(result.data.results && result.data.results.length > 0) {
                             handleResponse(result);
                             if(!loadmore) {this.$store.commit('setFirstSearchState', 'success')};
+							this.$store.commit('setSearchState', 'success');
+							if(loadmore || (!loadmore&&source.hasFirstSearchText === false)) this.page++;
 							this.$store.commit('dumpAll', "发起getDataFromText后：");
                             return this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
                         }else {
@@ -301,9 +323,11 @@
                     }
                     this.results = loadmore ? [...this.results, ...[]] : [];
                 } catch (error) {
-                    this.$store.commit('setSearchState', 'error');
-					if(!loadmore) {this.$store.commit('setFirstSearchState', 'error')}
-                    this.$message.error(this.$t('message.serach_result_from_text_error'));
+					// let source = getSource(this.$store.state.source_id);
+					// if(!source.hasUpload&&!loadmore) {this.$store.commit('setImageUploadState', 'error')};
+					this.$store.commit('setSearchState', 'error');
+					if (!loadmore) {this.$store.commit('setFirstSearchState', 'error')};
+					this.$message.error(this.$t('message.serach_result_from_image_error') + e);
                 }
 				this.$store.commit('dumpAll', "发起getDataFromText后：");
             },
