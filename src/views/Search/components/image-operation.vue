@@ -105,7 +105,8 @@ export default {
             this.localCropImageList = [];
             this.mainImageActive = false;
             cropObject = null;
-            this.$emit('onClickClear');
+			// 暂时注释调父节点的onClickClear事件，避免1）死循环（父节点要清除截图数据）；2）避免清空父节点的其它搜索参数
+            // this.$emit('onClickClear');
         },
         onClickLocalItemClear(item, index) {
             this.localCropImageList.splice(index, 1);
