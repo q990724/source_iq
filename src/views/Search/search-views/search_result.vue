@@ -255,7 +255,9 @@
                             handleResponse(result);
                             if(!loadmore) {this.$store.commit('setFirstSearchState', 'success')}
 							this.$store.commit('setSearchState', 'success');
-							if(loadmore || (!loadmore&&source.hasFirstSearchPic === false)) this.page++;
+							// 只要搜索成功，页码就++（原站如果有单独的首次搜索接口，分页请求页码从2开始）
+							// if(loadmore || (!loadmore&&source.hasFirstSearchPic === false)) 
+							this.page++;
 							this.$store.commit('dumpAll', "发起getDataFromImage后：");
                             return this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
                         } else {
@@ -319,7 +321,9 @@
                             handleResponse(result);
                             if(!loadmore) {this.$store.commit('setFirstSearchState', 'success')};
 							this.$store.commit('setSearchState', 'success');
-							if(loadmore || (!loadmore&&source.hasFirstSearchText === false)) this.page++;
+							// 只要搜索成功，页码就++（原站如果有单独的首次搜索接口，分页请求页码从2开始）
+							// if(loadmore || (!loadmore&&source.hasFirstSearchText === false)) 
+							this.page++;
 							this.$store.commit('dumpAll', "发起getDataFromText后：");
                             return this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
                         }else {
