@@ -128,6 +128,7 @@ const publicData = {
         },
         onSelectImage() {
 			console.log("onSelectImage");
+			//TBD: 新上传原图，需要把之前的原图对应的切图状态都清空
 			//TBD：新上传图片（插件或本地文件）发起新搜索，清空之前所有搜索参数和搜索状态，暂时不支持图片+上次搜索参数组合
 			this.onClickClear();
 			this.$store.commit('setSearchType', 'image');

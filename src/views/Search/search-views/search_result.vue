@@ -177,8 +177,11 @@
 							this.$store.commit('setImageUploadState', 'error');
 						}
 						this.$store.commit('dumpAll', "发起uploadPic后：");
-					} 
-					this.getDataFromImage(base64,false);
+					}
+					// Do nothing
+					if (!source.hasUpload || this.$store.state.imageUploadState == 'uploaded')
+						this.getDataFromImage(base64,false);
+					
 				} catch (e) {
 					console.log(e);
 					this.$store.commit('setSearchState', 'error');
