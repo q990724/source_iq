@@ -6,8 +6,10 @@
                 <!--  图片处理区域  -->
                 <image-operation ref="image_operation" @onClickLocalItem="onClickLocalItem" @onClickMainImage="onClickMainImage" @onClickClear="onClickClear"></image-operation>
                 <!--  筛选区域  -->
-                <div class="filter-container mt40" v-if="(categoryList && categoryList.items) || (filterList && filterList.length > 0) || $store.state.searchState !== 'none' || $store.state.mainImage || $store.state.searchText">
-					<source-list @onSourceItemClick="onSourceItemClick" v-show="$store.state.searchState !== 'none' || $store.state.mainImage || $store.state.searchText"></source-list>
+				<!-- v-if="(categoryList && categoryList.items) || (filterList && filterList.length > 0) || $store.state.searchState !== 'none' || $store.state.mainImage || $store.state.searchText" -->
+                <div class="filter-container mt40">
+					<!-- v-show="$store.state.searchState !== 'none' || $store.state.mainImage || $store.state.searchText" -->
+					<source-list @onSourceItemClick="onSourceItemClick"></source-list>
                     <!-- 商品分类 -->
                     <product-class v-if="categoryList && categoryList.items" :class_list="categoryList" @onClassChange="onClassChange"></product-class>
                     <!--  筛选区域  -->
@@ -20,7 +22,7 @@
                 <h2 class="mt40" v-if="results && results.length > 0">{{ $t('message.findSource') }}</h2>
                 <!--  商品列表  -->
                 <product-list :offer_list="results" ref="product-list"></product-list>
-                <support-source-list v-show="$store.state.searchState === 'none' && !$store.state.mainImage && !$store.state.searchText"></support-source-list>
+<!--                <support-source-list v-show="$store.state.searchState === 'none' && !$store.state.mainImage && !$store.state.searchText"></support-source-list> -->
             </div>
         </div>
     </div>
