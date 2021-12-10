@@ -167,8 +167,8 @@
 						let file = getFileFromBase64(base64);
 						let uploadImageResult = await this.$store.dispatch('uploadPic', file);
 						console.log(uploadImageResult);
-						//TBD：需要对上传图片异常（错误代码或者data=null处理
-						if(uploadImageResult.data && uploadImageResult.data.imageAddress) {
+						//TBD：需要对上传图片异常（错误代码或者data=null，或者imageId=“0”等容错处理）
+						if(uploadImageResult.data && uploadImageResult.data.imageAddress && uploadImageResult.data.imageAddress !== '0') {
 							this.$store.commit('setImageAddress', uploadImageResult.data.imageAddress);
 							this.$store.commit('setImageUploadState', 'uploaded');
 						} else {
@@ -178,7 +178,7 @@
 						}
 						this.$store.commit('dumpAll', "发起uploadPic后：");
 					}
-					// Do nothing
+					// 只有图片上传成功，或者原站没有单独的上传图片接口，才会继续调用searchGoods接口
 					if (!source.hasUpload || this.$store.state.imageUploadState == 'uploaded')
 						this.getDataFromImage(base64,false);
 					
