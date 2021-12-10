@@ -1,12 +1,18 @@
 <template>
     <div class="source-list">
         <div class="content" @click="onItemClick">
+			<div class="item" :class="{'active': $store.state.source_id === 1}">
+			    <span data-name="alibaba">Alibaba</span>
+			</div>
+			<div class="item" :class="{'active': $store.state.source_id === 2}">
+			    <span data-name="1688">1688</span>
+			</div>
             <div class="item" :class="{'active': $store.state.source_id === 3}">
                 <span data-name="1688global">1688Global</span>
             </div>
-            <div class="item" :class="{'active': $store.state.source_id === 2}">
-                <span data-name="1688">1688</span>
-            </div>
+			<div class="item" :class="{'active': $store.state.source_id === 10}">
+			    <span data-name="1688overseas">1688overseas</span>
+			</div>
             <div class="item" :class="{'active': $store.state.source_id === 4}">
                 <span data-name="aliexpress">AliExpress</span>
             </div>
@@ -16,20 +22,14 @@
             <div class="item" :class="{'active': $store.state.source_id === 6}">
                 <span data-name="dhgate">DHgate</span>
             </div>
+			<div class="item" :class="{'active': $store.state.source_id === 8}">
+			    <span data-name="cjds">CJdropshipping</span>
+			</div>
             <div class="item" :class="{'active': $store.state.source_id === 7}">
                 <span data-name="mic">Made-in-China</span>
             </div>
-            <div class="item" :class="{'active': $store.state.source_id === 8}">
-                <span data-name="cjds">CJdropshipping</span>
-            </div>
             <div class="item" :class="{'active': $store.state.source_id === 9}">
                 <span data-name="litbox">LightInTheBox</span>
-            </div>
-            <div class="item" :class="{'active': $store.state.source_id === 10}">
-                <span data-name="1688Overseas">1688Overseas</span>
-            </div>
-            <div class="item" :class="{'active': $store.state.source_id === 1}">
-                <span data-name="alibaba">Alibaba</span>
             </div>
         </div>
     </div>
