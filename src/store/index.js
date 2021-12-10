@@ -178,6 +178,9 @@ export default new Vuex.Store({
                     case SourceMap['1688']['id']:
                         handleCheckBoxParams(payload.self, payload.e, payload.o, payload.paramName, ';');
                         break;
+                    case SourceMap['1688overseas']['id']:
+                        handleCheckBoxParams(payload.self, payload.e, payload.o, payload.paramName, ';');
+                        break;
                     case SourceMap['1688global']['id']:
                         switch (payload.title) {
                             case '地区':
@@ -217,7 +220,8 @@ export default new Vuex.Store({
                     case SourceMap['dhgate']['id']:
                         switch (payload.title) {
                             case 'Ship from':
-                                handleCheckBoxParams(payload.self, payload.e, payload.o, 'inventoryLocation', ";");
+                                // handleCheckBoxParams(payload.self, payload.e, payload.o, 'inventoryLocation', ";");
+                                payload.self.searchTextParams.inventoryLocation = payload.o.paramValue;
                                 break;
                             default:
                                 handleCheckBoxParams(payload.self, payload.e, payload.o, payload.paramName);
@@ -244,7 +248,7 @@ export default new Vuex.Store({
                         resolve(await _1688.searchGoods({ ...payload.searchTextParams, page: payload.page, sessionId: payload.sessionId}))
                         break;
                     case SourceMap['1688global']['id']:
-                        resolve(await _1688global.searchGoodsKj({ ...payload.searchTextParams, page: payload.page, sessionId: payload.sessionId }))
+                        resolve(await _1688global.searchGoodsKj({ ...payload.searchTextParams, page: payload.page, sessionId: payload.sessionId, requestId: payload.requestId }))
                         break;
                     case SourceMap['aliexpress']['id']:
                         resolve(await aliexpress.searchGoodsByText({ ...payload.searchTextParams,page: payload.page }))
@@ -264,6 +268,9 @@ export default new Vuex.Store({
                     case SourceMap['litbox']['id']:
                         resolve(await litbox.searchGoodsByText({ ...payload.searchTextParams,page: payload.page }))
                         break;
+                    case SourceMap['1688overseas']['id']:
+                        resolve(await _1688.searchGoods({ ...payload.searchTextParams, page: payload.page, sessionId: payload.sessionId}))
+                        break;
                 }
             })
         },
@@ -278,6 +285,11 @@ export default new Vuex.Store({
                 switch (this.state.source_id) {
                     case SourceMap['1688global']['id']:
                         resolve(await _1688global.searchGoodsFirstKj({ ...payload.searchTextParams,page: payload.page }))
+                        break;
+                }
+                switch (this.state.source_id) {
+                    case SourceMap['1688overseas']['id']:
+                        resolve(await _1688.searchGoodsFirst({ ...payload.searchTextParams,page: payload.page }))
                         break;
                 }
             })
@@ -327,6 +339,14 @@ export default new Vuex.Store({
                          result.data.imageAddress = res.data.url
                          resolve(result)
                          break;
+                     case SourceMap['1688overseas']['id']:
+                         res = await _1688.uploadPicH5( payload )
+                         result.retcode = res.retcode
+                         result.message = res.message
+                         result.data = {}
+                         result.data.imageAddress = res.data.imageId
+                         resolve(result)
+                         break;
                  }
             })
         },
@@ -353,7 +373,7 @@ export default new Vuex.Store({
                         resolve(res)
                         break;
                     case SourceMap['1688']['id']:
-                        res = await _1688.searchGoodsByPic({imageId:payload.imageAddress,page:payload.page, yoloRegionSelected:payload.yoloRegionSelected, yoloCropRegion:payload.yoloCropRegion, region:payload.region, pailitaoCategoryId:payload.cid, sessionId:payload.sessionId, requestId:payload.requestId })
+                        res = await _1688.searchGoodsByPic({imageId:payload.imageAddress,page:payload.page, yoloRegionSelected:payload.yoloRegionSelected, yoloCropRegion:payload.yoloCropRegion, region:payload.region, pailitaoCategoryId:payload.cid, sessionId:payload.sessionId, requestId:payload.requestId, searchtype:0})
                         resolve(res)
                         break;
                     case SourceMap['1688global']['id']:
@@ -382,6 +402,10 @@ export default new Vuex.Store({
                         res = await cjds.searchGoodsByPic( file )
                         resolve(res)
                         break;
+                    case SourceMap['1688overseas']['id']:
+                        res = await _1688.searchGoodsByPic({imageId:payload.imageAddress,page:payload.page, yoloRegionSelected:payload.yoloRegionSelected, yoloCropRegion:payload.yoloCropRegion, region:payload.region, pailitaoCategoryId:payload.cid, sessionId:payload.sessionId, requestId:payload.requestId, searchtype:1 })
+                        resolve(res)
+                        break;
                 }
             })
         },
@@ -390,7 +414,10 @@ export default new Vuex.Store({
             return new Promise(async (resolve)=>{
                 switch (this.state.source_id) {
                     case SourceMap['1688']['id']:
-                        resolve(await _1688.searchGoodsByPicFirst( {imageId:payload.imageAddress, yoloRegionSelected:payload.yoloRegionSelected, yoloCropRegion:payload.yoloCropRegion, region:payload.region, pailitaoCategoryId:payload.cid } ))
+                        resolve(await _1688.searchGoodsByPicFirst( {imageId:payload.imageAddress, yoloRegionSelected:payload.yoloRegionSelected, yoloCropRegion:payload.yoloCropRegion, region:payload.region, pailitaoCategoryId:payload.cid, searchtype:0 } ))
+                        break;
+                    case SourceMap['1688overseas']['id']:
+                        resolve(await _1688.searchGoodsByPicFirst( {imageId:payload.imageAddress, yoloRegionSelected:payload.yoloRegionSelected, yoloCropRegion:payload.yoloCropRegion, region:payload.region, pailitaoCategoryId:payload.cid, searchtype:1 } ))
                         break;
                 }
             })

@@ -226,12 +226,12 @@ export const _1688global = {
 			}
 		})
 	},
-	searchGoodsKj({search_text, featurePair, sessionId, page = 1, sortType, descendOrder, priceStart, priceEnd, quantityBegin, province, city, biztype, tagsZ, tese, filt, factorySize, employeesCount,category}) {
+	searchGoodsKj({search_text, featurePair, sessionId, requestId, page = 1, sortType, descendOrder, priceStart, priceEnd, quantityBegin, province, city, biztype, tagsZ, tese, filt, factorySize, employeesCount,category}) {
 		let cookie = getCookie('1688global');
 		if(!cookie) return Promise.reject('no cookie');
 		return Service.get('api/goods/searchGoodsKj', {
 			params: {
-				keywords: search_text, cookie, page, sessionId, featurePair, sortType, descendOrder, priceStart, priceEnd, quantityBegin, province, city, biztype, tagsZ, tese, filt, factorySize, employeesCount,category
+				keywords: search_text, cookie, page, sessionId, requestId, featurePair, sortType, descendOrder, priceStart, priceEnd, quantityBegin, province, city, biztype, tagsZ, tese, filt, factorySize, employeesCount,category
 			}
 		})
 	}

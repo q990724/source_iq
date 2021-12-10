@@ -68,6 +68,11 @@ const routes = [
         name: 'view-litbox',
         component: () => import('@/views/Search/search-views/search_result')
     },
+    {
+        path: '/view-1688overseas',
+        name: 'view-1688overseas',
+        component: () => import('@/views/Search/search-views/search_result')
+    },
 ]
 
 const router = new VueRouter({

@@ -71,6 +71,10 @@ export default {
                     if (current_path === '/view-litbox') return;
                     this.$router.push('/view-litbox');
                     break;
+                case SoureMap['1688overseas']['id']:
+                    if (current_path === '/view-1688overseas') return;
+                    this.$router.push('/view-1688overseas');
+                    break;
             }
         }
     }

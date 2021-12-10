@@ -293,7 +293,7 @@
                     if(!loadmore && source.hasFirstSearchText === true){
                         result = await this.$store.dispatch('firstSearchText', { searchTextParams: this.searchTextParams, page: this.page });
                     }else{
-                        result = await this.$store.dispatch('searchText', { searchTextParams: this.searchTextParams, page: this.page, sessionId: this.sessionId });
+                        result = await this.$store.dispatch('searchText', { searchTextParams: this.searchTextParams, page: this.page, requestId: this.requestId, sessionId: this.sessionId});
                     }
 					
 					console.log(result);
@@ -308,9 +308,11 @@
 								this.totalPage = this.resultInfo.totalPages || 1;
 							}
 							
-                            if(result.sourceResult && result.sourceResult.data && result.sourceResult.data.window && result.sourceResult.data.window.data && result.sourceResult.data.window.data.pageMessage) {
+                            if(result.sourceResult && result.sourceResult.data && result.sourceResult.data.window && result.sourceResult.data.window.data && result.sourceResult.data.window.data.pageMessage && result.sourceResult.data.window.data.requestData && result.sourceResult.data.window.data.requestData.data && result.sourceResult.data.window.data.requestData.data.params) {
                                 this.sessionId = result.sourceResult.data.window.data.pageMessage.sessionId;
+                                this.requestId = result.sourceResult.data.window.data.requestData.data.params.requestId;
                                 console.log(this.sessionId)
+                                console.log(this.requestId)
                             }
 						}
                         // this.resultInfo = result.data.resultInfo || null;

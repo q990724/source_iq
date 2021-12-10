@@ -16,7 +16,6 @@
 </template>
 
 <script>
-import {alibaba, yiwugo, dhgate, mic, cjds, litbox, aliexpress, _1688, _1688global} from "@/assets/js/apis";
 import { getSource } from "@/assets/js/source_map";
 import {getBase64, getFileFromBase64} from "@/assets/js/utils.js";
 export default {

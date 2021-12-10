@@ -25,6 +25,9 @@
             <div class="item" :class="{'active': $store.state.source_id === 9}">
                 <span data-name="litbox">LightInTheBox</span>
             </div>
+            <div class="item" :class="{'active': $store.state.source_id === 10}">
+                <span data-name="1688Overseas">1688Overseas</span>
+            </div>
             <div class="item" :class="{'active': $store.state.source_id === 1}">
                 <span data-name="alibaba">Alibaba</span>
             </div>
