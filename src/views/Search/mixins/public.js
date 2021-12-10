@@ -128,18 +128,23 @@ const publicData = {
         },
         onSelectImage() {
 			console.log("onSelectImage");
-			
-			//TBD：新上传图片（插件或本地文件）发起新搜索，清空之前所有搜索参数和搜索状态，暂时不支持图片+上次搜索参数组合
-			// this.onClickClear();
-			//TBD：新上传原图，需要把之前的原图对应的切图状态都清空，并且调用本view的onClickClear（）清除全部缓存（需要确定下切图处理的逻辑，也避免触发死循环事件
-			this.$refs['image_operation'].onClickClear();
-			this.$store.commit('setSearchType', 'image');
-			//TBD: 需要增加upload-file图片是否正常的鲁棒性检查
-            this.$store.commit('setOriginImage', window.localStorage.getItem('upload-file'))
-			// 从window缓存拿到插件或者本地文件上传的图片后，需要清除upload-file状态，否则下次页面刷新还会发起旧图的搜索
-			this.$store.commit('clearWindowStorageUploadFile');
-            this.$store.commit('setMainImage', this.$store.state.originImage);
-            this.imageSearch(this.$store.state.mainImage, true);
+			let that = this;
+			// let timer = window.setInterval(function() {
+			// 	if (window.localStorage.getItem('upload-file') !== null) {
+			// 		window.clearInterval(timer);
+					//TBD：新上传图片（插件或本地文件）发起新搜索，清空之前所有搜索参数和搜索状态，暂时不支持图片+上次搜索参数组合
+					// this.onClickClear();
+					//TBD：新上传原图，需要把之前的原图对应的切图状态都清空，并且调用本view的onClickClear（）清除全部缓存（需要确定下切图处理的逻辑，也避免触发死循环事件
+					that.$refs['image_operation'].onClickClear();
+					that.$store.commit('setSearchType', 'image');
+					//TBD: 需要增加upload-file图片是否正常的鲁棒性检查
+					that.$store.commit('setOriginImage', window.localStorage.getItem('upload-file'))
+					// 从window缓存拿到插件或者本地文件上传的图片后，需要清除upload-file状态，否则下次页面刷新还会发起旧图的搜索
+					that.$store.commit('clearWindowStorageUploadFile');
+					that.$store.commit('setMainImage', that.$store.state.originImage);
+					that.imageSearch(that.$store.state.mainImage, true);
+			// 	}
+			// },1000);
         },
         /**
          * @description 点击裁剪区域某个图片时触发

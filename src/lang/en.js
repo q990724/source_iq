@@ -30,7 +30,7 @@ module.exports = {
         shipments: '发货',
         goodMerchant: '实力商家',
         no_result: 'Trusted seller and official distributor for hundreds of operators',
-        input_placeholder: 'Please enter a keyword',
+        input_placeholder: 'Enter product keywords',
         select: 'Select',
     },
     button: {

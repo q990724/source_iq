@@ -10,7 +10,7 @@
           <span>{{ fil.title }}</span>
         </div>
         <div class="filter-item_options">
-          <div class="filter-item_option" v-for="o in fil.items" :key="o.id">
+          <div class="filter-item_option" v-for="o in fil.items" :key="o.id + o.name">
             <el-checkbox
               v-model="o.selected"
               @change="onFilterChange($event, o, fil.title, fil.paramName)"
