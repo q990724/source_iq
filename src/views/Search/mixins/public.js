@@ -201,13 +201,22 @@ const publicData = {
             this.imageSearch(this.$store.state.mainImage, reUpload);
         },
 
-        handleOptions(e, optionList, item_index){
+        handleClassOptions(e, optionList, item_index){
             if(optionList.selectUIType === 'radio'){
                 optionList.items.forEach(element=>{
                     element.selected = false;
                 })
             }
             optionList.items[item_index].selected = e;
+        },
+
+        handleFilterOptions(e, optionList, fil_index, item_index){
+            if(optionList[fil_index].selectUIType === 'radio') {
+                optionList[fil_index].items.forEach(element => {
+                    element.selected = false;
+                })
+            }
+            optionList[fil_index].items[item_index].selected = e;
         }
     }
 }
