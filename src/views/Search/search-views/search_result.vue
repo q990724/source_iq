@@ -90,7 +90,7 @@
              * @description 切换商品分类时触发
              */
             onClassChange({e, options, item_index}) {
-                this.handleClassOptions(e, this.categoryList,item_index);
+                this.handleOptions(e, this.categoryList,item_index);
                 this.$store.commit('resetSearchState');
                 this.cid = options.paramValue;
                 this.searchTextParams.category = options.paramValue;
@@ -117,7 +117,7 @@
             },
 
             onFilterChange({e, fil_index, item_index}) {
-                this.handleFilterOptions(e, this.filterList,fil_index, item_index);
+                this.handleOptions(e, this.filterList[fil_index], item_index);
                 this.initSearchResult();
                 // this.clearSearchParams();
 				this.$store.commit('resetSearchState');
