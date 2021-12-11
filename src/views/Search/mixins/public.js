@@ -101,11 +101,15 @@ const publicData = {
 			this.sessionId= '';
 			this.requestId= '';
 		},
-        initSearchResult() {
+        initConditions(){
             this.categoryList = {};
+            this.filterList = [];
+        },
+        initSearchResult() {
+            // this.categoryList = {};
             this.results = [];
             this.resultInfo = {};
-            this.filterList = [];
+            // this.filterList = [];
             this.page = 1;
             this.totalPage = 1;
         },
@@ -196,6 +200,24 @@ const publicData = {
             this.$store.commit('setMainImage', this.$store.state.originImage);
             this.imageSearch(this.$store.state.mainImage, reUpload);
         },
+
+        handleClassOptions(e, optionList, item_index){
+            if(optionList.selectUIType === 'radio'){
+                optionList.items.forEach(element=>{
+                    element.selected = false;
+                })
+            }
+            optionList.items[item_index].selected = e;
+        },
+
+        handleFilterOptions(e, optionList, fil_index, item_index){
+            if(optionList[fil_index].selectUIType === 'radio') {
+                optionList[fil_index].items.forEach(element => {
+                    element.selected = false;
+                })
+            }
+            optionList[fil_index].items[item_index].selected = e;
+        }
     }
 }
 

@@ -89,10 +89,11 @@
             /**
              * @description 切换商品分类时触发
              */
-            onClassChange({id}) {
-				this.$store.commit('resetSearchState');
-                this.cid = id;
-                this.searchTextParams.category = id;
+            onClassChange({e, options, item_index}) {
+                this.handleClassOptions(e, this.categoryList,item_index);
+                this.$store.commit('resetSearchState');
+                this.cid = options.paramValue;
+                this.searchTextParams.category = options.paramValue;
                 this.page = 1;
                 if(this.$store.state.searchType === 'image') {
 					// 切换商品分类，不需要重新发起图片上传
@@ -115,11 +116,12 @@
                 this.getDataFromText(false);
             },
 
-            onFilterChange({e, o, title, paramName}) {
+            onFilterChange({e, fil_index, item_index}) {
+                this.handleFilterOptions(e, this.filterList,fil_index, item_index);
                 this.initSearchResult();
                 // this.clearSearchParams();
 				this.$store.commit('resetSearchState');
-                this.$store.dispatch('filterChange',{title:title,self:this,e:e,o:o,paramName:paramName})
+                this.$store.dispatch('filterChange',{e:e, self:this, filterItem:this.filterList[fil_index], options:this.filterList[fil_index].items[item_index]})
                 if(this.$store.state.searchType === 'image') {
 					// 切换筛选条件，不需要重新发起图片上传
                     this.imageSearch(this.$store.state.mainImage, false);
@@ -210,7 +212,7 @@
 					//TBD: 切换筛选发起搜索时没有传参
                     let result = null;
                     if(!loadmore && source.hasFirstSearchPic === true){
-                        result = await this.$store.dispatch('firstSearchPic',{imageAddress: imageAddr, yoloRegionSelected: this.yoloCropRegion && this.region, yoloCropRegion: this.yoloCropRegion || null, region: this.region || null});
+                        result = await this.$store.dispatch('firstSearchPic',{imageAddress: imageAddr, yoloRegionSelected: this.yoloCropRegion && this.region, yoloCropRegion: this.yoloCropRegion || null, region: this.region || null, cid: this.cid,});
                     }else{
                         result = await this.$store.dispatch('searchPic',{imageAddress: imageAddr, page: this.page, yoloCropRegion: this.yoloCropRegion, region: this.region, cid: this.cid, location: this.location, tags: (this.tags && Array.isArray(this.tags)) ? this.tags.join(',') : null, requestId: this.requestId, sessionId: this.sessionId});
                     }

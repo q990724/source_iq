@@ -144,17 +144,17 @@ export default new Vuex.Store({
     actions: {
         // 点击筛选条件发请求筛选
         filterChange(content,payload){
-            function handleCheckBoxParams(self, e, o, key, s = ",") {
+            function handleCheckBoxParams({ self = payload.self, e = payload.e, o = payload.options, key, symbol = ",", joint = '' }) {
                 let arr = [];
                 if(self.searchTextParams[key]) {
-                    arr = self.searchTextParams[key].split(s);
+                    arr = self.searchTextParams[key].split(symbol);
                 }
                 if(e) {
-                    arr.push(o.paramValue);
-                }else if(arr.includes(o.paramValue)) {
-                    arr.splice(arr.indexOf(o.paramValue), 1);
+                    arr.push(joint + o.paramValue);
+                }else if(arr.includes(joint + o.paramValue)) {
+                    arr.splice(arr.indexOf(joint + o.paramValue), 1);
                 }
-                self.searchTextParams[key] = arr.join(s);
+                self.searchTextParams[key] = arr.join(symbol);
                 if(arr.length <= 0) {
                     delete self.searchTextParams[key];
                 }
@@ -162,76 +162,88 @@ export default new Vuex.Store({
             return new Promise((resolve)=>{
                 switch (this.state.source_id) {
                     case SourceMap['alibaba']['id']:
-                        switch (payload.title) {
-                            case 'Shipping':
-                                handleCheckBoxParams(payload.self, payload.e, payload.o, 'productTag', ";");
+                        handleCheckBoxParams({ key:payload.filterItem.paramName });
+                        switch (payload.filterItem.title) {
+                            case 'Management Certification':
+                                handleCheckBoxParams({ key:'param_order', joint:'CAT-' });
                                 break;
-                            case 'Sample Order':
-                                payload.self.searchTextParams.param_order="IFS-1";
-                                payload.self.searchTextParams.freeSample = payload.o.id;
+                            case 'Product Certification':
+                                handleCheckBoxParams({ key:'param_order', joint:'PAT-' });
+                                break;
+                            case 'Supplier Country/Region':
+                                handleCheckBoxParams({ key:'param_order', joint:'CNTRY-' });
+                                break;
+                            case 'Past Export Countries':
+                                handleCheckBoxParams({ key:'param_order', joint:'EC-' });
                                 break;
                             default:
-                                handleCheckBoxParams(payload.self, payload.e, payload.o, payload.paramName);
+                                handleCheckBoxParams({ key:'param_order', joint:'ATTR-' });
                                 break;
                         }
                         break;
                     case SourceMap['1688']['id']:
-                        handleCheckBoxParams(payload.self, payload.e, payload.o, payload.paramName, ';');
+                        handleCheckBoxParams({ key:payload.filterItem.paramName, symbol: ';' });
                         break;
                     case SourceMap['1688overseas']['id']:
-                        handleCheckBoxParams(payload.self, payload.e, payload.o, payload.paramName, ';');
+                        handleCheckBoxParams({ key:payload.filterItem.paramName, symbol: ';' });
                         break;
                     case SourceMap['1688global']['id']:
-                        switch (payload.title) {
+                        switch (payload.filterItem.title) {
                             case '地区':
-                                payload.self.location = payload.e ? payload.o.name : '';
+                                payload.self.location = payload.e ? payload.options.name : '';
                                 break;
                             case '属性':
                                 if(payload.e) {
                                     if(!Array.isArray(payload.self.tags)) payload.self.tags = [];
-                                    payload.self.tags.push(payload.o.name);
+                                    payload.self.tags.push(payload.options.name);
                                 }else {
                                     for (let i = 0; i < payload.self.tags.length; i++) {
-                                        if(payload.self.tags[i] == payload.o.name) {
+                                        if(payload.self.tags[i] === payload.options.name) {
                                             payload.self.tags.splice(i, 1);
                                         }
                                     }
                                 }
                                 break;
                             default:
-                                handleCheckBoxParams(payload.self, payload.e, payload.o, 'featurePair', ';');
+                                handleCheckBoxParams({ key:payload.filterItem.paramName, symbol: ';' });
                                 break;
                         }
                         break;
                     case SourceMap['aliexpress']['id']:
-                        switch (payload.title) {
+                        switch (payload.filterItem.title) {
                             case 'Brands':
-                                payload.self.searchTextParams.brand_id = payload.o.paramValue;
+                                payload.self.searchTextParams.brand_id = payload.options.paramValue;
                                 break;
                             default:
-                                handleCheckBoxParams(payload.self, payload.e, payload.o, payload.paramName,';');
+                                handleCheckBoxParams({ key:payload.filterItem.paramName, symbol: ';' });
                                 break;
                         }
 
                         break;
                     case SourceMap['yiwugo']['id']:
-                        handleCheckBoxParams(payload.self, payload.e, payload.o, payload.paramName);
+                        handleCheckBoxParams({ key:payload.filterItem.paramName});
                         break;
                     case SourceMap['dhgate']['id']:
-                        switch (payload.title) {
+                        switch (payload.filterItem.title) {
                             case 'Ship from':
                                 // handleCheckBoxParams(payload.self, payload.e, payload.o, 'inventoryLocation', ";");
-                                payload.self.searchTextParams.inventoryLocation = payload.o.paramValue;
+                                payload.self.searchTextParams.inventoryLocation = payload.options.paramValue;
                                 break;
                             default:
-                                handleCheckBoxParams(payload.self, payload.e, payload.o, payload.paramName);
+                                handleCheckBoxParams({ key:payload.filterItem.paramName});
                         }
                         break;
                     case SourceMap['mic']['id']:
-                        handleCheckBoxParams(payload.self, payload.e, payload.o, payload.paramName);
+                        handleCheckBoxParams({ key:payload.filterItem.paramName});
                         break;
                     case SourceMap['cjds']['id']:
-                        handleCheckBoxParams(payload.self, payload.e, payload.o, payload.paramName);
+                        switch (payload.filterItem.title) {
+                            case 'Ship From':
+                                payload.self.searchTextParams.country = payload.options.paramValue;
+                                break;
+                            default:
+                                handleCheckBoxParams({ key:payload.filterItem.paramName});
+                        }
                         break;
                 }
                 resolve()
