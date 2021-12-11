@@ -231,8 +231,14 @@
                     if(result && result.data) {
 						// 如果是首次搜索，保存接口返回的商品分类、筛选和排序条件
 						if(!loadmore) {	//this.$store.state.firstSearchState == 'none'
-							this.categoryList = result.data.categoryList || null;
-							this.filterList = result.data.filterList || null;
+							if(JSON.stringify(this.categoryList) == '{}') {
+								this.categoryList = result.data.categoryList;
+							};
+							if(this.filterList == undefined || this.filterList.length <= 0) {
+								this.filterList = result.data.filterList;
+							};
+							// this.categoryList = result.data.categoryList || null;
+							// this.filterList = result.data.filterList || null;
 							// this.sortList = result.data.sortList || null;
 							if(result.data && result.data.resultInfo && result.data.resultInfo.totalPages) {
 								this.resultInfo = result.data.resultInfo;
@@ -304,8 +310,14 @@
                     if(result && result.data) {
 						// 如果是首次搜索，保存接口返回的商品分类、筛选和排序条件
 						if(!loadmore) {	//this.$store.state.firstSearchState == 'none'
-							this.categoryList = result.data.categoryList || null;
-							this.filterList = result.data.filterList || null;
+							if(JSON.stringify(this.categoryList) == '{}') {
+								this.categoryList = result.data.categoryList;
+							};
+							if(this.filterList == undefined || this.filterList.length <= 0) {
+								this.filterList = result.data.filterList;
+							};
+							// this.categoryList = result.data.categoryList || null;
+							// this.filterList = result.data.filterList || null;
 							// this.sortList = result.data.sortList || null;
 							if(result.data && result.data.resultInfo && result.data.resultInfo.totalPages) {
 								this.resultInfo = result.data.resultInfo;

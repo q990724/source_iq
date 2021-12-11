@@ -87,6 +87,7 @@ const publicData = {
         onClickClear() {
 			this.$store.commit('dumpAll',"before onClickClear");
             this.initSearchResult();
+			this.initConditions();
 			this.clearSearchParams();
             // this.imageAddress = '';
             this.$store.commit('resetAll');
@@ -123,6 +124,7 @@ const publicData = {
 			// 切换站点要复用当前的searchType，和搜索参数（图片或者关键词），清空其它一切状态
             // this.$store.commit('setSearchState', 'none');
 			this.initSearchResult();
+			this.initConditions();
 			this.clearSearchParams();
 			// this.imageAddress = '';
 			this.$store.commit('resetUploadState');
@@ -165,6 +167,7 @@ const publicData = {
 			let originImage = this.$store.state.originImage;
 			//TBD：新上传图片（插件或本地文件）发起新搜索，清空之前所有搜索参数和搜索状态，暂时不支持图片+上次搜索参数组合
 			this.initSearchResult();
+			this.initConditions();
 			this.clearSearchParams();
 			this.$store.commit('resetSearchState');
 			// this.onClickClear();
@@ -193,6 +196,7 @@ const publicData = {
 			console.log("reUpload:", reUpload);
 			//TBD：新上传图片（插件或本地文件）发起新搜索，清空之前所有搜索参数和搜索状态，暂时不支持图片+上次搜索参数组合
 			this.initSearchResult();
+			this.initConditions();
 			this.clearSearchParams();
 			this.$store.commit('resetSearchState');
 			// this.onClickClear();
