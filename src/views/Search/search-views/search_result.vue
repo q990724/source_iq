@@ -69,6 +69,7 @@
             bus.$on('loadmore', this.loadmore.bind(this))
 			console.log(window.localStorage.getItem('upload-file'));
             if(window.localStorage.getItem('upload-file')) {
+				// TBD：此处有2种可能：1）有插件或本地上传图片，但没等content图片投递完成；2）没有插件或本地上传图片
 				console.log("mounted->onSelectImage");
                 this.onSelectImage();
             }else if(this.$store.state.mainImage && this.$store.state.searchType === 'image') {
