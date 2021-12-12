@@ -75,6 +75,18 @@ export default {
                     if (current_path === '/view-1688overseas') return;
                     this.$router.push('/view-1688overseas');
                     break;
+                case SoureMap['banggood']['id']:
+                    if (current_path === '/view-banggood') return;
+                    this.$router.push('/view-banggood');
+                    break;
+                case SoureMap['chinabrands']['id']:
+                    if (current_path === '/view-chinabrands') return;
+                    this.$router.push('/view-chinabrands');
+                    break;
+                case SoureMap['globalres']['id']:
+                    if (current_path === '/view-globalres') return;
+                    this.$router.push('/view-globalres');
+                    break;
             }
         }
     }

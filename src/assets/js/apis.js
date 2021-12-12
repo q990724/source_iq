@@ -374,3 +374,34 @@ export const litbox = {
 		})
 	},
 }
+
+export const banggood = {
+	// 搜索商品
+	searchGoodsByText({search_text, page=1, lang='en', country='CN', warehouse = null, special_options, category = null, sort = '0' }) {
+		return Service.get('api/banggoodapp/searchGoodsByText',{
+			params: {
+				search_text, page, lang, country, warehouse, special_options, category, sort
+			},
+		})
+	},
+}
+export const chinabrands = {
+	// 搜索商品
+	searchGoodsByText({search_text, page=1, lang='en', country= null, brand_id = null, sort, canReserve = null, type = '0', sale_time = null }) {
+		return Service.get('api/chinabrands/searchGoodsByText',{
+			params: {
+				search_text, page, lang, country, brand_id, sort, canReserve, type, sale_time
+			},
+		})
+	},
+}
+export const globalres = {
+	// 搜索商品
+	searchGoodsByText({search_text, page=1, country= null, busType = null, directOrderFlag = null, min_price, max_price,  category = null }) {
+		return Service.get('api/globalresapp/searchGoodsByText',{
+			params: {
+				search_text, page, country, busType, directOrderFlag, min_price, max_price, category
+			},
+		})
+	},
+}

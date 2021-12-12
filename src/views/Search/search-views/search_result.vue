@@ -214,7 +214,7 @@
                     if(!loadmore && source.hasFirstSearchPic === true){
                         result = await this.$store.dispatch('firstSearchPic',{imageAddress: imageAddr, yoloRegionSelected: this.yoloCropRegion && this.region, yoloCropRegion: this.yoloCropRegion || null, region: this.region || null, cid: this.cid,});
                     }else{
-                        result = await this.$store.dispatch('searchPic',{imageAddress: imageAddr, page: this.page, yoloCropRegion: this.yoloCropRegion, region: this.region, cid: this.cid, location: this.location, tags: (this.tags && Array.isArray(this.tags)) ? this.tags.join(',') : null, requestId: this.requestId, sessionId: this.sessionId});
+                        result = await this.$store.dispatch('searchPic',{imageAddress: imageAddr, page: this.page, yoloCropRegion: this.yoloCropRegion, region: this.region, cid: this.cid, location: this.location, tags: (this.tags && Array.isArray(this.tags)) ? this.tags.join(',') : null, requestId: this.requestId, sessionId: this.sessionId, color: this.color});
                     }
                     if (!source.hasUpload&&!loadmore) {
 						if (result.data && result.data.searchImage && result.data.searchImage.imageAddress) {

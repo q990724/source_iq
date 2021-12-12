@@ -98,6 +98,7 @@ const publicData = {
 			this.yoloCropRegion = '';
 			this.region = '';
 			this.location = '';
+            this.color= 0;
 			this.tags = '';
 			this.sessionId= '';
 			this.requestId= '';
