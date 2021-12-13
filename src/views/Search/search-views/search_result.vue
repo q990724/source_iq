@@ -215,7 +215,7 @@
                     if(!loadmore && source.hasFirstSearchPic === true){
                         result = await this.$store.dispatch('firstSearchPic',{imageAddress: imageAddr, yoloRegionSelected: this.yoloCropRegion && this.region, yoloCropRegion: this.yoloCropRegion || null, region: this.region || null, cid: this.cid,});
                     }else{
-                        result = await this.$store.dispatch('searchPic',{imageAddress: imageAddr, page: this.page, yoloCropRegion: this.yoloCropRegion, region: this.region, cid: this.cid, location: this.location, tags: (this.tags && Array.isArray(this.tags)) ? this.tags.join(',') : null, requestId: this.requestId, sessionId: this.sessionId, color: this.color});
+                        result = await this.$store.dispatch('searchPic',{imageAddress: imageAddr, page: this.page, yoloCropRegion: this.yoloCropRegion, region: this.region, cid: this.cid, location: this.location, tags: (this.tags && Array.isArray(this.tags)) ? this.tags.join(',') : null, requestId: this.$store.state.session['requestId'], sessionId: this.$store.state.session['sessionId'], color: this.color});
                     }
                     if (!source.hasUpload&&!loadmore) {
 						if (result.data && result.data.searchImage && result.data.searchImage.imageAddress) {
@@ -252,12 +252,10 @@
                                 let r = await getBase64FromCropImage(this.$store.state.mainImage, regionList);
                                 this.$refs['image_operation'].setLocalImageList(r);
                             }
-                            if(result.sourceResult && result.sourceResult.data && result.sourceResult.data.window && result.sourceResult.data.window.data && result.sourceResult.data.window.data.pageMessage && result.sourceResult.data.window.data.pageConfigData && result.sourceResult.data.window.data.pageConfigData.data) {
-                                this.sessionId = result.sourceResult.data.window.data.pageMessage.sessionId;
-                                this.requestId = result.sourceResult.data.window.data.pageConfigData.data.requestId;
-                                console.log(this.sessionId)
-                                console.log(this.requestId)
-                            }
+							if(result.data && result.data.resultInfo && (result.data.resultInfo.sessionId || result.data.resultInfo.requestId)) {
+								this.$store.commit('setSessionId', result.data.resultInfo.sessionId);
+								this.$store.commit('setRequestId', result.data.resultInfo.requestId);
+							}
 						}
 
                         // this.resultInfo = result.data.resultInfo;
@@ -304,7 +302,7 @@
                     if(!loadmore && source.hasFirstSearchText === true){
                         result = await this.$store.dispatch('firstSearchText', { searchTextParams: this.searchTextParams, page: this.page });
                     }else{
-                        result = await this.$store.dispatch('searchText', { searchTextParams: this.searchTextParams, page: this.page, requestId: this.requestId, sessionId: this.sessionId});
+                        result = await this.$store.dispatch('searchText', { searchTextParams: this.searchTextParams, page: this.page, requestId: this.$store.state.session['requestId'], sessionId: this.$store.state.session['sessionId']});
                     }
 					
 					console.log(result);
@@ -325,11 +323,9 @@
 								this.totalPage = this.resultInfo.totalPages || 1;
 							}
 							
-                            if(result.sourceResult && result.sourceResult.data && result.sourceResult.data.window && result.sourceResult.data.window.data && result.sourceResult.data.window.data.pageMessage && result.sourceResult.data.window.data.requestData && result.sourceResult.data.window.data.requestData.data && result.sourceResult.data.window.data.requestData.data.params) {
-                                this.sessionId = result.sourceResult.data.window.data.pageMessage.sessionId;
-                                this.requestId = result.sourceResult.data.window.data.requestData.data.params.requestId;
-                                console.log(this.sessionId)
-                                console.log(this.requestId)
+                            if(result.data && result.data.resultInfo && (result.data.resultInfo.sessionId || result.data.resultInfo.requestId)) {
+								this.$store.commit('setSessionId', result.data.resultInfo.sessionId);
+								this.$store.commit('setRequestId', result.data.resultInfo.requestId);
                             }
 						}
                         // this.resultInfo = result.data.resultInfo || null;

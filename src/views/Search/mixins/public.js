@@ -56,8 +56,8 @@ const publicData = {
             location: '',
             tags: '',
 			//1688, 1688global, 1688overseas首次图搜和文字搜索接口调用返回，作为后续分页请求的必选参数
-            sessionId: '',
-            requestId: '',
+            // sessionId: '',
+            // requestId: '',
             // 当前数据源
             // source_id: 1,
         }
@@ -101,8 +101,8 @@ const publicData = {
 			this.location = '';
             this.color= 0;
 			this.tags = '';
-			this.sessionId= '';
-			this.requestId= '';
+			// this.sessionId= '';
+			// this.requestId= '';
 		},
         initConditions(){
             this.categoryList = {};
