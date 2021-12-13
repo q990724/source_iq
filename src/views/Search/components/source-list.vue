@@ -31,6 +31,15 @@
             <div class="item" :class="{'active': $store.state.source_id === 9}">
                 <span data-name="litbox">LightInTheBox</span>
             </div>
+            <div class="item" :class="{'active': $store.state.source_id === 11}">
+                <span data-name="banggood">Banggood</span>
+            </div>
+            <div class="item" :class="{'active': $store.state.source_id === 12}">
+                <span data-name="chinabrands">Chinabrands</span>
+            </div>
+            <div class="item" :class="{'active': $store.state.source_id === 13}">
+                <span data-name="globalres">Globalres</span>
+            </div>
         </div>
     </div>
 </template>

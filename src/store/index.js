@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import { getSource } from "@/assets/js/source_map.js";
 import SourceMap from "@/assets/js/source_map.js";
-import { alibaba, _1688, _1688global, aliexpress,  yiwugo, dhgate, mic, cjds, litbox } from "@/assets/js/apis"
+import { alibaba, _1688, _1688global, aliexpress,  yiwugo, dhgate, mic, cjds, litbox, banggood, chinabrands, globalres } from "@/assets/js/apis";
 import { getFileFromBase64 } from "@/assets/js/utils.js";
 Vue.use(Vuex)
 
@@ -144,16 +144,18 @@ export default new Vuex.Store({
     actions: {
         // 点击筛选条件发请求筛选
         filterChange(content,payload){
-            function handleCheckBoxParams({ self = payload.self, e = payload.e, o = payload.options, key, symbol = ",", joint = '' }) {
+            function handleCheckBoxParams({ self = payload.self, e = payload.e, o = payload.options, selectUIType = payload.filterItem.selectUIType, key, symbol = ",", joint = '' }) {
                 let arr = [];
-                if(self.searchTextParams[key]) {
+                // if(selectUIType && self.searchTextParams[key] && selectUIType === "checkbox"){
                     arr = self.searchTextParams[key].split(symbol);
-                }
+                // }
+
                 if(e) {
                     arr.push(joint + o.paramValue);
                 }else if(arr.includes(joint + o.paramValue)) {
                     arr.splice(arr.indexOf(joint + o.paramValue), 1);
                 }
+
                 self.searchTextParams[key] = arr.join(symbol);
                 if(arr.length <= 0) {
                     delete self.searchTextParams[key];
@@ -212,7 +214,7 @@ export default new Vuex.Store({
                     case SourceMap['aliexpress']['id']:
                         switch (payload.filterItem.title) {
                             case 'Brands':
-                                payload.self.searchTextParams.brand_id = payload.options.paramValue;
+                                payload.self.searchTextParams.brand_id = payload.e ? payload.options.paramValue : '';
                                 break;
                             default:
                                 handleCheckBoxParams({ key:payload.filterItem.paramName, symbol: ';' });
@@ -227,23 +229,44 @@ export default new Vuex.Store({
                         switch (payload.filterItem.title) {
                             case 'Ship from':
                                 // handleCheckBoxParams(payload.self, payload.e, payload.o, 'inventoryLocation', ";");
-                                payload.self.searchTextParams.inventoryLocation = payload.options.paramValue;
+                                payload.self.searchTextParams.inventoryLocation = payload.e ? payload.options.paramValue : '';
                                 break;
                             default:
                                 handleCheckBoxParams({ key:payload.filterItem.paramName});
                         }
                         break;
                     case SourceMap['mic']['id']:
-                        handleCheckBoxParams({ key:payload.filterItem.paramName});
-                        break;
-                    case SourceMap['cjds']['id']:
                         switch (payload.filterItem.title) {
-                            case 'Ship From':
-                                payload.self.searchTextParams.country = payload.options.paramValue;
+                            case 'Location':
+                                payload.self.searchTextParams.location = payload.e ? payload.options.paramValue : '';
+                                break;
+                            case 'Member Type':
+                                payload.self.searchTextParams.memberType = payload.e ? payload.options.paramValue : '';
+                                break;
+                            case 'Color':
+                                payload.self.color = payload.e ? payload.options.paramValue : '';
                                 break;
                             default:
                                 handleCheckBoxParams({ key:payload.filterItem.paramName});
                         }
+                        break;
+                    case SourceMap['cjds']['id']:
+                        switch (payload.filterItem.title) {
+                            case 'Ship From':
+                                payload.self.searchTextParams.country = payload.e ? payload.options.paramValue : '';
+                                break;
+                            default:
+                                handleCheckBoxParams({ key:payload.filterItem.paramName});
+                        }
+                        break;
+                    case SourceMap['banggood']['id']:
+                        payload.self.searchTextParams[payload.filterItem.paramName] = payload.e ? payload.options.paramValue : '';
+                        break;
+                    case SourceMap['chinabrands']['id']:
+                        payload.self.searchTextParams[payload.filterItem.paramName] = payload.e ? payload.options.paramValue : '';
+                        break;
+                    case SourceMap['globalres']['id']:
+                        payload.self.searchTextParams[payload.filterItem.paramName] = payload.e ? payload.options.paramValue : '';
                         break;
                 }
                 resolve()
@@ -282,6 +305,15 @@ export default new Vuex.Store({
                         break;
                     case SourceMap['1688overseas']['id']:
                         resolve(await _1688.searchGoods({ ...payload.searchTextParams, page: payload.page, sessionId: payload.sessionId}))
+                        break;
+                    case SourceMap['banggood']['id']:
+                        resolve(await banggood.searchGoodsByText({ ...payload.searchTextParams,page: payload.page }))
+                        break;
+                    case SourceMap['chinabrands']['id']:
+                        resolve(await chinabrands.searchGoodsByText({ ...payload.searchTextParams,page: payload.page }))
+                        break;
+                    case SourceMap['globalres']['id']:
+                        resolve(await globalres.searchGoodsByText({ ...payload.searchTextParams,page: payload.page }))
                         break;
                 }
             })
@@ -406,7 +438,7 @@ export default new Vuex.Store({
                         resolve(res)
                         break;
                     case SourceMap['mic']['id']:
-                        res = await mic.searchGoodsByPic( is_file, file, resImg, payload.page , payload.cid )
+                        res = await mic.searchGoodsByPic( is_file, file, resImg, payload.page , payload.cid, payload.color )
                         res.data.searchImage.imageAddress = res.sourceResult.data.content.imgId
                         resolve(res)
                         break;

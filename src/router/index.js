@@ -73,6 +73,21 @@ const routes = [
         name: 'view-1688overseas',
         component: () => import('@/views/Search/search-views/search_result')
     },
+    {
+        path: '/view-banggood',
+        name: 'view-banggood',
+        component: () => import('@/views/Search/search-views/search_result')
+    },
+    {
+        path: '/view-chinabrands',
+        name: 'view-chinabrands',
+        component: () => import('@/views/Search/search-views/search_result')
+    },
+    {
+        path: '/view-globalres',
+        name: 'view-globalres',
+        component: () => import('@/views/Search/search-views/search_result')
+    },
 ]
 
 const router = new VueRouter({
