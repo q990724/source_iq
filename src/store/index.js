@@ -20,6 +20,11 @@ export default new Vuex.Store({
 		//搜索状态
         searchState: 'none', // 搜索状态 none：未发起搜索/搜索结果被清空，success: 正常收到相应，error：搜索出错/接口返回错误，null: 搜索结果为空
         firstSearchState: 'none', // none：未发起首次搜索，success: 首次搜索成功，error：首次搜索失败
+		//1688, 1688global, 1688overseas首次图搜和文字搜索接口调用返回，作为后续分页请求的必选参数
+		session: {
+			sessionId: null,
+			requestId: null,
+		},
     },
     mutations: {
 		// 重置全部，包括搜索模式、搜索参数、图片上传状态、搜索状态；“source_id"初始化责任在content和vue.mounted两处
@@ -52,6 +57,8 @@ export default new Vuex.Store({
 			// 清除之前一切搜索状态（等于搜索从未发生过）
 			this.state.searchState = 'none';
 			this.state.firstSearchState = 'none';
+			this.state.session['sessionId'] = null;
+			this.state.session['requestId'] = null;
 		},
 		dumpAll(state, msg) {
 			console.log(msg);
@@ -63,7 +70,9 @@ export default new Vuex.Store({
 			console.log("searchText:", this.state.searchText);
 			console.log("imageUploadState:", this.state.imageUploadState);
 			console.log("searchState:", this.state.searchState);
-			console.log("firstSearchState:", this.state.firstSearchState);				
+			console.log("firstSearchState:", this.state.firstSearchState);
+			console.log("sessionId:", this.state.session['sessionId']);	
+			console.log("requestId:", this.state.session['requestId']);
 		},
         // 获取插件设置
         getAppSetting(state) {
@@ -139,7 +148,13 @@ export default new Vuex.Store({
         },
         setFirstSearchState(state, s) {
             state.firstSearchState = s;
-        }
+        },
+		setSessionId(state, s) {
+		    state.session['sessionId'] = s;
+		},
+		setRequestId(state, s) {
+		    state.session['requestId'] = s;
+		},
     },
     actions: {
         // 点击筛选条件发请求筛选
