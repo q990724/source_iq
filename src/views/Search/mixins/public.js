@@ -37,6 +37,8 @@ const publicData = {
             categoryList: {},
             // 筛选列表
             filterList: [],
+			// exprList:
+			// sortList:
             // 商品结果列表
             results: [],
             // 搜索结果相关信息 pageNum等
@@ -49,9 +51,9 @@ const publicData = {
 			totalPage: 1,
             // 当前已选分类ID
             cid: null,
-            //1688或1688跨境切图所需
-            yoloCropRegion: '',
-            region: '',
+            // //1688或1688跨境切图所需
+            // yoloCropRegion: '',
+            // region: '',
             //1688筛选所需参数和每次搜索接口返回的sessionId
             location: '',
             tags: '',
@@ -96,8 +98,8 @@ const publicData = {
         },
 		clearSearchParams() {
 			this.cid = null;
-			this.yoloCropRegion = '';
-			this.region = '';
+			// this.yoloCropRegion = '';
+			// this.region = '';
 			this.location = '';
             this.color= 0;
 			this.tags = '';

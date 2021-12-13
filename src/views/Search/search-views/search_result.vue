@@ -213,9 +213,9 @@
 					//TBD: 切换筛选发起搜索时没有传参
                     let result = null;
                     if(!loadmore && source.hasFirstSearchPic === true){
-                        result = await this.$store.dispatch('firstSearchPic',{imageAddress: imageAddr, yoloRegionSelected: this.yoloCropRegion && this.region, yoloCropRegion: this.yoloCropRegion || null, region: this.region || null, cid: this.cid,});
+                        result = await this.$store.dispatch('firstSearchPic',{imageAddress: imageAddr, yoloRegionSelected: this.$store.state.yoloCropRegion && this.$store.state.region, yoloCropRegion: this.$store.state.yoloCropRegion || null, region: this.$store.state.region || null, cid: this.cid,});
                     }else{
-                        result = await this.$store.dispatch('searchPic',{imageAddress: imageAddr, page: this.page, yoloCropRegion: this.yoloCropRegion, region: this.region, cid: this.cid, location: this.location, tags: (this.tags && Array.isArray(this.tags)) ? this.tags.join(',') : null, requestId: this.$store.state.session['requestId'], sessionId: this.$store.state.session['sessionId'], color: this.color});
+                        result = await this.$store.dispatch('searchPic',{imageAddress: imageAddr, page: this.page, yoloCropRegion: this.$store.state.yoloCropRegion, region: this.$store.state.region, cid: this.cid, location: this.location, tags: (this.tags && Array.isArray(this.tags)) ? this.tags.join(',') : null, requestId: this.$store.state.session['requestId'], sessionId: this.$store.state.session['sessionId'], color: this.color});
                     }
                     if (!source.hasUpload&&!loadmore) {
 						if (result.data && result.data.searchImage && result.data.searchImage.imageAddress) {
@@ -245,9 +245,10 @@
 								this.resultInfo = result.data.resultInfo;
 								this.totalPage = this.resultInfo.totalPages || 1;
 							}
-                            if (result.data.searchImage && result.data.searchImage.yoloCropRegion) {
-                                this.yoloCropRegion = result.data.searchImage.yoloCropRegion;
-                                this.region = result.data.searchImage.region;
+							// TBD: 此处只判断了yoloCropRegion不为NULL，没有判断result.data.searchImage.region
+                            if (result.data.searchImage && (result.data.searchImage.yoloCropRegion)) {
+								this.$store.commit('setYoloCropRegion', result.data.searchImage.yoloCropRegion);
+								this.$store.commit('setRegion', result.data.searchImage.region);
                                 let regionList = result.data.searchImage.yoloCropRegion.split(';');
                                 let r = await getBase64FromCropImage(this.$store.state.mainImage, regionList);
                                 this.$refs['image_operation'].setLocalImageList(r);

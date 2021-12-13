@@ -14,6 +14,9 @@ export default new Vuex.Store({
         imageAddress: null,
         originImage: null, // 首次搜索时上传/接收的图片
         mainImage: null, // 当前搜索的图片(base64)
+		//1688或1688跨境切图所需
+		yoloCropRegion: null,
+		region: null,
         searchText: null, // 当前搜索文字
 		// 图片上传状态
 		imageUploadState: 'none', // 图片上传状态 none: 未发起上传, uploaded: 图片上传完成, error: 图片上传失败
@@ -22,6 +25,7 @@ export default new Vuex.Store({
         firstSearchState: 'none', // none：未发起首次搜索，success: 首次搜索成功，error：首次搜索失败
 		//1688, 1688global, 1688overseas首次图搜和文字搜索接口调用返回，作为后续分页请求的必选参数
 		session: {
+			// cookie: null,
 			sessionId: null,
 			requestId: null,
 		},
@@ -41,6 +45,8 @@ export default new Vuex.Store({
 				this.state.originImage = null;
 				this.state.mainImage = null;
 				this.state.imageAddress = null;
+				this.state.yoloCropRegion = null;
+				this.state.region = null;
 				// 如果图片搜索参数重置，那么图片上传状态也要重置
                 this.commit('resetUploadState');
 			} else if(searchType == 'text') {
@@ -51,6 +57,7 @@ export default new Vuex.Store({
 		resetUploadState() {
 			this.state.imageUploadState = 'none';
 			this.state.imageAddress = null;
+			// 无需重置yoloCropRegion和region？
 		},
 		// 重置搜索状态
 		resetSearchState() {
@@ -59,6 +66,7 @@ export default new Vuex.Store({
 			this.state.firstSearchState = 'none';
 			this.state.session['sessionId'] = null;
 			this.state.session['requestId'] = null;
+			// 无需重置yoloCropRegion和region？
 		},
 		dumpAll(state, msg) {
 			console.log(msg);
@@ -67,6 +75,8 @@ export default new Vuex.Store({
 			console.log("imageAddress:", this.state.imageAddress);
 			console.log("originImage:", this.state.originImage);
 			console.log("mainImage:", this.state.mainImage);
+			console.log("yoloCropRegion:", this.state.yoloCropRegion);
+			console.log("region:", this.state.region);
 			console.log("searchText:", this.state.searchText);
 			console.log("imageUploadState:", this.state.imageUploadState);
 			console.log("searchState:", this.state.searchState);
@@ -154,6 +164,12 @@ export default new Vuex.Store({
 		},
 		setRequestId(state, s) {
 		    state.session['requestId'] = s;
+		},
+		setYoloCropRegion(state, s) {
+		    state.yoloCropRegion = s;
+		},
+		setRegion(state, s) {
+		    state.region = s;
 		},
     },
     actions: {
