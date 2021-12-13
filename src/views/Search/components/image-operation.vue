@@ -1,6 +1,6 @@
 <template>
-    <div class="image-operation mt40" v-if="$store.state.originImage">
-        <div class="left">
+    <div class="image-operation mt40" v-if="$store.state.originImage || $store.state.searchText">
+        <div class="left" v-if="$store.state.searchType === 'image'">
             <div class="item main-item" :class="{'active': mainImageActive}">
                 <img :src="$store.state.originImage" alt="" class="img" @click="onClickMainImage">
                 <span @click="chooseImageBox"><img src="@/assets/img/kuangxuan.png" alt="">{{ $t('label.chooseBox') }}</span>
@@ -22,6 +22,11 @@
                     <span @click="confirmCropBox">确定</span>
                     <span @click="closeCropBox">取消</span>
                 </div>
+            </div>
+        </div>
+        <div class="left" v-if="$store.state.searchType === 'text'">
+            <div class="text-list">
+                <div class="text">{{ $store.state.searchText }}</div>
             </div>
         </div>
         <div class="right">
@@ -137,6 +142,18 @@ export default {
         flex: 1;
         display: flex;
         align-items: flex-end;
+        .text-list {
+            display: flex;
+            align-items: center;
+            .text {
+                margin-right: 10px;
+                margin-bottom: 10px;
+                padding: 5px 8px;
+                border: 1px solid #FF4000;
+                border-radius: 5px;
+                font-size: 14px;
+            }
+        }
         .item {
             box-sizing: border-box;
             position: relative;
