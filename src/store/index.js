@@ -160,7 +160,6 @@ export default new Vuex.Store({
         // 点击筛选条件发请求筛选
         filterChange(content,payload){
             function handleCheckBoxParams({ self = payload.self, e = payload.e, o = payload.options, selectUIType = payload.filterItem.selectUIType, key, symbol = ",", joint = '' }) {
-                console.log(self.searchTextParams[key])
                 let arr = [];
                 // if(selectUIType && self.searchTextParams[key] && selectUIType === "checkbox"){
                 //     arr = self.searchTextParams[key].split(symbol);

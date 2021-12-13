@@ -117,12 +117,12 @@
                 this.getDataFromText(false);
             },
 
-            onFilterChange({filterIndex, itemIndex, e}) {
-                this.handleOptions(this.filterList[filterIndex], itemIndex, e);
+            onFilterChange({filterIndex, itemIndex, event}) {
+                this.handleOptions(this.filterList[filterIndex], itemIndex, event);
                 this.initSearchResult();
                 // this.clearSearchParams();
 				this.$store.commit('resetSearchState');
-                this.$store.dispatch('filterChange',{e:e, self:this, filterItem:this.filterList[filterIndex], options:this.filterList[filterIndex].items[itemIndex]})
+                this.$store.dispatch('filterChange',{e:event, self:this, filterItem:this.filterList[filterIndex], options:this.filterList[filterIndex].items[itemIndex]})
                 if(this.$store.state.searchType === 'image') {
 					// 切换筛选条件，不需要重新发起图片上传
                     this.imageSearch(this.$store.state.mainImage, false);
