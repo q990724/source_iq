@@ -1,19 +1,19 @@
 <template>
   <div class="group-filter" v-if="filterList && filterList.length > 0">
-    <template v-for="(fil, index) in filterList">
+    <template v-for="(filter, filterIndex) in filterList">
       <div
         class="filter-item"
-        v-if="fil.items && fil.items.length > 0"
-        :key="index"
+        v-if="filter.items && filter.items.length > 0"
+        :key="filterIndex"
       >
         <div class="filter-item_title">
-          <span>{{ fil.title }}</span>
+          <span>{{ filter.title }}</span>
         </div>
         <div class="filter-item_options">
-          <div class="filter-item_option" v-for="(item,i) in fil.items" :key="item.id + item.name">
+          <div class="filter-item_option" v-for="(item,itemIndex) in filter.items" :key="item.id + item.name">
             <el-checkbox
               v-model="item.selected"
-              @change="onFilterChange($event, index, i)"
+              @change="onFilterChange(filterIndex, itemIndex, $event)"
               >{{ item.name }}</el-checkbox
             >
           </div>
@@ -33,8 +33,8 @@ export default {
     },
   },
   methods: {
-    onFilterChange(e, fil_index, item_index) {
-      this.$emit("onFilterChange", { e, fil_index, item_index });
+    onFilterChange(filterIndex, itemIndex, event) {
+      this.$emit("onFilterChange", {filterIndex, itemIndex, event});
     },
   },
 };

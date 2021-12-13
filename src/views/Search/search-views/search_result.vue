@@ -90,11 +90,11 @@
             /**
              * @description 切换商品分类时触发
              */
-            onClassChange({e, options, item_index}) {
-                this.handleOptions(e, this.categoryList,item_index);
+            onClassChange({itemIndex, event}) {
+                this.handleOptions(this.categoryList, itemIndex, event);
                 this.$store.commit('resetSearchState');
-                this.cid = options.paramValue;
-                this.searchTextParams.category = options.paramValue;
+                this.cid = this.categoryList.items[itemIndex].paramValue;
+                this.searchTextParams.category = this.categoryList.items[itemIndex].paramValue;
                 this.page = 1;
                 if(this.$store.state.searchType === 'image') {
 					// 切换商品分类，不需要重新发起图片上传
@@ -117,12 +117,12 @@
                 this.getDataFromText(false);
             },
 
-            onFilterChange({e, fil_index, item_index}) {
-                this.handleOptions(e, this.filterList[fil_index], item_index);
+            onFilterChange({filterIndex, itemIndex, e}) {
+                this.handleOptions(this.filterList[filterIndex], itemIndex, e);
                 this.initSearchResult();
                 // this.clearSearchParams();
 				this.$store.commit('resetSearchState');
-                this.$store.dispatch('filterChange',{e:e, self:this, filterItem:this.filterList[fil_index], options:this.filterList[fil_index].items[item_index]})
+                this.$store.dispatch('filterChange',{e:e, self:this, filterItem:this.filterList[filterIndex], options:this.filterList[filterIndex].items[itemIndex]})
                 if(this.$store.state.searchType === 'image') {
 					// 切换筛选条件，不需要重新发起图片上传
                     this.imageSearch(this.$store.state.mainImage, false);

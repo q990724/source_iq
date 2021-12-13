@@ -31,6 +31,8 @@ export default {
         }
     },
     watch: {
+		//TBD：由于异步进程之间的“竞跑”，这里可能遇到source_id=null，app-setting还没来得及从window获取更新store
+		//TBD：如果store->source_id初始化为1而不是null，会导致插件切换source_id=1时，watch不触发，路由不切换产生不一致
         source_id() {
 			console.log("app.vue watch source_id",this.$store.state.source_id);
             let current_path = this.$route.path;

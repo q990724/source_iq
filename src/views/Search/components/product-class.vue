@@ -7,7 +7,7 @@
             <img src="@/assets/img/down-arrow.png" alt="">
         </div>
         <div class="list" :style="listStyle" v-if="class_list.items">
-            <div class="item" v-for="(item,i) in class_list.items" :key="item.name + item.id" :class="{'active': item.selected}" @click="onItemClick($event, item, i)">
+            <div class="item" v-for="(item,itemIndex) in class_list.items" :key="item.name + item.id" :class="{'active': item.selected}" @click="onItemClick(itemIndex, $event)">
                 <span>{{ item.name }}</span>
             </div>
         </div>
@@ -41,8 +41,8 @@ export default {
                 this.listStyle["max-height"] = `30px`;
             }
         },
-        onItemClick(e, options, item_index) {
-            this.$emit('onClassChange', {e, options, item_index});
+        onItemClick(itemIndex, event) {
+            this.$emit('onClassChange', {itemIndex, event});
         }
     }
 }

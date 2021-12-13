@@ -55,6 +55,7 @@ const publicData = {
             //1688筛选所需参数和每次搜索接口返回的sessionId
             location: '',
             tags: '',
+			//1688, 1688global, 1688overseas首次图搜和文字搜索接口调用返回，作为后续分页请求的必选参数
             sessionId: '',
             requestId: '',
             // 当前数据源
@@ -206,13 +207,14 @@ const publicData = {
             this.imageSearch(this.$store.state.mainImage, reUpload);
         },
 
-        handleOptions(e, optionList, item_index){
-            if(optionList.selectUIType === 'radio'){
-                optionList.items.forEach(element=>{
+		// 统一处理商品分类、筛选条件的选项变更状态
+        handleOptions(filter, itemIndex, event){
+            if(filter.selectUIType === 'radio'){
+                filter.items.forEach(element=>{
                     element.selected = false;
                 })
             }
-            optionList.items[item_index].selected = e;
+            filter.items[itemIndex].selected = event;
         }
     }
 }
