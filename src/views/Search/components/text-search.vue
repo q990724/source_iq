@@ -68,7 +68,7 @@ export default {
             this.input = '';
         },
         onClickSearchButton() {
-            if(!this.input.trim()) return this.$message.info(this.$t('message.search_text_not_null'));
+            if(!this.input || !this.input.trim()) return this.$message.info(this.$t('message.search_text_not_null'));
             this.$emit('onClickSearchButton', {searchText: this.input, index_area: this.index_area});
         },
         onClickCamera() {
