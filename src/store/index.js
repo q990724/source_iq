@@ -13,13 +13,19 @@ export default new Vuex.Store({
 		// 搜索参数
 		searchParams: {
 			searchText: null, // 当前搜索文字
+            imageAddress: null,
+            originImage: null, // 首次搜索时上传/接收的图片
+            mainImage: null, // 当前搜索的图片(base64)
+            //1688或1688跨境切图所需
+            yoloCropRegion: null,
+            region: null,
 		},
-        imageAddress: null,
-        originImage: null, // 首次搜索时上传/接收的图片
-        mainImage: null, // 当前搜索的图片(base64)
-		//1688或1688跨境切图所需
-		yoloCropRegion: null,
-		region: null,
+        // imageAddress: null,
+        // originImage: null, // 首次搜索时上传/接收的图片
+        // mainImage: null, // 当前搜索的图片(base64)
+		// //1688或1688跨境切图所需
+		// yoloCropRegion: null,
+		// region: null,
         searchText: null, // 当前搜索文字
 		// 图片上传状态
 		imageUploadState: 'none', // 图片上传状态 none: 未发起上传, uploaded: 图片上传完成, error: 图片上传失败
@@ -42,24 +48,34 @@ export default new Vuex.Store({
 			this.commit('resetUploadState');
 			this.commit('resetSearchState');
 		},
+        clearConditions(state) {
+            if(state.searchParams.categoryId != null) state.searchParams.categoryId=null;
+            if(state.searchParams.cat_id != null) state.searchParams.cat_id=null;
+            if(state.searchParams.category != null) state.searchParams.category=null;
+            if(state.searchParams.Category != null)  delete state.searchParams.Category;
+            //
+            // (state.searchParams.cat_id != null) ? state.searchParams.categoryId : null;
+            // (state.searchParams.category != null) ? state.searchParams.categoryId : null;
+        },
 		// 根据搜索模式参数，重置搜索参数
 		resetSearchParams(state,searchType) {
 			if(searchType == 'image') {
-				this.state.originImage = null;
-				this.state.mainImage = null;
-				this.state.imageAddress = null;
-				this.state.yoloCropRegion = null;
-				this.state.region = null;
+				this.state.searchParams.originImage = null;
+				this.state.searchParams.mainImage = null;
+				this.state.searchParams.imageAddress = null;
+				this.state.searchParams.yoloCropRegion = null;
+				this.state.searchParams.region = null;
 				// 如果图片搜索参数重置，那么图片上传状态也要重置
                 this.commit('resetUploadState');
 			} else if(searchType == 'text') {
 				this.state.searchParams['searchText'] = null;
 			}
+            // state.searchParams = {};
 		},
 		// 重置图片上传状态
 		resetUploadState() {
 			this.state.imageUploadState = 'none';
-			this.state.imageAddress = null;
+			this.state.searchParams.imageAddress = null;
 			// 无需重置yoloCropRegion和region？
 		},
 		// 重置搜索状态
@@ -75,12 +91,12 @@ export default new Vuex.Store({
 			console.log(msg);
 			console.log("source_id:", this.state.source_id);
 			console.log("searchType:", this.state.searchType);
-			console.log("imageAddress:", this.state.imageAddress);
-			console.log("originImage:", this.state.originImage);
-			console.log("mainImage:", this.state.mainImage);
-			console.log("yoloCropRegion:", this.state.yoloCropRegion);
-			console.log("region:", this.state.region);
-			console.log("searchText:", this.state.searchText);
+			console.log("imageAddress:", this.state.searchParams.imageAddress);
+			console.log("originImage:", this.state.searchParams.originImage);
+			console.log("mainImage:", this.state.searchParams.mainImage);
+			console.log("yoloCropRegion:", this.state.searchParams.yoloCropRegion);
+			console.log("region:", this.state.searchParams.region);
+			console.log("searchText:", this.state.searchParams.searchText);
 			console.log("imageUploadState:", this.state.imageUploadState);
 			console.log("searchState:", this.state.searchState);
 			console.log("firstSearchState:", this.state.firstSearchState);
@@ -108,30 +124,30 @@ export default new Vuex.Store({
         },
 		// 设置当前搜索图片原站返回的图片地址
 		setImageAddress(state, imageAddress) {
-		    state.imageAddress = imageAddress;
+		    state.searchParams.imageAddress = imageAddress;
 		},
 		// 清空当前搜索图片原站返回的图片地址
 		clearImageAddress(state) {
-		    state.imageAddress = null;
+		    state.searchParams.imageAddress = null;
 		},
         // 清除搜索图片
         clearMainImage(state) {
-            state.mainImage = null;
+            state.searchParams.mainImage = null;
         },
         // 设置搜索图片
         setMainImage(state, image) {
             state.searchParams['searchText'] = null;
-            state.mainImage = image;
+            state.searchParams.mainImage = image;
         },
         // 清除搜索图片
         clearOriginImage(state) {
-            state.originImage = null;
+            state.searchParams.originImage = null;
         },
         // 设置搜索图片
         setOriginImage(state, image) {
             this.commit('clearWindowStorageUploadFile');
-            state.searchParams['searchText'] = null;
-            state.originImage = image;
+            state.searchParams.searchText = null;
+            state.searchParams.originImage = image;
         },
         // 设置图片缓存
         setWindowStorageUploadFile(state, base64) {
@@ -153,8 +169,8 @@ export default new Vuex.Store({
 		},
         // 设置搜索文字
         setSearchText(state, text) {
-            state.mainImage = null;
-            state.originImage = null;
+            state.searchParams.mainImage = null;
+            state.searchParams.originImage = null;
 			state.searchParams['searchText'] = text;
         },
         // 清空搜索词
@@ -179,10 +195,10 @@ export default new Vuex.Store({
 		    state.session['requestId'] = s;
 		},
 		setYoloCropRegion(state, s) {
-		    state.yoloCropRegion = s;
+		    state.searchParams.yoloCropRegion = s;
 		},
 		setRegion(state, s) {
-		    state.region = s;
+		    state.searchParams.region = s;
 		},
         // 设置图片搜索标识，如果存在此标识，证明window.localStore中有uploadFile
         setImageSearchId() {
@@ -228,7 +244,9 @@ export default new Vuex.Store({
                         delete that.state.searchParams[filterItem.paramName][filterItem.title];
                     }
 				}
+				console.log(filterItem)
                 let arr = [];
+				// TBD: title 逻辑有问题
                 if(that.state.searchParams[filterItem.paramName] && that.state.searchParams[filterItem.paramName][filterItem.title]){
                     arr = that.state.searchParams[filterItem.paramName][filterItem.title].split(separator);
                 }else{
@@ -385,6 +403,8 @@ export default new Vuex.Store({
                         // 深度复制，其实只需要paramName不需要深度复制
                         let filterItemClone = JSON.parse(JSON.stringify(payload.filterItem));
                         filterItemClone.paramName = 'param_order';
+                        filterItemClone.selectUIType = 'checkbox';
+                        filterItemClone.title = 'param_order';
                         switch (payload.filterItem.title) {
                             case 'Related Category':
                                 break;
@@ -413,26 +433,26 @@ export default new Vuex.Store({
                         handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e, separator: ';'});
                         break;
                     case SourceMap['1688global']['id']:
-                        switch (payload.filterItem.title) {
-                            case '地区':
-                                payload.self.location = payload.e ? payload.option.name : '';
-                                break;
-                            case '属性':
-                                if(payload.e) {
-                                    if(!Array.isArray(payload.self.tags)) payload.self.tags = [];
-                                    payload.self.tags.push(payload.option.name);
-                                }else {
-                                    for (let i = 0; i < payload.self.tags.length; i++) {
-                                        if(payload.self.tags[i] === payload.option.name) {
-                                            payload.self.tags.splice(i, 1);
-                                        }
-                                    }
-                                }
-                                break;
-                            default:
+                        // switch (payload.filterItem.title) {
+                        //     case '地区':
+                        //         payload.self.location = payload.e ? payload.option.name : '';
+                        //         break;
+                        //     case '属性':
+                                // if(payload.e) {
+                                //     if(!Array.isArray(payload.self.tags)) payload.self.tags = [];
+                                //     payload.self.tags.push(payload.option.name);
+                                // }else {
+                                //     for (let i = 0; i < payload.self.tags.length; i++) {
+                                //         if(payload.self.tags[i] === payload.option.name) {
+                                //             payload.self.tags.splice(i, 1);
+                                //         }
+                                //     }
+                                // }
+                                // break;
+                            // default:
                                 handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e, separator: ';'});
-                                break;
-                        }
+                                // break;
+                        // }
                         break;
                     case SourceMap['aliexpress']['id']:
                         switch (payload.filterItem.title) {
@@ -452,13 +472,13 @@ export default new Vuex.Store({
                         handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e});
                         break;
                     case SourceMap['mic']['id']:
-                        switch (payload.filterItem.title) {
-                            case 'Color':
-                                payload.self.color = payload.e ? payload.options.paramValue : '';
-                                break;
-                            default:
+                        // switch (payload.filterItem.title) {
+                        //     case 'Color':
+                        //         payload.self.color = payload.e ? payload.options.paramValue : '';
+                        //         break;
+                        //     default:
                                 handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e});
-                        }
+                        // }
                         break;
                     case SourceMap['cjds']['id']:
                         handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e});
@@ -608,57 +628,59 @@ export default new Vuex.Store({
 
         searchPic(content,payload){
             console.log(payload);
-            let file = null, resImg = '', is_file = true, res = null, result = {};
+            let res = null, params = {};
+            // let file = null, resImg = '', is_file = true, res = null, result = {};
 
-            let source = getSource(this.state.source_id);
-            if (source.hasUpload === false) {
-                //如果没有上传图片成功的状态就先将base64转图片传递，否则直接传上传成功后的返回值
-                if(this.state.imageUploadState !== 'uploaded') {
-                    file = getFileFromBase64(payload.imageAddress);
-                }else{
-                    resImg = payload.imageAddress;
-                    is_file = false
-                }
-            }
+            // let source = getSource(this.state.source_id);
+            // if (source.hasUpload === false) {
+            //     //如果没有上传图片成功的状态就先将base64转图片传递，否则直接传上传成功后的返回值
+            //     if(this.state.imageUploadState !== 'uploaded') {
+            //         file = getFileFromBase64(payload.imageAddress);
+            //     }else{
+            //         resImg = payload.imageAddress;
+            //         is_file = false
+            //     }
+            // }
 
             return new Promise(async (resolve)=>{
+                params = collapse({...payload.searchPicParams});
                 switch (this.state.source_id) {
                     case SourceMap['alibaba']['id']:
-                        res = await alibaba.searchGoodsByPic( payload.imageAddress, payload.page, payload.cid )
+                        res = await alibaba.searchGoodsByPic({...params, page:payload.page} )
                         resolve(res)
                         break;
                     case SourceMap['1688']['id']:
-                        res = await _1688.searchGoodsByPic({imageId:payload.imageAddress,page:payload.page, yoloRegionSelected:payload.yoloRegionSelected, yoloCropRegion:payload.yoloCropRegion, region:payload.region, pailitaoCategoryId:payload.cid, sessionId:payload.sessionId, requestId:payload.requestId, searchtype:0})
+                        res = await _1688.searchGoodsByPic({...params,sessionId:payload.sessionId, requestId:payload.requestId, searchtype:0})
                         resolve(res)
                         break;
                     case SourceMap['1688global']['id']:
-                        res = await _1688global.searchGoodsByPic( payload.imageAddress,payload.page, payload.region, payload.cid, payload.location, payload.tags )
+                        res = await _1688global.searchGoodsByPic({...params,page:payload.page})
                         resolve(res)
                         break;
                     case SourceMap['aliexpress']['id']:
-                        res = await aliexpress.searchGoodsByPic( payload.imageAddress, payload.cid )
+                        res = await aliexpress.searchGoodsByPic({...params})
                         resolve(res)
                         break;
                     case SourceMap['yiwugo']['id']:
-                        res = await yiwugo.searchGoodsByPic( payload.imageAddress, payload.page)
+                        res = await yiwugo.searchGoodsByPic({...params, page:payload.page})
                         resolve(res)
                         break;
                     case SourceMap['dhgate']['id']:
-                        res = await dhgate.searchGoodsByPic( is_file, file, resImg, payload.page, payload.cid )
+                        res = await dhgate.searchGoodsByPic({...params, page:payload.page})
                         res.data.searchImage.imageAddress = res.sourceResult.data.data.imgUrl
                         resolve(res)
                         break;
                     case SourceMap['mic']['id']:
-                        res = await mic.searchGoodsByPic( is_file, file, resImg, payload.page , payload.cid, payload.color )
+                        res = await mic.searchGoodsByPic({...params, page:payload.page})
                         res.data.searchImage.imageAddress = res.sourceResult.data.content.imgId
                         resolve(res)
                         break;
                     case SourceMap['cjds']['id']:
-                        res = await cjds.searchGoodsByPic( file )
+                        res = await cjds.searchGoodsByPic()
                         resolve(res)
                         break;
                     case SourceMap['1688overseas']['id']:
-                        res = await _1688.searchGoodsByPic({imageId:payload.imageAddress,page:payload.page, yoloRegionSelected:payload.yoloRegionSelected, yoloCropRegion:payload.yoloCropRegion, region:payload.region, pailitaoCategoryId:payload.cid, sessionId:payload.sessionId, requestId:payload.requestId, searchtype:1 })
+                        res = await _1688.searchGoodsByPic({...params,page:payload.page, sessionId:payload.sessionId, requestId:payload.requestId, searchtype:1 })
                         resolve(res)
                         break;
                 }
@@ -666,13 +688,16 @@ export default new Vuex.Store({
         },
 
         firstSearchPic(content,payload){
+            console.log(payload.searchPicParams)
+            let params = {};
             return new Promise(async (resolve)=>{
+                params = collapse({...payload.searchPicParams});
                 switch (this.state.source_id) {
                     case SourceMap['1688']['id']:
-                        resolve(await _1688.searchGoodsByPicFirst( {imageId:payload.imageAddress, yoloRegionSelected:payload.yoloRegionSelected, yoloCropRegion:payload.yoloCropRegion, region:payload.region, pailitaoCategoryId:payload.cid, searchtype:0 } ))
+                        resolve(await _1688.searchGoodsByPicFirst( {...params, searchtype:0 } ))
                         break;
                     case SourceMap['1688overseas']['id']:
-                        resolve(await _1688.searchGoodsByPicFirst( {imageId:payload.imageAddress, yoloRegionSelected:payload.yoloRegionSelected, yoloCropRegion:payload.yoloCropRegion, region:payload.region, pailitaoCategoryId:payload.cid, searchtype:1 } ))
+                        resolve(await _1688.searchGoodsByPicFirst( {...params, searchtype:1 } ))
                         break;
                 }
             })

@@ -1,8 +1,8 @@
 <template>
-    <div class="image-operation mt40" v-if="$store.state.originImage || $store.state.searchText">
+    <div class="image-operation mt40" v-if="$store.state.searchParams.originImage || $store.state.searchParams.searchText">
         <div class="left" v-if="$store.state.searchType === 'image'">
             <div class="item main-item" :class="{'active': mainImageActive}">
-                <img :src="$store.state.originImage" alt="" class="img" @click="onClickMainImage">
+                <img :src="$store.state.searchParams.originImage" alt="" class="img" @click="onClickMainImage">
                 <span @click="chooseImageBox"><img src="@/assets/img/kuangxuan.png" alt="">{{ $t('label.chooseBox') }}</span>
             </div>
             <!--本地裁剪图片暂存列表-->
@@ -16,7 +16,7 @@
             </div>
             <div id="cropBox" v-show="cropBoxStatus">
                 <div class="image-container">
-                    <img :src="$store.state.originImage" alt="">
+                    <img :src="$store.state.searchParams.originImage" alt="">
                 </div>
                 <div class="foot">
                     <span @click="confirmCropBox">确定</span>
@@ -26,7 +26,7 @@
         </div>
         <div class="left" v-if="$store.state.searchType === 'text'">
             <div class="text-list">
-                <div class="text">{{ $store.state.searchText }}</div>
+                <div class="text">{{ $store.state.searchParams.searchText }}</div>
             </div>
         </div>
         <div class="right">

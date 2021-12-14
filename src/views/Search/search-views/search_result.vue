@@ -71,21 +71,18 @@ export default {
         console.log(this.$store.state.source_id);
         // 加载更多
         bus.$on('loadmore', this.loadmore.bind(this))
-
-        if (window.localStorage.getItem('has-upload-file')) {
-            this.$store.commit('clearImageSearchId');
+        console.log(window.localStorage.getItem('upload-file'));
+        console.log(this.$store.state.searchParams.mainImage);
+        if (window.localStorage.getItem('upload-file')) {
             // TBD：此处有2种可能：1）有插件或本地上传图片，但没等content图片投递完成；2）没有插件或本地上传图片
             console.log("mounted->onSelectImage");
-            let file = await this.awaitGetUploadImage();
-            if(file) {
-                this.onSelectImage();
-            }
-        } else if (this.$store.state.mainImage && this.$store.state.searchType === 'image') {
+            this.onSelectImage();
+        } else if (this.$store.state.searchParams.mainImage && this.$store.state.searchType === 'image') {
             // //TBD：新上传图片（插件或本地文件）发起新搜索，清空之前所有搜索参数和搜索状态，暂时不支持图片+上次搜索参数组合
             // this.onClickClear();
             // this.$store.commit('setSearchType', 'image');
             console.log("mounted->imageSearch");
-            this.imageSearch(this.$store.state.mainImage, true);
+            this.imageSearch(this.$store.state.searchParams.mainImage, true);
         } else if (this.$store.state.searchParams['searchText'] && this.$store.state.searchType === 'text') {
             console.log("mounted->onClickSearchButton");
             this.onClickSearchButton({searchText: this.$store.state.searchParams['searchText']});
@@ -136,7 +133,7 @@ export default {
             this.page = 1;
             if (this.$store.state.searchType === 'image') {
                 // 切换商品分类，不需要重新发起图片上传
-                this.imageSearch(this.$store.state.mainImage, false);
+                this.imageSearch(this.$store.state.searchParams.mainImage, false);
             } else if (this.$store.state.searchType === 'text') {
                 this.getDataFromText(false);
             }
@@ -168,7 +165,7 @@ export default {
             })
             if (this.$store.state.searchType === 'image') {
                 // 切换筛选条件，不需要重新发起图片上传
-                this.imageSearch(this.$store.state.mainImage, false);
+                this.imageSearch(this.$store.state.searchParams.mainImage, false);
             } else if (this.$store.state.searchType === 'text') {
                 this.getDataFromText(false);
             }
@@ -186,7 +183,7 @@ export default {
                     return;
                 }
                 if (this.$store.state.searchType === 'image' && this.$store.state.imageUploadState === 'uploaded') {
-                    this.getDataFromImage(this.$store.state.mainImage, true);
+                    this.getDataFromImage(this.$store.state.searchParams.mainImage, true);
                 } else if (this.$store.state.searchType === 'text') {
                     this.getDataFromText(true);
                 } else {
@@ -248,34 +245,44 @@ export default {
             // this.$refs['product-list'].changeShowNoList(false);
             try {
                 let source = getSource(this.$store.state.source_id);
-                let imageAddr = null;
-                if (source.hasUpload == false && this.$store.state.imageUploadState !== 'uploaded') {
-                    imageAddr = base64;
-                } else {
-                    imageAddr = this.$store.state.imageAddress;
-                }
+                // let imageAddr = null;
+                // if (source.hasUpload == false && this.$store.state.imageUploadState !== 'uploaded') {
+                //     imageAddr = base64;
+                // } else {
+                //     imageAddr = this.$store.state.searchParams.imageAddress;
+                // }
                 //TBD: 切换筛选发起搜索时没有传参
                 let result = null;
                 if (!loadmore && source.hasFirstSearchPic === true) {
+                    // result = await this.$store.dispatch('firstSearchPic', {
+                    //     imageAddress: imageAddr,
+                    //     yoloRegionSelected: this.$store.state.yoloCropRegion && this.$store.state.region,
+                    //     yoloCropRegion: this.$store.state.yoloCropRegion || null,
+                    //     region: this.$store.state.region || null,
+                    //     cid: this.cid,
+                    // });
                     result = await this.$store.dispatch('firstSearchPic', {
-                        imageAddress: imageAddr,
-                        yoloRegionSelected: this.$store.state.yoloCropRegion && this.$store.state.region,
-                        yoloCropRegion: this.$store.state.yoloCropRegion || null,
-                        region: this.$store.state.region || null,
-                        cid: this.cid,
+                        searchPicParams: this.$store.state.searchParams
                     });
                 } else {
+                    // result = await this.$store.dispatch('searchPic', {
+                    //     imageAddress: imageAddr,
+                    //     page: this.page,
+                    //     yoloCropRegion: this.$store.state.yoloCropRegion,
+                    //     region: this.$store.state.region,
+                    //     cid: this.cid,
+                    //     location: this.location,
+                    //     tags: (this.tags && Array.isArray(this.tags)) ? this.tags.join(',') : null,
+                    //     requestId: this.$store.state.session['requestId'],
+                    //     sessionId: this.$store.state.session['sessionId'],
+                    //     color: this.color
+                    // });
+                    console.log(this.$store.state.searchParams)
                     result = await this.$store.dispatch('searchPic', {
-                        imageAddress: imageAddr,
+                        searchPicParams: this.$store.state.searchParams,
                         page: this.page,
-                        yoloCropRegion: this.$store.state.yoloCropRegion,
-                        region: this.$store.state.region,
-                        cid: this.cid,
-                        location: this.location,
-                        tags: (this.tags && Array.isArray(this.tags)) ? this.tags.join(',') : null,
                         requestId: this.$store.state.session['requestId'],
                         sessionId: this.$store.state.session['sessionId'],
-                        color: this.color
                     });
                 }
                 if (!source.hasUpload && !loadmore) {
@@ -296,11 +303,9 @@ export default {
                         if (JSON.stringify(this.categoryList) == '{}') {
                             this.categoryList = result.data.categoryList;
                         }
-                        ;
                         if (this.filterList == undefined || this.filterList.length <= 0) {
                             this.filterList = result.data.filterList;
                         }
-                        ;
                         // this.categoryList = result.data.categoryList || null;
                         // this.filterList = result.data.filterList || null;
                         // this.sortList = result.data.sortList || null;
@@ -313,7 +318,7 @@ export default {
                             this.$store.commit('setYoloCropRegion', result.data.searchImage.yoloCropRegion);
                             this.$store.commit('setRegion', result.data.searchImage.region);
                             let regionList = result.data.searchImage.yoloCropRegion.split(';');
-                            let r = await getBase64FromCropImage(this.$store.state.mainImage, regionList);
+                            let r = await getBase64FromCropImage(this.$store.state.searchParams.mainImage, regionList);
                             this.$refs['image_operation'].setLocalImageList(r);
                         }
                         if (result.data && result.data.resultInfo && (result.data.resultInfo.sessionId || result.data.resultInfo.requestId)) {

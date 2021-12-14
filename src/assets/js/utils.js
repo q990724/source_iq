@@ -152,6 +152,16 @@ export function collapse(params){
 		console.log('key',key);   //打印传的参数
 		if(key === 'searchText'){
 			return params;
+		}else if(key === 'imageAddress'){
+			return params;
+		}else if(key === 'originImage'){
+			return params;
+		}else if(key === 'mainImage'){
+			return params;
+		}else if(key === 'yoloCropRegion'){
+			return params;
+		}else if(key === 'region'){
+			return params;
 		}
 		let arr = [];
 		Object.keys(params[key]).forEach(k=>{

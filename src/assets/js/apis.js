@@ -4,6 +4,7 @@ import { Message, MessageBox } from 'element-ui';
 import {i18n} from "@/main";
 import SourceMap from "@/assets/js/source_map";
 import Store from "@/store";
+import { getFileFromBase64 } from "@/assets/js/utils.js";
 
 function getCookie(source) {
 	let cookie = '';
@@ -52,11 +53,11 @@ export const alibaba = {
         })
     },
     // 图片搜索
-    searchGoodsByPic(imageAddress, beginPage = 1, categoryId = null) {
+    searchGoodsByPic({imageAddress, page = 1, categoryId = null}) {
         // beginPage = beginPage > 5 ? 5 : beginPage;
         return Service.get('api/aliintersite/searchGoodsByPic', {
             params: {
-                imageAddress, beginPage, categoryId
+                imageAddress, beginPage:page, categoryId
             }
         })
     },
@@ -112,12 +113,12 @@ export const aliexpress = {
 	    })
 	},
 	// 图片搜索
-	searchGoodsByPic(filename, category_id = null) {
+	searchGoodsByPic({imageAddress, category_id = null}) {
 		let cookie = getCookie('aliexpress');
 		if(!cookie) return Promise.reject('no cookie');
 	    return Service.get('api/aliexpress/searchGoodsByPic', {
 	        params: {
-	            filename, category_id
+	            filename:imageAddress, category_id
 	        },
 			headers: {
 				'token': cookie
@@ -153,23 +154,23 @@ export const _1688 = {
 	    })
 	},
 	// 图片搜索
-	searchGoodsByPic({imageId, page = 1, yoloRegionSelected = true, yoloCropRegion = '', region = '', pailitaoCategoryId = null, searchtype = 0, sortField = 'normal', sortType = 'asc',priceStart,priceEnd,quantityBegin,gmtCreate,province,city,dis,sessionId, requestId,}) {
+	searchGoodsByPic({imageAddress, page = 1, yoloRegionSelected = true, yoloCropRegion = '', region = '', pailitaoCategoryId = null, searchtype = 0, sortField = 'normal', sortType = 'asc',priceStart,priceEnd,quantityBegin,gmtCreate,province,city,dis,sessionId, requestId,}) {
 		let cookie = getCookie('1688');
 		if(!cookie) return Promise.reject('no cookie');
 	    return Service.get('api/goods/imgSearch', {
 	        params: {
-	            imageId, searchtype, page, yoloRegionSelected, yoloCropRegion, region, sessionId, requestId,
+	            imageId:imageAddress, searchtype, page, yoloRegionSelected, yoloCropRegion, region, sessionId, requestId,
 				cookie,pailitaoCategoryId,sortField,sortType,priceStart,priceEnd,quantityBegin,gmtCreate,province,city,dis
 	        }
 	    })
 	},
 	// 图片搜索
-	searchGoodsByPicFirst({imageId, yoloRegionSelected = null, yoloCropRegion = null, region = null, pailitaoCategoryId, searchtype = 0, sortField,sortType,priceStart,priceEnd,quantityBegin,gmtCreate,province,city,dis}) {
+	searchGoodsByPicFirst({imageAddress, yoloRegionSelected = null, yoloCropRegion = null, region = null, pailitaoCategoryId, searchtype = 0, sortField,sortType,priceStart,priceEnd,quantityBegin,gmtCreate,province,city,dis}) {
 		let cookie = getCookie('1688');
 		if(!cookie) return Promise.reject('no cookie');
 	    return Service.get('api/goods/imgSearchFirst', {
 	        params: {
-	            imageId, cookie, searchtype, yoloRegionSelected, yoloCropRegion, region,pailitaoCategoryId,sortField,sortType,priceStart,priceEnd,quantityBegin,gmtCreate,province,city,dis
+	            imageId:imageAddress, cookie, searchtype, yoloRegionSelected, yoloCropRegion, region,pailitaoCategoryId,sortField,sortType,priceStart,priceEnd,quantityBegin,gmtCreate,province,city,dis
 	        }
 	    })
 	},
@@ -207,12 +208,12 @@ export const _1688global = {
 	        }
 	    })
 	},
-	searchGoodsByPic(imgUrl, pageNo, region, categoryId, location, tags, keyword) {
+	searchGoodsByPic({imageAddress, page, region, categoryId, location, tags, keyword}) {
 		let cookie = getCookie('1688global');
 		if(!cookie) return Promise.reject('no cookie');
 	    return Service.get('api/goods/imgSearchKj', {
 	        params: {
-	            imgUrl, cookie,region,keyword,categoryId,location,tags,pageNo
+	            imgUrl:imageAddress, cookie,region,keyword,categoryId,location,tags,pageNo:page
 	        }
 	    })
 	},
@@ -247,10 +248,10 @@ export const yiwugo = {
 		})
 	},
 	// 图片搜索
-	searchGoodsByPic(file_url, page = 1, page_size = 10, lang = 'en') {
+	searchGoodsByPic({imageAddress, page = 1, page_size = 10, lang = 'en'}) {
 		return Service.get('api/yiwugoapp/searchGoodsByPic', {
 			params: {
-				file_url, page, page_size, lang
+				file_url:imageAddress, page, page_size, lang
 			}
 		})
 	},
@@ -274,11 +275,13 @@ export const yiwugo = {
 
 export const dhgate = {
 	// 图片搜索
-	searchGoodsByPic(is_file, file, resImg, page_num = 1, category = null, page_size = 10, lang = 'en', currency = 'USD') {
-		if(is_file === true){
+	searchGoodsByPic({imageAddress, page = 1, category = null, page_size = 10, lang = 'en', currency = 'USD'}) {
+		let file = null
+		file = getFileFromBase64(Store.state.searchParams.mainImage);
+		if(Store.state.imageUploadState !== 'uploaded') {
 			let formData = new FormData();
 			formData.append('image', file);
-			formData.append('page_num', page_num);
+			formData.append('page_num', page);
 			formData.append('page_size', page_size);
 			formData.append('lang', lang);
 			formData.append('currency', currency);
@@ -289,7 +292,7 @@ export const dhgate = {
 			})
 		}else{
 			const params = Qs.stringify({
-				imgUrl:resImg, page_num, page_size, lang, currency, category
+				imgUrl:imageAddress, page_num:page, page_size, lang, currency, category
 			});
 			return Service.post('api/dhgateapp/searchGoodsByPic',params, {
 				headers: {'Content-Type':'application/x-www-form-urlencoded'}
@@ -313,11 +316,13 @@ export const dhgate = {
 
 export const mic = {
 	// 图片搜索
-	searchGoodsByPic(is_file, file, resImg, page_num = 1,category = '', color = 0, page_size = 20) {
-		if(is_file === true) {
+	searchGoodsByPic({imageAddress, page = 1,category = null, color = 0, page_size = 20}) {
+		let file = null
+		file = getFileFromBase64(Store.state.searchParams.mainImage);
+		if(Store.state.imageUploadState !== 'uploaded') {
 			let formData = new FormData();
 			formData.append('image', file);
-			formData.append('page_num', page_num);
+			formData.append('page_num', page);
 			formData.append('page_size', page_size);
 			// formData.append('category', category);
 			return Service.post('api/micapp/searchGoodsByPic', formData, {
@@ -327,7 +332,7 @@ export const mic = {
 			})
 		}else{
 			const params = Qs.stringify({
-				imgId:resImg, page_num, page_size, category, color
+				imgId:imageAddress, page_num:page, page_size, category, color
 			});
 			return Service.post('api/micapp/searchGoodsByPic',params)
 		}
@@ -344,7 +349,9 @@ export const mic = {
 }
 export const cjds = {
 	// 图片搜索
-	searchGoodsByPic(file) {
+	searchGoodsByPic() {
+		let file = null
+		file = getFileFromBase64(Store.state.searchParams.mainImage);
 		let formData = new FormData();
 		formData.append('image', file);
 		return Service.post('api/cjdsapp/searchGoodsByPic', formData)

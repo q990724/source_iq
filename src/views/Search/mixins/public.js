@@ -50,14 +50,14 @@ const publicData = {
 			// 搜索后获取的总页码
 			totalPage: 1,
             // 当前已选分类ID
-            cid: null,
+            // cid: null,
             // //1688或1688跨境切图所需
             // yoloCropRegion: '',
             // region: '',
             //1688筛选所需参数和每次搜索接口返回的sessionId
-            location: '',
-            tags: '',
-            color: 0,
+            // location: '',
+            // tags: '',
+            // color: 0,
 			//1688, 1688global, 1688overseas首次图搜和文字搜索接口调用返回，作为后续分页请求的必选参数
             // sessionId: '',
             // requestId: '',
@@ -115,16 +115,18 @@ const publicData = {
 			this.$store.commit('dumpAll',"after onClickClear");
         },
 		clearSearchParams() {
-			this.cid = null;
+            // this.$store.commit('resetSearchParams');
+			// this.cid = null;
 			// this.yoloCropRegion = '';
 			// this.region = '';
-			this.location = '';
-            this.color= 0;
-			this.tags = '';
+			// this.location = '';
+            // this.color= 0;
+			// this.tags = '';
 			// this.sessionId= '';
 			// this.requestId= '';
 		},
         initConditions(){
+            this.$store.commit('clearConditions');
             this.categoryList = {};
             this.filterList = [];
         },
@@ -169,8 +171,8 @@ const publicData = {
 					that.$store.commit('setOriginImage', window.localStorage.getItem('upload-file'))
 					// 从window缓存拿到插件或者本地文件上传的图片后，需要清除upload-file状态，否则下次页面刷新还会发起旧图的搜索
 					that.$store.commit('clearWindowStorageUploadFile');
-					that.$store.commit('setMainImage', that.$store.state.originImage);
-					that.imageSearch(that.$store.state.mainImage, true);
+					that.$store.commit('setMainImage', that.$store.state.searchParams.originImage);
+					that.imageSearch(that.$store.state.searchParams.mainImage, true);
 			// 	}
 			// },1000);
         },
@@ -180,13 +182,13 @@ const publicData = {
         onClickLocalItem(item) {
 			console.log("onClickLocalItem")
 			let reUpload = true;
-			if(item.cover==this.$store.state.mainImage && this.$store.state.imageAddress && this.$store.state.imageUploadState == 'uploaded') {
+			if(item.cover==this.$store.state.searchParams.mainImage && this.$store.state.searchParams.imageAddress && this.$store.state.imageUploadState == 'uploaded') {
 				reUpload = false;
 			}else {
 				this.$store.commit('resetUploadState');
 			};
 			console.log("reUpload:", reUpload);
-			let originImage = this.$store.state.originImage;
+			let originImage = this.$store.state.searchParams.originImage;
 			//TBD：新上传图片（插件或本地文件）发起新搜索，清空之前所有搜索参数和搜索状态，暂时不支持图片+上次搜索参数组合
 			this.initSearchResult();
 			this.initConditions();
@@ -202,7 +204,7 @@ const publicData = {
 			}
 			this.$store.commit('setSearchType', 'image');
             this.$store.commit('setMainImage', item.cover);
-            this.imageSearch(this.$store.state.mainImage, reUpload);
+            this.imageSearch(this.$store.state.searchParams.mainImage, reUpload);
         },
         /**
          * @description 点击主图时触发
@@ -210,7 +212,7 @@ const publicData = {
         onClickMainImage() {
 			console.log("onClickMainImage");
 			let reUpload = true;
-			if(this.$store.state.originImage==this.$store.state.mainImage && this.$store.state.imageAddress && this.$store.state.imageUploadState == 'uploaded') {
+			if(this.$store.state.searchParams.originImage==this.$store.state.searchParams.mainImage && this.$store.state.searchParams.imageAddress && this.$store.state.imageUploadState == 'uploaded') {
 				reUpload = false;
 			}else {
 				this.$store.commit('resetUploadState');
@@ -223,8 +225,8 @@ const publicData = {
 			this.$store.commit('resetSearchState');
 			// this.onClickClear();
 			this.$store.commit('setSearchType', 'image');
-            this.$store.commit('setMainImage', this.$store.state.originImage);
-            this.imageSearch(this.$store.state.mainImage, reUpload);
+            this.$store.commit('setMainImage', this.$store.state.searchParams.originImage);
+            this.imageSearch(this.$store.state.searchParams.mainImage, reUpload);
         },
 
 		// 统一处理商品分类、筛选条件的选项变更状态
