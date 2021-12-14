@@ -164,16 +164,17 @@ export function collapse(params){
 			return params;
 		}
 		if(params[key]){
-			return params;
+			let arr = [];
+			Object.keys(params[key]).forEach(k=>{
+				// console.log('k',k);   //打印传的参数
+				// console.log('val',Object.values(params[key][k]))
+				arr.push(params[key][k]);
+			})
+			params[key] = arr.join(',')
 		}
-		let arr = [];
-		Object.keys(params[key]).forEach(k=>{
-			// console.log('k',k);   //打印传的参数
-			// console.log('val',Object.values(params[key][k]))
-			arr.push(params[key][k]);
-		})
-		params[key] = arr.join(',')
+
 	})
+	console.log('筛选传参扁平化之后')
 	console.log(params)
 	return params;
 }

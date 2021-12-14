@@ -240,20 +240,24 @@ export default new Vuex.Store({
             let that = this;
 			// 对任意一个categoryList/filterList/exprList/sortList的filterItem，拼装传参数据
 			function handleParams({filterItem, option, e, separator = ",", joint = ''}) {
+			    if(!that.state.searchParams[filterItem.paramName]) that.state.searchParams[filterItem.paramName] = {}
+
 				// 如果filterItem是“单选”，先清除之前的参数值
 				if(filterItem.selectUIType === 'radio'){
 				    if(that.state.searchParams[filterItem.paramName] && filterItem.title in that.state.searchParams[filterItem.paramName]){
+                        console.log('删除已有参数前')
+                        console.log(that.state.searchParams[filterItem.paramName])
+                        console.log(that.state.searchParams[filterItem.paramName][filterItem.title])
                         //TBD：不确定如下语法是否正确
                         delete that.state.searchParams[filterItem.paramName][filterItem.title];
                     }
 				}
-				console.log(filterItem)
                 let arr = [];
 				// TBD: title 逻辑有问题
-                if(that.state.searchParams[filterItem.paramName] && that.state.searchParams[filterItem.paramName][filterItem.title]){
+                if(that.state.searchParams[filterItem.paramName][filterItem.title]){
+                    console.log(that.state.searchParams[filterItem.paramName])
+                    console.log(that.state.searchParams[filterItem.paramName][filterItem.title])
                     arr = that.state.searchParams[filterItem.paramName][filterItem.title].split(separator);
-                }else{
-                    that.state.searchParams[filterItem.paramName] = {};
                 }
 
                 if(option.paramValue){
