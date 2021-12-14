@@ -66,8 +66,8 @@ export const alibaba = {
 		page = 1, 
 		index_area = 'product_en', 
 		language = 'en_US', 
-		tab = null, 
-		category = null,
+		tab = null,
+		Category = null,
 		supplierType = null, 
 		ta = null,
 		assessment_company = null,
@@ -89,7 +89,7 @@ export const alibaba = {
 		return Service.get('api/aliintersite/searchGoodsByText2', {
             params: {
                 search_text:searchText, page, index_area,language,tab,
-				Category:category,supplierType,ta,assessment_company,
+				Category,supplierType,ta,assessment_company,
 				replyAvgTime,param_order,freeSample,productTag,
 				moqf,moqt,pricef,pricet,Country,exportCountry,
 				companyAuthTag,productAuthTag,refine_attr_value
@@ -125,12 +125,12 @@ export const aliexpress = {
 	    })
 	},
 	// 文字搜索
-	searchGoodsByText({searchText, category, min_price, max_price, ship_from_country, sale, spend_save, free_shipping, is_favorite, sort_type, page = 1, country, language = 'en_US', currency, brand_id, pvid}) {
+	searchGoodsByText({searchText, cat_id, min_price, max_price, ship_from_country, sale, spend_save, free_shipping, is_favorite, sort_type, page = 1, country, language = 'en_US', currency, brand_id, pvid}) {
 		let cookie = getCookie('aliexpress');
 		if(!cookie) return Promise.reject('no cookie');
 	    return Service.get('api/aliexpress/searchGoodsByText', {
 	        params: {
-	            search_text:searchText, cat_id:category, min_price, max_price, ship_from_country, sale, spend_save, free_shipping, is_favorite, sort_type, page, country, language, currency, brand_id, pvid
+	            search_text:searchText, cat_id, min_price, max_price, ship_from_country, sale, spend_save, free_shipping, is_favorite, sort_type, page, country, language, currency, brand_id, pvid
 	        },
 			headers: {
 				'token': cookie

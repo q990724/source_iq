@@ -145,3 +145,22 @@ export function handleResponse (response) {
 export function findKey(obj, value, compare = (a, b) => a === b) {
 	return Object.keys(obj).find(k => compare(obj[k], value))
 }
+
+//使传参的参数值扁平化
+export function collapse(params){
+	Object.keys(params).forEach(key=>{
+		console.log('key',key);   //打印传的参数
+		if(key === 'searchText'){
+			return params;
+		}
+		let arr = [];
+		Object.keys(params[key]).forEach(k=>{
+			console.log('k',k);   //打印传的参数
+			// console.log('val',Object.values(params[key][k]))
+			arr.push(params[key][k]);
+		})
+		params[key] = arr.join(',')
+	})
+	console.log(params)
+	return params;
+}

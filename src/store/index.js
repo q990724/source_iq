@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 import { getSource } from "@/assets/js/source_map.js";
 import SourceMap from "@/assets/js/source_map.js";
 import { alibaba, _1688, _1688global, aliexpress,  yiwugo, dhgate, mic, cjds, litbox, banggood, chinabrands, globalres } from "@/assets/js/apis";
-import { getFileFromBase64 } from "@/assets/js/utils.js";
+import { getFileFromBase64, collapse } from "@/assets/js/utils.js";
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -189,43 +189,44 @@ export default new Vuex.Store({
         // 点击筛选条件发请求筛选
 		// payload包括filterItem（选中的filter类，该类选中的option，选中的当前值e三个参数
         onFilterChange(content,payload){
-            function handleCheckBoxParams({ self = payload.self, e = payload.e, o = payload.options, selectUIType = payload.filterItem.selectUIType, key, symbol = ",", joint = '' }) {
-                let arr = [];
-                // if(selectUIType && self.searchTextParams[key] && selectUIType === "checkbox"){
-                //     arr = self.searchTextParams[key].split(symbol);
-                // }
-                if(self.searchTextParams[key]){
-                    arr = self.searchTextParams[key].split(symbol);
-                }
-
-                if(e) {
-                    arr.push(joint + o.paramValue);
-                }else if(arr.includes(joint + o.paramValue)) {
-                    arr.splice(arr.indexOf(joint + o.paramValue), 1);
-                }
-
-                self.searchTextParams[key] = arr.join(symbol);
-                if(arr.length <= 0) {
-                    delete self.searchTextParams[key];
-                }
-            }
+            // function handleCheckBoxParams({ self = payload.self, e = payload.e, o = payload.options, selectUIType = payload.filterItem.selectUIType, key, symbol = ",", joint = '' }) {
+            //     let arr = [];
+            //     // if(selectUIType && self.searchTextParams[key] && selectUIType === "checkbox"){
+            //     //     arr = self.searchTextParams[key].split(symbol);
+            //     // }
+            //     if(self.searchTextParams[key]){
+            //         arr = self.searchTextParams[key].split(symbol);
+            //     }
+            //
+            //     if(e) {
+            //         arr.push(joint + o.paramValue);
+            //     }else if(arr.includes(joint + o.paramValue)) {
+            //         arr.splice(arr.indexOf(joint + o.paramValue), 1);
+            //     }
+            //
+            //     self.searchTextParams[key] = arr.join(symbol);
+            //     if(arr.length <= 0) {
+            //         delete self.searchTextParams[key];
+            //     }
+            // }
 
             let that = this;
 			// 对任意一个categoryList/filterList/exprList/sortList的filterItem，拼装传参数据
 			function handleParams({filterItem, option, e, separator = ",", joint = ''}) {
 				// 如果filterItem是“单选”，先清除之前的参数值
 				if(filterItem.selectUIType === 'radio'){
-					//TBD：不确定如下语法是否正确
-                    delete that.state.searchParams[filterItem.paramName];
+				    if(that.state.searchParams[filterItem.paramName] && filterItem.title in that.state.searchParams[filterItem.paramName]){
+                        //TBD：不确定如下语法是否正确
+                        delete that.state.searchParams[filterItem.paramName][filterItem.title];
+                    }
 				}
-				// 获取之前的参数值，并转化成参数值数组
                 let arr = [];
-				if(that.state.searchParams[filterItem.paramName]){
-				    arr = that.state.searchParams[filterItem.paramName].split(separator);
-				}
-				// 如果“选中”，添加参数值到参数值数组；如果"取消选中"，删除之前已经保存的参数值
-				// TBD: 如果e==false，目前的默认逻辑不是《key=‘’》，而是根本不传《key》
-				// payload.self.location = payload.e ? payload.options.name : '';
+                if(that.state.searchParams[filterItem.paramName] && that.state.searchParams[filterItem.paramName][filterItem.title]){
+                    arr = that.state.searchParams[filterItem.paramName][filterItem.title].split(separator);
+                }else{
+                    that.state.searchParams[filterItem.paramName] = {};
+                }
+
                 if(option.paramValue){
                     if(e) {
                         arr.push(joint + option.paramValue);
@@ -233,12 +234,33 @@ export default new Vuex.Store({
                         arr.splice(arr.indexOf(joint + option.paramValue), 1);
                     }
                 }
+                that.state.searchParams[filterItem.paramName][filterItem.title] = arr.join(separator);
+                // TBD：如果arr=['']，这时是否删除了《key，value》？
+                if(arr.length <= 0) {
+                    delete that.state.searchParams[filterItem.paramName][filterItem.title];
+                }
 
-                that.state.searchParams[filterItem.paramName] = arr.join(separator);
-				// TBD：如果arr=['']，这时是否删除了《key，value》？
-				if(arr.length <= 0) {
-				    delete that.state.searchParams[filterItem.paramName];
-				}
+				// 获取之前的参数值，并转化成参数值数组
+                // let arr = [];
+				// if(that.state.searchParams[filterItem.paramName]){
+				//     arr = that.state.searchParams[filterItem.paramName].split(separator);
+				// }
+				// // 如果“选中”，添加参数值到参数值数组；如果"取消选中"，删除之前已经保存的参数值
+				// // TBD: 如果e==false，目前的默认逻辑不是《key=‘’》，而是根本不传《key》
+				// // payload.self.location = payload.e ? payload.options.name : '';
+                // if(option.paramValue){
+                //     if(e) {
+                //         arr.push(joint + option.paramValue);
+                //     }else if(arr.includes(joint + option.paramValue)) {
+                //         arr.splice(arr.indexOf(joint + option.paramValue), 1);
+                //     }
+                // }
+                //
+                // that.state.searchParams[filterItem.paramName] = arr.join(separator);
+				// // TBD：如果arr=['']，这时是否删除了《key，value》？
+				// if(arr.length <= 0) {
+				//     delete that.state.searchParams[filterItem.paramName];
+				// }
 			}
             return new Promise((resolve)=>{
                 // switch (this.state.source_id) {
@@ -352,22 +374,27 @@ export default new Vuex.Store({
                 switch (this.state.source_id) {
                     case SourceMap['alibaba']['id']:
                         handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e});
+                        // 深度复制，其实只需要paramName不需要深度复制
+                        let filterItemClone = JSON.parse(JSON.stringify(payload.filterItem));
+                        filterItemClone.paramName = 'param_order';
                         switch (payload.filterItem.title) {
+                            case 'Related Category':
+                                break;
                             case 'Management Certification':
-                                handleCheckBoxParams({ key:'param_order', joint:'CAT-' });
-                                handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e, joint: 'CAT-'});
+                                // handleCheckBoxParams({ key:'param_order', joint:'CAT-' });
+                                handleParams({ filterItem:filterItemClone, option:payload.option, e:payload.e, joint: 'CAT-'});
                                 break;
                             case 'Product Certification':
-                                handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e, joint: 'PAT-'});
+                                handleParams({ filterItem:filterItemClone, option:payload.option, e:payload.e, joint: 'PAT-'});
                                 break;
                             case 'Supplier Country/Region':
-                                handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e, joint: 'CNTRY-'});
+                                handleParams({ filterItem:filterItemClone, option:payload.option, e:payload.e, joint: 'CNTRY-'});
                                 break;
                             case 'Past Export Countries':
-                                handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e, joint: 'EC-'});
+                                handleParams({ filterItem:filterItemClone, option:payload.option, e:payload.e, joint: 'EC-'});
                                 break;
                             default:
-                                handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e, joint: 'ATTR-'});
+                                handleParams({ filterItem:filterItemClone, option:payload.option, e:payload.e, joint: 'ATTR-'});
                                 break;
                         }
                         break;
@@ -402,7 +429,7 @@ export default new Vuex.Store({
                     case SourceMap['aliexpress']['id']:
                         switch (payload.filterItem.title) {
                             case 'Brands':
-                                content.commit('addSearchParam',{key:payload.filterItem.paramName, val: payload.option.paramValue});
+                                handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e});
                                 break;
                             default:
                                 handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e, separator: ';'});
@@ -414,22 +441,10 @@ export default new Vuex.Store({
                         handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e});
                         break;
                     case SourceMap['dhgate']['id']:
-                        switch (payload.filterItem.title) {
-                            case 'Ship from':
-                                content.commit('addSearchParam',{key:payload.filterItem.paramName, val: payload.option.paramValue});
-                                break;
-                            default:
-                                handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e});
-                        }
+                        handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e});
                         break;
                     case SourceMap['mic']['id']:
                         switch (payload.filterItem.title) {
-                            case 'Location':
-                                content.commit('addSearchParam',{key:payload.filterItem.paramName, val: payload.option.paramValue});
-                                break;
-                            case 'Member Type':
-                                content.commit('addSearchParam',{key:payload.filterItem.paramName, val: payload.option.paramValue});
-                                break;
                             case 'Color':
                                 payload.self.color = payload.e ? payload.options.paramValue : '';
                                 break;
@@ -438,22 +453,19 @@ export default new Vuex.Store({
                         }
                         break;
                     case SourceMap['cjds']['id']:
-                        switch (payload.filterItem.title) {
-                            case 'Ship From':
-                                content.commit('addSearchParam',{key:payload.filterItem.paramName, val: payload.option.paramValue});
-                                break;
-                            default:
-                                handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e});
-                        }
+                        handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e});
+                        break;
+                    case SourceMap['litbox']['id']:
+                        handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e});
                         break;
                     case SourceMap['banggood']['id']:
-                        content.commit('addSearchParam',{key:payload.filterItem.paramName, val: payload.option.paramValue});
+                        handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e});
                         break;
                     case SourceMap['chinabrands']['id']:
-                        content.commit('addSearchParam',{key:payload.filterItem.paramName, val: payload.option.paramValue});
+                        handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e});
                         break;
                     case SourceMap['globalres']['id']:
-                        content.commit('addSearchParam',{key:payload.filterItem.paramName, val: payload.option.paramValue});
+                        handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e});
                         break;
                 }
                 resolve()
@@ -461,66 +473,70 @@ export default new Vuex.Store({
         },
 
         searchText(content,payload){
+            let params = {};
             return new Promise(async(resolve)=>{
+                params = collapse({...payload.searchTextParams});
                 switch (this.state.source_id) {
                     case SourceMap['alibaba']['id']:
-                        resolve(await alibaba.searchGoodsByText({ ...payload.searchTextParams,page: payload.page }))
+                        resolve(await alibaba.searchGoodsByText({ ...params,page: payload.page }))
                         break;
                     case SourceMap['1688']['id']:
-                        resolve(await _1688.searchGoods({ ...payload.searchTextParams, page: payload.page, sessionId: payload.sessionId}))
+                        resolve(await _1688.searchGoods({ ...params, page: payload.page, sessionId: payload.sessionId}))
                         break;
                     case SourceMap['1688global']['id']:
-                        resolve(await _1688global.searchGoodsKj({ ...payload.searchTextParams, page: payload.page, sessionId: payload.sessionId, requestId: payload.requestId }))
+                        resolve(await _1688global.searchGoodsKj({ ...params, page: payload.page, sessionId: payload.sessionId, requestId: payload.requestId }))
                         break;
                     case SourceMap['aliexpress']['id']:
-                        resolve(await aliexpress.searchGoodsByText({ ...payload.searchTextParams,page: payload.page }))
+                        resolve(await aliexpress.searchGoodsByText({ ...params,page: payload.page }))
                         break;
                     case SourceMap['yiwugo']['id']:
-                        resolve(await yiwugo.searchGoodsByText({ ...payload.searchTextParams,page: payload.page }))
+                        resolve(await yiwugo.searchGoodsByText({ ...params,page: payload.page }))
                         break;
                     case SourceMap['dhgate']['id']:
-                        resolve(await dhgate.searchGoodsByText({ ...payload.searchTextParams,page: payload.page }))
+                        resolve(await dhgate.searchGoodsByText({ ...params,page: payload.page }))
                         break;
                     case SourceMap['mic']['id']:
-                        resolve(await mic.searchGoodsByText({ ...payload.searchTextParams,page: payload.page }))
+                        resolve(await mic.searchGoodsByText({ ...params,page: payload.page }))
                         break;
                     case SourceMap['cjds']['id']:
-                        resolve(await cjds.searchGoodsByText({ ...payload.searchTextParams,page: payload.page }))
+                        resolve(await cjds.searchGoodsByText({ ...params,page: payload.page }))
                         break;
                     case SourceMap['litbox']['id']:
-                        resolve(await litbox.searchGoodsByText({ ...payload.searchTextParams,page: payload.page }))
+                        resolve(await litbox.searchGoodsByText({ ...params,page: payload.page }))
                         break;
                     case SourceMap['1688overseas']['id']:
-                        resolve(await _1688.searchGoods({ ...payload.searchTextParams, page: payload.page, sessionId: payload.sessionId}))
+                        resolve(await _1688.searchGoods({ ...params, page: payload.page, sessionId: payload.sessionId}))
                         break;
                     case SourceMap['banggood']['id']:
-                        resolve(await banggood.searchGoodsByText({ ...payload.searchTextParams,page: payload.page }))
+                        resolve(await banggood.searchGoodsByText({ ...params,page: payload.page }))
                         break;
                     case SourceMap['chinabrands']['id']:
-                        resolve(await chinabrands.searchGoodsByText({ ...payload.searchTextParams,page: payload.page }))
+                        resolve(await chinabrands.searchGoodsByText({ ...params,page: payload.page }))
                         break;
                     case SourceMap['globalres']['id']:
-                        resolve(await globalres.searchGoodsByText({ ...payload.searchTextParams,page: payload.page }))
+                        resolve(await globalres.searchGoodsByText({ ...params,page: payload.page }))
                         break;
                 }
             })
         },
 
         firstSearchText(content,payload){
+            let params = {};
             return new Promise(async (resolve)=>{
+                params = collapse({...payload.searchTextParams});
                 switch (this.state.source_id) {
                     case SourceMap['1688']['id']:
-                        resolve(await _1688.searchGoodsFirst({ ...payload.searchTextParams,page: payload.page }))
+                        resolve(await _1688.searchGoodsFirst({ ...params,page: payload.page }))
                         break;
                 }
                 switch (this.state.source_id) {
                     case SourceMap['1688global']['id']:
-                        resolve(await _1688global.searchGoodsFirstKj({ ...payload.searchTextParams,page: payload.page }))
+                        resolve(await _1688global.searchGoodsFirstKj({ ...params,page: payload.page }))
                         break;
                 }
                 switch (this.state.source_id) {
                     case SourceMap['1688overseas']['id']:
-                        resolve(await _1688.searchGoodsFirst({ ...payload.searchTextParams,page: payload.page }))
+                        resolve(await _1688.searchGoodsFirst({ ...params,page: payload.page }))
                         break;
                 }
             })

@@ -101,7 +101,13 @@ export default {
             // this.searchTextParams.category = this.categoryList.items[itemIndex].paramValue;
 			// TBD: 此处代码暂时没有走统一的“onFilterChange”，直接填写《kay，val》到store.searchParams
 			// TBD：导致无法处理“多选”的商品分类，因为添加category参数目前直接覆盖原有的，或已经选中的分类
-			this.$store.commit('addSearchParam',{key:this.categoryList.paramName, val: this.categoryList.items[itemIndex].paramValue});
+			// this.$store.commit('addSearchParam',{key:this.categoryList.paramName, val: this.categoryList.items[itemIndex].paramValue});
+            this.$store.dispatch('onFilterChange', {
+                filterItem: this.categoryList,
+                option: this.categoryList.items[itemIndex],
+                e: event,
+                self: this,
+            })
             this.page = 1;
             if (this.$store.state.searchType === 'image') {
                 // 切换商品分类，不需要重新发起图片上传
@@ -141,7 +147,7 @@ export default {
             } else if (this.$store.state.searchType === 'text') {
                 this.getDataFromText(false);
             }
-            this.getDataFromText(false);
+            // this.getDataFromText(false);
         },
         async loadmore() {
             this.$store.commit('dumpAll', "发起分页请求loadmore前：");
