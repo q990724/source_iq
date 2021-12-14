@@ -169,6 +169,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         // 收到base64更新的消息
         // 从chrome缓存中获取最新的base64
         chrome.storage.local.get({'upload-file': null}, function (o) {
+            window.localStorage.setItem('has-upload-file', 'true');
 			//TBD：需要“自我识别”，限制只有当前页面是搜索页才可以获取upload-file。目前如果多个content运行会有“race”争抢读写问题
 			//TBD：当前假设当前content所在页面是被background创建或者消息唤醒；如果是用户自己打开搜索页，不应该获取upload-file发起搜索
             chrome.storage.local.set({'upload-file': null}, function () {

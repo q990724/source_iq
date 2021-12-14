@@ -81,6 +81,8 @@ export default {
                 e.target.value = '';
                 let base64 = await getBase64(file);
                 this.$store.commit('setWindowStorageUploadFile', base64);
+                // 设置图片搜索标识
+                this.$store.commit('setImageSearchId');
                 this.$emit('onSelectImage');
             }
         },

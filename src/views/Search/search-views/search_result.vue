@@ -66,16 +66,20 @@ export default {
         //     }
         }
     },
-    mounted() {
+    async mounted() {
         console.log('search_result.vue mounted');
         console.log(this.$store.state.source_id);
         // 加载更多
         bus.$on('loadmore', this.loadmore.bind(this))
-        console.log(window.localStorage.getItem('upload-file'));
-        if (window.localStorage.getItem('upload-file')) {
+
+        if (window.localStorage.getItem('has-upload-file')) {
+            this.$store.commit('clearImageSearchId');
             // TBD：此处有2种可能：1）有插件或本地上传图片，但没等content图片投递完成；2）没有插件或本地上传图片
             console.log("mounted->onSelectImage");
-            this.onSelectImage();
+            let file = await this.awaitGetUploadImage();
+            if(file) {
+                this.onSelectImage();
+            }
         } else if (this.$store.state.mainImage && this.$store.state.searchType === 'image') {
             // //TBD：新上传图片（插件或本地文件）发起新搜索，清空之前所有搜索参数和搜索状态，暂时不支持图片+上次搜索参数组合
             // this.onClickClear();
@@ -88,6 +92,27 @@ export default {
         }
     },
     methods: {
+        // 获取缓存查看是否继续搜索或是否为插件带图跳转过来
+        awaitGetUploadImage() {
+            return new Promise((resolve, reject) => {
+                let retryCount = 0;
+                // 每隔100ms获取一次upload-file
+                let id = setInterval(() => {
+                    // 如果10次后还是没有获取到，放弃获取
+                    if(retryCount === 10) {
+                        clearInterval(id);
+                        resolve(null);
+                    }
+                    retryCount++;
+                    let file = window.localStorage.getItem('upload-file');
+                    // 如果获取到了，则返回
+                    if(file) {
+                        clearInterval(id);
+                        resolve(file);
+                    }
+                }, 100);
+            });
+        },
         onScroll(e) {
             console.log(e);
         },

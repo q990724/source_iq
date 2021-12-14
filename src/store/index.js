@@ -184,6 +184,14 @@ export default new Vuex.Store({
 		setRegion(state, s) {
 		    state.region = s;
 		},
+        // 设置图片搜索标识，如果存在此标识，证明window.localStore中有uploadFile
+        setImageSearchId() {
+            window.localStorage.setItem('has-upload-file', 'true');
+        },
+        // 清空图片搜素标识
+        clearImageSearchId() {
+            window.localStorage.removeItem('has-upload-file');
+        }
     },
     actions: {
         // 点击筛选条件发请求筛选
