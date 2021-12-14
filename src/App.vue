@@ -1,6 +1,16 @@
 <template>
     <div id="app" v-infinite-scroll="load" infinite-scroll-immediate="false">
         <router-view :key="key"></router-view>
+        <div class="right-fixed-container">
+            <!--返回顶部-->
+            <div class="go-top" @click="onGoTop" v-show="showRightFixed">
+                <i class="el-icon-top"></i>
+            </div>
+            <!--留言-->
+            <div class="feedback" @click="onFeedback">
+                <i class="el-icon-edit-outline"></i>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -8,19 +18,36 @@
 import bus from "@/assets/js/bus";
 import {getQueryVariable, findKey} from "@/assets/js/utils.js";
 import SoureMap from "@/assets/js/source_map.js";
-
+let appElement = null;
 export default {
+    data() {
+        return {
+            showRightFixed: false
+        }
+    },
     created() {
 		console.log('app.vue created');
     },
 	mounted() {
 		console.log('app.vue mounted');
+        appElement = $('#app');
+        appElement.scroll(this.onAppScrollEvent.bind(this));
 	},
     methods: {
         load() {
             console.log('app 收到loadmore事件');
             bus.$emit("loadmore");
         },
+        onAppScrollEvent(e) {
+            let top = appElement.scrollTop();
+            this.showRightFixed = top >= 1500;
+        },
+        onGoTop() {
+            appElement.scrollTop(0);
+        },
+        onFeedback() {
+
+        }
     },
     computed: {
         source_id() {
@@ -113,6 +140,27 @@ body {
 #app {
     overflow-y: auto;
     height: 100vh;
+}
+
+.right-fixed-container {
+    position: fixed;
+    right: 40px;
+    bottom: 100px;
+    div {
+        margin-bottom: 20px;
+        background: rgba(0,0,0,.3);
+        padding: 10px;
+        box-sizing: border-box;
+        border-radius: 4px;
+        cursor: pointer;
+        &:hover {
+            background: rgba(0,0,0,.5);
+        }
+    }
+    i {
+        font-size: 28px;
+        color: #FFF;
+    }
 }
 
 .scrollable::-webkit-scrollbar {
