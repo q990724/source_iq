@@ -133,7 +133,6 @@ function sendMessageToContentScript(message, callback) {
         for (let tab of tabs) {
             chrome.tabs.sendMessage(tab.id, message, function (response) {
                 if (callback) callback(response);
-                return true;
             });
         }
     });
@@ -155,63 +154,57 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
     return true;
 })
 
+// 解析不同url
+function parseUrl(url) {
+
+    if(url.indexOf('aliexpress.com') !== -1 ) {
+        updateCookie('aliexpress.com', 'aliexpress');
+    }else if(url.indexOf('global.1688.com') !== -1) {
+        updateCookie('1688.com', '1688global');
+    }else if(url.indexOf('1688.com') !== -1) {
+        updateCookie('1688.com', '1688');
+    }
+    return true;
+}
+// 获取并更新cookie
+function updateCookie(domain, source) {
+    let obj2cookie = function (obj, step) {
+        if (obj.constructor == Object) {
+            let cssStr = '';
+            for (let key in obj) {
+                cssStr += key + '=' + obj[key] + step;
+            }
+            return cssStr.substr(0, cssStr.length - 1);
+        }
+    }
+    chrome.cookies.getAll({domain: domain}, function(res) {
+        if(res && Array.isArray(res) && res.length > 0) {
+            let cookie_obj = {};
+            for(let item of res) {
+                if(item.name) cookie_obj[item.name] = item.value || '';
+            }
+            let cookie = obj2cookie(cookie_obj, ';') || '';
+            sendMessageToContentScript({cmd: 'update-cookie', value: {cookie: cookie, source: source}});
+        }
+    })
+}
+
 //TBD：如果跳转到登录页，登录页是“已经登录”状态，然后切换到搜索页，这时cookie没有重新获取更新；可以监听切换到搜索页事件更新cookie
 // 监听页面变化
 chrome.tabs.onUpdated.addListener(function(id, info, tab) {
 	let url = tab.url;
-	let obj2cookie = function (obj, step) {
-		if (obj.constructor == Object) {
-			var cssStr = '';
-			for (var key in obj) {
-				cssStr += key + '=' + obj[key] + step;
-			}
-			return cssStr.substr(0, cssStr.length - 1);
-		}
-	}
-	if(url.indexOf('aliexpress.com') !== -1 && info.status === 'complete') {
-		chrome.cookies.getAll({domain: 'aliexpress.com'}, function(res) {
-			if(res && Array.isArray(res) && res.length > 0) {
-				console.log(res);
-				let cookie_obj = {};
-				for(let item of res) {
-					if(item.name) cookie_obj[item.name] = item.value || '';
-				}
-				let cookie = obj2cookie(cookie_obj, ';') || '';
-				// chrome.storage.local.set({aliexpress_cookie: cookie}, function(){});
-                sendMessageToContentScript({cmd: 'update-cookie', value: {cookie: cookie, source: 'aliexpress'}});
-			}
-		})
-	}else if(url.indexOf('global.1688.com') !== -1 && info.status === 'complete') {
-		chrome.cookies.getAll({domain: '1688.com'}, function(res) {
-			if(res && Array.isArray(res) && res.length > 0) {
-				console.log('res', res);
-				let cookie_obj = {};
-				for(let item of res) {
-					if(item.name) cookie_obj[item.name] = item.value || '';
-				}
-				let cookie = obj2cookie(cookie_obj, '; ') || '';
-				// console.log(cookie);
-				// chrome.storage.local.set({_1688global_cookie: cookie}, function(){});
-                sendMessageToContentScript({cmd: 'update-cookie', value: {cookie: cookie, source: '1688global'}});
-			}
-		})
-	}else if(url.indexOf('1688.com') !== -1 && info.status === 'complete') {
-		chrome.cookies.getAll({domain: '1688.com'}, function(res) {
-			if(res && Array.isArray(res) && res.length > 0) {
-				console.log('res', res);
-				let cookie_obj = {};
-				for(let item of res) {
-					if(item.name) cookie_obj[item.name] = item.value || '';
-				}
-				let cookie = obj2cookie(cookie_obj, '; ') || '';
-				// console.log(cookie);
-				// chrome.storage.local.set({_1688_cookie: cookie}, function(){});
-                sendMessageToContentScript({cmd: 'update-cookie', value: {cookie: cookie, source: '1688'}});
-			}
-		})
-	}
-	return true;
+    if(info.status === 'complete') {
+        parseUrl(url);
+    }
 })
+
+chrome.tabs.onHighlighted.addListener(function (obj) {
+    let id = obj['tabIds'][0];
+    chrome.tabs.get(id, function (tab) {
+        let url = tab.url;
+        parseUrl(url);
+    })
+});
 
 //TBD：如果插件没有安装执行，直接打开搜索页，搜索页必需也独立有initSetting的逻辑，否则就会出现undefined状态
 //初始化设置

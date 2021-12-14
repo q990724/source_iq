@@ -22,7 +22,7 @@
                     <!-- 地区 -->
                 </div>
                 <!--商品高级筛选-->
-                <!-- <high-filtration></high-filtration> -->
+                <!--<high-filtration></high-filtration>-->
                 <h2 class="mt40" v-if="results && results.length > 0">{{ $t('message.findSource') }}</h2>
                 <!--  商品列表  -->
                 <product-list :offer_list="results" ref="product-list"></product-list>
@@ -73,10 +73,11 @@ export default {
         bus.$on('loadmore', this.loadmore.bind(this))
         console.log(window.localStorage.getItem('upload-file'));
         console.log(this.$store.state.searchParams.mainImage);
-        if (window.localStorage.getItem('upload-file')) {
-            // TBD：此处有2种可能：1）有插件或本地上传图片，但没等content图片投递完成；2）没有插件或本地上传图片
+        if (window.localStorage.getItem('has-upload-file')) {
             console.log("mounted->onSelectImage");
-            this.onSelectImage();
+            // TBD：此处有2种可能：1）有插件或本地上传图片，但没等content图片投递完成；2）没有插件或本地上传图片
+            let file = await this.awaitGetUploadImage();
+            if(file) this.onSelectImage();
         } else if (this.$store.state.searchParams.mainImage && this.$store.state.searchType === 'image') {
             // //TBD：新上传图片（插件或本地文件）发起新搜索，清空之前所有搜索参数和搜索状态，暂时不支持图片+上次搜索参数组合
             // this.onClickClear();
