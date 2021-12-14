@@ -57,6 +57,7 @@ const publicData = {
             //1688筛选所需参数和每次搜索接口返回的sessionId
             location: '',
             tags: '',
+            color: 0,
 			//1688, 1688global, 1688overseas首次图搜和文字搜索接口调用返回，作为后续分页请求的必选参数
             // sessionId: '',
             // requestId: '',

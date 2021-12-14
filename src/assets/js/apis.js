@@ -62,7 +62,7 @@ export const alibaba = {
     },
 	// 文字搜索
 	searchGoodsByText({
-		search_text = '', 
+		searchText = '',
 		page = 1, 
 		index_area = 'product_en', 
 		language = 'en_US', 
@@ -88,7 +88,7 @@ export const alibaba = {
 		page = page > 99 ? 99 : page;
 		return Service.get('api/aliintersite/searchGoodsByText2', {
             params: {
-                search_text, page, index_area,language,tab,
+                search_text:searchText, page, index_area,language,tab,
 				Category:category,supplierType,ta,assessment_company,
 				replyAvgTime,param_order,freeSample,productTag,
 				moqf,moqt,pricef,pricet,Country,exportCountry,
@@ -125,12 +125,12 @@ export const aliexpress = {
 	    })
 	},
 	// 文字搜索
-	searchGoodsByText({search_text, category, min_price, max_price, ship_from_country, sale, spend_save, free_shipping, is_favorite, sort_type, page = 1, country, language = 'en_US', currency, brand_id, pvid}) {
+	searchGoodsByText({searchText, category, min_price, max_price, ship_from_country, sale, spend_save, free_shipping, is_favorite, sort_type, page = 1, country, language = 'en_US', currency, brand_id, pvid}) {
 		let cookie = getCookie('aliexpress');
 		if(!cookie) return Promise.reject('no cookie');
 	    return Service.get('api/aliexpress/searchGoodsByText', {
 	        params: {
-	            search_text, cat_id:category, min_price, max_price, ship_from_country, sale, spend_save, free_shipping, is_favorite, sort_type, page, country, language, currency, brand_id, pvid
+	            search_text:searchText, cat_id:category, min_price, max_price, ship_from_country, sale, spend_save, free_shipping, is_favorite, sort_type, page, country, language, currency, brand_id, pvid
 	        },
 			headers: {
 				'token': cookie
@@ -174,22 +174,21 @@ export const _1688 = {
 	    })
 	},
 	// 文字搜索首次
-	searchGoodsFirst({search_text, page = 1, featurePair, sortType, descendOrder, priceStart, priceEnd, quantityBegin, province, city, biztype, tagsZ, tese, filt, factorySize, employeesCount}) {
-		console.log(search_text)
+	searchGoodsFirst({searchText, page = 1, featurePair, sortType, descendOrder, priceStart, priceEnd, quantityBegin, province, city, biztype, tagsZ, tese, filt, factorySize, employeesCount}) {
 		let cookie = getCookie('1688');
 		if(!cookie) return Promise.reject('no cookie');
 	    return Service.get('api/goods/searchGoodsFirst', {
 	        params: {
-	            type: 1, cookie, keyword: search_text, page, featurePair, sortType, descendOrder, priceStart, priceEnd, quantityBegin, province, city, biztype, tagsZ, tese, filt, factorySize, employeesCount
+	            type: 1, cookie, keyword: searchText, page, featurePair, sortType, descendOrder, priceStart, priceEnd, quantityBegin, province, city, biztype, tagsZ, tese, filt, factorySize, employeesCount
 	        }
 	    })
 	},
-	searchGoods({ search_text, page = 1, sessionId, featurePair, sortType, descendOrder, priceStart, priceEnd, quantityBegin, province, city, biztype, tagsZ, tese, filt, factorySize, employeesCount }) {
+	searchGoods({ searchText, page = 1, sessionId, featurePair, sortType, descendOrder, priceStart, priceEnd, quantityBegin, province, city, biztype, tagsZ, tese, filt, factorySize, employeesCount }) {
 		let cookie = getCookie('1688');
 		if(!cookie) return Promise.reject('no cookie');
 	    return Service.get('api/goods/searchGoods', {
 	        params: {
-	            type: 1, cookie, keyword: search_text, page, sessionId, featurePair, sortType, descendOrder, priceStart, priceEnd, quantityBegin, province, city, biztype, tagsZ, tese, filt, factorySize, employeesCount
+	            type: 1, cookie, keyword: searchText, page, sessionId, featurePair, sortType, descendOrder, priceStart, priceEnd, quantityBegin, province, city, biztype, tagsZ, tese, filt, factorySize, employeesCount
 	        }
 	    })
 	}
@@ -217,21 +216,21 @@ export const _1688global = {
 	        }
 	    })
 	},
-	searchGoodsFirstKj({search_text,featurePair,category}) {
+	searchGoodsFirstKj({searchText,featurePair,category}) {
 		let cookie = getCookie('1688global');
 		if(!cookie) return Promise.reject('no cookie');
 		return Service.get('api/goods/searchGoodsFirstKj', {
 			params: {
-				keywords:search_text, cookie,featurePair, category
+				keywords:searchText, cookie,featurePair, category
 			}
 		})
 	},
-	searchGoodsKj({search_text, featurePair, sessionId, requestId, page = 1, sortType, descendOrder, priceStart, priceEnd, quantityBegin, province, city, biztype, tagsZ, tese, filt, factorySize, employeesCount,category}) {
+	searchGoodsKj({searchText, featurePair, sessionId, requestId, page = 1, sortType, descendOrder, priceStart, priceEnd, quantityBegin, province, city, biztype, tagsZ, tese, filt, factorySize, employeesCount,category}) {
 		let cookie = getCookie('1688global');
 		if(!cookie) return Promise.reject('no cookie');
 		return Service.get('api/goods/searchGoodsKj', {
 			params: {
-				keywords: search_text, cookie, page, sessionId, requestId, featurePair, sortType, descendOrder, priceStart, priceEnd, quantityBegin, province, city, biztype, tagsZ, tese, filt, factorySize, employeesCount,category
+				keywords: searchText, cookie, page, sessionId, requestId, featurePair, sortType, descendOrder, priceStart, priceEnd, quantityBegin, province, city, biztype, tagsZ, tese, filt, factorySize, employeesCount,category
 			}
 		})
 	}
@@ -256,18 +255,18 @@ export const yiwugo = {
 		})
 	},
 	// 搜索商品
-	searchGoodsByText({search_text, page=1, lang='en', sort = 0, set_yiwu_market = 0, min_price = null, max_price = null, category = null, sub_market = null,}) {
+	searchGoodsByText({searchText, page=1, lang='en', sort = 0, set_yiwu_market = 0, min_price = null, max_price = null, category = null, sub_market = null,}) {
 		return Service.get('api/yiwugoapp/searchGoodsByText', {
 			params: {
-				search_text,page,lang,sort,set_yiwu_market,min_price,max_price,category,sub_market
+				search_text:searchText,page,lang,sort,set_yiwu_market,min_price,max_price,category,sub_market
 			}
 		})
 	},
 	// 搜索店铺
-	searchShopsByText({search_text, page = 1, language = 'en', page_size = 20}) {
+	searchShopsByText({searchText, page = 1, language = 'en', page_size = 20}) {
 		return Service.get('api/yiwugoapp/searchShopsByText', {
 			params: {
-				search_text, page, language, page_size
+				search_text:searchText, page, language, page_size
 			}
 		})
 	},
@@ -300,9 +299,9 @@ export const dhgate = {
 	},
 
 	// 搜索商品
-	searchGoodsByText({search_text, page=1, page_size=20, lang='en', currency='USD', sort = 1, price_sort = null, min_price = null, max_price = null, category = null, at = null, freeShipping = null, inventoryLocation = null}) {
+	searchGoodsByText({searchText, page=1, page_size=20, lang='en', currency='USD', sort = 1, price_sort = null, min_price = null, max_price = null, category = null, at = null, freeShipping = null, inventoryLocation = null}) {
 		const params = Qs.stringify({
-			search_text, page, page_size, lang, currency, sort, price_sort, min_price, max_price, category, at, freeShipping, inventoryLocation
+			search_text:searchText, page, page_size, lang, currency, sort, price_sort, min_price, max_price, category, at, freeShipping, inventoryLocation
 		});
 		return Service.post('api/dhgateapp/searchGoodsByText', params, {
 			headers: {
@@ -335,10 +334,10 @@ export const mic = {
 	},
 
 	// 搜索商品
-	searchGoodsByText({search_text, page=1, page_size=36, lang='en', currency='USD', min_price = null, max_price = null, category = null, location = null, memberType = null, property = null}) {
+	searchGoodsByText({searchText, page=1, page_size=36, lang='en', currency='USD', min_price = null, max_price = null, category = null, location = null, memberType = null, property = null}) {
 		return Service.get('api/micapp/searchGoodsByText',{
 			params: {
-				search_text, page, page_size, lang, currency, min_price, max_price, category, location, memberType, property
+				search_text:searchText, page, page_size, lang, currency, min_price, max_price, category, location, memberType, property
 			},
 		})
 	},
@@ -352,9 +351,9 @@ export const cjds = {
 	},
 
 	// 搜索商品
-	searchGoodsByText({search_text, page=1, page_size=20, category = null, country = null, productType = null, addMarkStatus = null, sort = null, price_sort = null}) {
+	searchGoodsByText({searchText, page=1, page_size=20, category = null, country = null, productType = null, addMarkStatus = null, sort = null, price_sort = null}) {
 		const params = Qs.stringify({
-			search_text, page, page_size, category, country, productType, addMarkStatus, sort, price_sort
+			search_text:searchText, page, page_size, category, country, productType, addMarkStatus, sort, price_sort
 		});
 		return Service.post('api/cjdsapp/searchGoodsByText',params,{
 			headers: {
@@ -366,10 +365,10 @@ export const cjds = {
 
 export const litbox = {
 	// 搜索商品
-	searchGoodsByText({search_text, page=1, page_size=36, lang='en', country='CHN', country_code='CN', currency='CNY', searchType=3, category = null, brand = '0', sort = '6d', filters = []}) {
+	searchGoodsByText({searchText, page=1, page_size=36, lang='en', country='CHN', country_code='CN', currency='CNY', searchType=3, category = null, brand = '0', sort = '6d', filters = []}) {
 		return Service.get('api/litboxapp/searchGoodsByText',{
 			params: {
-				search_text, page, page_size, lang, country, country_code, currency, searchType, category, brand, sort, filters
+				search_text:searchText, page, page_size, lang, country, country_code, currency, searchType, category, brand, sort, filters
 			},
 		})
 	},
@@ -377,30 +376,30 @@ export const litbox = {
 
 export const banggood = {
 	// 搜索商品
-	searchGoodsByText({search_text, page=1, lang='en', country='CN', warehouse = null, special_options, category = null, sort = '0' }) {
+	searchGoodsByText({searchText, page=1, lang='en', country='CN', warehouse = null, special_options, category = null, sort = '0' }) {
 		return Service.get('api/banggoodapp/searchGoodsByText',{
 			params: {
-				search_text, page, lang, country, warehouse, special_options, category, sort
+				search_text:searchText, page, lang, country, warehouse, special_options, category, sort
 			},
 		})
 	},
 }
 export const chinabrands = {
 	// 搜索商品
-	searchGoodsByText({search_text, page=1, lang='en', country= null, brand_id = null, sort, canReserve = null, type = '0', sale_time = null }) {
+	searchGoodsByText({searchText, page=1, lang='en', country= null, brand_id = null, sort, canReserve = null, type = '0', sale_time = null }) {
 		return Service.get('api/chinabrands/searchGoodsByText',{
 			params: {
-				search_text, page, lang, country, brand_id, sort, canReserve, type, sale_time
+				search_text:searchText, page, lang, country, brand_id, sort, canReserve, type, sale_time
 			},
 		})
 	},
 }
 export const globalres = {
 	// 搜索商品
-	searchGoodsByText({search_text, page=1, country= null, busType = null, directOrderFlag = null, min_price, max_price,  category = null }) {
+	searchGoodsByText({searchText, page=1, country= null, busType = null, directOrderFlag = null, min_price, max_price,  category = null }) {
 		return Service.get('api/globalresapp/searchGoodsByText',{
 			params: {
-				search_text, page, country, busType, directOrderFlag, min_price, max_price, category
+				search_text:searchText, page, country, busType, directOrderFlag, min_price, max_price, category
 			},
 		})
 	},

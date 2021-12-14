@@ -61,7 +61,7 @@ export default {
         },
     },
     created() {
-        this.input = this.$store.state.searchText;
+        this.input = this.$store.state.searchParams['searchText'];
     },
     methods: {
         onClickCloseButton() {
@@ -69,7 +69,7 @@ export default {
         },
         onClickSearchButton() {
             if(!this.input.trim()) return this.$message.info(this.$t('message.search_text_not_null'));
-            this.$emit('onClickSearchButton', {search_text: this.input, index_area: this.index_area});
+            this.$emit('onClickSearchButton', {searchText: this.input, index_area: this.index_area});
         },
         onClickCamera() {
             document.getElementById('uploadButton').click();

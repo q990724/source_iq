@@ -61,9 +61,9 @@ export default {
     mixins: [publicData],
     data() {
         return {
-            searchTextParams: {
-                search_text: '',
-            }
+        //     searchTextParams: {
+        //         search_text: '',
+        //     }
         }
     },
     mounted() {
@@ -82,9 +82,9 @@ export default {
             // this.$store.commit('setSearchType', 'image');
             console.log("mounted->imageSearch");
             this.imageSearch(this.$store.state.mainImage, true);
-        } else if (this.$store.state.searchText && this.$store.state.searchType === 'text') {
+        } else if (this.$store.state.searchParams['searchText'] && this.$store.state.searchType === 'text') {
             console.log("mounted->onClickSearchButton");
-            this.onClickSearchButton({search_text: this.$store.state.searchText});
+            this.onClickSearchButton({searchText: this.$store.state.searchParams['searchText']});
         }
     },
     methods: {
@@ -98,7 +98,10 @@ export default {
             this.handleOptions(this.categoryList, itemIndex, event);
             this.$store.commit('resetSearchState');
             this.cid = this.categoryList.items[itemIndex].paramValue;
-            this.searchTextParams.category = this.categoryList.items[itemIndex].paramValue;
+            // this.searchTextParams.category = this.categoryList.items[itemIndex].paramValue;
+			// TBD: 此处代码暂时没有走统一的“onFilterChange”，直接填写《kay，val》到store.searchParams
+			// TBD：导致无法处理“多选”的商品分类，因为添加category参数目前直接覆盖原有的，或已经选中的分类
+			this.$store.commit('addSearchParam',{key:this.categoryList.paramName, val: this.categoryList.items[itemIndex].paramValue});
             this.page = 1;
             if (this.$store.state.searchType === 'image') {
                 // 切换商品分类，不需要重新发起图片上传
@@ -114,10 +117,10 @@ export default {
         onClickSearchButton(params) {
             this.onClickClear();
             this.$store.commit('setSearchType', 'text');
-            this.$store.commit('setSearchText', params.search_text);
-            this.searchTextParams = {
-                search_text: params.search_text,
-            }
+            this.$store.commit('setSearchText', params.searchText);
+            // this.searchTextParams = {
+            //     search_text: params.search_text,
+            // }
             this.getDataFromText(false);
         },
 
@@ -126,11 +129,11 @@ export default {
             this.initSearchResult();
             // this.clearSearchParams();
             this.$store.commit('resetSearchState');
-            this.$store.dispatch('filterChange', {
-                e: event,
-                self: this,
+            this.$store.dispatch('onFilterChange', {
                 filterItem: this.filterList[filterIndex],
-                options: this.filterList[filterIndex].items[itemIndex]
+                option: this.filterList[filterIndex].items[itemIndex],
+				e: event,
+				self: this,
             })
             if (this.$store.state.searchType === 'image') {
                 // 切换筛选条件，不需要重新发起图片上传
@@ -138,6 +141,7 @@ export default {
             } else if (this.$store.state.searchType === 'text') {
                 this.getDataFromText(false);
             }
+            this.getDataFromText(false);
         },
         async loadmore() {
             this.$store.commit('dumpAll', "发起分页请求loadmore前：");
@@ -314,15 +318,9 @@ export default {
                 this.results = loadmore ? [...this.results, ...[]] : [];
             } catch (e) {
                 let source = getSource(this.$store.state.source_id);
-                if (!source.hasUpload && !loadmore) {
-                    this.$store.commit('setImageUploadState', 'error')
-                }
-                ;
+                if (!source.hasUpload && !loadmore) { this.$store.commit('setImageUploadState', 'error') }
                 this.$store.commit('setSearchState', 'error');
-                if (!loadmore) {
-                    this.$store.commit('setFirstSearchState', 'error')
-                }
-                ;
+                if (!loadmore) { this.$store.commit('setFirstSearchState', 'error') }
                 this.$message.error(this.$t('message.serach_result_from_image_error') + e);
             }
             this.$store.commit('dumpAll', "发起getDataFromImage后：");
@@ -335,18 +333,18 @@ export default {
         async getDataFromText(loadmore) {
             this.$store.commit('dumpAll', "发起getDataFromText前：");
             try {
-                console.log(this.searchTextParams);
+                console.log(this.$store.state.searchParams);
                 let source = getSource(this.$store.state.source_id);
                 let result = null;
 
                 if (!loadmore && source.hasFirstSearchText === true) {
                     result = await this.$store.dispatch('firstSearchText', {
-                        searchTextParams: this.searchTextParams,
+                        searchTextParams: this.$store.state.searchParams,
                         page: this.page
                     });
                 } else {
                     result = await this.$store.dispatch('searchText', {
-                        searchTextParams: this.searchTextParams,
+                        searchTextParams: this.$store.state.searchParams,
                         page: this.page,
                         requestId: this.$store.state.session['requestId'],
                         sessionId: this.$store.state.session['sessionId']
@@ -360,11 +358,9 @@ export default {
                         if (JSON.stringify(this.categoryList) == '{}') {
                             this.categoryList = result.data.categoryList;
                         }
-                        ;
                         if (this.filterList == undefined || this.filterList.length <= 0) {
                             this.filterList = result.data.filterList;
                         }
-                        ;
                         // this.categoryList = result.data.categoryList || null;
                         // this.filterList = result.data.filterList || null;
                         // this.sortList = result.data.sortList || null;
@@ -384,10 +380,7 @@ export default {
                     // }
                     if (result.data.results && result.data.results.length > 0) {
                         handleResponse(result);
-                        if (!loadmore) {
-                            this.$store.commit('setFirstSearchState', 'success')
-                        }
-                        ;
+                        if (!loadmore) {this.$store.commit('setFirstSearchState', 'success')}
                         this.$store.commit('setSearchState', 'success');
                         // 只要搜索成功，页码就++（原站如果有单独的首次搜索接口，分页请求页码从2开始）
                         // if(loadmore || (!loadmore&&source.hasFirstSearchText === false))
@@ -400,20 +393,14 @@ export default {
                 } else {
                     this.$message.error(this.$t('message.serach_result_from_text_error'));
                     this.$store.commit('setSearchState', 'error');
-                    if (!loadmore) {
-                        this.$store.commit('setFirstSearchState', 'error')
-                    }
-                    ;
+                    if (!loadmore) {this.$store.commit('setFirstSearchState', 'error')}
                 }
                 this.results = loadmore ? [...this.results, ...[]] : [];
             } catch (error) {
                 // let source = getSource(this.$store.state.source_id);
                 // if(!source.hasUpload&&!loadmore) {this.$store.commit('setImageUploadState', 'error')};
                 this.$store.commit('setSearchState', 'error');
-                if (!loadmore) {
-                    this.$store.commit('setFirstSearchState', 'error')
-                }
-                ;
+                if (!loadmore) {this.$store.commit('setFirstSearchState', 'error')}
                 this.$message.error(this.$t('message.serach_result_from_image_error') + e);
             }
             this.$store.commit('dumpAll', "发起getDataFromText后：");
