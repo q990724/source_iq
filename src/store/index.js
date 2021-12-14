@@ -26,7 +26,7 @@ export default new Vuex.Store({
 		// //1688或1688跨境切图所需
 		// yoloCropRegion: null,
 		// region: null,
-        searchText: null, // 当前搜索文字
+        // searchText: null, // 当前搜索文字
 		// 图片上传状态
 		imageUploadState: 'none', // 图片上传状态 none: 未发起上传, uploaded: 图片上传完成, error: 图片上传失败
 		//搜索状态
@@ -49,11 +49,12 @@ export default new Vuex.Store({
 			this.commit('resetSearchState');
 		},
         clearConditions(state) {
-            if(state.searchParams.categoryId != null) state.searchParams.categoryId=null;
-            if(state.searchParams.cat_id != null) state.searchParams.cat_id=null;
-            if(state.searchParams.category != null) state.searchParams.category=null;
-            if(state.searchParams.Category != null)  delete state.searchParams.Category;
-            //
+			console.log("before clearConditions->state.searchParams:", state.searchParams);
+
+			for (let key in state.searchParams) {
+				if(key === 'searchText' || key === 'imageAddress' || key === 'originImage' || key === 'mainImage' || key === 'yoloCropRegion' || key === 'region') continue;
+				delete state.searchParams[key]
+			}
             // (state.searchParams.cat_id != null) ? state.searchParams.categoryId : null;
             // (state.searchParams.category != null) ? state.searchParams.categoryId : null;
         },
@@ -70,6 +71,7 @@ export default new Vuex.Store({
 			} else if(searchType == 'text') {
 				this.state.searchParams['searchText'] = null;
 			}
+			// this.commit('clearConditions');
             // state.searchParams = {};
 		},
 		// 重置图片上传状态
@@ -91,17 +93,18 @@ export default new Vuex.Store({
 			console.log(msg);
 			console.log("source_id:", this.state.source_id);
 			console.log("searchType:", this.state.searchType);
-			console.log("imageAddress:", this.state.searchParams.imageAddress);
-			console.log("originImage:", this.state.searchParams.originImage);
-			console.log("mainImage:", this.state.searchParams.mainImage);
-			console.log("yoloCropRegion:", this.state.searchParams.yoloCropRegion);
-			console.log("region:", this.state.searchParams.region);
-			console.log("searchText:", this.state.searchParams.searchText);
+			console.log("searchParams:", this.state.searchParams);
+			// console.log("imageAddress:", this.state.searchParams.imageAddress);
+			// console.log("originImage:", this.state.searchParams.originImage);
+			// console.log("mainImage:", this.state.searchParams.mainImage);
+			// console.log("yoloCropRegion:", this.state.searchParams.yoloCropRegion);
+			// console.log("region:", this.state.searchParams.region);
+			// console.log("searchText:", this.state.searchParams.searchText);
 			console.log("imageUploadState:", this.state.imageUploadState);
 			console.log("searchState:", this.state.searchState);
 			console.log("firstSearchState:", this.state.firstSearchState);
-			console.log("sessionId:", this.state.session['sessionId']);	
-			console.log("requestId:", this.state.session['requestId']);
+			console.log("session:", this.state.session);	
+			// console.log("requestId:", this.state.session['requestId']);
 		},
         // 获取插件设置
         getAppSetting(state) {
