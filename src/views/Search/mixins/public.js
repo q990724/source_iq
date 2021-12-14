@@ -77,6 +77,23 @@ const publicData = {
     watch: {
         source_type() {
             this.page = 1;
+        },
+        filterList() {
+            if(Array.isArray(this.filterList) && this.filterList.length > 0) {
+                for (let i = 0; i < this.filterList.length; i++) {
+                    if(this.filterList[i].selectUIType !== 'radio') continue;
+                    this.$set(this.filterList[i], 'radioValue' , null);
+                    if(this.filterList[i]['items']) {
+                        for (let item of this.filterList[i]['items']) {
+                            if(item.selected) {
+                                this.$set(this.filterList[i], 'radioValue' , item.paramValue);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            console.log(this.filterList);
         }
     },
     computed: {
