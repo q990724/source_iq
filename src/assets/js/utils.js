@@ -149,7 +149,7 @@ export function findKey(obj, value, compare = (a, b) => a === b) {
 //使传参的参数值扁平化
 export function collapse(params){
 	Object.keys(params).forEach(key=>{
-		console.log('key',key);   //打印传的参数
+		// console.log('key',key);   //打印传的参数
 		if(key === 'searchText'){
 			return params;
 		}else if(key === 'imageAddress'){
@@ -163,9 +163,12 @@ export function collapse(params){
 		}else if(key === 'region'){
 			return params;
 		}
+		if(params[key]){
+			return params;
+		}
 		let arr = [];
 		Object.keys(params[key]).forEach(k=>{
-			console.log('k',k);   //打印传的参数
+			// console.log('k',k);   //打印传的参数
 			// console.log('val',Object.values(params[key][k]))
 			arr.push(params[key][k]);
 		})
