@@ -27,8 +27,8 @@
                     <el-collapse value="true">
                         <el-collapse-item :title="filter.title">
                             <div class="filter-item_options">
-                                <el-radio-group v-model="filter.radioValue" @change="onRadioGroupChange($event, filter.paramName)">
-                                    <el-radio :label="item.paramValue" v-for="(item,itemIndex) in filter.items" :key="item.id + item.name" class="filter-item_option">
+                                <el-radio-group v-model="filter.radioValue" >
+                                    <el-radio :label="item.paramValue" v-for="(item,itemIndex) in filter.items" :key="item.id + item.name" class="filter-item_option" @change="onFilterChange(filterIndex, itemIndex, $event)">
                                         {{item.name}}
                                     </el-radio>
                                 </el-radio-group>
@@ -60,9 +60,9 @@ export default {
         onFilterChange(filterIndex, itemIndex, event) {
             this.$emit("onFilterChange", {filterIndex, itemIndex, event});
         },
-        onRadioGroupChange(paramValue, paramName) {
-            console.log(paramValue, paramName);
-        }
+        // onRadioGroupChange(paramValue, paramName) {
+        //     console.log(paramValue, paramName);
+        // }
     },
 };
 </script>
