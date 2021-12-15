@@ -18,7 +18,7 @@
                     <!--  筛选区域  -->
                     <group-filter v-if="filterList && filterList.length > 0" :filterList="filterList"
                                   @onFilterChange="onFilterChange"></group-filter>
-                    <expr-list :expr-list="exprList"></expr-list>
+                    <expr-list :expr-list="exprList" @onExprChange="onExprChange"></expr-list>
                 </div>
                 <!--商品高级筛选-->
                 <!--<high-filtration></high-filtration>-->
@@ -182,6 +182,28 @@ export default {
                 option: this.filterList[filterIndex].items[itemIndex],
 				e: event,
             })
+            if (this.$store.state.searchType === 'image') {
+                // 切换筛选条件，不需要重新发起图片上传
+                this.imageSearch(this.$store.state.searchParams.mainImage, false);
+            } else if (this.$store.state.searchType === 'text') {
+                this.getDataFromText(false);
+            }
+            // this.getDataFromText(false);
+        },
+        onExprChange({exprIndex, itemIndex, event}) {
+            this.exprList[exprIndex].selectUIType = 'checkbox';
+            this.handleOptions(this.exprList[exprIndex], itemIndex, event);
+            this.initSearchResult();
+            this.$store.commit('resetSearchState');
+            for(let i = 0; i < this.exprList[exprIndex].items[itemIndex].params.length; i++){
+                this.exprList[exprIndex].paramName = this.exprList[exprIndex].items[itemIndex].params[i].paramName;
+                this.exprList[exprIndex].items[itemIndex].paramValue = this.exprList[exprIndex].items[itemIndex].params[i].paramValue;
+                this.$store.dispatch('onFilterChange', {
+                    filterItem: this.exprList[exprIndex],
+                    option: this.exprList[exprIndex].items[itemIndex],
+                    e: event,
+                })
+            }
             if (this.$store.state.searchType === 'image') {
                 // 切换筛选条件，不需要重新发起图片上传
                 this.imageSearch(this.$store.state.searchParams.mainImage, false);

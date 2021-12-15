@@ -418,6 +418,14 @@ export default new Vuex.Store({
                         switch (payload.filterItem.title) {
                             case 'Related Category':
                                 break;
+                            case 'Supplier Types':
+                                break;
+                            case 'Product Types':
+                                break;
+                            case 'Min. Order':
+                                break;
+                            case 'Price':
+                                break;
                             case 'Management Certification':
                                 // handleCheckBoxParams({ key:'param_order', joint:'CAT-' });
                                 handleParams({ filterItem:filterItemClone, option:payload.option, e:payload.e, joint: 'CAT-'});
