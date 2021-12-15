@@ -323,6 +323,7 @@ export default {
                         }
                         if(this.exprList == undefined || this.exprList.length <= 0) {
                             this.exprList = result.data.exprList;
+                            this.handleExprList();
                         }
                         // this.categoryList = result.data.categoryList || null;
                         // this.filterList = result.data.filterList || null;
@@ -417,6 +418,7 @@ export default {
                         }
                         if(this.exprList == undefined || this.exprList.length <= 0) {
                             this.exprList = result.data.exprList;
+                            this.handleExprList();
                         }
                         // this.categoryList = result.data.categoryList || null;
                         // this.filterList = result.data.filterList || null;

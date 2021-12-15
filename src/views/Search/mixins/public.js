@@ -80,7 +80,7 @@ const publicData = {
             this.page = 1;
         },
         filterList() {
-            if(Array.isArray(this.filterList) && this.filterList.length > 0) {
+            if(this.filterList && Array.isArray(this.filterList) && this.filterList.length > 0) {
                 for (let i = 0; i < this.filterList.length; i++) {
                     if(this.filterList[i].selectUIType !== 'radio') continue;
                     this.$set(this.filterList[i], 'radioValue' , null);
@@ -94,7 +94,6 @@ const publicData = {
                     }
                 }
             }
-            console.log(this.filterList);
         }
     },
     computed: {
@@ -239,6 +238,28 @@ const publicData = {
                 })
             }
             filter.items[itemIndex].selected = event;
+        },
+
+        // 统一处理expr数据结构，增加inputValue
+        handleExprList() {
+            if(this.exprList && Array.isArray(this.exprList) && this.exprList.length > 0) {
+                for (let expr_i = 0; expr_i < this.exprList.length; expr_i++) {
+                    let expr = this.exprList[expr_i];
+                    if(expr.items && Array.isArray(expr.items) && expr.items.length > 0) {
+                        for (let item_i = 0; item_i < expr.items.length; item_i++) {
+                            let item = expr.items[item_i];
+                            if(item.exprType !== 'bool') {
+                                if(item.params && Array.isArray(item.params)) {
+                                    for (let param_i = 0; param_i < item.params.length; param_i++) {
+                                        this.$set(this.exprList[expr_i]['items'][item_i]['params'][param_i], 'inputValue', '');
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            console.log(this.exprList);
         }
     }
 }
