@@ -75,7 +75,7 @@ export default {
             document.getElementById('uploadButton').click();
         },
         async selectImage(e) {
-            console.log(e);
+            console.log("text-search->selectImage",e);
             if(e.target.files && e.target.files.length > 0) {
                 let file = e.target.files[0];
                 e.target.value = '';

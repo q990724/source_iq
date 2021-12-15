@@ -6,7 +6,7 @@
                              @onSelectImage="onSelectImage"></text-search>
                 <!--  图片处理区域  -->
                 <image-operation ref="image_operation" @onClickLocalItem="onClickLocalItem"
-                                 @onClickMainImage="onClickMainImage" @onClickClear="onClickClear"></image-operation>
+                                 @onClickMainImage="onClickMainImage" @onClickSearchText="onClickSearchText" @onClickClear="onClickClear"></image-operation>
                 <!--  筛选区域  -->
                 <!-- v-if="(categoryList && categoryList.items) || (filterList && filterList.length > 0) || $store.state.searchState !== 'none' || $store.state.mainImage || $store.state.searchText" -->
                 <div class="filter-container mt40">
@@ -140,10 +140,11 @@ export default {
             }
         },
         /**
-         * @description 点击文字搜索时触发
+         * @description 点击搜索框-》“搜索”或者搜索框-》回车，只保持搜索关键词，清空其它搜索参数和结果，重新发起搜索
          * @param {Object} params {search_text: 'apple', index_area: 'product_en'}
          */
         onClickSearchButton(params) {
+			console.log("params:",params);
             this.onClickClear();
             this.$store.commit('setSearchType', 'text');
             this.$store.commit('setSearchText', params.searchText);
@@ -152,6 +153,20 @@ export default {
             // }
             this.getDataFromText(false);
         },
+		/**
+		 * @description 点击搜索结果区-》搜索文字，保持全部搜索条件、只清空上次搜索结果，重新发起文字搜索，不清除搜索参数
+		 * @param {Object} params {search_text: 'apple', index_area: 'product_en'}
+		 */
+		onClickSearchText(params) {
+			console.log("params:",params);
+			this.initSearchResult();
+		    this.$store.commit('setSearchType', 'text');
+		    this.$store.commit('setSearchText', params.searchText);
+		    // this.searchTextParams = {
+		    //     search_text: params.search_text,
+		    // }
+		    this.getDataFromText(false);
+		},
 
         onFilterChange({filterIndex, itemIndex, event}) {
             this.handleOptions(this.filterList[filterIndex], itemIndex, event);

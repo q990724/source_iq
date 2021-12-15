@@ -45,6 +45,7 @@ export default new Vuex.Store({
 			this.state.searchType = null;
 			this.commit('resetSearchParams','image');
 			this.commit('resetSearchParams','text');
+			this.commit('clearConditions');
 			this.commit('resetUploadState');
 			this.commit('resetSearchState');
 		},

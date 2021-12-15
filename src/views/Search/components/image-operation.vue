@@ -26,7 +26,7 @@
         </div>
         <div class="left" v-if="$store.state.searchType === 'text'">
             <div class="text-list">
-                <div class="text">{{ $store.state.searchParams.searchText }}</div>
+                <div class="text" @click="onClickSearchText">{{ $store.state.searchParams.searchText }}</div>
             </div>
         </div>
         <div class="right">
@@ -104,6 +104,11 @@ export default {
             this.mainImageActive = true;
             this.$emit('onClickMainImage');
         },
+		onClickSearchText() {
+			console.log("onClickSearchText");
+			console.log(this.$store.state.searchParams.searchText);
+		    this.$emit('onClickSearchText',{searchText: this.$store.state.searchParams.searchText});
+		},
 		// 清空本图片组件里面的截图缓存
 		onClickCropResult() {
 			this.cropBoxStatus = false
