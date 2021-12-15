@@ -158,6 +158,7 @@ const publicData = {
         },
         onSelectImage() {
 			console.log("onSelectImage");
+            this.$store.commit('clearImageSearchId');
 			let that = this;
 			// let timer = window.setInterval(function() {
 			// 	if (window.localStorage.getItem('upload-file') !== null) {
