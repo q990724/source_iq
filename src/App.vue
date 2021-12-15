@@ -10,8 +10,8 @@
             <div class="feedback" @click="onFeedback">
                 <i class="el-icon-edit-outline"></i>
             </div>
-            <feedback ref="feedback"></feedback>
         </div>
+        <feedback ref="feedback"></feedback>
     </div>
 </template>
 

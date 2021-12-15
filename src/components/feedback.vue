@@ -18,14 +18,14 @@
                         :on-change="onUploadChange"
                         :auto-upload="false">
                         <i slot="default" class="el-icon-plus"></i>
-                        <div slot="file" slot-scope="{file}">
-                            <img class="el-upload-list__item-thumbnail" :src="file.url" alt="">
+                        <template slot="file" slot-scope="{file}">
+                            <img class="el-upload-list__item-thumbnail img" :src="file.url" alt="">
                             <span class="el-upload-list__item-actions">
                                     <span class="el-upload-list__item-delete" @click="handleRemove(file)">
                                       <i class="el-icon-delete"></i>
                                     </span>
                                 </span>
-                        </div>
+                        </template>
                     </el-upload>
                 </el-form-item>
             </el-form>
@@ -106,6 +106,8 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
+.img {
+    object-fit: contain;
+}
 </style>
