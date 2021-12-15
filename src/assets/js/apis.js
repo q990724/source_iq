@@ -185,12 +185,12 @@ export const _1688 = {
 	        }
 	    })
 	},
-	searchGoods({ searchText, page = 1, sessionId, featurePair, sortType, descendOrder, priceStart, priceEnd, quantityBegin, province, city, biztype, tagsZ, tese, filt, factorySize, employeesCount }) {
+	searchGoods({ searchText, page = 1, sessionId, featurePair, sortType, descendOrder, priceStart, priceEnd, quantityBegin, province, city, biztype, tagsZ, tese, filt, factorySize, employeesCount, startIndex = 0 }) {
 		let cookie = getCookie('1688');
 		if(!cookie) return Promise.reject('no cookie');
 	    return Service.get('api/goods/searchGoods', {
 	        params: {
-	            type: 1, cookie, keyword: searchText, page, sessionId, featurePair, sortType, descendOrder, priceStart, priceEnd, quantityBegin, province, city, biztype, tagsZ, tese, filt, factorySize, employeesCount
+	            type: 1, cookie, keyword: searchText, page, sessionId, featurePair, sortType, descendOrder, priceStart, priceEnd, quantityBegin, province, city, biztype, tagsZ, tese, filt, factorySize, employeesCount, startIndex
 	        }
 	    })
 	}

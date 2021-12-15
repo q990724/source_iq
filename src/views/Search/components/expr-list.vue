@@ -1,5 +1,5 @@
 <template>
-    <div class="expr-list">
+    <div class="expr-list"  v-if="exprList && exprList.length > 0">
         <el-collapse>
             <el-collapse-item :title="expr.title" v-for="(expr, index) in exprList" :key="expr.title">
                 <div class="list" v-if="expr.items && expr.items.length > 0">
@@ -12,7 +12,7 @@
                         <div class="range" v-if="item.exprType === 'range'">
                             <!--<span class="range_title">Price</span>-->
                             <el-input style="width: 60px;margin-left: 8px;" placeholder="min"></el-input>
-                            <i style="margin: 0 5px;" v-if="item.parmas[0]['needInput']">-</i>
+                            <i style="margin: 0 5px;" v-if="item.params[0]['needInput']">-</i>
                             <el-input style="width: 60px;margin-right: 8px;" placeholder="max"></el-input>
                             <el-button size="small">OK</el-button>
                         </div>
