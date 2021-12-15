@@ -148,33 +148,18 @@ export function findKey(obj, value, compare = (a, b) => a === b) {
 
 //使传参的参数值扁平化
 export function collapse(params){
-	Object.keys(params).forEach(key=>{
-		// console.log('key',key);   //打印传的参数
-		if(key === 'searchText'){
-			return params;
-		}else if(key === 'imageAddress'){
-			return params;
-		}else if(key === 'originImage'){
-			return params;
-		}else if(key === 'mainImage'){
-			return params;
-		}else if(key === 'yoloCropRegion'){
-			return params;
-		}else if(key === 'region'){
-			return params;
-		}
+	// Object.keys(params).forEach(key=>{
+	for	(let key in params) {
+		if(key === 'searchText' || key ==='imageAddress'|| key ==='originImage'|| key ==='mainImage'||key ==='yoloCropRegion'||key ==='region')
+			continue;
 		if(params[key]){
 			let arr = [];
-			Object.keys(params[key]).forEach(k=>{
-				// console.log('k',k);   //打印传的参数
-				// console.log('val',Object.values(params[key][k]))
+			for (let k in params[key]) {
 				arr.push(params[key][k]);
-			})
+			}
 			params[key] = arr.join(',')
 		}
-
-	})
-	console.log('筛选传参扁平化之后')
-	console.log(params)
+	}
+	console.log('state.searchParams扁平化之后:',params);
 	return params;
 }

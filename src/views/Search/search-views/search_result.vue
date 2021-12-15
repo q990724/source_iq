@@ -129,7 +129,6 @@ export default {
                 filterItem: this.categoryList,
                 option: this.categoryList.items[itemIndex],
                 e: event,
-                self: this,
             })
             this.page = 1;
             if (this.$store.state.searchType === 'image') {
@@ -177,7 +176,6 @@ export default {
                 filterItem: this.filterList[filterIndex],
                 option: this.filterList[filterIndex].items[itemIndex],
 				e: event,
-				self: this,
             })
             if (this.$store.state.searchType === 'image') {
                 // 切换筛选条件，不需要重新发起图片上传
@@ -278,7 +276,8 @@ export default {
                     //     cid: this.cid,
                     // });
                     result = await this.$store.dispatch('firstSearchPic', {
-                        searchPicParams: this.$store.state.searchParams
+                        searchPicParams: this.$store.state.searchParams,
+						// TBD：是否需要传page，跟文字搜索统一？
                     });
                 } else {
                     // result = await this.$store.dispatch('searchPic', {
@@ -293,7 +292,6 @@ export default {
                     //     sessionId: this.$store.state.session['sessionId'],
                     //     color: this.color
                     // });
-                    console.log(this.$store.state.searchParams)
                     result = await this.$store.dispatch('searchPic', {
                         searchPicParams: this.$store.state.searchParams,
                         page: this.page,

@@ -241,23 +241,25 @@ export default new Vuex.Store({
             let that = this;
 			// 对任意一个categoryList/filterList/exprList/sortList的filterItem，拼装传参数据
 			function handleParams({filterItem, option, e, separator = ",", joint = ''}) {
+				//TBD：缺乏参数的鲁棒性检查，例如：paramName/filterItem.title都不能为NULL或者‘’
+				if(!filterItem.paramName) {
+					//TBD: 后台接口没有针对该条件组返回paramName，是个严重错误
+					//return;
+				}
+				if(!filterItem.title) {
+					//TBD:如果该条件组没有返回title，用paramName填充，作为鲁棒性措施
+					filterItem.title=filterItem.paramName;
+				}
 			    if(!that.state.searchParams[filterItem.paramName]) that.state.searchParams[filterItem.paramName] = {}
 
 				// 如果filterItem是“单选”，先清除之前的参数值
-				if(filterItem.selectUIType === 'radio'){
-				    if(that.state.searchParams[filterItem.paramName] && filterItem.title in that.state.searchParams[filterItem.paramName]){
-                        console.log('删除已有参数前')
-                        console.log(that.state.searchParams[filterItem.paramName])
-                        console.log(that.state.searchParams[filterItem.paramName][filterItem.title])
+				if(filterItem.selectUIType === 'radio' && that.state.searchParams[filterItem.paramName] && (filterItem.title in that.state.searchParams[filterItem.paramName])){
                         //TBD：不确定如下语法是否正确
                         delete that.state.searchParams[filterItem.paramName][filterItem.title];
-                    }
 				}
                 let arr = [];
 				// TBD: title 逻辑有问题
                 if(that.state.searchParams[filterItem.paramName][filterItem.title]){
-                    console.log(that.state.searchParams[filterItem.paramName])
-                    console.log(that.state.searchParams[filterItem.paramName][filterItem.title])
                     arr = that.state.searchParams[filterItem.paramName][filterItem.title].split(separator);
                 }
 
@@ -661,6 +663,10 @@ export default new Vuex.Store({
                         res = await _1688.searchGoodsByPic({...params,sessionId:payload.sessionId, requestId:payload.requestId, searchtype:0})
                         resolve(res)
                         break;
+					case SourceMap['1688overseas']['id']:	// 图搜接口与1688一样，只是searchtype参数不同（所有货源，跨境货源）
+						res = await _1688.searchGoodsByPic({...params,page:payload.page, sessionId:payload.sessionId, requestId:payload.requestId, searchtype:1 })
+						resolve(res)
+						break;
                     case SourceMap['1688global']['id']:
                         res = await _1688global.searchGoodsByPic({...params,page:payload.page})
                         resolve(res)
@@ -680,15 +686,14 @@ export default new Vuex.Store({
                         break;
                     case SourceMap['mic']['id']:
                         res = await mic.searchGoodsByPic({...params, page:payload.page})
+						// 没有单独的上传图片接口，所以需要处理下返回的imageAddress
                         res.data.searchImage.imageAddress = res.sourceResult.data.content.imgId
                         resolve(res)
                         break;
                     case SourceMap['cjds']['id']:
                         res = await cjds.searchGoodsByPic()
-                        resolve(res)
-                        break;
-                    case SourceMap['1688overseas']['id']:
-                        res = await _1688.searchGoodsByPic({...params,page:payload.page, sessionId:payload.sessionId, requestId:payload.requestId, searchtype:1 })
+						//TBD： CJ目前没有返回上传图片的imageAddress，也没有分页功能，如果切换到网页版会崩
+						res.data.searchImage.imageAddress = null
                         resolve(res)
                         break;
                 }
@@ -707,6 +712,7 @@ export default new Vuex.Store({
                     case SourceMap['1688overseas']['id']:
                         resolve(await _1688.searchGoodsByPicFirst( {...params, searchtype:1 } ))
                         break;
+					// 1688global没有首次搜索接口
                 }
             })
         },
