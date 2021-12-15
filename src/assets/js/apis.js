@@ -1,4 +1,5 @@
-import Qs from 'qs'
+import Qs from 'qs';
+import axios from "axios";
 import {Service} from "@/assets/js/http";
 import { Message, MessageBox } from 'element-ui';
 import {i18n} from "@/main";
@@ -410,4 +411,28 @@ export const globalres = {
 			},
 		})
 	},
+}
+
+
+export const publicAPI = {
+	uploadFeedbackImage(filelist) {
+		let formData = new FormData();
+		let i = 1;
+		for (let file of filelist) {
+			formData.append(`file_${i}`, file.raw);
+			i++;
+		}
+		return axios.post('http://www.tripsters.cn/Publics/Index/imgUpload', formData, {
+			headers: {
+				'Content-Type': 'multipart/form-data',
+			}
+		});
+	},
+	submitFeedback({appname = '欧洲火车', content = '', contact = null, img_path = null}) {
+		return axios.post('http://www.tripsters.cn/Publics/Index/sendUserFeedback', Qs.stringify({appname, contact, content, img_path}), {
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+			}
+		});
+	}
 }

@@ -10,29 +10,34 @@
             <div class="feedback" @click="onFeedback">
                 <i class="el-icon-edit-outline"></i>
             </div>
+            <feedback ref="feedback"></feedback>
         </div>
     </div>
 </template>
 
 <script>
 import bus from "@/assets/js/bus";
-import {getQueryVariable, findKey} from "@/assets/js/utils.js";
 import SoureMap from "@/assets/js/source_map.js";
+import {publicAPI} from "@/assets/js/apis";
+import feedback from "@/components/feedback";
 let appElement = null;
 export default {
     data() {
         return {
-            showRightFixed: false
+            showRightFixed: false,
         }
     },
-    created() {
-		console.log('app.vue created');
+    components: {
+        feedback
     },
-	mounted() {
-		console.log('app.vue mounted');
+    created() {
+        console.log('app.vue created');
+    },
+    mounted() {
+        console.log('app.vue mounted');
         appElement = $('#app');
         appElement.scroll(this.onAppScrollEvent.bind(this));
-	},
+    },
     methods: {
         load() {
             console.log('app 收到loadmore事件');
@@ -46,22 +51,22 @@ export default {
             appElement.scrollTop(0);
         },
         onFeedback() {
-
-        }
+            this.$refs['feedback'].open();
+        },
     },
     computed: {
         source_id() {
             return this.$store.state.source_id;
         },
         key() {
-            return this.$route.name !== undefined? this.$route.name +new Date(): this.$route +new Date()
+            return this.$route.name !== undefined ? this.$route.name + new Date() : this.$route + new Date()
         }
     },
     watch: {
-		//TBD：由于异步进程之间的“竞跑”，这里可能遇到source_id=null，app-setting还没来得及从window获取更新store
-		//TBD：如果store->source_id初始化为1而不是null，会导致插件切换source_id=1时，watch不触发，路由不切换产生不一致
+        //TBD：由于异步进程之间的“竞跑”，这里可能遇到source_id=null，app-setting还没来得及从window获取更新store
+        //TBD：如果store->source_id初始化为1而不是null，会导致插件切换source_id=1时，watch不触发，路由不切换产生不一致
         source_id() {
-			console.log("app.vue watch source_id",this.$store.state.source_id);
+            console.log("app.vue watch source_id", this.$store.state.source_id);
             let current_path = this.$route.path;
             switch (this.$store.state.source_id) {
                 case SoureMap['alibaba']['id']:
@@ -146,17 +151,20 @@ body {
     position: fixed;
     right: 40px;
     bottom: 100px;
+
     div {
         margin-bottom: 20px;
-        background: rgba(0,0,0,.3);
+        background: rgba(0, 0, 0, .3);
         padding: 10px;
         box-sizing: border-box;
         border-radius: 4px;
         cursor: pointer;
+
         &:hover {
-            background: rgba(0,0,0,.5);
+            background: rgba(0, 0, 0, .5);
         }
     }
+
     i {
         font-size: 28px;
         color: #FFF;
