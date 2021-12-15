@@ -37,6 +37,7 @@ const publicData = {
             categoryList: {},
             // 筛选列表
             filterList: [],
+            exprList: [],
 			// exprList:
 			// sortList:
             // 商品结果列表
