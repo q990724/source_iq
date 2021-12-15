@@ -110,6 +110,7 @@ const publicData = {
             this.initSearchResult();
 			this.initConditions();
 			this.clearSearchParams();
+			// this.$refs['text_search'].onClickCloseButton();
             // this.imageAddress = '';
             this.$store.commit('resetAll');
 			this.$store.commit('dumpAll',"after onClickClear");

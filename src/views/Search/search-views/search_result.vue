@@ -69,11 +69,11 @@ export default {
     },
     async mounted() {
         console.log('search_result.vue mounted');
-        console.log(this.$store.state.source_id);
+        console.log('source_id:',this.$store.state.source_id);
         // 加载更多
         bus.$on('loadmore', this.loadmore.bind(this))
-        console.log(window.localStorage.getItem('upload-file'));
-        console.log(this.$store.state.searchParams.mainImage);
+        console.log("window.localStorage.upload-file:",window.localStorage.getItem('upload-file'));
+        console.log("store.state.searchParams.mainImage:",this.$store.state.searchParams.mainImage);
         if (window.localStorage.getItem('has-upload-file')) {
             console.log("mounted->onSelectImage");
             // TBD：此处有2种可能：1）有插件或本地上传图片，但没等content图片投递完成；2）没有插件或本地上传图片
@@ -119,8 +119,11 @@ export default {
          * @description 切换商品分类时触发
          */
         onClassChange({itemIndex, event}) {
+			console.log("onClassChange");
             this.handleOptions(this.categoryList, itemIndex, event);
-            this.$store.commit('resetSearchState');
+			this.initSearchResult();
+			// this.clearSearchParams();
+			this.$store.commit('resetSearchState');
             this.cid = this.categoryList.items[itemIndex].paramValue;
             // this.searchTextParams.category = this.categoryList.items[itemIndex].paramValue;
 			// TBD: 此处代码暂时没有走统一的“onFilterChange”，直接填写《kay，val》到store.searchParams
@@ -131,7 +134,7 @@ export default {
                 option: this.categoryList.items[itemIndex],
                 e: event,
             })
-            this.page = 1;
+            // this.page = 1;
             if (this.$store.state.searchType === 'image') {
                 // 切换商品分类，不需要重新发起图片上传
                 this.imageSearch(this.$store.state.searchParams.mainImage, false);
@@ -158,7 +161,7 @@ export default {
 		 * @param {Object} params {search_text: 'apple', index_area: 'product_en'}
 		 */
 		onClickSearchText(params) {
-			console.log("params:",params);
+			console.log("onClickSearchText");
 			this.initSearchResult();
 		    this.$store.commit('setSearchType', 'text');
 		    this.$store.commit('setSearchText', params.searchText);
@@ -169,6 +172,7 @@ export default {
 		},
 
         onFilterChange({filterIndex, itemIndex, event}) {
+			console.log("onFilterChange");
             this.handleOptions(this.filterList[filterIndex], itemIndex, event);
             this.initSearchResult();
             // this.clearSearchParams();
