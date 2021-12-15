@@ -126,9 +126,12 @@ const publicData = {
 			// this.requestId= '';
 		},
         initConditions(){
+			// 这里的搜索条件和store.state.searchParams里面的搜索条件是联动的，需要整体清除
             this.$store.commit('clearConditions');
             this.categoryList = {};
             this.filterList = [];
+			this.exprList = [];
+			// this.sortList = [];
         },
         initSearchResult() {
             // this.categoryList = {};
