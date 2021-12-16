@@ -100,7 +100,7 @@ export const alibaba = {
 	}
 }
 
-export const aliexpress = {
+export const aliexpressDS = {
 	uploadPic(file) {
 		let cookie = getCookie('aliexpress');
 		if(!cookie) return Promise.reject('no cookie');
@@ -138,6 +138,34 @@ export const aliexpress = {
 				'token': cookie
 			}
 	    })
+	},
+}
+
+export const aliexpressZapieX = {
+	uploadPic(file) {
+		let formData = new FormData();
+		formData.append('file', file);
+		return Service.post('api/aliexpress/zapiexUploadPic', formData, {
+			headers: {
+				'Content-Type': 'multipart/form-data',
+			}
+		})
+	},
+	// 图片搜索
+	searchGoodsByPic({imageAddress, currency = null, shipTo, lang, sort, filter}) {
+		return Service.get('api/aliexpress/zapiexImgSearch', {
+			params: {
+				uploadKey:imageAddress, currency, shipTo, lang, sort, filter
+			},
+		})
+	},
+	// 文字搜索
+	searchGoodsByText({searchText, categoryId, min_price, max_price, shipFrom, shipTo, freeShippingOnly, fastShippingOnly, moreThanFourStarsOnly, sort, page = 1, language = 'en_US', currency}) {
+		return Service.get('api/aliexpress/zapiexSearchGoods', {
+			params: {
+				search_text:searchText, categoryId, min_price, max_price, shipFrom, shipTo, freeShippingOnly, fastShippingOnly, moreThanFourStarsOnly, sort, page, language, currency
+			},
+		})
 	},
 }
 

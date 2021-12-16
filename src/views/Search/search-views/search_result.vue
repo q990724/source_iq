@@ -229,6 +229,7 @@ export default {
             this.$store.commit('resetSearchState');
             let sortItemClone = JSON.parse(JSON.stringify(this.sortList[sortIndex]));
             sortItemClone.title = 'sort';
+            //如果item不存在，初始化一个子级的paramValue
             if(!sortItemClone.items) sortItemClone.items = [[paramValue=> '']];
             sortItemClone.items[itemIndex].paramValue = sortItemClone.paramValue;
             console.log(sortItemClone)

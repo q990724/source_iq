@@ -14,7 +14,10 @@
 			    <span data-name="1688overseas">1688overseas</span>
 			</div>
             <div class="item" :class="{'active': $store.state.source_id === 4}">
-                <span data-name="aliexpress">AliExpress</span>
+                <span data-name="aliexpressDS">Aliexpress DS</span>
+            </div>
+            <div class="item" :class="{'active': $store.state.source_id === 14}">
+                <span data-name="aliexpressZapieX">Aliexpress ZapieX</span>
             </div>
             <div class="item" :class="{'active': $store.state.source_id === 5}">
                 <span data-name="yiwugo">Yiwugo</span>

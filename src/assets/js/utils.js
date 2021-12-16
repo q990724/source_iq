@@ -122,19 +122,21 @@ export function handleResponse (response) {
 			// 对商品的封面图地址进行https加工
 			if (item.product.media.coverImageUrl && typeof item.product.media.coverImageUrl ==
 				'string') {
-				if (!item.product.media.coverImageUrl.includes('https')) {
+				if (item.product.media.coverImageUrl.includes('https:https://')) {
+					item.product.media.coverImageUrl = item.product.media.coverImageUrl.slice(6)
+				}else if (!item.product.media.coverImageUrl.includes('http')) {
 					item.product.media.coverImageUrl = 'https://' + item.product.media.coverImageUrl
 				}
 			}
 			// 对商品的详情页地址进行https加工
 			if (item.product.productUrl && typeof item.product.productUrl == 'string') {
-				if (!item.product.productUrl.includes('https')) {
+				if (!item.product.productUrl.includes('http')) {
 					item.product.productUrl = 'https://' + item.product.productUrl
 				}
 			}
 			// 对卖家的详情页地址进行https加工
 			if (item.seller && item.seller.homeUrl && typeof item.seller.homeUrl == 'string') {
-				if (!item.seller.homeUrl.includes('https')) {
+				if (!item.seller.homeUrl.includes('http')) {
 					item.seller.homeUrl = 'https://' + item.seller.homeUrl
 				}
 			}

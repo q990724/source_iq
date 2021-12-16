@@ -27,8 +27,14 @@ const routes = [
         component: () => import('@/views/Search/search-views/search_result')
     },
     {
-        path: '/view-aliexpress',
-        name: 'view-aliexpress',
+        path: '/view-aliexpressDS',
+        name: 'view-aliexpressDS',
+        // component: () => import('@/views/Search/search-views/aliexpress')
+        component: () => import('@/views/Search/search-views/search_result')
+    },
+    {
+        path: '/view-aliexpressZapieX',
+        name: 'view-aliexpressZapieX',
         // component: () => import('@/views/Search/search-views/aliexpress')
         component: () => import('@/views/Search/search-views/search_result')
     },

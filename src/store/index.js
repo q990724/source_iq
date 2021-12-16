@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import { getSource } from "@/assets/js/source_map.js";
 import SourceMap from "@/assets/js/source_map.js";
-import { alibaba, _1688, _1688global, aliexpress,  yiwugo, dhgate, mic, cjds, litbox, banggood, chinabrands, globalres } from "@/assets/js/apis";
+import { alibaba, _1688, _1688global, aliexpressDS, aliexpressZapieX,  yiwugo, dhgate, mic, cjds, litbox, banggood, chinabrands, globalres } from "@/assets/js/apis";
 import { getFileFromBase64, collapse } from "@/assets/js/utils.js";
 Vue.use(Vuex)
 
@@ -477,7 +477,7 @@ export default new Vuex.Store({
                                 // break;
                         // }
                         break;
-                    case SourceMap['aliexpress']['id']:
+                    case SourceMap['aliexpressDS']['id']:
                         switch (payload.filterItem.title) {
                             case 'Brands':
                                 handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e});
@@ -488,6 +488,9 @@ export default new Vuex.Store({
                                 break;
                         }
 
+                        break;
+                    case SourceMap['aliexpressZapieX']['id']:
+                        handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e});
                         break;
                     case SourceMap['yiwugo']['id']:
                         handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e});
@@ -538,8 +541,11 @@ export default new Vuex.Store({
                     case SourceMap['1688global']['id']:
                         resolve(await _1688global.searchGoodsKj({ ...params, page: payload.page, sessionId: payload.sessionId, requestId: payload.requestId }))
                         break;
-                    case SourceMap['aliexpress']['id']:
-                        resolve(await aliexpress.searchGoodsByText({ ...params,page: payload.page }))
+                    case SourceMap['aliexpressDS']['id']:
+                        resolve(await aliexpressDS.searchGoodsByText({ ...params,page: payload.page }))
+                        break;
+                    case SourceMap['aliexpressZapieX']['id']:
+                        resolve(await aliexpressZapieX.searchGoodsByText({ ...params,page: payload.page }))
                         break;
                     case SourceMap['yiwugo']['id']:
                         resolve(await yiwugo.searchGoodsByText({ ...params,page: payload.page }))
@@ -622,12 +628,20 @@ export default new Vuex.Store({
                          result.data.imageAddress = res.data.imgUrl
                          resolve(result)
                          break;
-                     case SourceMap['aliexpress']['id']:
-                         res = await aliexpress.uploadPic( payload )
+                     case SourceMap['aliexpressDS']['id']:
+                         res = await aliexpressDS.uploadPic( payload )
                          result.retcode = res.code
                          result.message = res.msg
                          result.data = {}
                          result.data.imageAddress = res.data.filename
+                         resolve(result)
+                         break;
+                     case SourceMap['aliexpressZapieX']['id']:
+                         res = await aliexpressZapieX.uploadPic( payload )
+                         result.retcode = res.retcode
+                         result.message = res.message
+                         result.data = {}
+                         result.data.imageAddress = res.data.uploadKey
                          resolve(result)
                          break;
                      case SourceMap['yiwugo']['id']:
@@ -685,8 +699,12 @@ export default new Vuex.Store({
                         res = await _1688global.searchGoodsByPic({...params,page:payload.page})
                         resolve(res)
                         break;
-                    case SourceMap['aliexpress']['id']:
-                        res = await aliexpress.searchGoodsByPic({...params})
+                    case SourceMap['aliexpressDS']['id']:
+                        res = await aliexpressDS.searchGoodsByPic({...params})
+                        resolve(res)
+                        break;
+                    case SourceMap['aliexpressZapieX']['id']:
+                        res = await aliexpressZapieX.searchGoodsByPic({...params})
                         resolve(res)
                         break;
                     case SourceMap['yiwugo']['id']:

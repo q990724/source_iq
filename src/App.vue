@@ -81,9 +81,13 @@ export default {
                     if (current_path === '/view-1688global') return;
                     this.$router.push('/view-1688global');
                     break;
-                case SoureMap['aliexpress']['id']:
-                    if (current_path === '/view-aliexpress') return;
-                    this.$router.push('/view-aliexpress');
+                case SoureMap['aliexpressDS']['id']:
+                    if (current_path === '/view-aliexpressDS') return;
+                    this.$router.push('/view-aliexpressDS');
+                    break;
+                case SoureMap['aliexpressZapieX']['id']:
+                    if (current_path === '/view-aliexpressZapieX') return;
+                    this.$router.push('/view-aliexpressZapieX');
                     break;
                 case SoureMap['yiwugo']['id']:
                     if (current_path === '/view-yiwugo') return;
