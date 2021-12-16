@@ -14,24 +14,11 @@ chrome.storage.local.get( {'upload-file': null}, function(o) {
     if(o['upload-file']) {
         chrome.storage.local.set({'upload-file': null}, function () {
             window.localStorage.setItem('upload-file', o['upload-file']);
+            window.location.reload();
         })
     }
 });
 console.log("content.js加载完成");
-
-
-$(document.body).append(`
-    <div id="source_iq_app">
-        <div class="cover-image">
-            <img src="#" alt="" id="ele" width="100%">
-            <div class="mark"></div>
-            <div class="confirm">
-                <span>确定</span>
-                <i>关闭</i>
-            </div>
-        </div>
-    </div>
-`);
 
 function coverImage(e) {
     return new Promise((resolve, reject) => {
@@ -51,6 +38,19 @@ function coverImage(e) {
     })
 
 }
+
+$(document.body).append(`
+        <div id="source_iq_app">
+            <div class="cover-image">
+                <img src="#" alt="" id="ele" width="100%">
+                <div class="mark"></div>
+                <div class="confirm">
+                    <span>确定</span>
+                    <i>关闭</i>
+                </div>
+            </div>
+        </div>
+    `);
 
 $(function() {
     $('.confirm').hide();
