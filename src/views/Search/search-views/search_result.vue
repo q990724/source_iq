@@ -178,7 +178,7 @@ export default {
 
         onFilterChange({filterIndex, itemIndex, event}) {
 			console.log("onFilterChange");
-            this.handleOptions(this.filterList[filterIndex], itemIndex, event);
+            // this.handleOptions(this.filterList[filterIndex], itemIndex, event);
             this.initSearchResult();
             // this.clearSearchParams();
             this.$store.commit('resetSearchState');
@@ -197,16 +197,17 @@ export default {
         },
         onExprChange({exprIndex, itemIndex, event}) {
             this.exprList[exprIndex].selectUIType = 'checkbox';
-            this.handleOptions(this.exprList[exprIndex], itemIndex, event);
+            // this.handleOptions(this.exprList[exprIndex], itemIndex, event);
 			// handleOptions与handleExprList的关系？
             this.initSearchResult();
             this.$store.commit('resetSearchState');
-            for(let i = 0; i < this.exprList[exprIndex].items[itemIndex].params.length; i++){
-                this.exprList[exprIndex].paramName = this.exprList[exprIndex].items[itemIndex].params[i].paramName;
-                this.exprList[exprIndex].items[itemIndex].paramValue = this.exprList[exprIndex].items[itemIndex].params[i].paramValue;
+            let exprItemClone = JSON.parse(JSON.stringify(this.exprList[exprIndex]));
+            for(let i = 0; i < exprItemClone.items[itemIndex].params.length; i++){
+                exprItemClone.paramName = exprItemClone.items[itemIndex].params[i].paramName;
+                exprItemClone.items[itemIndex].paramValue = exprItemClone.items[itemIndex].params[i].paramValue;
                 this.$store.dispatch('onFilterChange', {
-                    filterItem: this.exprList[exprIndex],
-                    option: this.exprList[exprIndex].items[itemIndex],
+                    filterItem: exprItemClone,
+                    option: exprItemClone.items[itemIndex],
                     e: event,
                 })
             }
