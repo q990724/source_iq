@@ -21,6 +21,7 @@
 					<!--  表达式区域  -->
                     <expr-list v-if="exprList && exprList.length > 0" :expr-list="exprList" 
 									@onExprChange="onExprChange"></expr-list>
+                    <sort-list :sort-list="sortList"></sort-list>
                 </div>
                 <!--商品高级筛选-->
                 <!--<high-filtration></high-filtration>-->
@@ -43,6 +44,7 @@ import ProductListComponent from "../components/product-list";
 import HighFiltration from "../components/high-filtration";
 import FilterComponent from "../components/group-filter.vue";
 import ExprListComponent from "../components/expr-list";
+import SortListComponent from "../components/sort-list";
 import bus from "@/assets/js/bus";
 import {getBase64FromCropImage, handleResponse, getFileFromBase64} from "@/assets/js/utils.js";
 import publicData from "../mixins/public.js";
@@ -59,7 +61,8 @@ export default {
         HighFiltration: HighFiltration,
         TextSearch: TextSearchComponent,
         GroupFilter: FilterComponent,
-        ExprList: ExprListComponent
+        ExprList: ExprListComponent,
+        SortList: SortListComponent
     },
     mixins: [publicData],
     data() {
@@ -354,6 +357,9 @@ export default {
                             this.exprList = result.data.exprList;
                             this.handleExprList();
                         }
+                        if(this.sortList == undefined || this.sortList.length <= 0) {
+                            this.sortList = result.data.sortList;
+                        }
                         // this.categoryList = result.data.categoryList || null;
                         // this.filterList = result.data.filterList || null;
                         // this.sortList = result.data.sortList || null;
@@ -448,6 +454,9 @@ export default {
                         if(this.exprList == undefined || this.exprList.length <= 0) {
                             this.exprList = result.data.exprList;
                             this.handleExprList();
+                        }
+                        if(this.sortList == undefined || this.sortList.length <= 0) {
+                            this.sortList = result.data.sortList;
                         }
                         // this.categoryList = result.data.categoryList || null;
                         // this.filterList = result.data.filterList || null;

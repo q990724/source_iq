@@ -38,6 +38,7 @@ const publicData = {
             // 筛选列表
             filterList: [],
             exprList: [],
+            sortList: [],
 			// exprList:
 			// sortList:
             // 商品结果列表
