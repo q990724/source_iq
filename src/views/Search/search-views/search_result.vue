@@ -228,6 +228,7 @@ export default {
             this.initSearchResult();
             this.$store.commit('resetSearchState');
             let sortItemClone = JSON.parse(JSON.stringify(this.sortList[sortIndex]));
+            sortItemClone.title = 'sort';
             if(!sortItemClone.items) sortItemClone.items = [[paramValue=> '']];
             sortItemClone.items[itemIndex].paramValue = sortItemClone.paramValue;
             console.log(sortItemClone)
@@ -237,6 +238,7 @@ export default {
                 e: event,
             })
             let sortItemClone2 = JSON.parse(JSON.stringify(this.sortList[sortIndex]));
+            sortItemClone2.title = 'sort';
             if(sortItemClone2.items && Array.isArray(sortItemClone2.items) && sortItemClone2.items.length > 0){
                 sortItemClone2.paramName = sortItemClone2.items[itemIndex].paramName;
                 this.$store.dispatch('onFilterChange', {
