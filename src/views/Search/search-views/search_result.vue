@@ -21,8 +21,8 @@
 					<!--  表达式区域  -->
                     <expr-list v-if="exprList && exprList.length > 0" :expr-list="exprList" 
 									@onExprChange="onExprChange"></expr-list>
-                    <sort-list v-if="sortList && sortList.length > 0":sort-list="sortList">
-									</sort-list>
+                    <sort-list v-if="sortList && sortList.length > 0" :sort-list="sortList"
+                                    @onSortChange="onSortChange"></sort-list>
                 </div>
                 <!--商品高级筛选-->
                 <!--<high-filtration></high-filtration>-->
@@ -197,6 +197,7 @@ export default {
             // this.getDataFromText(false);
         },
         onExprChange({exprIndex, itemIndex, event}) {
+            console.log("onExprChange");
             this.exprList[exprIndex].selectUIType = 'checkbox';
             // this.handleOptions(this.exprList[exprIndex], itemIndex, event);
 			// handleOptions与handleExprList的关系？
@@ -219,6 +220,37 @@ export default {
                 this.getDataFromText(false);
             }
             // this.getDataFromText(false);
+        },
+        onSortChange({sortIndex, itemIndex=0, event}) {
+            console.log("onSortChange");
+            this.sortList[sortIndex].selectUIType = 'radio';
+            this.handleOptions(this.sortList[sortIndex], 0, event, 'sort');
+            this.initSearchResult();
+            this.$store.commit('resetSearchState');
+            let sortItemClone = JSON.parse(JSON.stringify(this.sortList[sortIndex]));
+            if(!sortItemClone.items) sortItemClone.items = [[paramValue=> '']];
+            sortItemClone.items[itemIndex].paramValue = sortItemClone.paramValue;
+            console.log(sortItemClone)
+            this.$store.dispatch('onFilterChange', {
+                filterItem: sortItemClone,
+                option: sortItemClone.items[itemIndex],
+                e: event,
+            })
+            let sortItemClone2 = JSON.parse(JSON.stringify(this.sortList[sortIndex]));
+            if(sortItemClone2.items && Array.isArray(sortItemClone2.items) && sortItemClone2.items.length > 0){
+                sortItemClone2.paramName = sortItemClone2.items[itemIndex].paramName;
+                this.$store.dispatch('onFilterChange', {
+                    filterItem: sortItemClone2,
+                    option: sortItemClone2.items[itemIndex],
+                    e: event,
+                })
+            }
+            if (this.$store.state.searchType === 'image') {
+                // 切换筛选条件，不需要重新发起图片上传
+                this.imageSearch(this.$store.state.searchParams.mainImage, false);
+            } else if (this.$store.state.searchType === 'text') {
+                this.getDataFromText(false);
+            }
         },
         async loadmore() {
             this.$store.commit('dumpAll', "发起分页请求loadmore前：");

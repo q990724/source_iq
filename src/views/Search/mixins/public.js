@@ -236,13 +236,18 @@ const publicData = {
         },
 
 		// 统一处理商品分类、筛选条件的选项变更状态
-        handleOptions(filter, itemIndex, event){
-            if(filter.selectUIType === 'radio'){
-                filter.items.forEach(element=>{
-                    element.selected = false;
-                })
+        handleOptions(filter, itemIndex, event, type = ''){
+            if(type === 'sort'){
+                for (let sort of this.sortList) {
+                    sort.selected = false;
+                }
+                filter.selected = event;
+            }else if(filter.selectUIType === 'radio'){
+                    filter.items.forEach(element=>{
+                        element.selected = false;
+                    })
             }
-            filter.items[itemIndex].selected = event;
+            if(filter.items) filter.items[itemIndex].selected = event;
         },
 
         // 统一处理expr数据结构，增加inputValue

@@ -3,7 +3,7 @@
         <el-collapse>
             <el-collapse-item title="Sort">
                 <div class="list">
-                    <div class="item" v-for="(sort, index) in sortList" @click="onSortClick(sort)" :key="index" :class="{'active': sort.selected}">
+                    <div class="item" v-for="(sort, index) in sortList" @click="onSortClick(index)" :key="index" :class="{'active': sort.selected}">
                         <span>{{ sort.title }}</span>
                         <div class="up-down" v-if="sort.items">
                             <i class="el-icon-caret-top" v-if="(sort.items[0] && sort.items[0]['order'] === 'asc') || (sort.items[1] && sort.items[1]['order'] === 'asc')"></i>
@@ -28,14 +28,14 @@ export default {
         }
     },
     methods: {
-        onSortClick(item) {
-            for (let sort of this.sortList) {
-                sort.selected = false;
-                if(sort.title === item.title) {
-                    sort.selected = true;
-                }
-            }
-            console.log(item);
+        onSortClick(sortIndex) {
+            // for (let sort of this.sortList) {
+            //     sort.selected = false;
+            //     if(sort.title === item.title) {
+            //         sort.selected = true;
+            //     }
+            // }
+            this.$emit("onSortChange", {sortIndex, event:true});
         }
     }
 }
