@@ -21,7 +21,8 @@
 					<!--  表达式区域  -->
                     <expr-list v-if="exprList && exprList.length > 0" :expr-list="exprList" 
 									@onExprChange="onExprChange"></expr-list>
-                    <sort-list :sort-list="sortList"></sort-list>
+                    <sort-list v-if="sortList && sortList.length > 0":sort-list="sortList">
+									</sort-list>
                 </div>
                 <!--商品高级筛选-->
                 <!--<high-filtration></high-filtration>-->
@@ -345,9 +346,9 @@ export default {
                     }
                 }
                 console.log(result);
-                if (result && result.data) {
+                if (result && result.data && result.data.results) {
                     // 如果是首次搜索，保存接口返回的商品分类、筛选和排序条件
-                    if (!loadmore) {	//this.$store.state.firstSearchState == 'none'
+                    if (!loadmore && result.data.results.length > 0) {	//this.$store.state.firstSearchState == 'none'
                         if (JSON.stringify(this.categoryList) == '{}') {
                             this.categoryList = result.data.categoryList;
                         }
@@ -443,9 +444,9 @@ export default {
                 }
 
                 console.log(result);
-                if (result && result.data) {
+                if (result && result.data && result.data.results) {
                     // 如果是首次搜索，保存接口返回的商品分类、筛选和排序条件
-                    if (!loadmore) {	//this.$store.state.firstSearchState == 'none'
+                    if (!loadmore && result.data.results.length > 0) {	//this.$store.state.firstSearchState == 'none'
                         if (JSON.stringify(this.categoryList) == '{}') {
                             this.categoryList = result.data.categoryList;
                         }

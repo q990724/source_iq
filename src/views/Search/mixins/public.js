@@ -133,7 +133,7 @@ const publicData = {
             this.categoryList = {};
             this.filterList = [];
 			this.exprList = [];
-			// this.sortList = [];
+			this.sortList = [];
         },
         initSearchResult() {
             // this.categoryList = {};
