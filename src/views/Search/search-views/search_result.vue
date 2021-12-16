@@ -18,7 +18,9 @@
                     <!--  筛选区域  -->
                     <group-filter v-if="filterList && filterList.length > 0" :filterList="filterList"
                                   @onFilterChange="onFilterChange"></group-filter>
-                    <expr-list :expr-list="exprList" @onExprChange="onExprChange"></expr-list>
+					<!--  表达式区域  -->
+                    <expr-list v-if="exprList && exprList.length > 0" :expr-list="exprList" 
+									@onExprChange="onExprChange"></expr-list>
                 </div>
                 <!--商品高级筛选-->
                 <!--<high-filtration></high-filtration>-->
@@ -124,7 +126,7 @@ export default {
 			this.initSearchResult();
 			// this.clearSearchParams();
 			this.$store.commit('resetSearchState');
-            this.cid = this.categoryList.items[itemIndex].paramValue;
+            // this.cid = this.categoryList.items[itemIndex].paramValue;
             // this.searchTextParams.category = this.categoryList.items[itemIndex].paramValue;
 			// TBD: 此处代码暂时没有走统一的“onFilterChange”，直接填写《kay，val》到store.searchParams
 			// TBD：导致无法处理“多选”的商品分类，因为添加category参数目前直接覆盖原有的，或已经选中的分类
@@ -193,6 +195,7 @@ export default {
         onExprChange({exprIndex, itemIndex, event}) {
             this.exprList[exprIndex].selectUIType = 'checkbox';
             this.handleOptions(this.exprList[exprIndex], itemIndex, event);
+			// handleOptions与handleExprList的关系？
             this.initSearchResult();
             this.$store.commit('resetSearchState');
             for(let i = 0; i < this.exprList[exprIndex].items[itemIndex].params.length; i++){
