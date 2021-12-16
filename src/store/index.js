@@ -409,37 +409,42 @@ export default new Vuex.Store({
                 // }
                 switch (this.state.source_id) {
                     case SourceMap['alibaba']['id']:
+						// 先处理所有的category，filter，expr的共性逻辑
                         handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e});
+						
+						// 再处理所有的category，filter，expr的个性逻辑
                         // 深度复制，其实只需要paramName不需要深度复制
                         let filterItemClone = JSON.parse(JSON.stringify(payload.filterItem));
                         filterItemClone.paramName = 'param_order';
                         filterItemClone.selectUIType = 'checkbox';
                         filterItemClone.title = 'param_order';
+						// TBD：按照标题进行条件处理逻辑很脆弱。标题拼写只要修改逻辑就会崩掉
                         switch (payload.filterItem.title) {
-                            case 'Related Category':
-                                break;
-                            case 'Supplier Types':
-                                break;
-                            case 'Product Types':
-                                break;
-                            case 'Min. Order':
-                                break;
-                            case 'Price':
-                                break;
-                            case 'Management Certification':
+                            // case 'Related Category':
+                            //     break;
+                            // case 'Supplier Types':
+                            //     break;
+                            // case 'Product Types':
+                            //     break;
+                            // case 'Min. Order':	//exprList类型
+                            //     break;
+                            // case 'Price':
+                            //     break;
+                            case 'Management Certification':	//filterList类型
                                 // handleCheckBoxParams({ key:'param_order', joint:'CAT-' });
                                 handleParams({ filterItem:filterItemClone, option:payload.option, e:payload.e, joint: 'CAT-'});
                                 break;
-                            case 'Product Certification':
+                            case 'Product Certification':	//filterList类型
                                 handleParams({ filterItem:filterItemClone, option:payload.option, e:payload.e, joint: 'PAT-'});
                                 break;
-                            case 'Supplier Country/Region':
+                            case 'Supplier Country/Region':	//filterList类型
                                 handleParams({ filterItem:filterItemClone, option:payload.option, e:payload.e, joint: 'CNTRY-'});
                                 break;
-                            case 'Past Export Countries':
+                            case 'Past Export Countries':	//filterList类型
                                 handleParams({ filterItem:filterItemClone, option:payload.option, e:payload.e, joint: 'EC-'});
                                 break;
-                            default:
+                            default:	//categoryList、filterList、exprList类型
+								//BUG：目前所有的category，filter，expr都会走到这里处理！
                                 handleParams({ filterItem:filterItemClone, option:payload.option, e:payload.e, joint: 'ATTR-'});
                                 break;
                         }
@@ -478,6 +483,7 @@ export default new Vuex.Store({
                                 handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e});
                                 break;
                             default:
+								// TBD：separator分隔符和joint连接符最后应该放到后台接口入参时处理，对前端提供一个统一标准
                                 handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e, separator: ';'});
                                 break;
                         }
