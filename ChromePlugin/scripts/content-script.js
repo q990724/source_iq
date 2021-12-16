@@ -13,6 +13,7 @@ chrome.storage.local.get( {'upload-file': null}, function(o) {
 	console.log("content.js->up-loadfile",o['upload-file']);
     if(o['upload-file']) {
         chrome.storage.local.set({'upload-file': null}, function () {
+            window.localStorage.setItem('has-upload-file', 'true');
             window.localStorage.setItem('upload-file', o['upload-file']);
             window.location.reload();
         })
