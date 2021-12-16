@@ -1,14 +1,18 @@
 <template>
     <div class="text-search mt40">
         <div class="input-box">
-            <i class="el-icon-search"></i>
-<!--            <el-select v-model="index_area" :placeholder="$t('label.select')" v-if="options && options.length > 0">
-                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-                </el-option>
-            </el-select> -->
-            <input type="text" class="input" :placeholder="$t('label.input_placeholder')" v-model="input" autocomplete="off" @keypress="onKeyPress">
-             <i class="el-icon-circle-close clear" v-show="input" @click="onClickCloseButton"></i>
-            <i class="el-icon-camera camera" v-show="camera" @click="onClickCamera"></i>
+            <div style="display: flex;align-items: center;flex: 1">
+                <i class="el-icon-search"></i>
+                <!--            <el-select v-model="index_area" :placeholder="$t('label.select')" v-if="options && options.length > 0">
+                                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+                                </el-option>
+                            </el-select> -->
+                <input type="text" class="input" :placeholder="$t('label.input_placeholder')" v-model="input" autocomplete="off" @keypress="onKeyPress">
+            </div>
+             <div class="right">
+                 <i class="el-icon-circle-close clear" v-show="input" @click="onClickCloseButton"></i>
+                 <i class="el-icon-camera camera" v-show="camera" @click="onClickCamera"></i>
+             </div>
         </div>
         <div class="sbtn" @click="onClickSearchButton">{{$t('button.search')}}</div>
         <input type="file" accept="image/*" style="display: none" @change="selectImage" id='uploadButton'>
@@ -115,9 +119,8 @@ export default {
     i {
         display: block;
         text-align: center;
-        width: 40px;
+        width: 30px;
         &.camera, &.clear {
-            position: absolute;
             cursor: pointer;
             font-size: 18px;
         }
@@ -130,6 +133,7 @@ export default {
     }
 }
 .input {
+    flex: 1;
     width: 100%;
     height: 100%;
     border: none;
@@ -153,6 +157,11 @@ export default {
     letter-spacing: 1px;
     margin-left: -5px;
     cursor: pointer;
+}
+
+.right {
+    display: flex;
+    align-items: center;
 }
 
 ::v-deep .el-input__inner {
