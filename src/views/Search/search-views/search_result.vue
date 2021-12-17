@@ -15,6 +15,9 @@
                     <!-- 商品分类 -->
                     <product-class v-if="categoryList && categoryList.items" :class_list="categoryList"
                                    @onClassChange="onClassChange"></product-class>
+                    <!--<my-collapse title="标题">-->
+                    <!--    <div class="item"></div>-->
+                    <!--</my-collapse>-->
                     <!--  筛选区域  -->
                     <group-filter v-if="filterList && filterList.length > 0" :filterList="filterList"
                                   @onFilterChange="onFilterChange"></group-filter>
@@ -46,6 +49,7 @@ import HighFiltration from "../components/high-filtration";
 import FilterComponent from "../components/group-filter.vue";
 import ExprListComponent from "../components/expr-list";
 import SortListComponent from "../components/sort-list";
+import MyCollapseComponent from '@/components/my-collapse';
 import bus from "@/assets/js/bus";
 import {getBase64FromCropImage, handleResponse, getFileFromBase64} from "@/assets/js/utils.js";
 import publicData from "../mixins/public.js";
@@ -63,7 +67,8 @@ export default {
         TextSearch: TextSearchComponent,
         GroupFilter: FilterComponent,
         ExprList: ExprListComponent,
-        SortList: SortListComponent
+        SortList: SortListComponent,
+        MyCollapse: MyCollapseComponent
     },
     mixins: [publicData],
     data() {
