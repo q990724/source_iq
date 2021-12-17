@@ -89,6 +89,7 @@ export function getBase64FromCropImage(imagePath, regionList) {
 					let sx = arr[0], sy = arr[1], sw = arr[2], sh = arr[3];
 					let canvas = document.createElement('canvas');
 					let ctx = canvas.getContext('2d');
+					//TBD：此处region的xywh顺序可能错位
 					canvas.width = sy-sx
 					canvas.height = sh-sw
 					ctx.drawImage(image, sx, sw, sy, sh, 0, 0, image.width, image.height);

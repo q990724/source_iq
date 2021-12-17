@@ -407,7 +407,7 @@ export default {
                         // TBD: 此处只判断了yoloCropRegion不为NULL，没有判断result.data.searchImage.region
                         if (result.data.searchImage && (result.data.searchImage.yoloCropRegion)) {
                             this.$store.commit('setYoloCropRegion', result.data.searchImage.yoloCropRegion);
-                            this.$store.commit('setRegion', result.data.searchImage.region);
+                            // this.$store.commit('setRegion', result.data.searchImage.region);
                             let regionList = result.data.searchImage.yoloCropRegion.split(';');
                             let r = await getBase64FromCropImage(this.$store.state.searchParams.mainImage, regionList);
                             this.$refs['image_operation'].setLocalImageList(r);

@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import {alibaba, yiwugo, aliexpress, _1688, _1688global} from "@/assets/js/apis";
+// import {alibaba, yiwugo, aliexpress, _1688, _1688global} from "@/assets/js/apis";
 import SourceMap from "@/assets/js/source_map";
 import {getBase64} from "@/assets/js/utils.js";
 
@@ -48,6 +48,13 @@ export default {
             cropBoxStatus: false,
             cropResult: null,
             localCropImageList: [],
+			// let localItem = {
+			// 	id: new Date().getTime(),
+			// 	cover: base64,
+			// 	file: getFileFromBase64(base64),
+			// 	selected: false,
+			// 	region: item
+			// }
             mainImageActive: true
         }
     },
@@ -73,6 +80,10 @@ export default {
             this.cropResult = null;
 			cropObject.jcropApi.release();
         },
+		//TBD：1688图搜接口首次调用返回的yoloCropRegion是全部切图的坐标数组，region对应于第一张切图
+		//TBD：我们自己的切图也需要返回填充item.region的xywh坐标，跟1688返回的切图机制统一
+		//TBD：新增加一张来自同样originImage的截图item，yoloCropRegion数组也需要增加一组坐标；所有切图都来自originImage
+		//TBD：选中某张切图发起搜索，要传imageId+切图的region+yoloCropRegion+yoloRegionSelected=true；选中原图发起搜索，要传imageId+yoloCropRegion；如果新截图，要传mageId+region+yoloCropRegion（不传yoloRegionSelected，因为新截图坐标不在yoloCropRegion数组里面
         confirmCropBox() {
             try {
                 let localItem = {
@@ -95,6 +106,7 @@ export default {
             })
             this.mainImageActive = false;
             item.selected = true;
+			this.dump();
             this.$emit('onClickLocalItem', item);
         },
         onClickMainImage() {
@@ -102,6 +114,7 @@ export default {
                 e.selected = false;
             })
             this.mainImageActive = true;
+			this.dump();
             this.$emit('onClickMainImage');
         },
 		onClickSearchText() {
@@ -128,7 +141,14 @@ export default {
         },
 		setLocalImageList(list) {
 			this.localCropImageList = list;
-		}
+			this.dump();
+		},
+		dump() {
+			console.log("cropBoxStatus:", this.cropBoxStatus);
+			console.log("cropResult:", this.cropResult);
+			console.log("mainImageActive:", this.mainImageActive);
+			console.log("localCropImageList:", this.localCropImageList);
+		},
     }
 }
 </script>
