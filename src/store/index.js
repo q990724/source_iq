@@ -731,18 +731,23 @@ export default new Vuex.Store({
                         break;
                     case SourceMap['dhgate']['id']:
                         res = await dhgate.searchGoodsByPic({...params, page:payload.page})
+						//TBD： 临时补丁。没有单独的上传图片接口，后台接口统一返回imageAddress后再注释掉；不应该引用sourceResult
+						if(res.data.searchImage === undefined) res.data.searchImage = new Object();
                         res.data.searchImage.imageAddress = res.sourceResult.data.imgUrl
                         resolve(res)
                         break;
                     case SourceMap['mic']['id']:
                         res = await mic.searchGoodsByPic({...params, page:payload.page})
-						// 没有单独的上传图片接口，所以需要处理下返回的imageAddress
+						//TBD：临时补丁。没有单独的上传图片接口，后台接口统一返回imageAddress后再注释掉；不应该引用sourceResult
+						if(res.data.searchImage === undefined) res.data.searchImage = new Object();
                         res.data.searchImage.imageAddress = res.sourceResult.content.imgId
                         resolve(res)
                         break;
                     case SourceMap['cjds']['id']:
                         res = await cjds.searchGoodsByPic()
+						//TBD：临时补丁。没有单独的上传图片接口，后台接口统一返回imageAddress后再注释掉；不应该引用sourceResult
 						//TBD： CJ目前没有返回上传图片的imageAddress，也没有分页功能，如果切换到网页版会崩
+						if(res.data.searchImage === undefined) res.data.searchImage = new Object();
 						res.data.searchImage.imageAddress = null
                         resolve(res)
                         break;
