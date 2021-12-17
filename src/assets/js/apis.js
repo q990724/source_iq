@@ -387,10 +387,10 @@ export const cjds = {
 	},
 
 	// 搜索商品
-	searchGoodsByText({searchText, page=1, page_size=20, category = null, country = null, productType = null, addMarkStatus = null, sort = null, price_sort = null}) {
+	searchGoodsByText({searchText, page=1, page_size=20, category = null, country = null, productType = null, addMarkStatus = null, sort = null, price_sort = null, min_price, max_price}) {
 		const params = Qs.stringify({
 			search_text:searchText, page, page_size, category, country, productType, addMarkStatus, sort, price_sort
-		});
+			, min_price, max_price});
 		return Service.post('api/cjdsapp/searchGoodsByText',params,{
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded'
@@ -401,10 +401,10 @@ export const cjds = {
 
 export const litbox = {
 	// 搜索商品
-	searchGoodsByText({searchText, page=1, page_size=36, lang='en', country='CHN', country_code='CN', currency='CNY', searchType=3, category = null, brand = '0', sort = '6d', filters = []}) {
+	searchGoodsByText({searchText, page=1, page_size=36, lang='en', country='CHN', country_code='CN', currency='CNY', searchType=3, category = null, brand = '0', sort = '6d', fourStars, min_price, max_price}) {
 		return Service.get('api/litboxapp/searchGoodsByText',{
 			params: {
-				search_text:searchText, page, page_size, lang, country, country_code, currency, searchType, category, brand, sort, filters
+				search_text:searchText, page, page_size, lang, country, country_code, currency, searchType, category, brand, sort, fourStars, min_price, max_price
 			},
 		})
 	},
@@ -412,30 +412,30 @@ export const litbox = {
 
 export const banggood = {
 	// 搜索商品
-	searchGoodsByText({searchText, page=1, lang='en', country='CN', warehouse = null, special_options, category = null, sort = '0' }) {
+	searchGoodsByText({searchText, page=1, lang='en', country='CN', warehouse = null, special_options, category = null, sort = '0', min_price, max_price }) {
 		return Service.get('api/banggoodapp/searchGoodsByText',{
 			params: {
-				search_text:searchText, page, lang, country, warehouse, special_options, category, sort
+				search_text:searchText, page, lang, country, warehouse, special_options, category, sort, min_price, max_price
 			},
 		})
 	},
 }
 export const chinabrands = {
 	// 搜索商品
-	searchGoodsByText({searchText, page=1, lang='en', country= null, brand_id = null, sort, canReserve = null, type = '0', sale_time = null }) {
+	searchGoodsByText({searchText, page=1, lang='en', country= null, brand_id = null, sort, canReserve = null, type = '0', sale_time = null, min_price, max_price, min_stork, max_stork }) {
 		return Service.get('api/chinabrands/searchGoodsByText',{
 			params: {
-				search_text:searchText, page, lang, country, brand_id, sort, canReserve, type, sale_time
+				search_text:searchText, page, lang, country, brand_id, sort, canReserve, type, sale_time, min_price, max_price, min_stork, max_stork
 			},
 		})
 	},
 }
 export const globalres = {
 	// 搜索商品
-	searchGoodsByText({searchText, page=1, country= null, busType = null, directOrderFlag = null, min_price, max_price,  category = null }) {
+	searchGoodsByText({searchText, page=1, country= null, busType = null, directOrderFlag = null, min_price, max_price,  category = null, min_order }) {
 		return Service.get('api/globalresapp/searchGoodsByText',{
 			params: {
-				search_text:searchText, page, country, busType, directOrderFlag, min_price, max_price, category
+				search_text:searchText, page, country, busType, directOrderFlag, min_price, max_price, category, min_order
 			},
 		})
 	},

@@ -237,7 +237,7 @@ export default new Vuex.Store({
             //         delete self.searchTextParams[key];
             //     }
             // }
-
+            let filterItemClone =  {}, optionClone = {};
             let that = this;
 			// 对任意一个categoryList/filterList/exprList/sortList的filterItem，拼装传参数据
 			function handleParams({filterItem, option, e, separator = ",", joint = ''}) {
@@ -414,7 +414,7 @@ export default new Vuex.Store({
 						
 						// 再处理所有的category，filter，expr的个性逻辑
                         // 深度复制，其实只需要paramName不需要深度复制
-                        let filterItemClone = JSON.parse(JSON.stringify(payload.filterItem));
+                        filterItemClone = JSON.parse(JSON.stringify(payload.filterItem));
                         filterItemClone.paramName = 'param_order';
                         filterItemClone.selectUIType = 'checkbox';
                         filterItemClone.title = 'param_order';
@@ -491,6 +491,24 @@ export default new Vuex.Store({
                         break;
                     case SourceMap['aliexpressZapieX']['id']:
                         handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e});
+
+                        // 深度复制，其实只需要paramName不需要深度复制
+                        filterItemClone = JSON.parse(JSON.stringify(payload.filterItem));
+                        filterItemClone.paramName = 'attr_id';
+                        filterItemClone.selectUIType = 'radio';
+                        filterItemClone.title = 'attr_id';
+
+                        optionClone = JSON.parse(JSON.stringify(payload.option));
+                        if(filterItemClone.id) optionClone.paramValue = filterItemClone.id;
+
+                        switch (payload.filterItem.title) {
+                            case 'Brands':
+                                handleParams({ filterItem:filterItemClone, option:optionClone, e:payload.e});
+                                break;
+                            case 'Material':
+                                handleParams({ filterItem:filterItemClone, option:optionClone, e:payload.e});
+                                break;
+                        }
                         break;
                     case SourceMap['yiwugo']['id']:
                         handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e});
@@ -713,13 +731,13 @@ export default new Vuex.Store({
                         break;
                     case SourceMap['dhgate']['id']:
                         res = await dhgate.searchGoodsByPic({...params, page:payload.page})
-                        res.data.searchImage.imageAddress = res.sourceResult.data.data.imgUrl
+                        res.data.searchImage.imageAddress = res.sourceResult.data.imgUrl
                         resolve(res)
                         break;
                     case SourceMap['mic']['id']:
                         res = await mic.searchGoodsByPic({...params, page:payload.page})
 						// 没有单独的上传图片接口，所以需要处理下返回的imageAddress
-                        res.data.searchImage.imageAddress = res.sourceResult.data.content.imgId
+                        res.data.searchImage.imageAddress = res.sourceResult.content.imgId
                         resolve(res)
                         break;
                     case SourceMap['cjds']['id']:
