@@ -144,6 +144,7 @@ export default {
                 filterItem: this.categoryList,
                 option: this.categoryList.items[itemIndex],
                 e: event,
+				filterType: 'CATEGORY',
             })
             // this.page = 1;
             if (this.$store.state.searchType === 'image') {
@@ -192,6 +193,7 @@ export default {
                 filterItem: this.filterList[filterIndex],
                 option: this.filterList[filterIndex].items[itemIndex],
 				e: event,
+				filterType: 'FILTER',
             })
             if (this.$store.state.searchType === 'image') {
                 // 切换筛选条件，不需要重新发起图片上传
@@ -216,6 +218,7 @@ export default {
                     filterItem: exprItemClone,
                     option: exprItemClone.items[itemIndex],
                     e: event,
+					filterType: 'EXPR',
                 })
             }
             if (this.$store.state.searchType === 'image') {
@@ -242,6 +245,7 @@ export default {
                 filterItem: sortItemClone,
                 option: sortItemClone.items[itemIndex],
                 e: event,
+				filterType: 'SORT',
             })
             let sortItemClone2 = JSON.parse(JSON.stringify(this.sortList[sortIndex]));
             sortItemClone2.title = 'sort';
@@ -251,6 +255,7 @@ export default {
                     filterItem: sortItemClone2,
                     option: sortItemClone2.items[itemIndex],
                     e: event,
+					filterType: 'SORT',
                 })
             }
             if (this.$store.state.searchType === 'image') {

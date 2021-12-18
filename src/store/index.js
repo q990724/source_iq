@@ -411,6 +411,8 @@ export default new Vuex.Store({
                     case SourceMap['alibaba']['id']:
 						// 先处理所有的category，filter，expr的共性逻辑
                         handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e});
+						// 如果是商品分类，不需要后续的额外逻辑
+						if(payload.filterType == 'CATEGORY') break;
 						
 						// 再处理所有的category，filter，expr的个性逻辑
                         // 深度复制，其实只需要paramName不需要深度复制
