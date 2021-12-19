@@ -32,12 +32,17 @@ module.exports = {
         no_result: 'Trusted seller and official distributor for hundreds of operators',
         input_placeholder: 'Enter product keywords',
         select: 'Select',
+		leave_a_message: 'Leave A Message',
+		upload_pic: 'Upload Picture',
+		contact: 'Contact',
+		message:'Message',
     },
     button: {
         more: 'More',
         search: 'Search',
         cancel: 'Cancel',
 		confirm: 'Confirm',
+		submit: 'Submit',
 		clearSearch: "Clear",
     }
 }

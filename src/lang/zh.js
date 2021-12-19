@@ -16,13 +16,18 @@ module.exports = {
         hour: '小时',
         shipments: '发货',
         goodMerchant: '实力商家',
-        no_more: '- 没有找到结果 -'
+        no_more: '- 没有找到结果 -',
+		leave_a_message: '留言',
+		upload_pic: '上传截图',
+		contact: '联系方式',
+		message:'留言内容',
     },
     button: {
         more: '更多',
 		search: '搜索',
 		cancel: '取消',
 		confirm: '确认',
+		submit: '提交',
 		clearSearch: "清空搜索",
     }
 }

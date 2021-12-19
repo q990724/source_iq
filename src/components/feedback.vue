@@ -1,15 +1,15 @@
 <template>
     <div class="feedback" v-show="dialogVisible">
-        <el-dialog title="留言" :visible.sync="dialogVisible" append-to-body modal-append-to-body>
+        <el-dialog :title="$t('label.leave_a_message')" :visible.sync="dialogVisible" append-to-body modal-append-to-body>
             <el-form label-position="right" :model="feedbackForm" :rules="feedbackFormRules" ref="feedback-form">
-                <el-form-item label="留言内容" prop="content">
+                <el-form-item :label="$t('label.message')" prop="content">
                     <el-input type="textarea" v-model="feedbackForm.content"></el-input>
                 </el-form-item>
-                <el-form-item label="联系方式" prop="contact">
+                <el-form-item :label="$t('label.contact')" prop="contact">
                     <el-input v-model="feedbackForm.contact"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <p>截图</p>
+                    <p>{{$t('label.upload_pic')}}</p>
                     <el-upload
                         action="#"
                         list-type="picture-card"
@@ -30,8 +30,8 @@
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
-                    <el-button @click="onFeedbackCancel">取 消</el-button>
-                    <el-button type="primary" @click="onFeedbackSubmit">提 交</el-button>
+                    <el-button @click="onFeedbackCancel">{{$t('button.cancel')}}</el-button>
+                    <el-button type="primary" @click="onFeedbackSubmit">{{$t('button.submit')}}</el-button>
                 </span>
         </el-dialog>
     </div>
