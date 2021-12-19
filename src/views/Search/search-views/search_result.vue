@@ -229,10 +229,12 @@ export default {
             }
             // this.getDataFromText(false);
         },
-        onSortChange({sortIndex, itemIndex=0, event}) {
+        onSortChange({sortIndex, itemIndex=0, type, event}) {
             console.log("onSortChange");
+            // 如果是倒序，item数组下标为 1
+            if(type === 'desc') itemIndex=1;
             this.sortList[sortIndex].selectUIType = 'radio';
-            this.handleOptions(this.sortList[sortIndex], 0, event, 'sort');
+            this.handleOptions(this.sortList[sortIndex], itemIndex, event, 'SORT');
             this.initSearchResult();
             this.$store.commit('resetSearchState');
             let sortItemClone = JSON.parse(JSON.stringify(this.sortList[sortIndex]));

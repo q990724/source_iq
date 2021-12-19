@@ -236,10 +236,15 @@ const publicData = {
         },
 
 		// 统一处理商品分类、筛选条件的选项变更状态
-        handleOptions(filter, itemIndex, event, type = ''){
-            if(type === 'sort'){
+        handleOptions(filter, itemIndex, event, filterType = ''){
+            if(filterType === 'SORT'){
                 for (let sort of this.sortList) {
                     sort.selected = false;
+                    if(sort.items){
+                        for(let item of sort.items){
+                            item.selected = false;
+                        }
+                    }
                 }
                 filter.selected = event;
             }else if(filter.selectUIType === 'radio'){

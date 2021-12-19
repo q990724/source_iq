@@ -43,7 +43,7 @@ export default {
     methods: {
         // type=text/asc/desc
         onClickItem(sortIndex, type) {
-            this.$emit("onSortChange", {sortIndex, event:true});
+            this.$emit("onSortChange", {sortIndex, type, event:true});
         }
     }
 }
