@@ -19,8 +19,8 @@
                     <img :src="$store.state.searchParams.originImage" alt="">
                 </div>
                 <div class="foot">
-                    <span @click="confirmCropBox">确定</span>
-                    <span @click="closeCropBox">取消</span>
+                    <span @click="confirmCropBox">{{$t('button.confirm')}}</span>
+                    <span @click="closeCropBox">{{$t('button.cancel')}}</span>
                 </div>
             </div>
         </div>
@@ -30,7 +30,7 @@
             </div>
         </div>
         <div class="right">
-            <div class="reset" @click="onClickClear">清空搜索</div>
+            <div class="reset" @click="onClickClear">{{$t('button.clearSearch')}}</div>
         </div>
     </div>
 </template>

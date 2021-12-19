@@ -445,7 +445,7 @@ export default {
                         this.$store.commit('setSearchState', 'null');
                     }
                 } else {
-                    this.$message.error(this.$t('message.serach_result_from_image_error'));
+                    this.$message.error(this.$t('message.search_result_from_image_error'));
                     this.$store.commit('setSearchState', 'error');
                     if (!loadmore) {
                         this.$store.commit('setFirstSearchState', 'error')
@@ -458,7 +458,7 @@ export default {
                 if (!source.hasUpload && !loadmore) { this.$store.commit('setImageUploadState', 'error') }
                 this.$store.commit('setSearchState', 'error');
                 if (!loadmore) { this.$store.commit('setFirstSearchState', 'error') }
-                this.$message.error(this.$t('message.serach_result_from_image_error') + e);
+                this.$message.error(this.$t('message.search_result_from_image_error') + e);
             }
             this.$store.commit('dumpAll', "发起getDataFromImage后：");
 
@@ -535,7 +535,7 @@ export default {
                         this.$store.commit('setSearchState', 'null');
                     }
                 } else {
-                    this.$message.error(this.$t('message.serach_result_from_text_error'));
+                    this.$message.error(this.$t('message.search_result_from_text_error'));
                     this.$store.commit('setSearchState', 'error');
                     if (!loadmore) {this.$store.commit('setFirstSearchState', 'error')}
                 }
@@ -545,7 +545,7 @@ export default {
                 // if(!source.hasUpload&&!loadmore) {this.$store.commit('setImageUploadState', 'error')};
                 this.$store.commit('setSearchState', 'error');
                 if (!loadmore) {this.$store.commit('setFirstSearchState', 'error')}
-                this.$message.error(this.$t('message.serach_result_from_image_error') + e);
+                this.$message.error(this.$t('message.search_result_from_image_error') + e);
             }
             this.$store.commit('dumpAll', "发起getDataFromText后：");
         },

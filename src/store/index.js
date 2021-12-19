@@ -524,7 +524,7 @@ export default new Vuex.Store({
                         //         payload.self.color = payload.e ? payload.options.paramValue : '';
                         //         break;
                         //     default:
-                                handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e});
+						handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e});
                         // }
                         break;
                     case SourceMap['cjds']['id']:

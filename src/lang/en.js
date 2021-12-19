@@ -6,8 +6,8 @@ module.exports = {
         un_login: 'Not logged',
         go_login: 'Go to login',
         get_result_error: 'Failed to obtain data',
-        serach_result_from_image_error: 'Image search failed',
-        serach_result_from_text_error: 'Text search failed',
+        search_result_from_image_error: 'Image search failed',
+        search_result_from_text_error: 'Text search failed',
         upload_image_error: 'Uploading image failed',
         network_error: 'Network Error',
         search_text_not_null: 'Search content cannot be empty!',
@@ -36,6 +36,8 @@ module.exports = {
     button: {
         more: 'More',
         search: 'Search',
-        cancel: 'Cancel'
+        cancel: 'Cancel',
+		confirm: 'Confirm',
+		clearSearch: "Clear",
     }
 }

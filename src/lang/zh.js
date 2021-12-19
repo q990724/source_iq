@@ -20,5 +20,9 @@ module.exports = {
     },
     button: {
         more: '更多',
+		search: '搜索',
+		cancel: '取消',
+		confirm: '确认',
+		clearSearch: "清空搜索",
     }
 }
