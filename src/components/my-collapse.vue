@@ -1,5 +1,5 @@
 <template>
-    <div class="my-collapse">
+    <div class="my-collapse" :style="{'align-items': isShowCollapse ? 'flex-start' : 'center'}">
         <div class="title" v-if="title">{{ title }}</div>
         <!--<div class="options" v-if="list">-->
         <div class="options">
@@ -51,6 +51,7 @@ export default {
     },
     mounted() {
         let rowCount = Math.ceil($(this.$refs['items']).height() / this.rowHeight);
+        console.log(rowCount);
         if(rowCount > this.previewRow) {
             this.isShowCollapse = true;
         }
@@ -76,7 +77,7 @@ export default {
 <style scoped lang="scss">
 .my-collapse {
     display: flex;
-    align-items: flex-start;
+    //align-items: flex-start;
     .title {
         font-size: 18px;
         font-weight: bold;
@@ -94,6 +95,29 @@ export default {
                 align-items: center;
                 flex-wrap: wrap;
                 flex: 1;
+            }
+            ::v-deep .el-radio-group {
+                display: flex;
+                align-items: center;
+                flex-wrap: wrap;
+                flex: 1;
+                font-size: initial;
+                .item {
+                    line-height: 1.5;
+                    color: #666666;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    cursor: pointer;
+                    transition: color .4s;
+                    margin-right: 20px;
+                    &:hover {
+                        color: #FF4000;
+                    }
+                    &.active {
+                        color: #FF4000;
+                    }
+                }
             }
             .item {
                 line-height: 1.5;

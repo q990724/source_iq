@@ -33,7 +33,7 @@
 	import {
 		alibaba,
 		yiwugo,
-		aliexpress,
+		// aliexpress,
 		_1688
 	} from "@/assets/js/apis";
 	import bus from "@/assets/js/bus";

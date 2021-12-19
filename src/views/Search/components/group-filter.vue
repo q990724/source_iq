@@ -33,14 +33,13 @@
             <template v-if="filter.selectUIType === 'radio'">
                 <div class="filter-item">
                     <my-collapse :title="filter.title">
-                        <div class="item" v-for="(item,itemIndex) in filter.items" :key="item.id + item.name">
-                            <el-radio v-model="item.selected" class="filter-item_option" @change="onFilterChange(filterIndex, itemIndex, $event)">
-                                {{item.name}}
-                            </el-radio>
-                        </div>
-                        <!--<el-radio-group v-model="filter.radioValue" >-->
-                        <!--    -->
-                        <!--</el-radio-group>-->
+                        <el-radio-group v-model="filter.radioValue" >
+                            <div class="item" v-for="(item,itemIndex) in filter.items" :key="item.id + item.name">
+                                <el-radio :label="item.name" class="filter-item_option" @change="onFilterChange(filterIndex, itemIndex, $event)">
+                                    {{item.name}}
+                                </el-radio>
+                            </div>
+                        </el-radio-group>
                     </my-collapse>
                 </div>
             </template>

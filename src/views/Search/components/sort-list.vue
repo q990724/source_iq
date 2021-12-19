@@ -1,22 +1,32 @@
 <template>
     <div class="sort-list" v-if="sortList && Array.isArray(sortList) && sortList.length > 0">
-        <el-collapse>
-            <el-collapse-item title="Sort">
-                <div class="list">
-                    <div class="item" v-for="(sort, index) in sortList" @click="onSortClick(index)" :key="index" :class="{'active': sort.selected}">
-                        <span>{{ sort.title }}</span>
-                        <div class="up-down" v-if="sort.items">
-                            <i class="el-icon-caret-top" v-if="(sort.items[0] && sort.items[0]['order'] === 'asc') || (sort.items[1] && sort.items[1]['order'] === 'asc')"></i>
-                            <i class="el-icon-caret-bottom" v-if="(sort.items[0] && sort.items[0]['order'] === 'desc') || (sort.items[1] && sort.items[1]['order'] === 'desc')"></i>
-                        </div>
-                    </div>
+        <my-collapse :title="'Sort'" :row-height="40">
+            <div class="item" v-for="(sort, index) in sortList" :key="index">
+                <span @click="onClickItem(index, 'text')" :class="{'active': sort.selected}">{{ sort.title }}</span>
+                <div class="up-down" v-if="sort.items">
+                    <i @click="onClickItem(index, 'asc')" :class="{'active': sort.items[0].selected}" class="el-icon-caret-top" v-if="(sort.items[0] && sort.items[0]['order'] === 'asc') || (sort.items[1] && sort.items[1]['order'] === 'asc')"></i>
+                    <i @click="onClickItem(index, 'desc')" :class="{'active': sort.items[1].selected}" class="el-icon-caret-bottom" v-if="(sort.items[0] && sort.items[0]['order'] === 'desc') || (sort.items[1] && sort.items[1]['order'] === 'desc')"></i>
                 </div>
-            </el-collapse-item>
-        </el-collapse>
+            </div>
+        </my-collapse>
+        <!--<el-collapse>-->
+        <!--    <el-collapse-item title="Sort">-->
+        <!--        <div class="list">-->
+        <!--            <div class="item" v-for="(sort, index) in sortList" @click="onSortClick(index)" :key="index" :class="{'active': sort.selected}">-->
+        <!--                <span>{{ sort.title }}</span>-->
+        <!--                <div class="up-down" v-if="sort.items">-->
+        <!--                    <i class="el-icon-caret-top" v-if="(sort.items[0] && sort.items[0]['order'] === 'asc') || (sort.items[1] && sort.items[1]['order'] === 'asc')"></i>-->
+        <!--                    <i class="el-icon-caret-bottom" v-if="(sort.items[0] && sort.items[0]['order'] === 'desc') || (sort.items[1] && sort.items[1]['order'] === 'desc')"></i>-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--        </div>-->
+        <!--    </el-collapse-item>-->
+        <!--</el-collapse>-->
     </div>
 </template>
 
 <script>
+import MyCollapseCompntent from "@/components/my-collapse";
 export default {
     name: "sort-list",
     props: {
@@ -27,14 +37,12 @@ export default {
             }
         }
     },
+    components: {
+        MyCollapse: MyCollapseCompntent
+    },
     methods: {
-        onSortClick(sortIndex) {
-            // for (let sort of this.sortList) {
-            //     sort.selected = false;
-            //     if(sort.title === item.title) {
-            //         sort.selected = true;
-            //     }
-            // }
+        // type=text/asc/desc
+        onClickItem(sortIndex, type) {
             this.$emit("onSortChange", {sortIndex, event:true});
         }
     }
@@ -52,16 +60,20 @@ export default {
         margin-right: 20px;
         border: 1px solid #CCC;
         padding: 5px 8px;
-        span {
+        &:hover {
+            color: inherit !important;
+        }
+
+        & > span {
             cursor: pointer;
             &:hover {
                 color: #FF4000;
             }
+            &.active {
+                color: #FF4000;
+            }
         }
-        &.active {
-            border-color: #FF4000;
-            color: #FF4000;
-        }
+
         .up-down {
             display: flex;
             flex-direction: column;
@@ -69,6 +81,7 @@ export default {
             margin-left: 8px;
             i {
                 cursor: pointer;
+                font-size: 12px;
                 &.active {
                     color: #FF4000;
                 }
