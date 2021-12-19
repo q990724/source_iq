@@ -243,6 +243,10 @@ const publicData = {
                     if(sort.items){
                         for(let item of sort.items){
                             item.selected = false;
+                            //把上次的排序传参清空
+                            if(item.paramName in this.$store.state.searchParams){
+                                this.$store.state.searchParams[item.paramName] = null;
+                            }
                         }
                     }
                 }
