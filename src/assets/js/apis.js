@@ -422,10 +422,10 @@ export const banggood = {
 }
 export const chinabrands = {
 	// 搜索商品
-	searchGoodsByText({searchText, page=1, lang='en', country= null, brand_id = null, sort, canReserve = null, type = '0', sale_time = null, min_price, max_price, min_stork, max_stork }) {
+	searchGoodsByText({searchText, page=1, lang='en', country= null, brand_id = null, sort, canReserve = null, type = '0', sale_time = null, min_price, max_price, min_stock, max_stock }) {
 		return Service.get('api/chinabrands/searchGoodsByText',{
 			params: {
-				search_text:searchText, page, lang, country, brand_id, sort, canReserve, type, sale_time, min_price, max_price, min_stork, max_stork
+				search_text:searchText, page, lang, country, brand_id, sort, canReserve, type, sale_time, min_price, max_price, min_stock, max_stock
 			},
 		})
 	},

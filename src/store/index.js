@@ -626,59 +626,59 @@ export default new Vuex.Store({
                  switch (this.state.source_id) {
                      case SourceMap['alibaba']['id']:
                          res = await alibaba.uploadPic( payload )
-                         result.retcode = res.code
-                         result.message = res.msg
-                         result.data = {}
-                         result.data.imageAddress = res.data.imageAddress
-                         resolve(result)
+                         // result.retcode = res.code
+                         // result.message = res.msg
+                         // result.data = {}
+                         // result.data.imageAddress = res.data.imageAddress
+                         resolve(res)
                          break;
                      case SourceMap['1688']['id']:
                          res = await _1688.uploadPicH5( payload )
-                         result.retcode = res.retcode
-                         result.message = res.message
-                         result.data = {}
-                         result.data.imageAddress = res.data.imageId
-                         resolve(result)
+                         // result.retcode = res.retcode
+                         // result.message = res.message
+                         // result.data = {}
+                         // result.data.imageAddress = res.data.imageId
+                         resolve(res)
                          break;
                      case SourceMap['1688global']['id']:
                          res = await _1688global.uploadPic( payload )
-                         result.retcode = res.retcode
-                         result.message = res.message
-                         result.data = {}
-                         result.data.imageAddress = res.data.imgUrl
-                         resolve(result)
+                         // result.retcode = res.retcode
+                         // result.message = res.message
+                         // result.data = {}
+                         // result.data.imageAddress = res.data.imgUrl
+                         resolve(res)
                          break;
                      case SourceMap['aliexpressDS']['id']:
                          res = await aliexpressDS.uploadPic( payload )
-                         result.retcode = res.code
-                         result.message = res.msg
-                         result.data = {}
-                         result.data.imageAddress = res.data.filename
-                         resolve(result)
+                         // result.retcode = res.code
+                         // result.message = res.msg
+                         // result.data = {}
+                         // result.data.imageAddress = res.data.filename
+                         resolve(res)
                          break;
                      case SourceMap['aliexpressZapieX']['id']:
                          res = await aliexpressZapieX.uploadPic( payload )
-                         result.retcode = res.retcode
-                         result.message = res.message
-                         result.data = {}
-                         result.data.imageAddress = res.data.uploadKey
-                         resolve(result)
+                         // result.retcode = res.retcode
+                         // result.message = res.message
+                         // result.data = {}
+                         // result.data.imageAddress = res.data.uploadKey
+                         resolve(res)
                          break;
                      case SourceMap['yiwugo']['id']:
                          res = await yiwugo.uploadPic( payload )
-                         result.retcode = res.code
-                         result.message = res.msg
-                         result.data = {}
-                         result.data.imageAddress = res.data.url
-                         resolve(result)
+                         // result.retcode = res.code
+                         // result.message = res.msg
+                         // result.data = {}
+                         // result.data.imageAddress = res.data.url
+                         resolve(res)
                          break;
                      case SourceMap['1688overseas']['id']:
                          res = await _1688.uploadPicH5( payload )
-                         result.retcode = res.retcode
-                         result.message = res.message
-                         result.data = {}
-                         result.data.imageAddress = res.data.imageId
-                         resolve(result)
+                         // result.retcode = res.retcode
+                         // result.message = res.message
+                         // result.data = {}
+                         // result.data.imageAddress = res.data.imageId
+                         resolve(res)
                          break;
                  }
             })
@@ -734,23 +734,23 @@ export default new Vuex.Store({
                     case SourceMap['dhgate']['id']:
                         res = await dhgate.searchGoodsByPic({...params, page:payload.page})
 						//TBD： 临时补丁。没有单独的上传图片接口，后台接口统一返回imageAddress后再注释掉；不应该引用sourceResult
-						if(res.data.searchImage === undefined) res.data.searchImage = new Object();
-                        res.data.searchImage.imageAddress = res.sourceResult.data.imgUrl
+						// if(res.data.searchImage === undefined) res.data.searchImage = new Object();
+                        // res.data.searchImage.imageAddress = res.sourceResult.data.imgUrl
                         resolve(res)
                         break;
                     case SourceMap['mic']['id']:
                         res = await mic.searchGoodsByPic({...params, page:payload.page})
 						//TBD：临时补丁。没有单独的上传图片接口，后台接口统一返回imageAddress后再注释掉；不应该引用sourceResult
-						if(res.data.searchImage === undefined) res.data.searchImage = new Object();
-                        res.data.searchImage.imageAddress = res.sourceResult.content.imgId
+						// if(res.data.searchImage === undefined) res.data.searchImage = new Object();
+                        // res.data.searchImage.imageAddress = res.sourceResult.content.imgId
                         resolve(res)
                         break;
                     case SourceMap['cjds']['id']:
                         res = await cjds.searchGoodsByPic()
 						//TBD：临时补丁。没有单独的上传图片接口，后台接口统一返回imageAddress后再注释掉；不应该引用sourceResult
 						//TBD： CJ目前没有返回上传图片的imageAddress，也没有分页功能，如果切换到网页版会崩
-						if(res.data.searchImage === undefined) res.data.searchImage = new Object();
-						res.data.searchImage.imageAddress = null
+						// if(res.data.searchImage === undefined) res.data.searchImage = new Object();
+						// res.data.searchImage.imageAddress = null
                         resolve(res)
                         break;
                 }

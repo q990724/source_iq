@@ -431,7 +431,8 @@ export default {
                     // this.resultInfo = result.data.resultInfo;
                     // this.totalPage = this.resultInfo.totalPages || 1;
                     if (result.data.results && result.data.results.length > 0) {
-                        handleResponse(result);
+                        //注释掉前端处理http 的逻辑
+                        // handleResponse(result);
                         if (!loadmore) {
                             this.$store.commit('setFirstSearchState', 'success')
                         }
@@ -523,7 +524,8 @@ export default {
                     //     this.totalPage = this.resultInfo.totalPages
                     // }
                     if (result.data.results && result.data.results.length > 0) {
-                        handleResponse(result);
+                        //注释掉前端处理http 的逻辑
+                        // handleResponse(result);
                         if (!loadmore) {this.$store.commit('setFirstSearchState', 'success')}
                         this.$store.commit('setSearchState', 'success');
                         // 只要搜索成功，页码就++（原站如果有单独的首次搜索接口，分页请求页码从2开始）

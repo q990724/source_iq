@@ -17,12 +17,12 @@
                     </div>
                     <div class="gt" v-if="item.exprType === 'gt'">
                         <span class="gt_title">{{ item.name }}</span>
-                        <el-input style="width: 130px;margin: 0 8px" clearable placeholder="greater than" v-model="item.params[1]['paramValue']"></el-input>
+                        <el-input style="width: 130px;margin: 0 8px" clearable placeholder="greater than" v-model="item.params[0]['paramValue']"></el-input>
                         <el-button size="small" @click="onGtSubmit(index, i)">OK</el-button>
                     </div>
                     <div class="lt" v-if="item.exprType === 'lt'">
                         <span class="gt_title">{{ item.name }}</span>
-                        <el-input style="width: 130px;margin: 0 8px" clearable placeholder="less than" clearable v-model="item.params[0]['paramValue']"></el-input>
+                        <el-input style="width: 130px;margin: 0 8px" clearable placeholder="less than" clearable v-model="item.params[1]['paramValue']"></el-input>
                         <el-button size="small" @click="onLtSubmit(index, i)">OK</el-button>
                     </div>
                 </div>
