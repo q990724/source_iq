@@ -50,7 +50,7 @@ export default {
             },
             fileList: [],
             feedbackFormRules: {
-                content: [{required: true, message: '留言信息不能为空！'}]
+                content: [{required: true, message: this.$t('message.empty_message_not_allowed')}]
             },
             dialogVisible: false,
         }
@@ -63,7 +63,7 @@ export default {
             this.onFeedbackCancel();
         },
         async onFeedbackSubmit() {
-            if(!this.feedbackForm.content || !this.feedbackForm.content.trim()) return this.$message.error('留言内容不能为空！');
+            if(!this.feedbackForm.content || !this.feedbackForm.content.trim()) return this.$message.error(this.$t('message.empty_message_not_allowed'));
             let image_json = '';
             if(this.fileList && Array.isArray(this.fileList) && this.fileList.length > 0) {
                 await publicAPI.uploadFeedbackImage(this.fileList).then(res=>{

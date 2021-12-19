@@ -9,8 +9,9 @@
                 </div>
             </div>
             <div class="btns" v-if="isShowCollapse">
-                <span class="open" @click="open" v-if="!collapseStatus">展开</span>
-                <span class="close" @click="close" v-else>收起</span>
+				<!-- TBD：展开/收起改成图标，不用文字 -->
+                <span class="open" @click="open" v-if="!collapseStatus">{{$t('label.expand')}}</span>
+                <span class="close" @click="close" v-else>{{$t('label.collapse')}}</span>
             </div>
         </div>
     </div>

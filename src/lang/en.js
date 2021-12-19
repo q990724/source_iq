@@ -14,6 +14,7 @@ module.exports = {
         no_result_found: '- No Results Found -',
         unknown_error: 'Unknown error occurred ',
         no_search_image_api: 'Image Search not supported!',
+		empty_message_not_allowed: "Message can't be empty!",
     },
     label: {
         chooseBox: '框选主体',
@@ -36,6 +37,8 @@ module.exports = {
 		upload_pic: 'Upload Picture',
 		contact: 'Contact',
 		message:'Message',
+		expand:'+',
+		collapse:'-',
     },
     button: {
         more: 'More',
