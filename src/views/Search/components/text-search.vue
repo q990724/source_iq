@@ -1,5 +1,5 @@
 <template>
-    <div class="text-search mt40">
+    <div class="text-search">
         <div class="input-box">
             <div style="display: flex;align-items: center;flex: 1">
                 <i class="el-icon-search"></i>

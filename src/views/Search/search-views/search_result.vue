@@ -2,6 +2,26 @@
     <div class="search-result-container scrollable">
         <div class="container">
             <div class="main-container">
+                <div class="header">
+                    <!--logo-->
+                    <div class="logo">
+                        <img src="@/assets/img/source/1688.png" alt="logo">
+                    </div>
+                    <!--右侧区域-->
+                    <div class="right-wrap">
+                        <!--留言/意见反馈-->
+                        <span class="right-wrap_btn" @click="openFeedback()">Contact</span>
+                        <!--国家/语言/货币-->
+                        <div class="right-wrap_btn tags" @click="onLanguagechange()">
+                            <!--国家-->
+                            <span>{{ $store.state.countryName }}</span>
+                            <i>/</i>
+                            <span>{{ $store.state.languageName }}</span>
+                            <i>/</i>
+                            <span>{{ $store.state.currencyCode }}</span>
+                        </div>
+                    </div>
+                </div>
                 <text-search ref="text_search" @onClickSearchButton="onClickSearchButton"
                              @onSelectImage="onSelectImage"></text-search>
                 <!--  图片处理区域  -->
@@ -35,6 +55,8 @@
                 <!--                <support-source-list v-show="$store.state.searchState === 'none' && !$store.state.mainImage && !$store.state.searchText"></support-source-list> -->
             </div>
         </div>
+
+        <language-popup ref="language_popup"></language-popup>
     </div>
 </template>
 
@@ -50,6 +72,7 @@ import FilterComponent from "../components/group-filter.vue";
 import ExprListComponent from "../components/expr-list";
 import SortListComponent from "../components/sort-list";
 import MyCollapseComponent from '@/components/my-collapse';
+import LanguagePopupComponent from "@/components/language-popup";
 import bus from "@/assets/js/bus";
 import {getBase64FromCropImage, handleResponse, getFileFromBase64} from "@/assets/js/utils.js";
 import publicData from "../mixins/public.js";
@@ -68,7 +91,8 @@ export default {
         GroupFilter: FilterComponent,
         ExprList: ExprListComponent,
         SortList: SortListComponent,
-        MyCollapse: MyCollapseComponent
+        MyCollapse: MyCollapseComponent,
+        LanguagePopup: LanguagePopupComponent
     },
     mixins: [publicData],
     data() {
@@ -553,7 +577,12 @@ export default {
             }
             this.$store.commit('dumpAll', "发起getDataFromText后：");
         },
-
+        openFeedback() {
+            window.$openFeedback();
+        },
+        onLanguagechange() {
+            this.$refs['language_popup'].open();
+        }
     }
 }
 </script>
@@ -565,6 +594,41 @@ export default {
             min-width: 1390px;
             width: 1390px;
             margin: auto;
+            .header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 10px 0;
+                margin-bottom: 10px;
+                border-bottom: 1px solid #DDD;
+                .logo {
+                    img {
+                        width: 150px;
+                    }
+                }
+                .right-wrap {
+                    display: flex;
+                    align-items: center;
+                    .right-wrap_btn ~ .right-wrap_btn {
+                        margin-left: 20px;
+                    }
+                    .right-wrap_btn {
+                        cursor: pointer;
+                        &:hover {
+                            color: #FF4000;
+                        }
+                    }
+                    .tags {
+                        span {
+
+                        }
+                        i {
+                            margin: 0 5px;
+                            font-style: normal;
+                        }
+                    }
+                }
+            }
         }
     }
 }

@@ -47,5 +47,6 @@ module.exports = {
 		confirm: 'Confirm',
 		submit: 'Submit',
 		clearSearch: "Clear",
+        save: 'Save'
     }
 }

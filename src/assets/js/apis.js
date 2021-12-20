@@ -139,6 +139,9 @@ export const aliexpressDS = {
 			}
 	    })
 	},
+	getCountryLangCurrency() {
+		return Service.get('api/aliexpress/getCountryLangCurrency')
+	}
 }
 
 export const aliexpressZapieX = {
@@ -462,5 +465,5 @@ export const publicAPI = {
 				'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
 			}
 		});
-	}
+	},
 }

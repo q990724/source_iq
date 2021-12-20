@@ -38,6 +38,24 @@ export default new Vuex.Store({
 			sessionId: null,
 			requestId: null,
 		},
+        // 国家列表
+        countryList: [],
+        // 语言列表
+        languageList: [],
+        // 货币列表
+        currencyList: [],
+        // 已选国家代码
+        countryCode: 'US',
+        // 已选语言代码
+        languageCode: 'en_US',
+        // 已选货币代码
+        currencyCode: 'USD',
+        // 已选国家名称
+        countryName: 'United States',
+        // 已选语言名称
+        languageName: 'English',
+        // 已选货币名称
+        currencyName: 'US Dollar',
     },
     mutations: {
 		// 重置全部，包括搜索模式、搜索参数、图片上传状态、搜索状态；“source_id"初始化责任在content和vue.mounted两处

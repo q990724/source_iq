@@ -18,7 +18,7 @@
 <script>
 import bus from "@/assets/js/bus";
 import SoureMap from "@/assets/js/source_map.js";
-import {publicAPI} from "@/assets/js/apis";
+import {publicAPI, aliexpressDS} from "@/assets/js/apis";
 import feedback from "@/components/feedback";
 let appElement = null;
 export default {
@@ -32,11 +32,15 @@ export default {
     },
     created() {
         console.log('app.vue created');
+        this.getCountryLangCurrency();
     },
     mounted() {
         console.log('app.vue mounted');
         appElement = $('#app');
         appElement.scroll(this.onAppScrollEvent.bind(this));
+        window['$openFeedback'] = () => {
+            this.onFeedback();
+        }
     },
     methods: {
         load() {
@@ -53,6 +57,16 @@ export default {
         onFeedback() {
             this.$refs['feedback'].open();
         },
+        getCountryLangCurrency() {
+            aliexpressDS.getCountryLangCurrency().then(res=>{
+                if(res.data) {
+                    let result = res.data;
+                    this.$store.state.countryList = result.country;
+                    this.$store.state.currencyList = result.currency;
+                    this.$store.state.languageList = result.language;
+                }
+            })
+        }
     },
     computed: {
         source_id() {
