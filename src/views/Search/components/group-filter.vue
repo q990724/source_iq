@@ -31,8 +31,9 @@
                 </div>
             </template>
             <template v-if="filter.selectUIType === 'radio'">
-                <div class="filter-item">
+                <div class="filter-item" v-if="filter.items && filter.items.length > 0"  :key="filterIndex">
                     <my-collapse :title="filter.title">
+						<!-- radioValue在public.js做了预处理，没有理解其必要性 -->
                         <el-radio-group v-model="filter.radioValue" >
                             <div class="item" v-for="(item,itemIndex) in filter.items" :key="item.id + item.name">
                                 <el-radio :label="item.name" class="filter-item_option" @change="onFilterChange(filterIndex, itemIndex, $event)">
