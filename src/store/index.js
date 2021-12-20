@@ -217,26 +217,6 @@ export default new Vuex.Store({
         // 点击筛选条件发请求筛选
 		// payload包括filterItem（选中的filter类，该类选中的option，选中的当前值e三个参数
         onFilterChange(content,payload){
-            // function handleCheckBoxParams({ self = payload.self, e = payload.e, o = payload.options, selectUIType = payload.filterItem.selectUIType, key, symbol = ",", joint = '' }) {
-            //     let arr = [];
-            //     // if(selectUIType && self.searchTextParams[key] && selectUIType === "checkbox"){
-            //     //     arr = self.searchTextParams[key].split(symbol);
-            //     // }
-            //     if(self.searchTextParams[key]){
-            //         arr = self.searchTextParams[key].split(symbol);
-            //     }
-            //
-            //     if(e) {
-            //         arr.push(joint + o.paramValue);
-            //     }else if(arr.includes(joint + o.paramValue)) {
-            //         arr.splice(arr.indexOf(joint + o.paramValue), 1);
-            //     }
-            //
-            //     self.searchTextParams[key] = arr.join(symbol);
-            //     if(arr.length <= 0) {
-            //         delete self.searchTextParams[key];
-            //     }
-            // }
             let filterItemClone =  {}, optionClone = {};
             let that = this;
 			// 对任意一个categoryList/filterList/exprList/sortList的filterItem，拼装传参数据
@@ -299,250 +279,143 @@ export default new Vuex.Store({
 				// }
 			}
             return new Promise((resolve)=>{
+                handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e});
                 // switch (this.state.source_id) {
                 //     case SourceMap['alibaba']['id']:
-                //         handleCheckBoxParams({ key:payload.filterItem.paramName });
+				// 		// 先处理所有的category，filter，expr的共性逻辑
+                //         handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e});
+				// 		// 如果是商品分类，不需要后续的额外逻辑
+				// 		if(payload.filterType == 'CATEGORY') break;
+                //
+				// 		// 再处理所有的category，filter，expr的个性逻辑
+                //         // 深度复制，其实只需要paramName不需要深度复制
+                //         filterItemClone = JSON.parse(JSON.stringify(payload.filterItem));
+                //         filterItemClone.paramName = 'param_order';
+                //         filterItemClone.selectUIType = 'checkbox';
+                //         filterItemClone.title = 'param_order';
+				// 		// TBD：按照标题进行条件处理逻辑很脆弱。标题拼写只要修改逻辑就会崩掉
                 //         switch (payload.filterItem.title) {
-                //             case 'Management Certification':
-                //                 handleCheckBoxParams({ key:'param_order', joint:'CAT-' });
+                //             // case 'Related Category':
+                //             //     break;
+                //             // case 'Supplier Types':
+                //             //     break;
+                //             // case 'Product Types':
+                //             //     break;
+                //             // case 'Min. Order':	//exprList类型
+                //             //     break;
+                //             // case 'Price':
+                //             //     break;
+                //             case 'Management Certification':	//filterList类型
+                //                 // handleCheckBoxParams({ key:'param_order', joint:'CAT-' });
+                //                 handleParams({ filterItem:filterItemClone, option:payload.option, e:payload.e, joint: 'CAT-'});
                 //                 break;
-                //             case 'Product Certification':
-                //                 handleCheckBoxParams({ key:'param_order', joint:'PAT-' });
+                //             case 'Product Certification':	//filterList类型
+                //                 handleParams({ filterItem:filterItemClone, option:payload.option, e:payload.e, joint: 'PAT-'});
                 //                 break;
-                //             case 'Supplier Country/Region':
-                //                 handleCheckBoxParams({ key:'param_order', joint:'CNTRY-' });
+                //             case 'Supplier Country/Region':	//filterList类型
+                //                 handleParams({ filterItem:filterItemClone, option:payload.option, e:payload.e, joint: 'CNTRY-'});
                 //                 break;
-                //             case 'Past Export Countries':
-                //                 handleCheckBoxParams({ key:'param_order', joint:'EC-' });
+                //             case 'Past Export Countries':	//filterList类型
+                //                 handleParams({ filterItem:filterItemClone, option:payload.option, e:payload.e, joint: 'EC-'});
                 //                 break;
-                //             default:
-                //                 handleCheckBoxParams({ key:'param_order', joint:'ATTR-' });
+                //             default:	//categoryList、filterList、exprList类型
+				// 				//BUG：目前所有的category，filter，expr都会走到这里处理！
+                //                 handleParams({ filterItem:filterItemClone, option:payload.option, e:payload.e, joint: 'ATTR-'});
                 //                 break;
                 //         }
                 //         break;
                 //     case SourceMap['1688']['id']:
-                //         handleCheckBoxParams({ key:payload.filterItem.paramName, symbol: ';' });
+                //         handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e, separator: ';'});
                 //         break;
                 //     case SourceMap['1688overseas']['id']:
-                //         handleCheckBoxParams({ key:payload.filterItem.paramName, symbol: ';' });
+                //         handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e, separator: ';'});
                 //         break;
                 //     case SourceMap['1688global']['id']:
-                //         switch (payload.filterItem.title) {
-                //             case '地区':
-                //                 payload.self.location = payload.e ? payload.options.name : '';
-                //                 break;
-                //             case '属性':
-                //                 if(payload.e) {
-                //                     if(!Array.isArray(payload.self.tags)) payload.self.tags = [];
-                //                     payload.self.tags.push(payload.options.name);
-                //                 }else {
-                //                     for (let i = 0; i < payload.self.tags.length; i++) {
-                //                         if(payload.self.tags[i] === payload.options.name) {
-                //                             payload.self.tags.splice(i, 1);
-                //                         }
-                //                     }
-                //                 }
-                //                 break;
-                //             default:
-                //                 handleCheckBoxParams({ key:payload.filterItem.paramName, symbol: ';' });
-                //                 break;
-                //         }
+                //         // switch (payload.filterItem.title) {
+                //         //     case '地区':
+                //         //         payload.self.location = payload.e ? payload.option.name : '';
+                //         //         break;
+                //         //     case '属性':
+                //                 // if(payload.e) {
+                //                 //     if(!Array.isArray(payload.self.tags)) payload.self.tags = [];
+                //                 //     payload.self.tags.push(payload.option.name);
+                //                 // }else {
+                //                 //     for (let i = 0; i < payload.self.tags.length; i++) {
+                //                 //         if(payload.self.tags[i] === payload.option.name) {
+                //                 //             payload.self.tags.splice(i, 1);
+                //                 //         }
+                //                 //     }
+                //                 // }
+                //                 // break;
+                //             // default:
+                //                 handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e, separator: ';'});
+                //                 // break;
+                //         // }
                 //         break;
-                //     case SourceMap['aliexpress']['id']:
+                //     case SourceMap['aliexpressDS']['id']:
                 //         switch (payload.filterItem.title) {
                 //             case 'Brands':
-                //                 payload.self.searchTextParams.brand_id = payload.e ? payload.options.paramValue : '';
+                //                 handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e});
                 //                 break;
                 //             default:
-                //                 handleCheckBoxParams({ key:payload.filterItem.paramName, symbol: ';' });
+				// 				// TBD：separator分隔符和joint连接符最后应该放到后台接口入参时处理，对前端提供一个统一标准
+                //                 handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e, separator: ';'});
                 //                 break;
                 //         }
                 //
                 //         break;
+                //     case SourceMap['aliexpressZapieX']['id']:
+                //         handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e});
+                //
+                //         // 深度复制，其实只需要paramName不需要深度复制
+                //         filterItemClone = JSON.parse(JSON.stringify(payload.filterItem));
+                //         filterItemClone.paramName = 'attr_id';
+                //         filterItemClone.selectUIType = 'radio';
+                //         filterItemClone.title = 'attr_id';
+                //
+                //         optionClone = JSON.parse(JSON.stringify(payload.option));
+                //         if(filterItemClone.id) optionClone.paramValue = filterItemClone.id;
+                //
+                //         switch (payload.filterItem.title) {
+                //             case 'Brands':
+                //                 handleParams({ filterItem:filterItemClone, option:optionClone, e:payload.e});
+                //                 break;
+                //             case 'Material':
+                //                 handleParams({ filterItem:filterItemClone, option:optionClone, e:payload.e});
+                //                 break;
+                //         }
+                //         break;
                 //     case SourceMap['yiwugo']['id']:
-                //         handleCheckBoxParams({ key:payload.filterItem.paramName});
+                //         handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e});
                 //         break;
                 //     case SourceMap['dhgate']['id']:
-                //         switch (payload.filterItem.title) {
-                //             case 'Ship from':
-                //                 // handleCheckBoxParams(payload.self, payload.e, payload.o, 'inventoryLocation', ";");
-                //                 // payload.self.searchTextParams.inventoryLocation = payload.e ? payload.options.paramValue : '';
-                //                 content.commit('addSearchParam',{key:payload.filterItem.paramName, val: payload.option.paramValue});
-                //                 break;
-                //             default:
-                //                 handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e});
-                //         }
+                //         handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e});
                 //         break;
                 //     case SourceMap['mic']['id']:
-                //         switch (payload.filterItem.title) {
-                //             case 'Location':
-                //                 payload.self.searchTextParams.location = payload.e ? payload.options.paramValue : '';
-                //                 break;
-                //             case 'Member Type':
-                //                 payload.self.searchTextParams.memberType = payload.e ? payload.options.paramValue : '';
-                //                 break;
-                //             case 'Color':
-                //                 payload.self.color = payload.e ? payload.options.paramValue : '';
-                //                 break;
-                //             default:
-                //                 handleCheckBoxParams({ key:payload.filterItem.paramName});
-                //         }
+                //         // switch (payload.filterItem.title) {
+                //         //     case 'Color':
+                //         //         payload.self.color = payload.e ? payload.options.paramValue : '';
+                //         //         break;
+                //         //     default:
+				// 		handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e});
+                //         // }
                 //         break;
                 //     case SourceMap['cjds']['id']:
-                //         switch (payload.filterItem.title) {
-                //             case 'Ship From':
-                //                 payload.self.searchTextParams.country = payload.e ? payload.options.paramValue : '';
-                //                 break;
-                //             default:
-                //                 handleCheckBoxParams({ key:payload.filterItem.paramName});
-                //         }
+                //         handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e});
+                //         break;
+                //     case SourceMap['litbox']['id']:
+                //         handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e});
                 //         break;
                 //     case SourceMap['banggood']['id']:
-                //         payload.self.searchTextParams[payload.filterItem.paramName] = payload.e ? payload.options.paramValue : '';
+                //         handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e});
                 //         break;
                 //     case SourceMap['chinabrands']['id']:
-                //         payload.self.searchTextParams[payload.filterItem.paramName] = payload.e ? payload.options.paramValue : '';
+                //         handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e});
                 //         break;
                 //     case SourceMap['globalres']['id']:
-                //         payload.self.searchTextParams[payload.filterItem.paramName] = payload.e ? payload.options.paramValue : '';
+                //         handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e});
                 //         break;
                 // }
-                switch (this.state.source_id) {
-                    case SourceMap['alibaba']['id']:
-						// 先处理所有的category，filter，expr的共性逻辑
-                        handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e});
-						// 如果是商品分类，不需要后续的额外逻辑
-						if(payload.filterType == 'CATEGORY') break;
-						
-						// 再处理所有的category，filter，expr的个性逻辑
-                        // 深度复制，其实只需要paramName不需要深度复制
-                        filterItemClone = JSON.parse(JSON.stringify(payload.filterItem));
-                        filterItemClone.paramName = 'param_order';
-                        filterItemClone.selectUIType = 'checkbox';
-                        filterItemClone.title = 'param_order';
-						// TBD：按照标题进行条件处理逻辑很脆弱。标题拼写只要修改逻辑就会崩掉
-                        switch (payload.filterItem.title) {
-                            // case 'Related Category':
-                            //     break;
-                            // case 'Supplier Types':
-                            //     break;
-                            // case 'Product Types':
-                            //     break;
-                            // case 'Min. Order':	//exprList类型
-                            //     break;
-                            // case 'Price':
-                            //     break;
-                            case 'Management Certification':	//filterList类型
-                                // handleCheckBoxParams({ key:'param_order', joint:'CAT-' });
-                                handleParams({ filterItem:filterItemClone, option:payload.option, e:payload.e, joint: 'CAT-'});
-                                break;
-                            case 'Product Certification':	//filterList类型
-                                handleParams({ filterItem:filterItemClone, option:payload.option, e:payload.e, joint: 'PAT-'});
-                                break;
-                            case 'Supplier Country/Region':	//filterList类型
-                                handleParams({ filterItem:filterItemClone, option:payload.option, e:payload.e, joint: 'CNTRY-'});
-                                break;
-                            case 'Past Export Countries':	//filterList类型
-                                handleParams({ filterItem:filterItemClone, option:payload.option, e:payload.e, joint: 'EC-'});
-                                break;
-                            default:	//categoryList、filterList、exprList类型
-								//BUG：目前所有的category，filter，expr都会走到这里处理！
-                                handleParams({ filterItem:filterItemClone, option:payload.option, e:payload.e, joint: 'ATTR-'});
-                                break;
-                        }
-                        break;
-                    case SourceMap['1688']['id']:
-                        handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e, separator: ';'});
-                        break;
-                    case SourceMap['1688overseas']['id']:
-                        handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e, separator: ';'});
-                        break;
-                    case SourceMap['1688global']['id']:
-                        // switch (payload.filterItem.title) {
-                        //     case '地区':
-                        //         payload.self.location = payload.e ? payload.option.name : '';
-                        //         break;
-                        //     case '属性':
-                                // if(payload.e) {
-                                //     if(!Array.isArray(payload.self.tags)) payload.self.tags = [];
-                                //     payload.self.tags.push(payload.option.name);
-                                // }else {
-                                //     for (let i = 0; i < payload.self.tags.length; i++) {
-                                //         if(payload.self.tags[i] === payload.option.name) {
-                                //             payload.self.tags.splice(i, 1);
-                                //         }
-                                //     }
-                                // }
-                                // break;
-                            // default:
-                                handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e, separator: ';'});
-                                // break;
-                        // }
-                        break;
-                    case SourceMap['aliexpressDS']['id']:
-                        switch (payload.filterItem.title) {
-                            case 'Brands':
-                                handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e});
-                                break;
-                            default:
-								// TBD：separator分隔符和joint连接符最后应该放到后台接口入参时处理，对前端提供一个统一标准
-                                handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e, separator: ';'});
-                                break;
-                        }
-
-                        break;
-                    case SourceMap['aliexpressZapieX']['id']:
-                        handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e});
-
-                        // 深度复制，其实只需要paramName不需要深度复制
-                        filterItemClone = JSON.parse(JSON.stringify(payload.filterItem));
-                        filterItemClone.paramName = 'attr_id';
-                        filterItemClone.selectUIType = 'radio';
-                        filterItemClone.title = 'attr_id';
-
-                        optionClone = JSON.parse(JSON.stringify(payload.option));
-                        if(filterItemClone.id) optionClone.paramValue = filterItemClone.id;
-
-                        switch (payload.filterItem.title) {
-                            case 'Brands':
-                                handleParams({ filterItem:filterItemClone, option:optionClone, e:payload.e});
-                                break;
-                            case 'Material':
-                                handleParams({ filterItem:filterItemClone, option:optionClone, e:payload.e});
-                                break;
-                        }
-                        break;
-                    case SourceMap['yiwugo']['id']:
-                        handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e});
-                        break;
-                    case SourceMap['dhgate']['id']:
-                        handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e});
-                        break;
-                    case SourceMap['mic']['id']:
-                        // switch (payload.filterItem.title) {
-                        //     case 'Color':
-                        //         payload.self.color = payload.e ? payload.options.paramValue : '';
-                        //         break;
-                        //     default:
-						handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e});
-                        // }
-                        break;
-                    case SourceMap['cjds']['id']:
-                        handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e});
-                        break;
-                    case SourceMap['litbox']['id']:
-                        handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e});
-                        break;
-                    case SourceMap['banggood']['id']:
-                        handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e});
-                        break;
-                    case SourceMap['chinabrands']['id']:
-                        handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e});
-                        break;
-                    case SourceMap['globalres']['id']:
-                        handleParams({ filterItem:payload.filterItem, option:payload.option, e:payload.e});
-                        break;
-                }
                 resolve()
             })
         },

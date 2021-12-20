@@ -251,6 +251,13 @@ const publicData = {
                     }
                 }
                 filter.selected = event;
+            }else if(filterType === 'EXPR'){
+                    for(let param of filter.items[itemIndex].params) {
+                        //把上次的搜索表达式输入框传参清空
+                        if (param.paramName in this.$store.state.searchParams) {
+                            this.$store.state.searchParams[param.paramName] = null;
+                        }
+                    }
             }else if(filter.selectUIType === 'radio'){
                     filter.items.forEach(element=>{
                         element.selected = false;

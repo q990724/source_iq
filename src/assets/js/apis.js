@@ -160,10 +160,10 @@ export const aliexpressZapieX = {
 		})
 	},
 	// 文字搜索
-	searchGoodsByText({searchText, categoryId, min_price, max_price, shipFrom, shipTo, freeShippingOnly, fastShippingOnly, moreThanFourStarsOnly, sort, page = 1, language = 'en_US', currency, attr_id, attr_value}) {
+	searchGoodsByText({searchText, categoryId, min_price, max_price, shipFrom, shipTo, freeShippingOnly, fastShippingOnly, moreThanFourStarsOnly, sort, page = 1, language = 'en_US', currency, attr_id_value}) {
 		return Service.get('api/aliexpress/zapiexSearchGoods', {
 			params: {
-				search_text:searchText, categoryId, min_price, max_price, shipFrom, shipTo, freeShippingOnly, fastShippingOnly, moreThanFourStarsOnly, sort, page, language, currency, attr_id, attr_value
+				search_text:searchText, categoryId, min_price, max_price, shipFrom, shipTo, freeShippingOnly, fastShippingOnly, moreThanFourStarsOnly, sort, page, language, currency, attr_id_value
 			},
 		})
 	},
@@ -246,21 +246,21 @@ export const _1688global = {
 	        }
 	    })
 	},
-	searchGoodsFirstKj({searchText,featurePair, sortType, descendOrder, priceStart, priceEnd, quantityBegin, province, city, biztype, tagsZ, extendProperties, commonSort, filtMemberTags, filtOfferTags, holidayTagIdtese, filt, factorySize, employeesCount, category}) {
+	searchGoodsFirstKj({searchText,featurePair, sortType, descendOrder, priceStart, priceEnd, quantityBegin, province, city, biztype, tagsZ, extendProperties, commonSort, filtMemberTags, filtOfferTags, holidayTagId, tese, filt, factorySize, employeesCount, category}) {
 		let cookie = getCookie('1688global');
 		if(!cookie) return Promise.reject('no cookie');
 		return Service.get('api/goods/searchGoodsFirstKj', {
 			params: {
-				keywords:searchText, cookie,featurePair, sortType, descendOrder, priceStart, priceEnd, quantityBegin, province, city, biztype, tagsZ, extendProperties, commonSort, filtMemberTags, filtOfferTags, holidayTagIdtese, filt, factorySize, employeesCount, category
+				keywords:searchText, cookie,featurePair, sortType, descendOrder, priceStart, priceEnd, quantityBegin, province, city, biztype, tagsZ, extendProperties, commonSort, filtMemberTags, filtOfferTags, holidayTagId, tese, filt, factorySize, employeesCount, category
 			}
 		})
 	},
-	searchGoodsKj({searchText, featurePair, sessionId, requestId, page = 1, sortType, descendOrder, priceStart, priceEnd, quantityBegin, province, city, biztype, tagsZ, extendProperties, commonSort, filtMemberTags, filtOfferTags, holidayTagIdtese, filt, factorySize, employeesCount,category}) {
+	searchGoodsKj({searchText, featurePair, sessionId, requestId, page = 1, sortType, descendOrder, priceStart, priceEnd, quantityBegin, province, city, biztype, tagsZ, extendProperties, commonSort, filtMemberTags, filtOfferTags, holidayTagId, tese, filt, factorySize, employeesCount,category}) {
 		let cookie = getCookie('1688global');
 		if(!cookie) return Promise.reject('no cookie');
 		return Service.get('api/goods/searchGoodsKj', {
 			params: {
-				keywords: searchText, cookie, page, sessionId, requestId, featurePair, sortType, descendOrder, priceStart, priceEnd, quantityBegin, province, city, biztype, tagsZ, extendProperties, commonSort, filtMemberTags, filtOfferTags, holidayTagIdtese, filt, factorySize, employeesCount,category
+				keywords: searchText, cookie, page, sessionId, requestId, featurePair, sortType, descendOrder, priceStart, priceEnd, quantityBegin, province, city, biztype, tagsZ, extendProperties, commonSort, filtMemberTags, filtOfferTags, holidayTagId, tese, filt, factorySize, employeesCount,category
 			}
 		})
 	}
@@ -331,9 +331,9 @@ export const dhgate = {
 	},
 
 	// 搜索商品
-	searchGoodsByText({searchText, page=1, page_size=20, lang='en', currency='USD', sort = 1, price_sort = null, min_price = null, max_price = null, category = null, at = null, freeShipping = null, inventoryLocation = null}) {
+	searchGoodsByText({searchText, page=1, page_size=20, lang='en', currency='USD', sort = 1, price_sort = null, min_price = null, max_price = null, minOrder,category = null, at = null, freeShipping = null, inventoryLocation = null}) {
 		const params = Qs.stringify({
-			search_text:searchText, page, page_size, lang, currency, sort, price_sort, min_price, max_price, category, at, freeShipping, inventoryLocation
+			search_text:searchText, page, page_size, lang, currency, sort, price_sort, min_price, max_price, minOrder, category, at, freeShipping, inventoryLocation
 		});
 		return Service.post('api/dhgateapp/searchGoodsByText', params, {
 			headers: {

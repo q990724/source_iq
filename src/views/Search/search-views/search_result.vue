@@ -206,7 +206,7 @@ export default {
         onExprChange({exprIndex, itemIndex, event}) {
             console.log("onExprChange");
             this.exprList[exprIndex].selectUIType = 'checkbox';
-            // this.handleOptions(this.exprList[exprIndex], itemIndex, event);
+            this.handleOptions(this.exprList[exprIndex], itemIndex, event, 'EXPR');
 			// handleOptions与handleExprList的关系？
             this.initSearchResult();
             this.$store.commit('resetSearchState');
