@@ -14,18 +14,18 @@
 					<p v-if="item.product.tradePrice[0].minOrder">{{item.product.tradePrice[0].minOrder}} (Min.Order)
 					</p>
 					<!-- 如果卖家节点和年份都不存在时，就不渲染此div模块-->
-					<div class="supplier" v-if="item.seller !== undefined && item.seller.years !== undefined && item.seller && item.seller.years">
-						<div class="year">
+					<div class="supplier" v-if="showSeller">
+						<div class="year" v-if="item.seller.years">
 							<span>{{item.seller.years}}</span>
 							<sup>YRS</sup>
 						</div>
 						<div class="supplier-name" @click="openHref(item.seller.homeUrl)">{{item.seller.name}}</div>
 					</div>
 				</div>
-				<div class="bottom" v-if="item.seller && item.seller.homeUrl && item.seller.name">
+				<div class="bottom" v-if="showSeller && item.seller && item.seller.homeUrl && item.seller.name">
 					<span @click="openHref(item.seller.homeUrl)">{{item.seller.name}}</span>
 				</div>
-				<div class="bottom" v-else-if="item.seller">
+				<div class="bottom" v-else-if="showSeller && item.seller">
 					<span>{{item.seller.name}}</span>
 				</div>
 			</div>
@@ -55,7 +55,11 @@
 			offer_list: {
 				type: Array,
 				default: () => []
-			}
+			},
+            showSeller: {
+                type: [Boolean, undefined],
+                default: true
+            }
 		},
 		methods: {
 			openHref(href) {
@@ -72,7 +76,7 @@
 	.product-item {
 		float: left;
 		width: 335px;
-		min-height: 450px;
+		max-height: 450px;
 		background-color: #FFFFFF;
 		//box-shadow: 0 0 10px #DDD;
 		margin-right: 12px;
@@ -117,7 +121,7 @@
 				color: #000;
 				letter-spacing: 1px;
 				text-decoration: none;
-
+                height: 40px;
 				&:visited {
 					color: #333333;
 				}
