@@ -4,8 +4,8 @@
             <div class="item" v-for="(sort, index) in sortList" :key="index">
                 <span @click="onClickItem(index, 'text')" :class="{'active': sort.selected}">{{ sort.title }}</span>
                 <div class="up-down" v-if="sort.items">
-                    <i @click="onClickItem(index, 'asc')" :class="{'active': sort.items[0].selected}" class="el-icon-caret-top" v-if="(sort.items[0] && sort.items[0]['order'] === 'asc') || (sort.items[1] && sort.items[1]['order'] === 'asc')"></i>
-                    <i @click="onClickItem(index, 'desc')" :class="{'active': sort.items[1].selected}" class="el-icon-caret-bottom" v-if="(sort.items[0] && sort.items[0]['order'] === 'desc') || (sort.items[1] && sort.items[1]['order'] === 'desc')"></i>
+                    <i @click="onClickItem(index, 'asc')" :class="{'active': sort.items[0].selected}" class="el-icon-caret-top" v-if="sort.items[0] && sort.items[0]['order'] === 'asc'"></i>
+                    <i @click="onClickItem(index, 'desc')" :class="{'active': sort.items[1].selected}" class="el-icon-caret-bottom" v-if="sort.items[1] && sort.items[1]['order'] === 'desc'"></i>
                 </div>
             </div>
         </my-collapse>
