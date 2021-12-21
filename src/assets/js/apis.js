@@ -183,7 +183,7 @@ export const _1688 = {
 	    })
 	},
 	// 图片搜索
-	searchGoodsByPic({imageAddress, page = 1, yoloRegionSelected = true, yoloCropRegion = '', region = '', pailitaoCategoryId = null, searchtype = 0, sortField = 'normal', sortType = 'asc',priceStart,priceEnd,quantityBegin,extendProperties, memberTags, isImgPkg, isMainShortVideo, isAuthentication, isPatent, isSrcFactoryItm, holidayTagId, isZhangqiSelect, gmtCreate,province,city,dis,sessionId, requestId,}) {
+	searchGoodsByPic({imageAddress, page, yoloRegionSelected = null, yoloCropRegion = '', region = '', pailitaoCategoryId = null, searchtype = 0, sortField = 'normal', sortType = 'asc',priceStart,priceEnd,quantityBegin,extendProperties, memberTags, isImgPkg, isMainShortVideo, isAuthentication, isPatent, isSrcFactoryItm, holidayTagId, isZhangqiSelect, gmtCreate,province,city,dis,sessionId, requestId,}) {
 		let cookie = getCookie('1688');
 		if(!cookie) return Promise.reject('no cookie');
 	    return Service.get('api/goods/imgSearch', {

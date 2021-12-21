@@ -641,7 +641,7 @@ export default new Vuex.Store({
                             resolve(res)
                             break;
                         case SourceMap['1688']['id']:
-                            res = await _1688.searchGoodsByPic({...params,sessionId:payload.sessionId, requestId:payload.requestId, searchtype:0})
+                            res = await _1688.searchGoodsByPic({...params,page:payload.page, sessionId:payload.sessionId, requestId:payload.requestId, searchtype:0})
                             resolve(res)
                             break;
                         case SourceMap['1688overseas']['id']:	// 图搜接口与1688一样，只是searchtype参数不同（所有货源，跨境货源）
