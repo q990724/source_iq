@@ -498,92 +498,106 @@ export default new Vuex.Store({
         },
 
         firstSearchText(content,payload){
+            content.state.searchState = 'none';
             let params = {};
             return new Promise(async (resolve)=>{
                 params = collapse({...payload.searchTextParams});
-                switch (this.state.source_id) {
-                    case SourceMap['1688']['id']:
-                        resolve(await _1688.searchGoodsFirst({ ...params,page: payload.page }))
-                        break;
+                try {
+                    switch (this.state.source_id) {
+                        case SourceMap['1688']['id']:
+                            resolve(await _1688.searchGoodsFirst({ ...params,page: payload.page }))
+                            break;
+                    }
+                    switch (this.state.source_id) {
+                        case SourceMap['1688global']['id']:
+                            resolve(await _1688global.searchGoodsFirstKj({ ...params,page: payload.page }))
+                            break;
+                    }
+                    switch (this.state.source_id) {
+                        case SourceMap['1688overseas']['id']:
+                            resolve(await _1688.searchGoodsFirst({ ...params,page: payload.page }))
+                            break;
+                    }
+                }catch (e) {
+                    content.state.searchState = 'error';
+                    content.state.api_error_msg = e;
                 }
-                switch (this.state.source_id) {
-                    case SourceMap['1688global']['id']:
-                        resolve(await _1688global.searchGoodsFirstKj({ ...params,page: payload.page }))
-                        break;
-                }
-                switch (this.state.source_id) {
-                    case SourceMap['1688overseas']['id']:
-                        resolve(await _1688.searchGoodsFirst({ ...params,page: payload.page }))
-                        break;
-                }
+
             })
         },
 
         uploadPic(content,payload){
+            content.state.imageUploadState = 'none';
             let res = null, result = {};
              return new Promise(async (resolve)=>{
-                 switch (this.state.source_id) {
-                     case SourceMap['alibaba']['id']:
-                         res = await alibaba.uploadPic( payload )
-                         // result.retcode = res.code
-                         // result.message = res.msg
-                         // result.data = {}
-                         // result.data.imageAddress = res.data.imageAddress
-                         resolve(res)
-                         break;
-                     case SourceMap['1688']['id']:
-                         res = await _1688.uploadPicH5( payload )
-                         // result.retcode = res.retcode
-                         // result.message = res.message
-                         // result.data = {}
-                         // result.data.imageAddress = res.data.imageId
-                         resolve(res)
-                         break;
-                     case SourceMap['1688global']['id']:
-                         res = await _1688global.uploadPic( payload )
-                         // result.retcode = res.retcode
-                         // result.message = res.message
-                         // result.data = {}
-                         // result.data.imageAddress = res.data.imgUrl
-                         resolve(res)
-                         break;
-                     case SourceMap['aliexpressDS']['id']:
-                         res = await aliexpressDS.uploadPic( payload )
-                         // result.retcode = res.code
-                         // result.message = res.msg
-                         // result.data = {}
-                         // result.data.imageAddress = res.data.filename
-                         resolve(res)
-                         break;
-                     case SourceMap['aliexpressZapieX']['id']:
-                         res = await aliexpressZapieX.uploadPic( payload )
-                         // result.retcode = res.retcode
-                         // result.message = res.message
-                         // result.data = {}
-                         // result.data.imageAddress = res.data.uploadKey
-                         resolve(res)
-                         break;
-                     case SourceMap['yiwugo']['id']:
-                         res = await yiwugo.uploadPic( payload )
-                         // result.retcode = res.code
-                         // result.message = res.msg
-                         // result.data = {}
-                         // result.data.imageAddress = res.data.url
-                         resolve(res)
-                         break;
-                     case SourceMap['1688overseas']['id']:
-                         res = await _1688.uploadPicH5( payload )
-                         // result.retcode = res.retcode
-                         // result.message = res.message
-                         // result.data = {}
-                         // result.data.imageAddress = res.data.imageId
-                         resolve(res)
-                         break;
+                 try {
+                     switch (this.state.source_id) {
+                         case SourceMap['alibaba']['id']:
+                             res = await alibaba.uploadPic( payload )
+                             // result.retcode = res.code
+                             // result.message = res.msg
+                             // result.data = {}
+                             // result.data.imageAddress = res.data.imageAddress
+                             resolve(res)
+                             break;
+                         case SourceMap['1688']['id']:
+                             res = await _1688.uploadPicH5( payload )
+                             // result.retcode = res.retcode
+                             // result.message = res.message
+                             // result.data = {}
+                             // result.data.imageAddress = res.data.imageId
+                             resolve(res)
+                             break;
+                         case SourceMap['1688global']['id']:
+                             res = await _1688global.uploadPic( payload )
+                             // result.retcode = res.retcode
+                             // result.message = res.message
+                             // result.data = {}
+                             // result.data.imageAddress = res.data.imgUrl
+                             resolve(res)
+                             break;
+                         case SourceMap['aliexpressDS']['id']:
+                             res = await aliexpressDS.uploadPic( payload )
+                             // result.retcode = res.code
+                             // result.message = res.msg
+                             // result.data = {}
+                             // result.data.imageAddress = res.data.filename
+                             resolve(res)
+                             break;
+                         case SourceMap['aliexpressZapieX']['id']:
+                             res = await aliexpressZapieX.uploadPic( payload )
+                             // result.retcode = res.retcode
+                             // result.message = res.message
+                             // result.data = {}
+                             // result.data.imageAddress = res.data.uploadKey
+                             resolve(res)
+                             break;
+                         case SourceMap['yiwugo']['id']:
+                             res = await yiwugo.uploadPic( payload )
+                             // result.retcode = res.code
+                             // result.message = res.msg
+                             // result.data = {}
+                             // result.data.imageAddress = res.data.url
+                             resolve(res)
+                             break;
+                         case SourceMap['1688overseas']['id']:
+                             res = await _1688.uploadPicH5( payload )
+                             // result.retcode = res.retcode
+                             // result.message = res.message
+                             // result.data = {}
+                             // result.data.imageAddress = res.data.imageId
+                             resolve(res)
+                             break;
+                     }
+                 }catch (e) {
+                     content.state.imageUploadState = 'error';
+                     content.state.api_error_msg = e;
                  }
             })
         },
 
         searchPic(content,payload){
+            content.state.searchState = 'none';
             console.log(payload);
             let res = null, params = {};
             // let file = null, resImg = '', is_file = true, res = null, result = {};
@@ -601,74 +615,85 @@ export default new Vuex.Store({
 
             return new Promise(async (resolve)=>{
                 params = collapse({...payload.searchPicParams});
-                switch (this.state.source_id) {
-                    case SourceMap['alibaba']['id']:
-                        res = await alibaba.searchGoodsByPic({...params, page:payload.page} )
-                        resolve(res)
-                        break;
-                    case SourceMap['1688']['id']:
-                        res = await _1688.searchGoodsByPic({...params,sessionId:payload.sessionId, requestId:payload.requestId, searchtype:0})
-                        resolve(res)
-                        break;
-					case SourceMap['1688overseas']['id']:	// 图搜接口与1688一样，只是searchtype参数不同（所有货源，跨境货源）
-						res = await _1688.searchGoodsByPic({...params,page:payload.page, sessionId:payload.sessionId, requestId:payload.requestId, searchtype:1 })
-						resolve(res)
-						break;
-                    case SourceMap['1688global']['id']:
-                        res = await _1688global.searchGoodsByPic({...params,page:payload.page})
-                        resolve(res)
-                        break;
-                    case SourceMap['aliexpressDS']['id']:
-                        res = await aliexpressDS.searchGoodsByPic({...params})
-                        resolve(res)
-                        break;
-                    case SourceMap['aliexpressZapieX']['id']:
-                        res = await aliexpressZapieX.searchGoodsByPic({...params})
-                        resolve(res)
-                        break;
-                    case SourceMap['yiwugo']['id']:
-                        res = await yiwugo.searchGoodsByPic({...params, page:payload.page})
-                        resolve(res)
-                        break;
-                    case SourceMap['dhgate']['id']:
-                        res = await dhgate.searchGoodsByPic({...params, page:payload.page})
-						//TBD： 临时补丁。没有单独的上传图片接口，后台接口统一返回imageAddress后再注释掉；不应该引用sourceResult
-						// if(res.data.searchImage === undefined) res.data.searchImage = new Object();
-                        // res.data.searchImage.imageAddress = res.sourceResult.data.imgUrl
-                        resolve(res)
-                        break;
-                    case SourceMap['mic']['id']:
-                        res = await mic.searchGoodsByPic({...params, page:payload.page})
-						//TBD：临时补丁。没有单独的上传图片接口，后台接口统一返回imageAddress后再注释掉；不应该引用sourceResult
-						// if(res.data.searchImage === undefined) res.data.searchImage = new Object();
-                        // res.data.searchImage.imageAddress = res.sourceResult.content.imgId
-                        resolve(res)
-                        break;
-                    case SourceMap['cjds']['id']:
-                        res = await cjds.searchGoodsByPic()
-						//TBD：临时补丁。没有单独的上传图片接口，后台接口统一返回imageAddress后再注释掉；不应该引用sourceResult
-						//TBD： CJ目前没有返回上传图片的imageAddress，也没有分页功能，如果切换到网页版会崩
-						// if(res.data.searchImage === undefined) res.data.searchImage = new Object();
-						// res.data.searchImage.imageAddress = null
-                        resolve(res)
-                        break;
+                try {
+                    switch (this.state.source_id) {
+                        case SourceMap['alibaba']['id']:
+                            res = await alibaba.searchGoodsByPic({...params, page:payload.page} )
+                            resolve(res)
+                            break;
+                        case SourceMap['1688']['id']:
+                            res = await _1688.searchGoodsByPic({...params,sessionId:payload.sessionId, requestId:payload.requestId, searchtype:0})
+                            resolve(res)
+                            break;
+                        case SourceMap['1688overseas']['id']:	// 图搜接口与1688一样，只是searchtype参数不同（所有货源，跨境货源）
+                            res = await _1688.searchGoodsByPic({...params,page:payload.page, sessionId:payload.sessionId, requestId:payload.requestId, searchtype:1 })
+                            resolve(res)
+                            break;
+                        case SourceMap['1688global']['id']:
+                            res = await _1688global.searchGoodsByPic({...params,page:payload.page})
+                            resolve(res)
+                            break;
+                        case SourceMap['aliexpressDS']['id']:
+                            res = await aliexpressDS.searchGoodsByPic({...params})
+                            resolve(res)
+                            break;
+                        case SourceMap['aliexpressZapieX']['id']:
+                            res = await aliexpressZapieX.searchGoodsByPic({...params})
+                            resolve(res)
+                            break;
+                        case SourceMap['yiwugo']['id']:
+                            res = await yiwugo.searchGoodsByPic({...params, page:payload.page})
+                            resolve(res)
+                            break;
+                        case SourceMap['dhgate']['id']:
+                            res = await dhgate.searchGoodsByPic({...params, page:payload.page})
+                            //TBD： 临时补丁。没有单独的上传图片接口，后台接口统一返回imageAddress后再注释掉；不应该引用sourceResult
+                            // if(res.data.searchImage === undefined) res.data.searchImage = new Object();
+                            // res.data.searchImage.imageAddress = res.sourceResult.data.imgUrl
+                            resolve(res)
+                            break;
+                        case SourceMap['mic']['id']:
+                            res = await mic.searchGoodsByPic({...params, page:payload.page})
+                            //TBD：临时补丁。没有单独的上传图片接口，后台接口统一返回imageAddress后再注释掉；不应该引用sourceResult
+                            // if(res.data.searchImage === undefined) res.data.searchImage = new Object();
+                            // res.data.searchImage.imageAddress = res.sourceResult.content.imgId
+                            resolve(res)
+                            break;
+                        case SourceMap['cjds']['id']:
+                            res = await cjds.searchGoodsByPic()
+                            //TBD：临时补丁。没有单独的上传图片接口，后台接口统一返回imageAddress后再注释掉；不应该引用sourceResult
+                            //TBD： CJ目前没有返回上传图片的imageAddress，也没有分页功能，如果切换到网页版会崩
+                            // if(res.data.searchImage === undefined) res.data.searchImage = new Object();
+                            // res.data.searchImage.imageAddress = null
+                            resolve(res)
+                            break;
+                    }
+                }catch (e) {
+                    content.state.searchState = 'error';
+                    content.state.api_error_msg = e;
                 }
             })
         },
 
         firstSearchPic(content,payload){
+            content.state.searchState = 'none';
             console.log(payload.searchPicParams)
             let params = {};
             return new Promise(async (resolve)=>{
                 params = collapse({...payload.searchPicParams});
-                switch (this.state.source_id) {
-                    case SourceMap['1688']['id']:
-                        resolve(await _1688.searchGoodsByPicFirst( {...params, searchtype:0 } ))
-                        break;
-                    case SourceMap['1688overseas']['id']:
-                        resolve(await _1688.searchGoodsByPicFirst( {...params, searchtype:1 } ))
-                        break;
-					// 1688global没有首次搜索接口
+                try {
+                    switch (this.state.source_id) {
+                        case SourceMap['1688']['id']:
+                            resolve(await _1688.searchGoodsByPicFirst( {...params, searchtype:0 } ))
+                            break;
+                        case SourceMap['1688overseas']['id']:
+                            resolve(await _1688.searchGoodsByPicFirst( {...params, searchtype:1 } ))
+                            break;
+                        // 1688global没有首次搜索接口
+                    }
+                }catch (e) {
+                    content.state.searchState = 'error';
+                    content.state.api_error_msg = e;
                 }
             })
         },
