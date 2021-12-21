@@ -15,11 +15,11 @@
 					</p>
 					<!-- 如果卖家节点和年份都不存在时，就不渲染此div模块-->
 					<div class="supplier" v-if="showSeller">
-						<div class="year" v-if="item.seller.years">
+						<div class="year" v-if="item.seller && item.seller.years">
 							<span>{{item.seller.years}}</span>
 							<sup>YRS</sup>
 						</div>
-						<div class="supplier-name" @click="openHref(item.seller.homeUrl)">{{item.seller.name}}</div>
+						<div class="supplier-name" v-if="item.seller && item.seller.name" @click="openHref(item.seller.homeUrl)">{{item.seller.name}}</div>
 					</div>
 				</div>
 				<div class="bottom" v-if="showSeller && item.seller && item.seller.homeUrl && item.seller.name">
