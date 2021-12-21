@@ -80,6 +80,7 @@ export default {
             this.$store.state.currencyCode = this.currency;
             this.$store.state.currencyName = this.currencyName;
             this.close();
+            this.$emit('onSave');
         },
         onSelectChange(event, type) {
             function getName(list, code) {

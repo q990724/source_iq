@@ -56,7 +56,7 @@
             </div>
         </div>
 
-        <language-popup ref="language_popup"></language-popup>
+        <language-popup ref="language_popup" @onSave="onLanguagePopupSave"></language-popup>
     </div>
 </template>
 
@@ -582,6 +582,9 @@ export default {
         },
         onLanguagechange() {
             this.$refs['language_popup'].open();
+        },
+        onLanguagePopupSave() {
+            
         }
     }
 }
