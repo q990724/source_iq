@@ -63,6 +63,33 @@ export default {
                 this.$store.state.countryList = result.country;
                 this.$store.state.currencyList = result.currency;
                 this.$store.state.languageList = result.language;
+                if(result.country && result.defaultCountryIndex){
+                    this.$store.state.countryCode = this.$store.state.countryList[result.defaultCountryIndex]['code'];
+                    this.$store.state.countryName = this.$store.state.countryList[result.defaultCountryIndex]['name'];
+                }else{
+                    this.$store.state.countryCode = null;
+                    this.$store.state.countryName = null;
+                }
+                if(result.currency && result.defaultCurrencyIndex && result.defaultCurrencyIndex >= 0  || result.currency && result.defaultCurrencyIndex === 0){
+                // if(result.currency && result.defaultCurrencyIndex && result.defaultCurrencyIndex !== -1){
+                    console.log('货币code',this.$store.state.currencyList[result.defaultCurrencyIndex]['code']);
+                    this.$store.state.currencyCode = this.$store.state.currencyList[result.defaultCurrencyIndex]['code'];
+                    this.$store.state.currencyName = this.$store.state.currencyList[result.defaultCurrencyIndex]['name'];
+                }else{
+                    this.$store.state.currencyCode = null;
+                    this.$store.state.currencyName = null;
+                }
+                // if(result.language && result.defaultLanguageIndex && result.defaultLanguageIndex >= 0){
+                if(result.language && result.defaultLanguageIndex || result.language && result.defaultLanguageIndex === 0){
+                    this.$store.state.languageCode = this.$store.state.languageList[result.defaultLanguageIndex]['code'];
+                    this.$store.state.languageName = this.$store.state.languageList[result.defaultLanguageIndex]['name'];
+                }else{
+                    this.$store.state.languageCode = null;
+                    this.$store.state.languageName = null;
+                }
+                // console.log(result.defaultCurrencyIndex);
+                // console.log('切换站点语言',result.language)
+                // console.log('切换站点货币',result.currency)
             }
         }
     },

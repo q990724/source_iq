@@ -277,18 +277,18 @@ export const yiwugo = {
 		})
 	},
 	// 图片搜索
-	searchGoodsByPic({imageAddress, page = 1, page_size = 10, lang = 'en'}) {
+	searchGoodsByPic({imageAddress, page = 1, page_size = 10, language = 'en'}) {
 		return Service.get('api/yiwugoapp/searchGoodsByPic', {
 			params: {
-				file_url:imageAddress, page, page_size, lang
+				file_url:imageAddress, page, page_size, lang:language
 			}
 		})
 	},
 	// 搜索商品
-	searchGoodsByText({searchText, page=1, lang='en', sort = 0, set_yiwu_market = 0, min_price = null, max_price = null, category = null, sub_market = null,}) {
+	searchGoodsByText({searchText, page=1, language='en', sort = 0, set_yiwu_market = 0, min_price = null, max_price = null, category = null, sub_market = null,}) {
 		return Service.get('api/yiwugoapp/searchGoodsByText', {
 			params: {
-				search_text:searchText,page,lang,sort,set_yiwu_market,min_price,max_price,category,sub_market
+				search_text:searchText,page,lang:language,sort,set_yiwu_market,min_price,max_price,category,sub_market
 			}
 		})
 	},
@@ -304,7 +304,7 @@ export const yiwugo = {
 
 export const dhgate = {
 	// 图片搜索
-	searchGoodsByPic({imageAddress, page = 1, category = null, page_size = 10, lang = 'en', currency = 'USD'}) {
+	searchGoodsByPic({imageAddress, page = 1, category = null, page_size = 10, language = 'en', currency = 'USD'}) {
 		let file = null
 		file = getFileFromBase64(Store.state.searchParams.mainImage);
 		if(Store.state.imageUploadState !== 'uploaded') {
@@ -312,7 +312,7 @@ export const dhgate = {
 			formData.append('image', file);
 			formData.append('page_num', page);
 			formData.append('page_size', page_size);
-			formData.append('lang', lang);
+			formData.append('lang', language);
 			formData.append('currency', currency);
 			return Service.post('api/dhgateapp/searchGoodsByPic', formData, {
 				headers: {
@@ -321,7 +321,7 @@ export const dhgate = {
 			})
 		}else{
 			const params = Qs.stringify({
-				imgUrl:imageAddress, page_num:page, page_size, lang, currency, category
+				imgUrl:imageAddress, page_num:page, page_size, lang:language, currency, category
 			});
 			return Service.post('api/dhgateapp/searchGoodsByPic',params, {
 				headers: {'Content-Type':'application/x-www-form-urlencoded'}
@@ -331,9 +331,9 @@ export const dhgate = {
 	},
 
 	// 搜索商品
-	searchGoodsByText({searchText, page=1, page_size=20, lang='en', currency='USD', sort = 1, price_sort = null, min_price = null, max_price = null, minOrder,category = null, at = null, freeShipping = null, inventoryLocation = null}) {
+	searchGoodsByText({searchText, page=1, page_size=20, language='en', currency='USD', sort = 1, price_sort = null, min_price = null, max_price = null, minOrder,category = null, at = null, freeShipping = null, inventoryLocation = null}) {
 		const params = Qs.stringify({
-			search_text:searchText, page, page_size, lang, currency, sort, price_sort, min_price, max_price, minOrder, category, at, freeShipping, inventoryLocation
+			search_text:searchText, page, page_size, lang:language, currency, sort, price_sort, min_price, max_price, minOrder, category, at, freeShipping, inventoryLocation
 		});
 		return Service.post('api/dhgateapp/searchGoodsByText', params, {
 			headers: {
@@ -368,10 +368,10 @@ export const mic = {
 	},
 
 	// 搜索商品
-	searchGoodsByText({searchText, page=1, page_size=36, lang='en', currency='USD', min_price = null, max_price = null, category = null, location = null, memberType = null, property = null}) {
+	searchGoodsByText({searchText, page=1, page_size=36, language='en', currency='USD', min_price = null, max_price = null, category = null, location = null, memberType = null, property = null}) {
 		return Service.get('api/micapp/searchGoodsByText',{
 			params: {
-				search_text:searchText, page, page_size, lang, currency, min_price, max_price, category, location, memberType, property
+				search_text:searchText, page, page_size, lang:language, currency, min_price, max_price, category, location, memberType, property
 			},
 		})
 	},
@@ -401,10 +401,10 @@ export const cjds = {
 
 export const litbox = {
 	// 搜索商品
-	searchGoodsByText({searchText, page=1, page_size=36, lang='en', country='CHN', country_code='CN', currency='CNY', searchType=3, category = null, brand = '0', sort = '6d', fourStars, min_price, max_price}) {
+	searchGoodsByText({searchText, page=1, page_size=36, language='en', country='CHN', country_code='CN', currency='CNY', searchType=3, category = null, brand = '0', sort = '6d', fourStars, min_price, max_price}) {
 		return Service.get('api/litboxapp/searchGoodsByText',{
 			params: {
-				search_text:searchText, page, page_size, lang, country, country_code, currency, searchType, category, brand, sort, fourStars, min_price, max_price
+				search_text:searchText, page, page_size, lang:language, country, country_code, currency, searchType, category, brand, sort, fourStars, min_price, max_price
 			},
 		})
 	},
@@ -412,20 +412,20 @@ export const litbox = {
 
 export const banggood = {
 	// 搜索商品
-	searchGoodsByText({searchText, page=1, lang='en', country='CN', warehouse = null, special_options, category = null, sort = '0', min_price, max_price }) {
+	searchGoodsByText({searchText, page=1, language='en', country='CN', warehouse = null, special_options, category = null, sort = '0', min_price, max_price }) {
 		return Service.get('api/banggoodapp/searchGoodsByText',{
 			params: {
-				search_text:searchText, page, lang, country, warehouse, special_options, category, sort, min_price, max_price
+				search_text:searchText, page, lang:language, country, warehouse, special_options, category, sort, min_price, max_price
 			},
 		})
 	},
 }
 export const chinabrands = {
 	// 搜索商品
-	searchGoodsByText({searchText, page=1, lang='en', country= null, brand_id = null, sort, canReserve = null, type = '0', sale_time = null, min_price, max_price, min_stock, max_stock }) {
+	searchGoodsByText({searchText, page=1, language='en', country= null, brand_id = null, sort, canReserve = null, type = '0', sale_time = null, min_price, max_price, min_stock, max_stock }) {
 		return Service.get('api/chinabrands/searchGoodsByText',{
 			params: {
-				search_text:searchText, page, lang, country, brand_id, sort, canReserve, type, sale_time, min_price, max_price, min_stock, max_stock
+				search_text:searchText, page, lang:language, country, brand_id, sort, canReserve, type, sale_time, min_price, max_price, min_stock, max_stock
 			},
 		})
 	},

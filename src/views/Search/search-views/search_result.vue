@@ -150,6 +150,19 @@ export default {
         onScroll(e) {
             console.log(e);
         },
+        onLanguagePopupSave(){
+            this.initSearchResult();
+            this.$store.commit('resetSearchState');
+            // 到store中处理多语言参数
+            this.$store.dispatch('onCountryLangCurrencyChange')
+
+            if (this.$store.state.searchType === 'image') {
+                // 切换筛选条件，不需要重新发起图片上传
+                this.imageSearch(this.$store.state.searchParams.mainImage, false);
+            } else if (this.$store.state.searchType === 'text') {
+                this.getDataFromText(false);
+            }
+        },
         /**
          * @description 切换商品分类时触发
          */
@@ -583,9 +596,6 @@ export default {
         onLanguagechange() {
             this.$refs['language_popup'].open();
         },
-        onLanguagePopupSave() {
-            
-        }
     }
 }
 </script>

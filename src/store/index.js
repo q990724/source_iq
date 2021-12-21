@@ -45,17 +45,29 @@ export default new Vuex.Store({
         // 货币列表
         currencyList: [],
         // 已选国家代码
-        countryCode: 'US',
+        // countryCode: 'US',
+        // // 已选语言代码
+        // languageCode: 'en_US',
+        // // 已选货币代码
+        // currencyCode: 'USD',
+        // // 已选国家名称
+        // countryName: 'United States',
+        // // 已选语言名称
+        // languageName: 'English',
+        // // 已选货币名称
+        // currencyName: 'US Dollar',
+        // 已选国家代码
+        countryCode: null,
         // 已选语言代码
-        languageCode: 'en_US',
+        languageCode: null,
         // 已选货币代码
-        currencyCode: 'USD',
+        currencyCode: null,
         // 已选国家名称
-        countryName: 'United States',
+        countryName: null,
         // 已选语言名称
-        languageName: 'English',
+        languageName: null,
         // 已选货币名称
-        currencyName: 'US Dollar',
+        currencyName: null,
         api_error_msg: ''
     },
     mutations: {
@@ -233,6 +245,13 @@ export default new Vuex.Store({
         }
     },
     actions: {
+        // 点击切换语言或货币或国家发请求筛选
+        onCountryLangCurrencyChange(content,payload){
+            console.log('store','onCountryLangCurrencyChange')
+            this.state.searchParams['country'] = this.state.countryCode;
+            this.state.searchParams['language'] = this.state.languageCode;
+            this.state.searchParams['currency'] = this.state.currencyCode;
+        },
         // 点击筛选条件发请求筛选
 		// payload包括filterItem（选中的filter类，该类选中的option，选中的当前值e三个参数
         onFilterChange(content,payload){

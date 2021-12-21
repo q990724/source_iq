@@ -153,7 +153,7 @@ export function findKey(obj, value, compare = (a, b) => a === b) {
 export function collapse(params){
 	// Object.keys(params).forEach(key=>{
 	for	(let key in params) {
-		if(key === 'searchText' || key ==='imageAddress'|| key ==='originImage'|| key ==='mainImage'||key ==='yoloCropRegion'||key ==='region')
+		if(key === 'searchText' || key ==='imageAddress'|| key ==='originImage'|| key ==='mainImage'||key ==='yoloCropRegion'||key ==='region' || key === 'language' || key === 'country' || key === 'currency')
 			continue;
 		if(params[key]){
 			let arr = [];

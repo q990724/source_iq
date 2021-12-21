@@ -79,6 +79,9 @@ export default {
             this.$store.state.languageName =  this.languageName;
             this.$store.state.currencyCode = this.currency;
             this.$store.state.currencyName = this.currencyName;
+            // this.$store.state.searchParams['country'] = this.country;
+            // this.$store.state.searchParams['language'] = this.language;
+            // this.$store.state.searchParams['currency'] = this.currency;
             this.close();
             this.$emit('onSave');
         },
@@ -95,14 +98,17 @@ export default {
                 case 'country':
                     this.country = event;
                     this.countryName = getName(this.$store.state.countryList, event);
+                    console.log("onCountryChange");
                     break;
                 case 'language':
                     this.language = event;
                     this.languageName = getName(this.$store.state.languageList, event);
+                    console.log("onLanguageChange");
                     break;
                 case 'currency':
                     this.currency = event;
                     this.currencyName = getName(this.$store.state.currencyList, event);
+                    console.log("onCurrencyChange");
                     break;
             }
         }

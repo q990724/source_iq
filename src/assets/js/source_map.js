@@ -9,7 +9,7 @@ const SourceMap = {
         hasSearchPic: true,
         hasFirstSearchText: false,
         hasFirstSearchPic: false,
-        getCountryLangCurrency: 'api/aliexpress/getCountryLangCurrency',
+        getCountryLangCurrency: 'api/aliintersite/getCountryLangCurrency',
     },
     '1688': {
         id: 2,
@@ -21,7 +21,7 @@ const SourceMap = {
         hasSearchPic: true,
         hasFirstSearchText: true,
         hasFirstSearchPic: true,
-        getCountryLangCurrency: 'api/aliexpress/getCountryLangCurrency',
+        getCountryLangCurrency: '',
     },
     '1688global': {
         id: 3,
@@ -33,7 +33,7 @@ const SourceMap = {
         hasSearchPic: true,
         hasFirstSearchText: true,
         hasFirstSearchPic: false,
-        getCountryLangCurrency: 'api/aliexpress/getCountryLangCurrency',
+        getCountryLangCurrency: '',
     },
 	'1688overseas': {
 	    id: 10,
@@ -45,7 +45,7 @@ const SourceMap = {
 	    hasSearchPic: true,
 	    hasFirstSearchText: true,
 	    hasFirstSearchPic: true,
-        getCountryLangCurrency: 'api/aliexpress/getCountryLangCurrency',
+        getCountryLangCurrency: '',
 	},
     'aliexpressDS': {
         id: 4,
@@ -69,7 +69,7 @@ const SourceMap = {
         hasSearchPic: true,
         hasFirstSearchText: false,
         hasFirstSearchPic: false,
-        getCountryLangCurrency: 'api/aliexpress/getCountryLangCurrency',
+        getCountryLangCurrency: 'api/aliexpress/zapiexGetCountryLangCurrency',
     },
     'yiwugo': {
         id: 5,
@@ -81,7 +81,7 @@ const SourceMap = {
         hasSearchPic: true,
         hasFirstSearchText: false,
         hasFirstSearchPic: false,
-        getCountryLangCurrency: 'api/aliexpress/getCountryLangCurrency',
+        getCountryLangCurrency: 'api/yiwugoapp/getCountryLangCurrency',
     },
     'dhgate': {
         id: 6,
@@ -93,7 +93,7 @@ const SourceMap = {
         hasSearchPic: true,
         hasFirstSearchText: false,
         hasFirstSearchPic: false,
-        getCountryLangCurrency: 'api/aliexpress/getCountryLangCurrency',
+        getCountryLangCurrency: 'api/dhgateapp/getCountryLangCurrency',
     },
 	'cjds': {
 	    id: 8,
@@ -105,7 +105,7 @@ const SourceMap = {
 	    hasSearchPic: true,
 	    hasFirstSearchText: false,
 	    hasFirstSearchPic: false,
-        getCountryLangCurrency: 'api/aliexpress/getCountryLangCurrency',
+        getCountryLangCurrency: 'api/cjdsapp/getCountryLangCurrency',
 	},
     'mic': {
         id: 7,
@@ -117,7 +117,7 @@ const SourceMap = {
         hasSearchPic: true,
         hasFirstSearchText: false,
         hasFirstSearchPic: false,
-        getCountryLangCurrency: 'api/aliexpress/getCountryLangCurrency',
+        getCountryLangCurrency: 'api/micapp/getCountryLangCurrency',
     },
     'litbox': {
         id: 9,
@@ -129,7 +129,7 @@ const SourceMap = {
         hasSearchPic: false,
         hasFirstSearchText: false,
         hasFirstSearchPic: false,
-        getCountryLangCurrency: 'api/aliexpress/getCountryLangCurrency',
+        getCountryLangCurrency: 'api/litboxapp/getCountryLangCurrency',
     },
     'banggood': {
         id: 11,
@@ -141,7 +141,7 @@ const SourceMap = {
         hasSearchPic: false,
         hasFirstSearchText: false,
         hasFirstSearchPic: false,
-        getCountryLangCurrency: 'api/aliexpress/getCountryLangCurrency',
+        getCountryLangCurrency: 'api/banggoodapp/getCountryLangCurrency',
     },
     'chinabrands': {
         id: 12,
