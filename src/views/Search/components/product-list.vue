@@ -36,7 +36,7 @@
         </div>
 		<!-- TBD：如果搜索错误，也在页面底部显示错误提示。错误提示=具体接口请求返回的错误信息，暂时写死-->
 		<div class="no-result" v-if="$store.state.searchState === 'error'">
-		    <p>{{$t('message.get_result_error')}}</p>
+		    <p>{{$store.state.api_error_msg}}</p>
 		</div>
 	</div>
 </template>
