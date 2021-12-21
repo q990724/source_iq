@@ -7,6 +7,9 @@
 			<div class="item" :class="{'active': $store.state.source_id === 2}">
 			    <span data-name="1688">1688</span>
 			</div>
+            <div class="item" :class="{'active': $store.state.source_id === 15}">
+                <span data-name="1688rapid">1688Rapid</span>
+            </div>
             <div class="item" :class="{'active': $store.state.source_id === 3}">
                 <span data-name="1688global">1688Global</span>
             </div>

@@ -23,6 +23,18 @@ const SourceMap = {
         hasFirstSearchPic: true,
         getCountryLangCurrency: '',
     },
+    '1688rapid': {
+        id: 15,
+        loginPageUrl: 'https://login.taobao.com/?redirect_url=https%3A%2F%2Flogin.1688.com%2Fmember%2Fjump.htm%3Ftarget%3Dhttps%253A%252F%252Flogin.1688.com%252Fmember%252FmarketSigninJump.htm%253FDone%253D%25252F%25252Fwww.1688.com%25252F&style=tao_custom&from=1688web',
+        needCookie: true,
+        logo: require('@/assets/img/source/1688.png'),
+        name: "1688 Rapid",
+        hasUpload: false,
+        hasSearchPic: true,
+        hasFirstSearchText: false,
+        hasFirstSearchPic: false,
+        getCountryLangCurrency: '',
+    },
     '1688global': {
         id: 3,
         loginPageUrl: 'https://login.taobao.com/?redirect_url=https://global.1688.com/',

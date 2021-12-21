@@ -225,6 +225,40 @@ export const _1688 = {
 	}
 }
 
+export const _1688rapid = {
+	// 图片搜索
+	searchGoodsByPic({imageAddress, page = 1, attr_id, page_size = 10}) {
+		let file = null
+		file = getFileFromBase64(Store.state.searchParams.mainImage);
+		if(Store.state.imageUploadState !== 'uploaded') {
+			let formData = new FormData();
+			formData.append('file', file);
+			formData.append('page', page);
+			formData.append('page_size', page_size);
+			return Service.post('api/1688/rapidUploadPic', formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data'
+				}
+			})
+		}else{
+			const params = Qs.stringify({
+				url:imageAddress, page, page_size, attr_id
+			});
+			return Service.post('api/1688/rapidUploadPicUrl',params, {
+				headers: {'Content-Type':'application/x-www-form-urlencoded'}
+			})
+		}
+	},
+	// 搜索商品
+	searchGoodsByText({searchText, page=1, page_size=20, sort = '0', min_price = null, max_price = null, attr_id}) {
+		return Service.get('api/1688/rapidSearchGoods',{
+			params: {
+				search_text:searchText, page, page_size, sort, attr_id, min_price, max_price,
+			},
+		})
+	},
+}
+
 export const _1688global = {
 	uploadPic(file) {
 		let cookie = getCookie('1688global');

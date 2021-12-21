@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import { getSource } from "@/assets/js/source_map.js";
 import SourceMap from "@/assets/js/source_map.js";
-import { alibaba, _1688, _1688global, aliexpressDS, aliexpressZapieX,  yiwugo, dhgate, mic, cjds, litbox, banggood, chinabrands, globalres } from "@/assets/js/apis";
+import { alibaba, _1688, _1688rapid, _1688global, aliexpressDS, aliexpressZapieX,  yiwugo, dhgate, mic, cjds, litbox, banggood, chinabrands, globalres } from "@/assets/js/apis";
 import { getFileFromBase64, collapse } from "@/assets/js/utils.js";
 Vue.use(Vuex)
 
@@ -471,6 +471,9 @@ export default new Vuex.Store({
                         case SourceMap['1688']['id']:
                             resolve(await _1688.searchGoods({ ...params, page: payload.page, sessionId: payload.sessionId}))
                             break;
+                        case SourceMap['1688rapid']['id']:
+                            resolve(await _1688rapid.searchGoodsByText({ ...params, page: payload.page}))
+                            break;
                         case SourceMap['1688global']['id']:
                             resolve(await _1688global.searchGoodsKj({ ...params, page: payload.page, sessionId: payload.sessionId, requestId: payload.requestId }))
                             break;
@@ -642,6 +645,10 @@ export default new Vuex.Store({
                             break;
                         case SourceMap['1688']['id']:
                             res = await _1688.searchGoodsByPic({...params,page:payload.page, sessionId:payload.sessionId, requestId:payload.requestId, searchtype:0})
+                            resolve(res)
+                            break;
+                        case SourceMap['1688rapid']['id']:
+                            res = await _1688rapid.searchGoodsByPic({...params,page:payload.page})
                             resolve(res)
                             break;
                         case SourceMap['1688overseas']['id']:	// 图搜接口与1688一样，只是searchtype参数不同（所有货源，跨境货源）
