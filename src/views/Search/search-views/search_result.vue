@@ -14,8 +14,8 @@
                         <!--国家/语言/货币-->
                         <div class="right-wrap_btn tags" @click="onLanguagechange()">
                             <!--国家-->
-                            <span>{{ $store.state.countryName }}</span>
-                            <i>/</i>
+<!--                            <span>{{ $store.state.countryName }}</span>
+                            <i>/</i> -->
                             <span>{{ $store.state.languageName }}</span>
                             <i>/</i>
                             <span>{{ $store.state.currencyCode }}</span>

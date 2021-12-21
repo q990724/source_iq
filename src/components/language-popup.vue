@@ -5,7 +5,7 @@
             width="30%">
             <div class="form">
                 <el-form label-position="top">
-                    <el-form-item label="Ship to">
+<!--                    <el-form-item label="Ship to">
                         <el-select v-model="country" filterable placeholder="请选择" @change="onSelectChange($event, 'country')">
                             <el-option
                                 v-for="item in $store.state.countryList"
@@ -14,7 +14,7 @@
                                 :value="item.code">
                             </el-option>
                         </el-select>
-                    </el-form-item>
+                    </el-form-item> -->
                     <el-form-item label="Language">
                         <el-select v-model="language" filterable placeholder="请选择" @change="onSelectChange($event, 'language')">
                             <el-option

@@ -19,9 +19,12 @@
 							<span>{{item.seller.years}}</span>
 							<sup>YRS</sup>
 						</div>
-						<div class="supplier-name" v-if="item.seller && item.seller.name" @click="openHref(item.seller.homeUrl)">{{item.seller.name}}</div>
+						<!-- 鲁棒性检查seller.homeUrl是否为NULL再增加点击事件 -->
+						<div class="supplier-name" v-if="item.seller && item.seller.name && item.seller.homeUrl " @click="openHref(item.seller.homeUrl)">{{item.seller.name}}</div>
+						<div class="supplier-name" v-else-if="item.seller && item.seller.name">{{item.seller.name}}</div>
 					</div>
 				</div>
+				<!-- 鲁棒性检查seller.homeUrl是否为NULL再增加点击事件 -->
 				<div class="bottom" v-if="showSeller && item.seller && item.seller.homeUrl && item.seller.name">
 					<span @click="openHref(item.seller.homeUrl)">{{item.seller.name}}</span>
 				</div>
