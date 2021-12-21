@@ -67,7 +67,8 @@ export const alibaba = {
 		searchText = '',
 		page = 1, 
 		index_area = 'product_en', 
-		language = 'en_US', 
+		language = 'en_US',
+		currency = 'USD',
 		tab = null,
 		Category = null,
 		supplierType = null, 
@@ -90,7 +91,7 @@ export const alibaba = {
 		page = page > 99 ? 99 : page;
 		return Service.get('api/aliintersite/searchGoodsByText2', {
             params: {
-                search_text:searchText, page, index_area,language,tab,
+                search_text:searchText, page, index_area,language,currency,tab,
 				Category,supplierType,ta,assessment_company,
 				replyAvgTime,param_order,freeSample,productTag,
 				moqf,moqt,pricef,pricet,Country,exportCountry,
@@ -345,7 +346,7 @@ export const dhgate = {
 
 export const mic = {
 	// 图片搜索
-	searchGoodsByPic({imageAddress, page = 1,category = null, color = 0, page_size = 20}) {
+	searchGoodsByPic({imageAddress, page = 1,category = null, color = 0, page_size = 20, language='en', currency='USD',}) {
 		let file = null
 		file = getFileFromBase64(Store.state.searchParams.mainImage);
 		if(Store.state.imageUploadState !== 'uploaded') {
@@ -353,6 +354,8 @@ export const mic = {
 			formData.append('image', file);
 			formData.append('page_num', page);
 			formData.append('page_size', page_size);
+			formData.append('lang', language);
+			formData.append('currency', currency);
 			// formData.append('category', category);
 			return Service.post('api/micapp/searchGoodsByPic', formData, {
 				headers: {
@@ -361,7 +364,7 @@ export const mic = {
 			})
 		}else{
 			const params = Qs.stringify({
-				imgId:imageAddress, page_num:page, page_size, category, color
+				imgId:imageAddress, page_num:page, page_size, category, color, currency, lang:language
 			});
 			return Service.post('api/micapp/searchGoodsByPic',params)
 		}
