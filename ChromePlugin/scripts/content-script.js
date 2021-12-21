@@ -59,11 +59,13 @@ $(function() {
     $('#ele').Jcrop({
         bgColor: '#000',
         bgOpticy: '0.4',
+        boxWidth: window.innerWidth,
+        boxHeight: window.innerHeight,
         onSelect: (e) => {
             console.log("onSelect");
             $('.confirm').show();
-            $(".confirm").css('top', e.y + e.h + 10 + 'px');
-            $(".confirm").css('left', e.x + 'px');
+            $(".confirm").css('top', (e.y + e.h + 10) / window.devicePixelRatio + 'px');
+            $(".confirm").css('left', (e.x) / window.devicePixelRatio + 'px');
             coverImage(e).then(res=>{
 				//TBD：需要检查截图是否成功，成功再uploadImage，失败做异常处理
                 coverImageRes = {
