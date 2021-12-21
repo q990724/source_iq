@@ -56,15 +56,14 @@ export default {
         onFeedback() {
             this.$refs['feedback'].open();
         },
-        getCountryLangCurrency(path, params) {
-            publicAPI.getCountryLangCurrency(path, params).then(res=>{
-                if(res.data) {
-                    let result = res.data;
-                    this.$store.state.countryList = result.country;
-                    this.$store.state.currencyList = result.currency;
-                    this.$store.state.languageList = result.language;
-                }
-            })
+        async getCountryLangCurrency(path, params) {
+            let res = await publicAPI.getCountryLangCurrency(path, params);
+            if(res.data) {
+                let result = res.data;
+                this.$store.state.countryList = result.country;
+                this.$store.state.currencyList = result.currency;
+                this.$store.state.languageList = result.language;
+            }
         }
     },
     computed: {
