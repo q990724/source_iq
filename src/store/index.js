@@ -141,7 +141,10 @@ export default new Vuex.Store({
 			console.log("imageUploadState:", this.state.imageUploadState);
 			console.log("searchState:", this.state.searchState);
 			console.log("firstSearchState:", this.state.firstSearchState);
-			console.log("session:", this.state.session);	
+			console.log("session:", this.state.session);
+			console.log("countryName:", this.state.countryName);
+			console.log("languageName:", this.state.languageName);
+			console.log("currencyName:", this.state.currencyName);
 			// console.log("requestId:", this.state.session['requestId']);
 		},
         // 获取插件设置
@@ -472,49 +475,49 @@ export default new Vuex.Store({
                 try {
                     switch (this.state.source_id) {
                         case SourceMap['alibaba']['id']:
-                            resolve(await alibaba.searchGoodsByText({ ...params,page: payload.page }))
+                            resolve(await alibaba.searchGoodsByText({ ...params,page: payload.page,language:content.state.languageCode,currency:content.state.currencyCode }))
                             break;
                         case SourceMap['1688']['id']:
-                            resolve(await _1688.searchGoods({ ...params, page: payload.page, sessionId: payload.sessionId}))
+                            resolve(await _1688.searchGoods({ ...params, page: payload.page, sessionId: payload.sessionId, language:content.state.languageCode,currency:content.state.currencyCode}))
                             break;
                         case SourceMap['1688rapid']['id']:
-                            resolve(await _1688rapid.searchGoodsByText({ ...params, page: payload.page}))
+                            resolve(await _1688rapid.searchGoodsByText({ ...params, page: payload.page,language:content.state.languageCode,currency:content.state.currencyCode}))
                             break;
                         case SourceMap['1688global']['id']:
-                            resolve(await _1688global.searchGoodsKj({ ...params, page: payload.page, sessionId: payload.sessionId, requestId: payload.requestId }))
+                            resolve(await _1688global.searchGoodsKj({ ...params, page: payload.page, sessionId: payload.sessionId, requestId: payload.requestId,language:content.state.languageCode,currency:content.state.currencyCode }))
                             break;
                         case SourceMap['aliexpressDS']['id']:
-                            resolve(await aliexpressDS.searchGoodsByText({ ...params,page: payload.page }))
+                            resolve(await aliexpressDS.searchGoodsByText({ ...params,page: payload.page,language:content.state.languageCode,currency:content.state.currencyCode }))
                             break;
                         case SourceMap['aliexpressZapieX']['id']:
-                            resolve(await aliexpressZapieX.searchGoodsByText({ ...params,page: payload.page }))
+                            resolve(await aliexpressZapieX.searchGoodsByText({ ...params,page: payload.page,language:content.state.languageCode,currency:content.state.currencyCode }))
                             break;
                         case SourceMap['yiwugo']['id']:
-                            resolve(await yiwugo.searchGoodsByText({ ...params,page: payload.page }))
+                            resolve(await yiwugo.searchGoodsByText({ ...params,page: payload.page,language:content.state.languageCode,currency:content.state.currencyCode }))
                             break;
                         case SourceMap['dhgate']['id']:
-                            resolve(await dhgate.searchGoodsByText({ ...params,page: payload.page }))
+                            resolve(await dhgate.searchGoodsByText({ ...params,page: payload.page,language:content.state.languageCode,currency:content.state.currencyCode }))
                             break;
                         case SourceMap['mic']['id']:
-                            resolve(await mic.searchGoodsByText({ ...params,page: payload.page }))
+                            resolve(await mic.searchGoodsByText({ ...params,page: payload.page,language:content.state.languageCode,currency:content.state.currencyCode }))
                             break;
                         case SourceMap['cjds']['id']:
-                            resolve(await cjds.searchGoodsByText({ ...params,page: payload.page }))
+                            resolve(await cjds.searchGoodsByText({ ...params,page: payload.page,language:content.state.languageCode,currency:content.state.currencyCode }))
                             break;
                         case SourceMap['litbox']['id']:
-                            resolve(await litbox.searchGoodsByText({ ...params,page: payload.page }))
+                            resolve(await litbox.searchGoodsByText({ ...params,page: payload.page,language:content.state.languageCode,currency:content.state.currencyCode }))
                             break;
                         case SourceMap['1688overseas']['id']:
-                            resolve(await _1688.searchGoods({ ...params, page: payload.page, sessionId: payload.sessionId}))
+                            resolve(await _1688.searchGoods({ ...params, page: payload.page, sessionId: payload.sessionId,language:content.state.languageCode,currency:content.state.currencyCode}))
                             break;
                         case SourceMap['banggood']['id']:
-                            resolve(await banggood.searchGoodsByText({ ...params,page: payload.page }))
+                            resolve(await banggood.searchGoodsByText({ ...params,page: payload.page,language:content.state.languageCode,currency:content.state.currencyCode }))
                             break;
                         case SourceMap['chinabrands']['id']:
-                            resolve(await chinabrands.searchGoodsByText({ ...params,page: payload.page }))
+                            resolve(await chinabrands.searchGoodsByText({ ...params,page: payload.page,language:content.state.languageCode,currency:content.state.currencyCode }))
                             break;
                         case SourceMap['globalres']['id']:
-                            resolve(await globalres.searchGoodsByText({ ...params,page: payload.page }))
+                            resolve(await globalres.searchGoodsByText({ ...params,page: payload.page,language:content.state.languageCode,currency:content.state.currencyCode }))
                             break;
                     }
                 }catch (e) {
@@ -533,17 +536,17 @@ export default new Vuex.Store({
                 try {
                     switch (this.state.source_id) {
                         case SourceMap['1688']['id']:
-                            resolve(await _1688.searchGoodsFirst({ ...params,page: payload.page }))
+                            resolve(await _1688.searchGoodsFirst({ ...params,page: payload.page,language:content.state.languageCode,currency:content.state.currencyCode }))
                             break;
                     }
                     switch (this.state.source_id) {
                         case SourceMap['1688global']['id']:
-                            resolve(await _1688global.searchGoodsFirstKj({ ...params,page: payload.page }))
+                            resolve(await _1688global.searchGoodsFirstKj({ ...params,page: payload.page,language:content.state.languageCode,currency:content.state.currencyCode }))
                             break;
                     }
                     switch (this.state.source_id) {
                         case SourceMap['1688overseas']['id']:
-                            resolve(await _1688.searchGoodsFirst({ ...params,page: payload.page }))
+                            resolve(await _1688.searchGoodsFirst({ ...params,page: payload.page,language:content.state.languageCode,currency:content.state.currencyCode }))
                             break;
                     }
                 }catch (e) {
@@ -646,46 +649,46 @@ export default new Vuex.Store({
                 try {
                     switch (this.state.source_id) {
                         case SourceMap['alibaba']['id']:
-                            res = await alibaba.searchGoodsByPic({...params, page:payload.page} )
+                            res = await alibaba.searchGoodsByPic({...params, page:payload.page,language:content.state.languageCode,currency:content.state.currencyCode} )
                             resolve(res)
                             break;
                         case SourceMap['1688']['id']:
-                            res = await _1688.searchGoodsByPic({...params,page:payload.page, sessionId:payload.sessionId, requestId:payload.requestId, searchtype:0})
+                            res = await _1688.searchGoodsByPic({...params,page:payload.page, sessionId:payload.sessionId, requestId:payload.requestId, searchtype:0,language:content.state.languageCode,currency:content.state.currencyCode})
                             resolve(res)
                             break;
                         case SourceMap['1688rapid']['id']:
-                            res = await _1688rapid.searchGoodsByPic({...params,page:payload.page})
+                            res = await _1688rapid.searchGoodsByPic({...params,page:payload.page,language:content.state.languageCode,currency:content.state.currencyCode})
                             resolve(res)
                             break;
                         case SourceMap['1688overseas']['id']:	// 图搜接口与1688一样，只是searchtype参数不同（所有货源，跨境货源）
-                            res = await _1688.searchGoodsByPic({...params,page:payload.page, sessionId:payload.sessionId, requestId:payload.requestId, searchtype:1 })
+                            res = await _1688.searchGoodsByPic({...params,page:payload.page, sessionId:payload.sessionId, requestId:payload.requestId, searchtype:1,language:content.state.languageCode,currency:content.state.currencyCode })
                             resolve(res)
                             break;
                         case SourceMap['1688global']['id']:
-                            res = await _1688global.searchGoodsByPic({...params,page:payload.page})
+                            res = await _1688global.searchGoodsByPic({...params,page:payload.page,language:content.state.languageCode,currency:content.state.currencyCode})
                             resolve(res)
                             break;
                         case SourceMap['aliexpressDS']['id']:
-                            res = await aliexpressDS.searchGoodsByPic({...params})
+                            res = await aliexpressDS.searchGoodsByPic({...params,language:content.state.languageCode,currency:content.state.currencyCode})
                             resolve(res)
                             break;
                         case SourceMap['aliexpressZapieX']['id']:
-                            res = await aliexpressZapieX.searchGoodsByPic({...params})
+                            res = await aliexpressZapieX.searchGoodsByPic({...params,language:content.state.languageCode,currency:content.state.currencyCode})
                             resolve(res)
                             break;
                         case SourceMap['yiwugo']['id']:
-                            res = await yiwugo.searchGoodsByPic({...params, page:payload.page})
+                            res = await yiwugo.searchGoodsByPic({...params, page:payload.page,language:content.state.languageCode,currency:content.state.currencyCode})
                             resolve(res)
                             break;
                         case SourceMap['dhgate']['id']:
-                            res = await dhgate.searchGoodsByPic({...params, page:payload.page})
+                            res = await dhgate.searchGoodsByPic({...params, page:payload.page,language:content.state.languageCode,currency:content.state.currencyCode})
                             //TBD： 临时补丁。没有单独的上传图片接口，后台接口统一返回imageAddress后再注释掉；不应该引用sourceResult
                             // if(res.data.searchImage === undefined) res.data.searchImage = new Object();
                             // res.data.searchImage.imageAddress = res.sourceResult.data.imgUrl
                             resolve(res)
                             break;
                         case SourceMap['mic']['id']:
-                            res = await mic.searchGoodsByPic({...params, page:payload.page})
+                            res = await mic.searchGoodsByPic({...params, page:payload.page,language:content.state.languageCode,currency:content.state.currencyCode})
                             //TBD：临时补丁。没有单独的上传图片接口，后台接口统一返回imageAddress后再注释掉；不应该引用sourceResult
                             // if(res.data.searchImage === undefined) res.data.searchImage = new Object();
                             // res.data.searchImage.imageAddress = res.sourceResult.content.imgId
@@ -716,10 +719,10 @@ export default new Vuex.Store({
                 try {
                     switch (this.state.source_id) {
                         case SourceMap['1688']['id']:
-                            resolve(await _1688.searchGoodsByPicFirst( {...params, searchtype:0 } ))
+                            resolve(await _1688.searchGoodsByPicFirst( {...params, searchtype:0,language:content.state.languageCode,currency:content.state.currencyCode } ))
                             break;
                         case SourceMap['1688overseas']['id']:
-                            resolve(await _1688.searchGoodsByPicFirst( {...params, searchtype:1 } ))
+                            resolve(await _1688.searchGoodsByPicFirst( {...params, searchtype:1,language:content.state.languageCode,currency:content.state.currencyCode } ))
                             break;
                         // 1688global没有首次搜索接口
                     }
