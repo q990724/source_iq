@@ -23,10 +23,12 @@
 
 <body>
     <div class="container">
-        <h2>SourceIQ</h2>
+        <!--项目名称-->
+        <h2 data-locale="projectName"></h2>
         <form>
             <div class="form-group">
-                <label for="select-source">Select Source</label>
+                <!--选择默认货源-->
+                <label data-locale="selectSource" for="select-source"></label>
                 <select class="form-control" id="select-source">
 					<option value="1" selected>alibaba</option>
                     <option value="2">1688</option>
@@ -45,8 +47,10 @@
                     <option value="13">globalres</option>
                 </select>
             </div>
-            <button type="button" id="save" class="btn btn-success">Save</button>
-            <button type="button" id="default" class="btn btn-info">Default</button>
+            <!--保存-->
+            <button type="button" id="save" class="btn btn-success" data-locale="save"></button>
+            <!--默认-->
+            <button type="button" id="default" class="btn btn-info" data-locale="default"></button>
         </form>
     </div>
     <script src="../scripts/popup.js" type="text/javascript" charset="utf-8"></script>

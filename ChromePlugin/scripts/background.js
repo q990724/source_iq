@@ -81,7 +81,7 @@ function uploadImage(base64) {
 
 // 右键菜单
 chrome.contextMenus.create({
-    title: "图片搜索",
+    title: chrome.i18n.getMessage('contextMenusButton'),
     contexts: ['all'],
     onclick: function (info, tab) {
         if (info.mediaType && info.mediaType == 'image') {

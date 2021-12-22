@@ -46,8 +46,8 @@ $(document.body).append(`
                 <img src="#" alt="" id="ele" width="100%">
                 <div class="mark"></div>
                 <div class="confirm">
-                    <span>确定</span>
-                    <i>关闭</i>
+                    <span>${chrome.i18n.getMessage('confirm')}</span>
+                    <i>${chrome.i18n.getMessage('cancle')}</i>
                 </div>
             </div>
         </div>

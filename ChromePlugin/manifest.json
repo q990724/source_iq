@@ -50,5 +50,6 @@
             ],
             "run_at": "document_end"
         }
-    ]
+    ],
+    "default_locale": "en"
 }

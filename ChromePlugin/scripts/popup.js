@@ -1,4 +1,10 @@
 window.onload = function() {
+
+    // 设置多语言
+    document.querySelectorAll('[data-locale]').forEach(elem => {
+        elem.innerText = chrome.i18n.getMessage(elem.dataset.locale)
+    })
+
     function sendMessageToContentScript(message, callback) {
 		//TBD: 改成定向消息，避免广播给第三方页面
         chrome.tabs.query({ }, function (tabs) {

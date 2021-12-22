@@ -1,0 +1,30 @@
+{
+  "confirm": {
+    "message": "确认",
+    "description": "确认"
+  },
+  "cancle": {
+    "message": "取消",
+    "description": "取消"
+  },
+  "save": {
+    "message": "保存",
+    "description": "保存"
+  },
+  "default": {
+    "message": "默认",
+    "description": "默认"
+  },
+  "contextMenusButton": {
+    "message": "Source IQ",
+    "description": "chrome右键菜单按钮名称"
+  },
+  "projectName": {
+    "message": "Source IQ",
+    "description": "项目名称"
+  },
+  "selectSource": {
+    "message": "选择货源",
+    "description": "选择货源"
+  }
+}
