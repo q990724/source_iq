@@ -45,7 +45,7 @@ const SourceMap = {
         hasSearchPic: true,
         hasFirstSearchText: true,
         hasFirstSearchPic: false,
-        getCountryLangCurrency: '',
+        getCountryLangCurrency: 'api/goods/getCountryLangCurrency',
     },
 	'1688overseas': {
 	    id: 10,

@@ -80,7 +80,8 @@ export default {
                     this.$store.state.currencyName = null;
                 }
                 // if(result.language && result.defaultLanguageIndex && result.defaultLanguageIndex >= 0){
-                if(result.language && result.defaultLanguageIndex || result.language && result.defaultLanguageIndex === 0){
+                if(result.language && result.defaultLanguageIndex && result.defaultLanguageIndex >= 0 || result.language && result.defaultLanguageIndex === 0){
+                    console.log('语言code',this.$store.state.currencyList[result.defaultLanguageIndex]['code']);
                     this.$store.state.languageCode = this.$store.state.languageList[result.defaultLanguageIndex]['code'];
                     this.$store.state.languageName = this.$store.state.languageList[result.defaultLanguageIndex]['name'];
                 }else{

@@ -255,12 +255,12 @@ export default new Vuex.Store({
     },
     actions: {
         // 点击切换语言或货币或国家发请求筛选
-        onCountryLangCurrencyChange(content,payload){
-            console.log('store','onCountryLangCurrencyChange')
-            this.state.searchParams['country'] = this.state.countryCode;
-            this.state.searchParams['language'] = this.state.languageCode;
-            this.state.searchParams['currency'] = this.state.currencyCode;
-        },
+        // onCountryLangCurrencyChange(content,payload){
+        //     console.log('store','onCountryLangCurrencyChange')
+        //     this.state.searchParams['country'] = this.state.countryCode;
+        //     this.state.searchParams['language'] = this.state.languageCode;
+        //     this.state.searchParams['currency'] = this.state.currencyCode;
+        // },
         // 点击筛选条件发请求筛选
 		// payload包括filterItem（选中的filter类，该类选中的option，选中的当前值e三个参数
         onFilterChange(content,payload){
