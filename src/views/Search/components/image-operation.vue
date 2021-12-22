@@ -297,7 +297,7 @@ export default {
     .image-container {
         padding: 20px;
         img {
-            width: 100%;
+
         }
     }
     .foot {

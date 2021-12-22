@@ -5,12 +5,12 @@ class MyCrop {
         this.params = params;
         this.location = null;
         let self = this;
-        console.log($(this.selector), $(this.selector).width(), $(this.selector).height())
+        console.log($(this.selector), $(this.selector).innerWidth(), $(this.selector).height())
         $(this.selector).Jcrop({
             allowSelect: true,
             baseClass: 'my-crop',
-            boxWidth: 500,
-            boxHeight: 500,
+            boxWidth: 400 / window.devicePixelRatio,
+            boxHeight: 400 / window.devicePixelRatio,
             onSelect: this.onSelected.bind(this),
             onChange: this.onChange.bind(this),
             onRelease: this.onRelease.bind(this)
