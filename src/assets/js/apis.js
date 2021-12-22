@@ -103,8 +103,11 @@ export const alibaba = {
 
 export const aliexpressDS = {
 	uploadPic(file) {
-		let cookie = getCookie('aliexpress');
-		if(!cookie) return Promise.reject('no cookie');
+		let cookie = null;
+		if(SourceMap['aliexpressDS'].needCookie === true) {
+			cookie = getCookie('aliexpress');
+			if(!cookie) return Promise.reject('no cookie');
+		}
 	    let formData = new FormData();
 	    formData.append('file', file);
 	    return Service.post('api/aliexpress/uploadPic', formData, {
@@ -116,8 +119,11 @@ export const aliexpressDS = {
 	},
 	// 图片搜索
 	searchGoodsByPic({imageAddress, category_id = null}) {
-		let cookie = getCookie('aliexpress');
-		if(!cookie) return Promise.reject('no cookie');
+		let cookie = null;
+		if(SourceMap['aliexpressDS'].needCookie === true) {
+			cookie = getCookie('aliexpress');
+			if(!cookie) return Promise.reject('no cookie');
+		}
 	    return Service.get('api/aliexpress/searchGoodsByPic', {
 	        params: {
 	            filename:imageAddress, category_id
@@ -129,8 +135,11 @@ export const aliexpressDS = {
 	},
 	// 文字搜索
 	searchGoodsByText({searchText, cat_id, min_price, max_price, ship_from_country, isBigSale, hasCoupon, isFreeShip, isFavorite, sort_type, page = 1, country, language = 'en_US', currency, brand_id, pvid}) {
-		let cookie = getCookie('aliexpress');
-		if(!cookie) return Promise.reject('no cookie');
+		let cookie = null;
+		if(SourceMap['aliexpressDS'].needCookie === true) {
+			cookie = getCookie('aliexpress');
+			if(!cookie) return Promise.reject('no cookie');
+		}
 	    return Service.get('api/aliexpress/searchGoodsByText', {
 	        params: {
 	            search_text:searchText, cat_id, min_price, max_price, ship_from_country, isBigSale, hasCoupon, isFreeShip, isFavorite, sort_type, page, country, language, currency, brand_id, pvid
@@ -172,8 +181,11 @@ export const aliexpressZapieX = {
 
 export const _1688 = {
 	uploadPicH5(file) {
-		let cookie = getCookie('1688');
-		if(!cookie) return Promise.reject('no cookie');
+		let cookie = null;
+		if(SourceMap['1688'].needCookie === true) {
+			cookie = getCookie('1688');
+			if(!cookie) return Promise.reject('no cookie');
+		}
 	    let formData = new FormData();
 	    formData.append('file', file);
 		formData.append('cookie', cookie);
@@ -185,8 +197,11 @@ export const _1688 = {
 	},
 	// 图片搜索
 	searchGoodsByPic({imageAddress, page, yoloRegionSelected = null, yoloCropRegion = '', region = '', pailitaoCategoryId = null, searchtype = 0, sortField = 'normal', sortType = 'asc',priceStart,priceEnd,quantityBegin,extendProperties, memberTags, isImgPkg, isMainShortVideo, isAuthentication, isPatent, isSrcFactoryItm, holidayTagId, isZhangqiSelect, gmtCreate,province,city,dis,sessionId, requestId,}) {
-		let cookie = getCookie('1688');
-		if(!cookie) return Promise.reject('no cookie');
+		let cookie = null;
+		if(SourceMap['1688'].needCookie === true) {
+			cookie = getCookie('1688');
+			if(!cookie) return Promise.reject('no cookie');
+		}
 	    return Service.get('api/goods/imgSearch', {
 	        params: {
 	            imageId:imageAddress, searchtype, page, yoloRegionSelected, yoloCropRegion, region, sessionId, requestId,
@@ -196,8 +211,11 @@ export const _1688 = {
 	},
 	// 图片搜索
 	searchGoodsByPicFirst({imageAddress, yoloRegionSelected = null, yoloCropRegion = null, region = null, pailitaoCategoryId, searchtype = 0, sortField,sortType,priceStart,priceEnd,quantityBegin,extendProperties, memberTags, isImgPkg, isMainShortVideo, isAuthentication, isPatent, isSrcFactoryItm, holidayTagId, isZhangqiSelect, gmtCreate,province,city,dis}) {
-		let cookie = getCookie('1688');
-		if(!cookie) return Promise.reject('no cookie');
+		let cookie = null;
+		if(SourceMap['1688'].needCookie === true) {
+			cookie = getCookie('1688');
+			if(!cookie) return Promise.reject('no cookie');
+		}
 	    return Service.get('api/goods/imgSearchFirst', {
 	        params: {
 	            imageId:imageAddress, cookie, searchtype, yoloRegionSelected, yoloCropRegion, region,pailitaoCategoryId,sortField,sortType,priceStart,priceEnd,quantityBegin, extendProperties, memberTags, isImgPkg, isMainShortVideo, isAuthentication, isPatent, isSrcFactoryItm, holidayTagId, isZhangqiSelect, gmtCreate,province,city,dis
@@ -206,8 +224,11 @@ export const _1688 = {
 	},
 	// 文字搜索首次
 	searchGoodsFirst({searchText, page = 1, featurePair, sortType, descendOrder, priceStart, priceEnd, quantityBegin, province, city, biztype, tagsZ, offerTags, filtHolidayTagId, extendProperties, memberTags, commonSort, tese, filt, factorySize, employeesCount}) {
-		let cookie = getCookie('1688');
-		if(!cookie) return Promise.reject('no cookie');
+		let cookie = null;
+		if(SourceMap['1688'].needCookie === true) {
+			cookie = getCookie('1688');
+			if(!cookie) return Promise.reject('no cookie');
+		}
 	    return Service.get('api/goods/searchGoodsFirst', {
 	        params: {
 	            type: 1, cookie, keyword: searchText, page, featurePair, sortType, descendOrder, priceStart, priceEnd, quantityBegin, province, city, biztype, tagsZ, offerTags, filtHolidayTagId, extendProperties, memberTags, commonSort, tese, filt, factorySize, employeesCount
@@ -215,8 +236,11 @@ export const _1688 = {
 	    })
 	},
 	searchGoods({ searchText, page = 1, sessionId, featurePair, sortType, descendOrder, priceStart, priceEnd, quantityBegin, province, city, biztype, tagsZ, offerTags, filtHolidayTagId, extendProperties, memberTags, commonSort,tese, filt, factorySize, employeesCount, startIndex = 0 }) {
-		let cookie = getCookie('1688');
-		if(!cookie) return Promise.reject('no cookie');
+		let cookie = null;
+		if(SourceMap['1688'].needCookie === true) {
+			cookie = getCookie('1688');
+			if(!cookie) return Promise.reject('no cookie');
+		}
 	    return Service.get('api/goods/searchGoods', {
 	        params: {
 	            type: 1, cookie, keyword: searchText, page, sessionId, featurePair, sortType, descendOrder, priceStart, priceEnd, quantityBegin, province, city, biztype, tagsZ, offerTags, filtHolidayTagId, extendProperties, memberTags, commonSort,tese, filt, factorySize, employeesCount, startIndex
@@ -261,8 +285,11 @@ export const _1688rapid = {
 
 export const _1688global = {
 	uploadPic(file) {
-		let cookie = getCookie('1688global');
-		if(!cookie) return Promise.reject('no cookie');
+		let cookie = null;
+		if(SourceMap['1688global'].needCookie === true) {
+			cookie = getCookie('1688global');
+			if(!cookie) return Promise.reject('no cookie');
+		}
 	    let formData = new FormData();
 	    formData.append('file', file);
 		formData.append('cookie', cookie);
@@ -273,8 +300,11 @@ export const _1688global = {
 	    })
 	},
 	searchGoodsByPic({imageAddress, page, region, categoryId, location, tags, keyword}) {
-		let cookie = getCookie('1688global');
-		if(!cookie) return Promise.reject('no cookie');
+		let cookie = null;
+		if(SourceMap['1688global'].needCookie === true) {
+			cookie = getCookie('1688global');
+			if(!cookie) return Promise.reject('no cookie');
+		}
 	    return Service.get('api/goods/imgSearchKj', {
 	        params: {
 	            imgUrl:imageAddress, cookie,region,keyword,categoryId,location,tags,pageNo:page
@@ -282,8 +312,11 @@ export const _1688global = {
 	    })
 	},
 	searchGoodsFirstKj({searchText,featurePair, sortType, descendOrder, priceStart, priceEnd, quantityBegin, province, city, biztype, tagsZ, extendProperties, commonSort, filtMemberTags, filtOfferTags, holidayTagId, tese, filt, factorySize, employeesCount, category}) {
-		let cookie = getCookie('1688global');
-		if(!cookie) return Promise.reject('no cookie');
+		let cookie = null;
+		if(SourceMap['1688global'].needCookie === true) {
+			cookie = getCookie('1688global');
+			if(!cookie) return Promise.reject('no cookie');
+		}
 		return Service.get('api/goods/searchGoodsFirstKj', {
 			params: {
 				keywords:searchText, cookie,featurePair, sortType, descendOrder, priceStart, priceEnd, quantityBegin, province, city, biztype, tagsZ, extendProperties, commonSort, filtMemberTags, filtOfferTags, holidayTagId, tese, filt, factorySize, employeesCount, category
@@ -291,8 +324,11 @@ export const _1688global = {
 		})
 	},
 	searchGoodsKj({searchText, featurePair, sessionId, requestId, page = 1, sortType, descendOrder, priceStart, priceEnd, quantityBegin, province, city, biztype, tagsZ, extendProperties, commonSort, filtMemberTags, filtOfferTags, holidayTagId, tese, filt, factorySize, employeesCount,category}) {
-		let cookie = getCookie('1688global');
-		if(!cookie) return Promise.reject('no cookie');
+		let cookie = null;
+		if(SourceMap['1688global'].needCookie === true) {
+			cookie = getCookie('1688global');
+			if(!cookie) return Promise.reject('no cookie');
+		}
 		return Service.get('api/goods/searchGoodsKj', {
 			params: {
 				keywords: searchText, cookie, page, sessionId, requestId, featurePair, sortType, descendOrder, priceStart, priceEnd, quantityBegin, province, city, biztype, tagsZ, extendProperties, commonSort, filtMemberTags, filtOfferTags, holidayTagId, tese, filt, factorySize, employeesCount,category
