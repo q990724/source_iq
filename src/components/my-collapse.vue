@@ -24,6 +24,7 @@ export default {
         return {
             isShowCollapse: false,
             collapseStatus: false,
+            rowHeight: 0,
             items: [
                 'Lorem ipsum dolor sit amet', 'consectetur adipisicing elit', 'Delectus', 'adipisicing elit', 'Delectus', 'dolor sit amet', 'consectetur adipisicing',
                 'consectetur adipisicing'
@@ -44,18 +45,33 @@ export default {
         previewRow: {
             type: Number,
             default: 1
-        },
-        rowHeight: {
-            type: Number,
-            default: 25
         }
     },
     mounted() {
+        let $items = $(this.$refs['items']);
+        let children = [];
+        // $(this.$refs['items']).children('.item')
+        if($items.children('.el-radio-group').length > 0) {
+            children = $($items.children('.el-radio-group')[0]).children('.item');
+        }else {
+            children = $items.children('.item');
+        }
+        if(children && children.length > 0) {
+            let maxHeight = $(children[0]).outerHeight(true);
+            for (let i=1; i < children.length; i++) {
+                let c = $(children[i]);
+                if(maxHeight < c.outerHeight(true)) {
+                    maxHeight = c.outerHeight(true);
+                }
+            }
+            this.rowHeight = maxHeight;
+        }
+        // console.log(this.rowHeight, children.length);
         let rowCount = Math.ceil($(this.$refs['items']).height() / this.rowHeight);
-        console.log(rowCount);
         if(rowCount > this.previewRow) {
             this.isShowCollapse = true;
         }
+
     },
     methods: {
         open() {

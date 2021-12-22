@@ -60,25 +60,21 @@ export default {
     },
     methods: {
         chooseImageBox() {
-			if(cropObject) {
-				cropObject.setImage($('#cropBox > .image-container > img').attr('src'));
-				this.cropBoxStatus = true;
-			}else {
-				cropObject = new MyCrop({
-				    selector: '#cropBox > .image-container > img',
-				    imgPath: $('#cropBox > .image-container > img').attr('src'),
-				    onSuccess: (res) =>{
-						console.log(res);
-				        this.cropResult = res;
-				    }
-				})
-				this.cropBoxStatus = true;
-			}            
+            cropObject = new MyCrop({
+                selector: '#cropBox > .image-container > img',
+                imgPath: $('#cropBox > .image-container > img').attr('src'),
+                onSuccess: (res) =>{
+                    console.log(res);
+                    this.cropResult = res;
+                }
+            })
+            this.cropBoxStatus = true;
         },
         closeCropBox() {
             this.cropBoxStatus = false;
             this.cropResult = null;
 			cropObject.jcropApi.release();
+            cropObject.jcropApi.destroy();
         },
 		//TBD：1688图搜接口首次调用返回的yoloCropRegion是全部切图的坐标数组，region对应于第一张切图
 		//TBD：我们自己的切图也需要返回填充item.region的xywh坐标，跟1688返回的切图机制统一

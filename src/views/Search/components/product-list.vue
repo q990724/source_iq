@@ -11,8 +11,7 @@
 						<i>{{ item.product.tradePrice[0].priceText }}</i> <span v-if="item.product.tradePrice[0].unit">
 							/ {{item.product.tradePrice[0].unit}}</span>
 					</h2>
-					<p v-if="item.product.tradePrice[0].minOrder">{{item.product.tradePrice[0].minOrder}} (Min.Order)
-					</p>
+					<p v-if="item.product.tradePrice[0].minOrder" style="text-overflow: ellipsis;white-space: nowrap;overflow: hidden;">{{item.product.tradePrice[0].minOrder}} (Min.Order)</p>
 					<!-- 如果卖家节点和年份都不存在时，就不渲染此div模块-->
 					<div class="supplier" v-if="showSeller">
 						<div class="year" v-if="item.seller && item.seller.years">
@@ -32,7 +31,7 @@
 					<span>{{item.seller.name}}</span>
 				</div>
 			</div>
-			<div class="clear"></div>
+			<!--<div class="clear"></div>-->
 		</div>
         <div class="no-result" v-if="$store.state.searchState === 'null'">
             <p>{{$t('message.no_result_found')}}</p>
@@ -76,10 +75,15 @@
 </script>
 
 <style scoped lang="scss">
+    .product-list {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
 	.product-item {
-		float: left;
-		width: 335px;
-		max-height: 450px;
+        width: 335px;
+        //min-height: 500px;
 		background-color: #FFFFFF;
 		//box-shadow: 0 0 10px #DDD;
 		margin-right: 12px;
@@ -111,6 +115,7 @@
 		}
 
 		.message {
+            width: 100%;
 			padding: 10px 10px 20px 10px;
 			border-bottom: 1px solid #DEDEDE;
 
@@ -120,11 +125,12 @@
 				-webkit-line-clamp: 2;
 				overflow: hidden;
 				font-size: 14px;
+                line-height: 21px;
 				margin-bottom: 10px;
 				color: #000;
 				letter-spacing: 1px;
 				text-decoration: none;
-                height: 40px;
+                height: 45px;
 				&:visited {
 					color: #333333;
 				}
@@ -143,6 +149,9 @@
 			}
 
 			.price {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
 				span {
 					font-size: 14px;
 				}
@@ -167,6 +176,8 @@
 					sup {
 						margin-left: 5px;
 					}
+
+                    margin-right: 20px;
 				}
 
 				.supplier-name {
@@ -175,12 +186,12 @@
 					overflow: hidden;
 					text-overflow: ellipsis;
 					white-space: nowrap;
-					margin-left: 20px;
 				}
 			}
 		}
 
 		.bottom {
+            width: 100%;
 			font-size: 14px;
 			padding: 10px;
 			color: #333;
