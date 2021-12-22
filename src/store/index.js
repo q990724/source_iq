@@ -80,6 +80,11 @@ export default new Vuex.Store({
 			this.commit('resetUploadState');
 			this.commit('resetSearchState');
 		},
+		resetCountryLangCurrency(state) {
+			state.countryCode=state.languageCode=state.currencyCode=null;
+			state.countryName=state.languageName=state.urrencyName=null;
+			state.countryList=state.languageList=state.currencyList=[];
+		},
         clearConditions(state) {
 			console.log("before clearConditions->state.searchParams:", state.searchParams);
 
@@ -120,6 +125,7 @@ export default new Vuex.Store({
 			this.state.session['sessionId'] = null;
 			this.state.session['requestId'] = null;
 			// 无需重置yoloCropRegion和region？
+			this.state.api_error_msg = '';
 		},
 		dumpAll(state, msg) {
 			console.log(msg);

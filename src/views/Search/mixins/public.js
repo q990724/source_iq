@@ -159,6 +159,7 @@ const publicData = {
 			this.$store.commit('resetUploadState');
 			this.$store.commit('resetSearchState');
 			this.$store.commit('setSourceId', source_id);
+			this.$store.commit('resetCountryLangCurrency');
             console.log('当前数据源ID：', this.$store.state.source_id);
         },
         onSelectImage() {
