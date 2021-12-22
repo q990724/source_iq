@@ -152,6 +152,7 @@ export default {
         },
         onLanguagePopupSave(){
             this.initSearchResult();
+			this.initConditions();
             this.$store.commit('resetSearchState');
             // 到store中处理多语言参数
             this.$store.dispatch('onCountryLangCurrencyChange')
