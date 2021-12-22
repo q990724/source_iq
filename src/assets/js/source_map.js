@@ -21,7 +21,7 @@ const SourceMap = {
         hasSearchPic: true,
         hasFirstSearchText: true,
         hasFirstSearchPic: true,
-        getCountryLangCurrency: '',
+        getCountryLangCurrency: 'api/goods/getCountryLangCurrency',
     },
     '1688rapid': {
         id: 15,
@@ -33,7 +33,7 @@ const SourceMap = {
         hasSearchPic: true,
         hasFirstSearchText: false,
         hasFirstSearchPic: false,
-        getCountryLangCurrency: '',
+        getCountryLangCurrency: 'api/goods/getCountryLangCurrency',
     },
     '1688global': {
         id: 3,
@@ -57,7 +57,7 @@ const SourceMap = {
 	    hasSearchPic: true,
 	    hasFirstSearchText: true,
 	    hasFirstSearchPic: true,
-        getCountryLangCurrency: '',
+        getCountryLangCurrency: 'api/goods/getCountryLangCurrency',
 	},
     'aliexpressDS': {
         id: 4,
@@ -165,7 +165,7 @@ const SourceMap = {
         hasSearchPic: false,
         hasFirstSearchText: false,
         hasFirstSearchPic: false,
-        getCountryLangCurrency: 'api/aliexpress/getCountryLangCurrency',
+        getCountryLangCurrency: 'api/chinabrands/getCountryLangCurrency',
     },
     'globalres': {
         id: 13,
@@ -177,7 +177,7 @@ const SourceMap = {
         hasSearchPic: false,
         hasFirstSearchText: false,
         hasFirstSearchPic: false,
-        getCountryLangCurrency: 'api/aliexpress/getCountryLangCurrency',
+        getCountryLangCurrency: 'api/globalresapp/getCountryLangCurrency',
     },
 }
 

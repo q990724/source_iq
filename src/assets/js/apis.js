@@ -54,11 +54,11 @@ export const alibaba = {
         })
     },
     // 图片搜索
-    searchGoodsByPic({imageAddress, page = 1, categoryId = null}) {
+    searchGoodsByPic({imageAddress, page = 1, categoryId = null,language = 'en_US',currency = 'USD',}) {
         // beginPage = beginPage > 5 ? 5 : beginPage;
         return Service.get('api/aliintersite/searchGoodsByPic', {
             params: {
-                imageAddress, beginPage:page, categoryId
+                imageAddress, beginPage:page, categoryId,language,currency,
             }
         })
     },
@@ -251,7 +251,7 @@ export const _1688 = {
 
 export const _1688rapid = {
 	// 图片搜索
-	searchGoodsByPic({imageAddress, page = 1, attr_id, page_size = 10}) {
+	searchGoodsByPic({imageAddress, page = 1, attr_id, page_size = 20}) {
 		let file = null
 		file = getFileFromBase64(Store.state.searchParams.mainImage);
 		if(Store.state.imageUploadState !== 'uploaded') {
@@ -460,9 +460,9 @@ export const cjds = {
 	},
 
 	// 搜索商品
-	searchGoodsByText({searchText, page=1, page_size=20, category = null, country = null, productType = null, addMarkStatus = null, sort = null, price_sort = null, min_price, max_price}) {
+	searchGoodsByText({searchText, page=1, page_size=20, language, currency, category = null, country = null, productType = null, addMarkStatus = null, sort = null, price_sort = null, min_price, max_price}) {
 		const params = Qs.stringify({
-			search_text:searchText, page, page_size, category, country, productType, addMarkStatus, sort, price_sort
+			search_text:searchText, page, page_size, lang:language, currency, category, country, productType, addMarkStatus, sort, price_sort
 			, min_price, max_price});
 		return Service.post('api/cjdsapp/searchGoodsByText',params,{
 			headers: {
@@ -485,10 +485,10 @@ export const litbox = {
 
 export const banggood = {
 	// 搜索商品
-	searchGoodsByText({searchText, page=1, language='en', country='CN', warehouse = null, special_options, category = null, sort = '0', min_price, max_price }) {
+	searchGoodsByText({searchText, page=1, language='en-GB', currency = 'USD', country='CN', warehouse = null, special_options, category = null, sort = '0', min_price, max_price }) {
 		return Service.get('api/banggoodapp/searchGoodsByText',{
 			params: {
-				search_text:searchText, page, lang:language, country, warehouse, special_options, category, sort, min_price, max_price
+				search_text:searchText, page, lang:language, currency, country, warehouse, special_options, category, sort, min_price, max_price
 			},
 		})
 	},
@@ -505,10 +505,10 @@ export const chinabrands = {
 }
 export const globalres = {
 	// 搜索商品
-	searchGoodsByText({searchText, page=1, country= null, busType = null, directOrderFlag = null, min_price, max_price,  category = null, min_order }) {
+	searchGoodsByText({searchText, page=1, language='en', country= null, busType = null, directOrderFlag = null, min_price, max_price,  category = null, min_order }) {
 		return Service.get('api/globalresapp/searchGoodsByText',{
 			params: {
-				search_text:searchText, page, country, busType, directOrderFlag, min_price, max_price, category, min_order
+				search_text:searchText, page, lang:language, country, busType, directOrderFlag, min_price, max_price, category, min_order
 			},
 		})
 	},
