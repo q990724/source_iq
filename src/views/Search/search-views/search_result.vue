@@ -453,7 +453,7 @@ export default {
                         // this.sortList = result.data.sortList || null;
                         if (result.data && result.data.resultInfo) {	// && result.data.resultInfo.totalPages) {
                             // this.resultInfo = result.data.resultInfo;
-                            this.totalPage = this.resultInfo.totalPages;	// || 1;
+                            this.totalPage = result.data.resultInfo.totalPages;	// || 1;
                         }
                         // TBD: 此处只判断了yoloCropRegion不为NULL，没有判断result.data.searchImage.region
                         if (result.data.searchImage && (result.data.searchImage.yoloCropRegion)) {
@@ -552,7 +552,7 @@ export default {
                         // this.sortList = result.data.sortList || null;
                         if (result.data && result.data.resultInfo) {// && result.data.resultInfo.totalPages) {
                             // this.resultInfo = result.data.resultInfo;
-                            this.totalPage = this.resultInfo.totalPages;	// || 1;
+                            this.totalPage = result.data.resultInfo.totalPages;	// || 1;
                         }
 
                         if (result.data && result.data.resultInfo && (result.data.resultInfo.sessionId || result.data.resultInfo.requestId)) {
