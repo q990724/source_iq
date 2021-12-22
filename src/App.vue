@@ -114,17 +114,17 @@ export default {
                     this.$router.push('/view-alibaba');
                     break;
                 case SoureMap['1688']['id']:
-                    // await this.getCountryLangCurrency(SoureMap['1688']['getCountryLangCurrency']);
+                    await this.getCountryLangCurrency(SoureMap['1688']['getCountryLangCurrency']);
                     if (current_path === '/view-1688') return;
                     this.$router.push('/view-1688');
                     break;
                 case SoureMap['1688rapid']['id']:
-                    // await this.getCountryLangCurrency(SoureMap['1688rapid']['getCountryLangCurrency']);
+                    await this.getCountryLangCurrency(SoureMap['1688rapid']['getCountryLangCurrency']);
                     if (current_path === '/view-1688rapid') return;
                     this.$router.push('/view-1688rapid');
                     break;
                 case SoureMap['1688global']['id']:
-                    // await this.getCountryLangCurrency(SoureMap['1688global']['getCountryLangCurrency']);
+                    await this.getCountryLangCurrency(SoureMap['1688global']['getCountryLangCurrency']);
                     if (current_path === '/view-1688global') return;
                     this.$router.push('/view-1688global');
                     break;
@@ -164,7 +164,7 @@ export default {
                     this.$router.push('/view-litbox');
                     break;
                 case SoureMap['1688overseas']['id']:
-                    // await this.getCountryLangCurrency(SoureMap['1688overseas']['getCountryLangCurrency']);
+                    await this.getCountryLangCurrency(SoureMap['1688overseas']['getCountryLangCurrency']);
                     if (current_path === '/view-1688overseas') return;
                     this.$router.push('/view-1688overseas');
                     break;
@@ -174,12 +174,12 @@ export default {
                     this.$router.push('/view-banggood');
                     break;
                 case SoureMap['chinabrands']['id']:
-                    // await this.getCountryLangCurrency(SoureMap['chinabrands']['getCountryLangCurrency']);
+                    await this.getCountryLangCurrency(SoureMap['chinabrands']['getCountryLangCurrency']);
                     if (current_path === '/view-chinabrands') return;
                     this.$router.push('/view-chinabrands');
                     break;
                 case SoureMap['globalres']['id']:
-                    // await this.getCountryLangCurrency(SoureMap['globalres']['getCountryLangCurrency']);
+                    await this.getCountryLangCurrency(SoureMap['globalres']['getCountryLangCurrency']);
                     if (current_path === '/view-globalres') return;
                     this.$router.push('/view-globalres');
                     break;
