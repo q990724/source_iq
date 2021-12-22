@@ -312,7 +312,8 @@ export default {
                 console.log("page", this.page);
                 console.log("totalPage:", this.totalPage);
                 // this.page++;
-                if (this.page > this.totalPage) {
+				console.log("resultInfo:",this.resultInfo);
+                if ((this.totalPage !== undefined && this.page > this.totalPage) || (this.resultInfo.hasMore !== undefined && this.resultInfo.hasMore === false)) {
                     this.$store.commit('setSearchState', 'null');
                     return;
                 }
@@ -450,9 +451,9 @@ export default {
                         // this.categoryList = result.data.categoryList || null;
                         // this.filterList = result.data.filterList || null;
                         // this.sortList = result.data.sortList || null;
-                        if (result.data && result.data.resultInfo && result.data.resultInfo.totalPages) {
-                            this.resultInfo = result.data.resultInfo;
-                            this.totalPage = this.resultInfo.totalPages || 1;
+                        if (result.data && result.data.resultInfo) {	// && result.data.resultInfo.totalPages) {
+                            // this.resultInfo = result.data.resultInfo;
+                            this.totalPage = this.resultInfo.totalPages;	// || 1;
                         }
                         // TBD: 此处只判断了yoloCropRegion不为NULL，没有判断result.data.searchImage.region
                         if (result.data.searchImage && (result.data.searchImage.yoloCropRegion)) {
@@ -468,7 +469,7 @@ export default {
                         }
                     }
 
-                    // this.resultInfo = result.data.resultInfo;
+                    this.resultInfo = result.data.resultInfo || null;
                     // this.totalPage = this.resultInfo.totalPages || 1;
                     if (result.data.results && result.data.results.length > 0) {
                         //注释掉前端处理http 的逻辑
@@ -549,9 +550,9 @@ export default {
                         // this.categoryList = result.data.categoryList || null;
                         // this.filterList = result.data.filterList || null;
                         // this.sortList = result.data.sortList || null;
-                        if (result.data && result.data.resultInfo && result.data.resultInfo.totalPages) {
-                            this.resultInfo = result.data.resultInfo;
-                            this.totalPage = this.resultInfo.totalPages || 1;
+                        if (result.data && result.data.resultInfo) {// && result.data.resultInfo.totalPages) {
+                            // this.resultInfo = result.data.resultInfo;
+                            this.totalPage = this.resultInfo.totalPages;	// || 1;
                         }
 
                         if (result.data && result.data.resultInfo && (result.data.resultInfo.sessionId || result.data.resultInfo.requestId)) {
@@ -559,7 +560,7 @@ export default {
                             this.$store.commit('setRequestId', result.data.resultInfo.requestId);
                         }
                     }
-                    // this.resultInfo = result.data.resultInfo || null;
+                    this.resultInfo = result.data.resultInfo || null;
                     // if(this.resultInfo && this.resultInfo.totalResults && this.resultInfo.pageSize) {
                     //     this.totalPage = this.resultInfo.totalPages
                     // }
