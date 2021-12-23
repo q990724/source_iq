@@ -12,14 +12,14 @@
                         <!--留言/意见反馈-->
                         <span class="right-wrap_btn" @click="openFeedback()">Contact</span>
                         <!--国家/语言/货币-->
-                        <div class="right-wrap_btn tags" @click="onLanguagechange()">
+<!--                        <div class="right-wrap_btn tags" @click="onLanguagechange()"> -->
                             <!--国家-->
 <!--                            <span>{{ $store.state.countryName }}</span>
                             <i>/</i> -->
-                            <span>{{ $store.state.languageName }}</span>
+<!--                            <span>{{ $store.state.languageName }}</span>
                             <i>/</i>
                             <span>{{ $store.state.currencyCode }}</span>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
                 <text-search ref="text_search" @onClickSearchButton="onClickSearchButton"
@@ -311,6 +311,7 @@ export default {
         },
         async loadmore() {
             this.$store.commit('dumpAll', "发起分页请求loadmore前：");
+			// $("#app").scrollTop($(".search-result-container").height() - $('.product-item').height() * 2);
             if (this.$store.state.firstSearchState === 'success') {
                 console.log('触底事件触发');
                 console.log("page", this.page);
