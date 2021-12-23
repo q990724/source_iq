@@ -3,46 +3,34 @@
 
         <template v-for="(filter, filterIndex) in filterList">
             <template v-if="filter.selectUIType === 'checkbox'">
-                <div class="filter-item" v-if="filter.items && filter.items.length > 0" :key="filterIndex">
-                    <my-collapse :title="filter.title">
-                        <div class="item" v-for="(item,itemIndex) in filter.items" :key="item.id + item.name">
-                            <el-checkbox v-model="item.selected"
-                                         @change="onFilterChange(filterIndex, itemIndex, $event)">
-                                {{ item.name }}
-                            </el-checkbox>
-                        </div>
-                    </my-collapse>
-                    <!--<el-collapse value="true">-->
-                    <!--    &lt;!&ndash;<div class="filter-item_title">&ndash;&gt;-->
-                    <!--    &lt;!&ndash;    <span>{{ filter.title }}</span>&ndash;&gt;-->
-                    <!--    &lt;!&ndash;</div>&ndash;&gt;-->
-                    <!--    <el-collapse-item :title="filter.title">-->
-                    <!--        <div class="filter-item_options">-->
-                    <!--            <div class="filter-item_option" v-for="(item,itemIndex) in filter.items"-->
-                    <!--                 :key="item.id + item.name">-->
-                    <!--                <el-checkbox v-model="item.selected"-->
-                    <!--                             @change="onFilterChange(filterIndex, itemIndex, $event)">-->
-                    <!--                    {{ item.name }}-->
-                    <!--                </el-checkbox>-->
-                    <!--            </div>-->
-                    <!--        </div>-->
-                    <!--    </el-collapse-item>-->
-                    <!--</el-collapse>-->
-                </div>
+                <template v-if="filter.items && filter.items.length > 0">
+                    <div class="filter-item" :key="filterIndex" v-if="!(collapseFilterGroup && filterIndex >= collapseFilterGroupCount)">
+                        <my-collapse :title="filter.title">
+                            <div class="item" v-for="(item,itemIndex) in filter.items" :key="item.id + item.name">
+                                <el-checkbox v-model="item.selected"
+                                             @change="onFilterChange(filterIndex, itemIndex, $event)">
+                                    {{ item.name }}
+                                </el-checkbox>
+                            </div>
+                        </my-collapse>
+                    </div>
+                </template>
             </template>
             <template v-if="filter.selectUIType === 'radio'">
-                <div class="filter-item" v-if="filter.items && filter.items.length > 0"  :key="filterIndex">
-                    <my-collapse :title="filter.title">
-						<!-- radioValue在public.js做了预处理，没有理解其必要性 -->
-                        <el-radio-group v-model="filter.radioValue" >
-                            <div class="item" v-for="(item,itemIndex) in filter.items" :key="item.id + item.name">
-                                <el-radio :label="item.name" class="filter-item_option" @change="onFilterChange(filterIndex, itemIndex, $event)">
-                                    {{item.name}}
-                                </el-radio>
-                            </div>
-                        </el-radio-group>
-                    </my-collapse>
-                </div>
+                <template v-if="filter.items && filter.items.length > 0">
+                    <div class="filter-item" :key="filterIndex" v-if="!(collapseFilterGroup && filterIndex >= collapseFilterGroupCount)">
+                        <my-collapse :title="filter.title">
+                            <!-- radioValue在public.js做了预处理，没有理解其必要性 -->
+                            <el-radio-group v-model="filter.radioValue" >
+                                <div class="item" v-for="(item,itemIndex) in filter.items" :key="item.id + item.name">
+                                    <el-radio :label="item.name" class="filter-item_option" @change="onFilterChange(filterIndex, itemIndex, $event)">
+                                        {{item.name}}
+                                    </el-radio>
+                                </div>
+                            </el-radio-group>
+                        </my-collapse>
+                    </div>
+                </template>
             </template>
         </template>
 
@@ -58,13 +46,21 @@ export default {
             type: Array,
             default: () => [],
         },
+        collapseFilterGroup: {
+            type: Boolean,
+            default: true
+        },
+        collapseFilterGroupCount: {
+            type: Number,
+            default: 1
+        }
     },
     components: {
         MyCollapse
     },
     data() {
         return {
-            radio: ''
+            radio: '',
         }
     },
     methods: {

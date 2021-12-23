@@ -39,6 +39,8 @@ module.exports = {
 		message:'Message',
 		expand:'+',
 		collapse:'-',
+        spread_more: '展开更多',
+        pack_more: '收起筛选'
     },
     button: {
         more: 'More',

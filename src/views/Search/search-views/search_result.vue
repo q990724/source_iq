@@ -40,12 +40,16 @@
                     <!--</my-collapse>-->
                     <!--  筛选区域  -->
                     <group-filter v-if="filterList && filterList.length > 0" :filterList="filterList"
-                                  @onFilterChange="onFilterChange"></group-filter>
+                                  @onFilterChange="onFilterChange" :collapse-filter-group="isCollapseFilterGroup" :collapse-filter-group-count="collapseFilterGroupCount"></group-filter>
 					<!--  表达式区域  -->
                     <expr-list v-if="exprList && exprList.length > 0" :expr-list="exprList" 
-									@onExprChange="onExprChange"></expr-list>
+									@onExprChange="onExprChange" :collapse-filter-group="isCollapseFilterGroup" :collapse-filter-group-count="collapseFilterGroupCount"></expr-list>
                     <sort-list v-if="sortList && sortList.length > 0" :sort-list="sortList"
-                                    @onSortChange="onSortChange"></sort-list>
+                                    @onSortChange="onSortChange" :collapse-filter-group="isCollapseFilterGroup" :collapse-filter-group-count="collapseFilterGroupCount"></sort-list>
+                    <div class="collapse" v-if="(filterList && filterList.length > 0) || (exprList && exprList.length > 0) || (sortList && sortList.length > 0)">
+                        <span @click="onChangeCollapse(true)" v-if="!isCollapseFilterGroup">{{ $t('label.pack_more') }}</span>
+                        <span @click="onChangeCollapse(false)" v-else>{{ $t('label.spread_more') }}</span>
+                    </div>
                 </div>
                 <!--商品高级筛选-->
                 <!--<high-filtration></high-filtration>-->
@@ -97,9 +101,9 @@ export default {
     mixins: [publicData],
     data() {
         return {
-        //     searchTextParams: {
-        //         search_text: '',
-        //     }
+            // 是否折叠筛选组 false: 展开 true: 收起
+            isCollapseFilterGroup: true,
+            collapseFilterGroupCount: 2
         }
     },
     async mounted() {
@@ -598,6 +602,9 @@ export default {
         onLanguagechange() {
             this.$refs['language_popup'].open();
         },
+        onChangeCollapse(state) {
+            this.isCollapseFilterGroup = state;
+        }
     }
 }
 </script>
@@ -654,5 +661,18 @@ export default {
     border: 1px solid #DCDFE6;
     background-color: #FFF;
     padding: 20px 10px;
+}
+
+.collapse {
+    margin-top: 20px;
+    span {
+        cursor: pointer;
+        padding: 4px 8px;
+        border: 1px solid #CCC;
+        &:hover {
+            color: #FF4000;
+            border-color: #FF4000;
+        }
+    }
 }
 </style>

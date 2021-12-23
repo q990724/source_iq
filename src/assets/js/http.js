@@ -72,7 +72,7 @@ Service.interceptors.response.use(response => {
                 console.log(e);
             })
         }else {
-            // if(response.data.message) { 
+            // if(response.data.message) {
             //     Message.error(response.data.message);
             // }
             return Promise.reject(response.data.message || response.data.msg || i18n.t('unknown_error'));
