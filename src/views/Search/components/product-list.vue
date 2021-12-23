@@ -7,11 +7,29 @@
 				</div>
 				<div class="message">
 					<a class="name" :href="item.product.productUrl" target="_blank" v-html="item.product.displayTitle"></a>
-					<h2 class="price">
-						<i>{{ item.product.tradePrice[0].priceText }}</i> <span v-if="item.product.tradePrice[0].unit">
-							/ {{item.product.tradePrice[0].unit}}</span>
+					<h2 class="price" v-if="item.product.tradePrice && item.product.tradePrice.length > 0">
+                        <template v-for="price in item.product.tradePrice">
+                            <!-- 正常价 -->
+                            <div class="sale" v-if="price.type === 'wholesale' || price.type === 'sale'">
+                                <i>{{ price.priceText }}</i> <span v-if="item.product.tradePrice[0].unit"> / {{item.product.tradePrice[0].unit}}</span>
+                            </div>
+                            <!-- 划线价 -->
+                            <div class="retail" v-if="price.type === 'retail'">
+                                <del>{{ price.priceText }}</del>
+                            </div>
+                        </template>
 					</h2>
-					<p v-if="item.product.tradePrice[0].minOrder" style="text-overflow: ellipsis;white-space: nowrap;overflow: hidden;">{{item.product.tradePrice[0].minOrder}} (Min.Order)</p>
+                    <!--Min.Order-->
+                    <p v-if="item.product.tradePrice[0].minOrder" style="text-overflow: ellipsis;white-space: nowrap;overflow: hidden;">{{item.product.tradePrice[0].minOrder}} (Min.Order)</p>
+                    <!--评分和销量-->
+                    <div class="star_sale" v-if="item.product.rating || item.product.salesHistory">
+                        <div class="star" v-if="item.product.rating && item.product.rating.score && item.product.rating.score > 0">
+                            <el-rate v-model="item.product.rating.score" disabled show-score text-color="#ff9900" score-template="{value}"></el-rate>
+                        </div>
+                        <div class="sale_count" v-if="item.product.salesHistory">
+                            <span>{{item.product.salesHistory.totalSalesAmountText}}</span>
+                        </div>
+                    </div>
 					<!-- 如果卖家节点和年份都不存在时，就不渲染此div模块-->
 					<div class="supplier" v-if="showSeller">
 						<div class="year" v-if="item.seller && item.seller.years">
@@ -150,6 +168,8 @@
 			}
 
 			.price {
+                display: flex;
+                align-items: center;
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
@@ -157,11 +177,18 @@
 					font-size: 14px;
 				}
 
-				i {
+				i, del {
 					color: #FF4000;
 					font-size: 16px;
 					font-style: normal;
 				}
+
+                .retail {
+                    margin-left: 10px;
+                    del {
+                        color: #999;
+                    }
+                }
 			}
 
 			&>p {
