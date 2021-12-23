@@ -33,9 +33,9 @@
 			</div>
 			<!--<div class="clear"></div>-->
 		</div>
-        <!--<div class="no-result" v-if="$store.state.searchState === 'null'">-->
-        <!--    <p>{{$t('message.no_result_found')}}</p>-->
-        <!--</div>-->
+        <div class="no-result" v-if="$store.state.searchState === 'null'">
+            <p>{{$t('message.no_result_found')}}</p>
+        </div>
 		<!--&lt;!&ndash; TBD：如果搜索错误，也在页面底部显示错误提示。错误提示=具体接口请求返回的错误信息，暂时写死&ndash;&gt;-->
 		<!--<div class="no-result" v-if="$store.state.searchState === 'error' || $store.state.imageUploadState === 'error'">-->
 		<!--    <p>{{$store.state.api_error_msg}}</p>-->
