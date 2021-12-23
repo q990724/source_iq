@@ -158,7 +158,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         `);
         $("#setImagePath").remove();
     }else if(request.cmd == 'parse-title') {
-        sendResponse($('.s-matching-dir').html())
+        // sendResponse($('.s-matching-dir').html())
     }else if(request.cmd == 'setting-change') {
 		console.log("content收到setting-change，马上reload");
         // 收到插件设置改变消息
@@ -188,6 +188,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     }else if(request.cmd == 'update-cookie') {
         window.localStorage.setItem(`cookie-${request.value.source}`, request.value.cookie);
     }
-    sendResponse('get messsage');
+    sendResponse({msg: 'get messsage'});
     return true;
 });

@@ -127,9 +127,9 @@ function sendMessageToActiveTabContentScript(message, callback) {
         });
     });
 }
-// 发送消息给所有窗口的ContentScript.js
+// 发送消息给项目窗口的ContentScript.js
 function sendMessageToContentScript(message, callback) {
-    chrome.tabs.query({ }, function (tabs) {
+    chrome.tabs.query({title: 'SourceIQ'}, function (tabs) {
         for (let tab of tabs) {
             chrome.tabs.sendMessage(tab.id, message, function (response) {
                 if (callback) callback(response);
@@ -149,6 +149,7 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
         // 应用获取设置
         chrome.storage.local.get( {app_setting: null}, function(o) {
             sendResponse({app_setting: o.app_setting})
+            return true;
         })
     }
     return true;
