@@ -604,6 +604,7 @@ export default {
 
 <style scoped lang="scss">
 .search-result-container {
+    margin-bottom: 300px;
     .container {
         .main-container {
             min-width: 1390px;
