@@ -37,13 +37,12 @@ export default {
     },
     mounted() {
         console.log('app.vue mounted');
-        appElement = $('#app');
-        appElement.scroll(this.onAppScrollEvent.bind(this));
         window['$openFeedback'] = () => {
             this.onFeedback();
         }
 
-        $(window).scroll(async ()=> {
+        $(window).scroll(async (e)=> {
+            this.onAppScrollEvent($(window).scrollTop());
             let awayBtm = $(document).height() - $(window).scrollTop() - $(window).height();
             if (awayBtm <= minAwayBtm && this.$store.state.loadmore_busy) {
                 this.$store.state.loadmore_busy=false;
@@ -56,8 +55,7 @@ export default {
             console.log('app 收到loadmore事件');
             bus.$emit("loadmore");
         },
-        onAppScrollEvent(e) {
-            let top = appElement.scrollTop();
+        onAppScrollEvent(top) {
             this.showRightFixed = top >= 1500;
         },
         onGoTop() {
