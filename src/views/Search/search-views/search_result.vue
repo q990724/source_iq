@@ -78,7 +78,7 @@ import SortListComponent from "../components/sort-list";
 import MyCollapseComponent from '@/components/my-collapse';
 import LanguagePopupComponent from "@/components/language-popup";
 import bus from "@/assets/js/bus";
-import {getBase64FromCropImage, handleResponse, getFileFromBase64} from "@/assets/js/utils.js";
+import {getBase64FromCropImage, handleResponse, getFileFromBase64, debounce} from "@/assets/js/utils.js";
 import publicData from "../mixins/public.js";
 import {getSource} from "@/assets/js/source_map.js";
 
@@ -110,7 +110,7 @@ export default {
         console.log('search_result.vue mounted');
         console.log('source_id:',this.$store.state.source_id);
         // 加载更多
-        bus.$on('loadmore', this.loadmore.bind(this))
+        bus.$on('loadmore', debounce(this.loadmore.bind(this), 500));
         console.log("window.localStorage.upload-file:",window.localStorage.getItem('upload-file'));
         console.log("store.state.searchParams.mainImage:",this.$store.state.searchParams.mainImage);
         if (window.localStorage.getItem('has-upload-file')) {

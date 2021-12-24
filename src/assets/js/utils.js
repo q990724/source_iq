@@ -166,3 +166,13 @@ export function collapse(params){
 	console.log('state.searchParams扁平化之后:',params);
 	return params;
 }
+
+
+//防抖函数,在规定时间内只让最后一次生效
+export function debounce(fn, delay) {
+	let timer = null;
+	return function() {
+		clearTimeout(timer); //清除前一次的事件触发
+		timer = setTimeout(() => (fn.call(this)), delay); //重新设置定时触发事件
+	}
+}
