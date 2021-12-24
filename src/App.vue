@@ -22,6 +22,7 @@ import SoureMap from "@/assets/js/source_map.js";
 import {publicAPI} from "@/assets/js/apis";
 import feedback from "@/components/feedback";
 let appElement = null;
+let minAwayBtm = 0;
 export default {
     data() {
         return {
@@ -41,6 +42,14 @@ export default {
         window['$openFeedback'] = () => {
             this.onFeedback();
         }
+
+        $(window).scroll(async ()=> {
+            let awayBtm = $(document).height() - $(window).scrollTop() - $(window).height();
+            if (awayBtm <= minAwayBtm && this.$store.state.loadmore_busy) {
+                this.$store.state.loadmore_busy=false;
+                this.load();
+            }
+        })
     },
     methods: {
         load() {

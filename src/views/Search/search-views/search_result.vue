@@ -81,8 +81,7 @@ import bus from "@/assets/js/bus";
 import {getBase64FromCropImage, handleResponse, getFileFromBase64} from "@/assets/js/utils.js";
 import publicData from "../mixins/public.js";
 import {getSource} from "@/assets/js/source_map.js";
-let busy = true;
-let minAwayBtm = 0;
+
 export default {
     name: "view-",
     components: {
@@ -131,14 +130,7 @@ export default {
         }
 
 
-        $(window).scroll(async ()=> {
-            let awayBtm = $(document).height() - $(window).scrollTop() - $(window).height();
-            if (awayBtm <= minAwayBtm && busy) {
-                busy=false;
-                await this.loadmore();
-                busy = true;
-            }
-        })
+
     },
     methods: {
         // 获取缓存查看是否继续搜索或是否为插件带图跳转过来
@@ -334,14 +326,15 @@ export default {
                     return;
                 }
                 if (this.$store.state.searchType === 'image' && this.$store.state.imageUploadState === 'uploaded') {
-                    this.getDataFromImage(this.$store.state.searchParams.mainImage, true);
+                    await this.getDataFromImage(this.$store.state.searchParams.mainImage, true);
                 } else if (this.$store.state.searchType === 'text') {
-                    this.getDataFromText(true);
+                    await this.getDataFromText(true);
                 } else {
                     //TBD: 应该做异常处理
                     console.log("loadmore状态未知");
                 }
             }
+            this.$store.state.loadmore_busy = true;
         },
         // reUpload：true 需要重新上传图片；false 不需要重新上传图片，可以复用当前的imageAddress
         async imageSearch(base64, reUpload = true) {
@@ -569,6 +562,7 @@ export default {
                         if (result.data && result.data.resultInfo) {// && result.data.resultInfo.totalPages) {
                             // this.resultInfo = result.data.resultInfo;
                             this.totalPage = result.data.resultInfo.totalPages;	// || 1;
+                            console.log('``````````````````totalPage:', this.totalPage);
                         }
 
                         if (result.data && result.data.resultInfo && (result.data.resultInfo.sessionId || result.data.resultInfo.requestId)) {
