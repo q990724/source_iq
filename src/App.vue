@@ -59,7 +59,7 @@ export default {
             this.showRightFixed = top >= 1500;
         },
         onGoTop() {
-            appElement.scrollTop(0);
+            $(window).scrollTop(0);
         },
         onFeedback() {
             this.$refs['feedback'].open();

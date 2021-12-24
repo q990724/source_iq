@@ -1,16 +1,14 @@
 <template>
-    <div class="sort-list" v-if="sortList && Array.isArray(sortList) && sortList.length > 0">
-        <template v-if="!(collapseFilterGroup && filterIndex >= collapseFilterGroupCount)">
-            <my-collapse :title="'Sort'" :row-height="40">
-                <div class="item" v-for="(sort, index) in sortList" :key="index">
-                    <span @click="onClickItem(index, 'text')" :class="{'active': sort.selected}">{{ sort.title }}</span>
-                    <div class="up-down" v-if="sort.items">
-                        <i @click="onClickItem(index, 'asc')" :class="{'active': sort.items[0].selected}" class="el-icon-caret-top" v-if="sort.items[0] && sort.items[0]['order'] === 'asc'"></i>
-                        <i @click="onClickItem(index, 'desc')" :class="{'active': sort.items[1].selected}" class="el-icon-caret-bottom" v-if="sort.items[1] && sort.items[1]['order'] === 'desc'"></i>
-                    </div>
+    <div class="sort-list">
+        <my-collapse :title="'Sort'">
+            <div class="item" v-for="(sort, index) in sortList" :key="index">
+                <span @click="onClickItem(index, 'text')" :class="{'active': sort.selected}">{{ sort.title }}</span>
+                <div class="up-down" v-if="sort.items">
+                    <i @click="onClickItem(index, 'asc')" :class="{'active': sort.items[0].selected}" class="el-icon-caret-top" v-if="sort.items[0] && sort.items[0]['order'] === 'asc'"></i>
+                    <i @click="onClickItem(index, 'desc')" :class="{'active': sort.items[1].selected}" class="el-icon-caret-bottom" v-if="sort.items[1] && sort.items[1]['order'] === 'desc'"></i>
                 </div>
-            </my-collapse>
-        </template>
+            </div>
+        </my-collapse>
         <!--<el-collapse>-->
         <!--    <el-collapse-item title="Sort">-->
         <!--        <div class="list">-->

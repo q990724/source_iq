@@ -2,7 +2,7 @@
     <div class="expr-list" v-if="exprList && exprList.length > 0">
         <template v-for="(expr, index) in exprList">
             <div class="expr-item" :key="expr.title" v-if="!(collapseFilterGroup && index >= collapseFilterGroupCount)">
-                <my-collapse :title="expr.title" :row-height="expr.hasInput ? 40 : 25">
+                <my-collapse :title="expr.title">
                     <div class="item" v-for="(item, i) in expr.items" :key="i">
                         <!--type=bool-->
                         <div class="bool" v-if="item.exprType === 'bool'">
