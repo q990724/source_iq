@@ -1,7 +1,7 @@
 <template>
     <div class="search-result-container scrollable">
         <div class="container">
-            <div class="main-container">
+            <div class="main-container media-content">
                 <div class="header">
                     <!--logo-->
                     <div class="logo">
@@ -615,8 +615,8 @@ export default {
     margin-bottom: 300px;
     .container {
         .main-container {
-            min-width: 1390px;
-            width: 1390px;
+            //min-width: 1390px;
+            //width: 1390px;
             margin: auto;
             .header {
                 display: flex;

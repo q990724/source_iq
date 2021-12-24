@@ -101,18 +101,14 @@
         flex-wrap: wrap;
     }
 	.product-item {
-        width: 335px;
-        //min-height: 500px;
+        width: 266.4px;
 		background-color: #FFFFFF;
-		//box-shadow: 0 0 10px #DDD;
 		margin-right: 12px;
 		margin-bottom: 12px;
 		transition: all .2s;
-
 		&:hover {
 			box-shadow: 0 0 10px #DFDFDF;
 		}
-
 		.banner {
 			height: 220px;
 			overflow: hidden;

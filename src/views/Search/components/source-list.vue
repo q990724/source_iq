@@ -73,7 +73,6 @@ export default {
     align-items: center;
     justify-content: space-between;
     background-color: #FFF;
-    margin-bottom: 10px;
     .content {
         flex: 1;
         width: 100%;
@@ -83,7 +82,8 @@ export default {
         flex-wrap: wrap;
         .item {
             font-size: 20px;
-            margin-right: 60px;
+            margin-right: 50px;
+            padding: 5px 0;
             &.active {
                 color: #FF4000;
                 font-weight: bold;

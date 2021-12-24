@@ -200,9 +200,9 @@ export default {
 body {
     font-family: Microsoft YaHei, Heiti SC, tahoma, arial, Hiragino Sans GB,
     "\5B8B\4F53", sans-serif;
-    color: #6a6c6f;
-    font-size: 16px;
-    background-color: #efeff4;
+    color: $regular_text_color;
+    font-size: $regular_text_size;
+    background-color: $background_color;
 }
 
 #app {
@@ -212,8 +212,8 @@ body {
 
 .right-fixed-container {
     position: fixed;
-    right: 40px;
-    bottom: 100px;
+    right: 5%;
+    bottom: 10%;
 
     div {
         margin-bottom: 20px;

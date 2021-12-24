@@ -5,3 +5,58 @@
 .mt40 {
     margin-top: 40px;
 }
+
+// 背景色
+$background_color: #EFEFF4;
+// 主色
+$primary_color: #FF000;
+// 激活色
+$active_color: $primary_color;
+// hover色
+$hover_color: $primary_color;
+// line色
+$line_color: #AAAAAA;
+// 突出文字颜色
+$primary_text_color: #303133;
+// 普通文本颜色
+$regular_text_color: #606266;
+// 次要文字颜色
+$secondary_text_color: #909399;
+// 占位文字颜色
+$placeholder_text_color: #C0C4CC;
+
+// 突出文字字号
+$primary_text_size: 18px;
+// 普通文本字号
+$regular_text_size: 16px;
+// 次要文字字号
+$secondary_text_size: 14px;
+// 占位文字字号
+$placeholder_text_size: 12px;
+
+
+// 内容区最大宽度
+$content_width_lg: 1392px;
+// 内容区中屏幕宽度
+$content_width_md: 1114px;
+// 内容区小屏幕宽度
+$content_width_sm: 836px;
+
+// 媒体查询
+@media (min-width: 1420px) {
+    .media-content {
+        width: $content_width_lg;
+    }
+}
+
+@media (min-width: 1220px) and (max-width: 1419px) {
+    .media-content {
+        width: $content_width_md;
+    }
+}
+
+@media (max-width: 1219px) {
+    .media-content {
+        width: $content_width_sm;
+    }
+}
