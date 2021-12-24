@@ -48,7 +48,14 @@
                 "css/jquery.Jcrop.min.css",
                 "css/source_iq.css"
             ],
-            "run_at": "document_end"
+            "run_at": "document_idle"
+        },
+        {
+            "matches": ["http://*/*", "https://*/*"],
+            "js": [
+                "scripts/content-script1.js"
+            ],
+            "run_at": "document_start"
         }
     ],
     "default_locale": "en"

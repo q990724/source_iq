@@ -1,26 +1,3 @@
-console.log("注入js完成");
-// 打开页面后自动获取一次当前设置
-chrome.storage.local.get( {app_setting: null}, function(o) {
-	console.log("content.js->app-setting",JSON.stringify(o.app_setting));
-	//不清空chrome缓存的app-setting状态，只是COPY一份到window缓存
-    window.localStorage.setItem('app-setting', JSON.stringify(o.app_setting));
-});
-
-//TBD：需要“自我识别”，限制只有当前页面是搜索页才可以获取upload-file。目前如果多个content运行会有“race”争抢读写问题
-//TBD：当前假设当前content所在页面是被background创建或者消息唤醒；如果是用户自己打开搜索页，不应该获取upload-file发起搜索
-// 打开页面后自动获取一次Chrome缓存图片
-chrome.storage.local.get( {'upload-file': null}, function(o) {
-	console.log("content.js->up-loadfile",o['upload-file']);
-    if(o['upload-file']) {
-        chrome.storage.local.set({'upload-file': null}, function () {
-            window.localStorage.setItem('has-upload-file', 'true');
-            window.localStorage.setItem('upload-file', o['upload-file']);
-            window.location.reload();
-        })
-    }
-});
-console.log("content.js加载完成");
-
 function coverImage(e) {
     return new Promise((resolve, reject) => {
         let path = $("#ele").attr("src");
@@ -29,7 +6,7 @@ function coverImage(e) {
         let canvas = document.createElement("canvas");
         let cxt = canvas.getContext("2d");
         img.src = path;
-        img.onload = function() {
+        img.onload = function () {
             canvas.width = e.w;
             canvas.height = e.h;
             cxt.drawImage(img, e.x, e.y, e.w, e.h, 0, 0, e.w, e.h);
@@ -41,19 +18,19 @@ function coverImage(e) {
 }
 
 $(document.body).append(`
-        <div id="source_iq_app">
-            <div class="cover-image">
-                <img src="#" alt="" id="ele" width="100%">
-                <div class="mark"></div>
-                <div class="confirm">
-                    <span>${chrome.i18n.getMessage('confirm')}</span>
-                    <i>${chrome.i18n.getMessage('cancle')}</i>
-                </div>
+    <div id="source_iq_app">
+        <div class="cover-image">
+            <img src="#" alt="" id="ele" width="100%">
+            <div class="mark"></div>
+            <div class="confirm">
+                <span>${chrome.i18n.getMessage('confirm')}</span>
+                <i>${chrome.i18n.getMessage('cancle')}</i>
             </div>
         </div>
-    `);
+    </div>
+`);
 
-$(function() {
+$(function () {
     $('.confirm').hide();
     let coverImageRes = '';
     $('#ele').Jcrop({
@@ -66,8 +43,8 @@ $(function() {
             $('.confirm').show();
             $(".confirm").css('top', (e.y + e.h + 10) / window.devicePixelRatio + 'px');
             $(".confirm").css('left', (e.x) / window.devicePixelRatio + 'px');
-            coverImage(e).then(res=>{
-				//TBD：需要检查截图是否成功，成功再uploadImage，失败做异常处理
+            coverImage(e).then(res => {
+                //TBD：需要检查截图是否成功，成功再uploadImage，失败做异常处理
                 coverImageRes = {
                     action: 'uploadImage',
                     value: {
@@ -86,14 +63,14 @@ $(function() {
         window.$crop = this;
     });
 
-    $('.confirm > i').click(function() {
-		//TBD：需要检查截图是否成功，成功再uploadImage，失败做异常处理
+    $('.confirm > i').click(function () {
+        //TBD：需要检查截图是否成功，成功再uploadImage，失败做异常处理
         $('#source_iq_app').hide();
     });
 
-    $('.confirm > span').click(function() {
+    $('.confirm > span').click(function () {
         $('#source_iq_app').hide();
-		//TBD：需要检查截图是否成功，成功再uploadImage，失败做异常处理
+        //TBD：需要检查截图是否成功，成功再uploadImage，失败做异常处理
         chrome.runtime.sendMessage(coverImageRes);
 
     });
@@ -101,13 +78,16 @@ $(function() {
     function getQueryVariable(variable) {
         let query = window.location.search.substring(1);
         let vars = query.split("&");
-        for (let i=0;i<vars.length;i++) {
+        for (let i = 0; i < vars.length; i++) {
             let pair = vars[i].split("=");
-            if(pair[0] == variable){return pair[1];}
+            if (pair[0] == variable) {
+                return pair[1];
+            }
         }
-        return(false);
+        return (false);
     }
-    function updateUrl( key, value){
+
+    function updateUrl(key, value) {
         var newurl = updateQueryStringParameter(key, value)
         //向当前url添加参数，没有历史记录
         window.history.replaceState({
@@ -117,20 +97,20 @@ $(function() {
 
     function updateQueryStringParameter(key, value) {
         var uri = window.location.href
-        if(!value) {
+        if (!value) {
             return uri;
         }
         var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
         var separator = uri.indexOf('?') !== -1 ? "&" : "?";
         if (uri.match(re)) {
             return uri.replace(re, '$1' + key + "=" + value + '$2');
-        }
-        else {
+        } else {
             return uri + separator + key + "=" + value;
         }
     }
+
     let refreshUploadFile = getQueryVariable('refreshUploadFile');
-    if(refreshUploadFile === 'true') {
+    if (refreshUploadFile === 'true') {
         // 从chrome缓存中获取最新的base64
         chrome.storage.local.get({'upload-file': null}, function (o) {
             // 存储到window缓存中
@@ -157,37 +137,39 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             </script>
         `);
         $("#setImagePath").remove();
-    }else if(request.cmd == 'parse-title') {
+    } else if (request.cmd == 'parse-title') {
         // sendResponse($('.s-matching-dir').html())
-    }else if(request.cmd == 'setting-change') {
-		console.log("content收到setting-change，马上reload");
+    } else if (request.cmd == 'setting-change') {
+        console.log("content收到setting-change，马上reload");
         // 收到插件设置改变消息
         // 将新的设置写入到window缓存中
         window.localStorage.setItem('app-setting', JSON.stringify(request.value.appSetting));
         // 如果当前window的title=SourceIQ，则刷新页面
-        if(window.document.title === 'SourceIQ') {
+        if (window.document.title === 'SourceIQ') {
             window.location.reload();
         }
-    }else if(request.cmd == 'image-file') {
+    } else if (request.cmd == 'image-file') {
         // 收到base64更新的消息
         // 从chrome缓存中获取最新的base64
         chrome.storage.local.get({'upload-file': null}, function (o) {
             window.localStorage.setItem('has-upload-file', 'true');
-			//TBD：需要“自我识别”，限制只有当前页面是搜索页才可以获取upload-file。目前如果多个content运行会有“race”争抢读写问题
-			//TBD：当前假设当前content所在页面是被background创建或者消息唤醒；如果是用户自己打开搜索页，不应该获取upload-file发起搜索
+            //TBD：需要“自我识别”，限制只有当前页面是搜索页才可以获取upload-file。目前如果多个content运行会有“race”争抢读写问题
+            //TBD：当前假设当前content所在页面是被background创建或者消息唤醒；如果是用户自己打开搜索页，不应该获取upload-file发起搜索
             chrome.storage.local.set({'upload-file': null}, function () {
                 // 存储到window缓存中
                 window.localStorage.setItem('upload-file', o['upload-file']);
                 // 如果当前window的title=SourceIQ，则刷新页面
-                if(window.document.title === 'SourceIQ') {
-					console.log("content收到upload-file，马上reload");
+                if (window.document.title === 'SourceIQ') {
+                    console.log("content收到upload-file，马上reload");
                     window.location.reload();
                 }
             })
         });
-    }else if(request.cmd == 'update-cookie') {
+    } else if (request.cmd == 'update-cookie') {
         window.localStorage.setItem(`cookie-${request.value.source}`, request.value.cookie);
     }
     sendResponse({msg: 'get messsage'});
     return true;
 });
+
+console.log("content.js加载完成");
