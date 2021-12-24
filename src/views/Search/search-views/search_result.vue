@@ -24,6 +24,7 @@
                 </div>
                 <text-search ref="text_search" @onClickSearchButton="onClickSearchButton"
                              @onSelectImage="onSelectImage"></text-search>
+				<source-list @onSourceItemClick="onSourceItemClick"></source-list>
                 <!--  图片处理区域  -->
                 <image-operation ref="image_operation" @onClickLocalItem="onClickLocalItem"
                                  @onClickMainImage="onClickMainImage" @onClickSearchText="onClickSearchText" @onClickClear="onClickClear"></image-operation>
@@ -31,7 +32,7 @@
                 <!-- v-if="(categoryList && categoryList.items) || (filterList && filterList.length > 0) || $store.state.searchState !== 'none' || $store.state.mainImage || $store.state.searchText" -->
                 <div class="filter-container mt40">
                     <!-- v-show="$store.state.searchState !== 'none' || $store.state.mainImage || $store.state.searchText" -->
-                    <source-list @onSourceItemClick="onSourceItemClick"></source-list>
+<!--                    <source-list @onSourceItemClick="onSourceItemClick"></source-list> -->
                     <!-- 商品分类 -->
                     <product-class v-if="categoryList && categoryList.items" :class_list="categoryList"
                                    @onClassChange="onClassChange"></product-class>
