@@ -334,7 +334,6 @@ export default {
                     console.log("loadmore状态未知");
                 }
             }
-            this.$store.state.loadmore_busy = true;
         },
         // reUpload：true 需要重新上传图片；false 不需要重新上传图片，可以复用当前的imageAddress
         async imageSearch(base64, reUpload = true) {

@@ -525,6 +525,8 @@ export default new Vuex.Store({
                     console.log('Store请求接口发生错误：', e);
                     content.state.searchState = 'error';
                     content.state.api_error_msg = e;
+                }finally {
+                    content.state.loadmore_busy = true;
                 }
             })
         },
@@ -553,6 +555,8 @@ export default new Vuex.Store({
                 }catch (e) {
                     content.state.searchState = 'error';
                     content.state.api_error_msg = e;
+                }finally {
+                    content.state.loadmore_busy = true;
                 }
 
             })
@@ -707,6 +711,8 @@ export default new Vuex.Store({
                 }catch (e) {
                     content.state.searchState = 'error';
                     content.state.api_error_msg = e;
+                }finally {
+                    content.state.loadmore_busy = true;
                 }
             })
         },
@@ -730,6 +736,8 @@ export default new Vuex.Store({
                 }catch (e) {
                     content.state.searchState = 'error';
                     content.state.api_error_msg = e;
+                }finally {
+                    content.state.loadmore_busy = true;
                 }
             })
         },
