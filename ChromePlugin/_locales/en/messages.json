@@ -16,11 +16,11 @@
     "description": "默认"
   },
   "contextMenusButton": {
-    "message": "Source IQ",
+    "message": "Sourcefrom",
     "description": "chrome右键菜单按钮名称"
   },
   "projectName": {
-    "message": "Source IQ",
+    "message": "Sourcefrom",
     "description": "项目名称"
   },
   "selectSource": {

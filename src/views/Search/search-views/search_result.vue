@@ -5,7 +5,7 @@
                 <div class="header">
                     <!--logo-->
                     <div class="logo">
-                        <img src="@/assets/img/source/1688.png" alt="logo">
+                        <img src="@/assets/img/logo2.png" alt="logo">
                     </div>
                     <!--右侧区域-->
                     <div class="right-wrap">
@@ -24,13 +24,15 @@
                 </div>
                 <text-search ref="text_search" @onClickSearchButton="onClickSearchButton"
                              @onSelectImage="onSelectImage"></text-search>
-				<source-list @onSourceItemClick="onSourceItemClick"></source-list>
+                <div class="filter-container mt40">
+                    <source-list @onSourceItemClick="onSourceItemClick"></source-list>
+                </div>
                 <!--  图片处理区域  -->
                 <image-operation ref="image_operation" @onClickLocalItem="onClickLocalItem"
                                  @onClickMainImage="onClickMainImage" @onClickSearchText="onClickSearchText" @onClickClear="onClickClear"></image-operation>
                 <!--  筛选区域  -->
                 <!-- v-if="(categoryList && categoryList.items) || (filterList && filterList.length > 0) || $store.state.searchState !== 'none' || $store.state.mainImage || $store.state.searchText" -->
-                <div class="filter-container mt40">
+                <div class="filter-container mt40" v-if="(categoryList && categoryList.items) || (filterList && filterList.length > 0) || (exprList && exprList.length > 0) || (sortList && sortList.length > 0)">
                     <!-- v-show="$store.state.searchState !== 'none' || $store.state.mainImage || $store.state.searchText" -->
 <!--                    <source-list @onSourceItemClick="onSourceItemClick"></source-list> -->
                     <!-- 商品分类 -->
@@ -630,7 +632,7 @@ export default {
                 border-bottom: 1px solid $line_color;
                 .logo {
                     img {
-                        width: 150px;
+                        width: 50px;
                     }
                 }
                 .right-wrap {

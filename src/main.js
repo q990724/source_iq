@@ -22,6 +22,8 @@ export const i18n = new VueI18n({
     }
 })
 
+document.title = i18n.t('label.projectName');
+
 let v = new Vue({
     router,
     store,

@@ -22,6 +22,7 @@ module.exports = {
 		upload_pic: '上传截图',
 		contact: '联系方式',
 		message:'留言内容',
+        projectName: '搜货源',
     },
     button: {
         more: '更多',

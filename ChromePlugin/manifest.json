@@ -9,9 +9,9 @@
         "default_title": "图片搜索"
     },
     "icons": {
-        "12": "images/icon-64.png",
-        "48": "images/icon-64.png",
-        "128": "images/icon-64.png"
+        "32": "images/icon-32.png",
+        "64": "images/icon-64.png",
+        "128": "images/icon-128.png"
     },
     "background": {
         "scripts": [

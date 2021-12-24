@@ -40,7 +40,8 @@ module.exports = {
 		expand:'+',
 		collapse:'-',
         spread_more: 'Expand',
-        pack_more: 'Collapse'
+        pack_more: 'Collapse',
+        projectName: 'Sourcefrom',
     },
     button: {
         more: 'More',
