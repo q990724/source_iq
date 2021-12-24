@@ -2,54 +2,69 @@
 	<div>
 		<div class="product-list mt40" v-if="offer_list && offer_list.length > 0">
 			<div class="product-item" v-for="(item, i) in offer_list" :key="item.product.displayTitle + Math.random()">
-				<div class="banner" @click="openHref(item.product.productUrl)">
-					<img :src="item.product.media.coverImageUrl" alt="">
-				</div>
-				<div class="message">
-					<div class="product">
-                        <a class="name" :href="item.product.productUrl" target="_blank" v-html="item.product.displayTitle"></a>
-                        <h2 class="price" v-if="item.product.tradePrice && item.product.tradePrice.length > 0">
-                            <template v-for="price in item.product.tradePrice">
-                                <!-- 正常价 -->
-                                <div class="sale" v-if="price.type === 'wholesale' || price.type === 'sale'">
-                                    <i>{{ price.priceText }}</i> <span v-if="item.product.tradePrice[0].unit"> / {{item.product.tradePrice[0].unit}}</span>
+                <div class="product-item_content">
+                    <div class="banner" @click="openHref(item.product.productUrl)">
+                        <img :src="item.product.media.coverImageUrl" alt="">
+                    </div>
+                    <div class="message">
+                        <div class="product">
+                            <a class="name" :href="item.product.productUrl" target="_blank" v-html="item.product.displayTitle"></a>
+                            <h2 class="price one-line" v-if="item.product.tradePrice && item.product.tradePrice.length > 0">
+                                <template v-for="price in item.product.tradePrice">
+                                    <!-- 正常价 -->
+                                    <div class="sale" v-if="price.type === 'wholesale' || price.type === 'sale'">
+                                        <i>{{ price.priceText }}</i> <span v-if="item.product.tradePrice[0].unit"> / {{item.product.tradePrice[0].unit}}</span>
+                                    </div>
+                                    <!-- 划线价 -->
+                                    <div class="retail" v-if="price.type === 'retail'">
+                                        <del>{{ price.priceText }}</del>
+                                    </div>
+                                </template>
+                            </h2>
+                            <!--Min.Order-->
+                            <p class="min-order" v-if="item.product.tradePrice[0].minOrder">{{item.product.tradePrice[0].minOrder}} (Min.Order)</p>
+                            <!--评分和销量-->
+                            <div class="star_sale" v-if="item.product.rating || item.product.salesHistory">
+                                <div class="star" v-if="item.product.rating && item.product.rating.score && item.product.rating.score > 0">
+                                    <el-rate v-model="item.product.rating.score" disabled show-score text-color="#ff9900" score-template="{value}"></el-rate>
                                 </div>
-                                <!-- 划线价 -->
-                                <div class="retail" v-if="price.type === 'retail'">
-                                    <del>{{ price.priceText }}</del>
+                                <div class="sale_count one-line" v-if="item.product.salesHistory">
+                                    <span>{{item.product.salesHistory.totalSalesAmountText}}</span>
                                 </div>
-                            </template>
-                        </h2>
-                        <!--Min.Order-->
-                        <p v-if="item.product.tradePrice[0].minOrder" style="text-overflow: ellipsis;white-space: nowrap;overflow: hidden;">{{item.product.tradePrice[0].minOrder}} (Min.Order)</p>
-                        <!--评分和销量-->
-                        <div class="star_sale" v-if="item.product.rating || item.product.salesHistory">
-                            <div class="star" v-if="item.product.rating && item.product.rating.score && item.product.rating.score > 0">
-                                <el-rate v-model="item.product.rating.score" disabled show-score text-color="#ff9900" score-template="{value}"></el-rate>
-                            </div>
-                            <div class="sale_count" v-if="item.product.salesHistory">
-                                <span>{{item.product.salesHistory.totalSalesAmountText}}</span>
+                                <div v-else style="height: 20px;"></div>
                             </div>
                         </div>
+                        <!-- 如果卖家节点和年份都不存在时，就不渲染此div模块-->
+                        <div class="supplier" v-if="showSeller">
+                            <div class="year_name">
+                                <div class="year" v-if="item.seller && item.seller.years">
+                                    <span>{{item.seller.years}}</span>
+                                    <sup>YRS</sup>
+                                </div>
+                                <!-- 鲁棒性检查seller.homeUrl是否为NULL再增加点击事件 -->
+                                <div class="supplier-name" v-if="item.seller && item.seller.name && item.seller.homeUrl " @click="openHref(item.seller.homeUrl)" :title="item.seller.name">{{item.seller.name}}</div>
+                                <div class="supplier-name" v-else-if="item.seller && item.seller.name" :title="item.seller.name">{{item.seller.name}}</div>
+                            </div>
+                            <div class="credentials" v-if="item.seller.credentials && item.seller.credentials.length > 0">
+                                <div class="cre" v-for="(cre, cre_i) in item.seller.credentials" :key="cre_i">
+                                    <div class="cre_image" v-if="cre.displayType === 'image'">
+                                        <img :src="cre.icon.value" alt="" v-if="cre.icon.type === 'url'">
+                                        <i v-if="cre.icon.type === 'font'" :style="{'color': cre.icon.value.color}" v-for="icon in cre.icon.value.repeatCount + 1">{{cre.icon.value.fontLabel}}</i>
+                                    </div>
+                                    <div class="cre_text" v-if="cre.displayType === 'text'"></div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
-					<!-- 如果卖家节点和年份都不存在时，就不渲染此div模块-->
-					<div class="supplier" v-if="showSeller">
-						<div class="year" v-if="item.seller && item.seller.years">
-							<span>{{item.seller.years}}</span>
-							<sup>YRS</sup>
-						</div>
-						<!-- 鲁棒性检查seller.homeUrl是否为NULL再增加点击事件 -->
-						<div class="supplier-name" v-if="item.seller && item.seller.name && item.seller.homeUrl " @click="openHref(item.seller.homeUrl)">{{item.seller.name}}</div>
-						<div class="supplier-name" v-else-if="item.seller && item.seller.name">{{item.seller.name}}</div>
-					</div>
-				</div>
-				<!-- 鲁棒性检查seller.homeUrl是否为NULL再增加点击事件 -->
-				<div class="bottom" v-if="showSeller && item.seller && item.seller.homeUrl && item.seller.name">
-					<span @click="openHref(item.seller.homeUrl)">{{item.seller.name}}</span>
-				</div>
-				<div class="bottom" v-else-if="showSeller && item.seller">
-					<span>{{item.seller.name}}</span>
-				</div>
+                    <!-- 鲁棒性检查seller.homeUrl是否为NULL再增加点击事件 -->
+                    <div class="bottom one-line" v-if="showSeller && item.seller && item.seller.homeUrl && item.seller.name">
+                        <span @click="openHref(item.seller.homeUrl)" :title="item.seller.name">{{item.seller.name}}</span>
+                    </div>
+                    <div class="bottom one-line" v-else-if="showSeller && item.seller">
+                        <span :title="item.seller.name">{{item.seller.name}}</span>
+                    </div>
+                </div>
 			</div>
 			<!--<div class="clear"></div>-->
 		</div>
@@ -101,13 +116,20 @@
         align-items: center;
         justify-content: flex-start;
         flex-wrap: wrap;
+        margin-left: -10px;
+        margin-right: -10px;
     }
 	.product-item {
-        width: 266.4px;
-		background-color: #FFFFFF;
-		margin-right: 12px;
+        width: 25%;
+        flex: 0 0 25%;
 		margin-bottom: 12px;
 		transition: all .2s;
+        padding: 10px;
+        border-radius: 10px;
+        .product-item_content {
+            background-color: #FFFFFF;
+            border-radius: 10px;
+        }
 		&:hover {
 			box-shadow: 0 0 10px #DFDFDF;
 		}
@@ -121,27 +143,27 @@
 				height: 100%;
 				object-fit: contain;
 				background-color: #FFF;
-				transition: all .5s;
+				transition: all .2s;
 			}
 
-			//&:hover {
-			//    img {
-			//        transform: scale(1.05);
-			//    }
-			//}
+			&:hover {
+			    img {
+			        transform: scale(1.05);
+			    }
+			}
 		}
 
 		.message {
             width: 100%;
 			padding: 10px 10px 20px 10px;
-			border-bottom: 1px solid $line_color;
+			//border-bottom: 1px solid $line_color;
 
 			.name {
 				display: -webkit-box;
 				-webkit-box-orient: vertical;
 				-webkit-line-clamp: 2;
 				overflow: hidden;
-				font-size: 14px;
+				font-size: $regular_text_size;
                 line-height: 21px;
 				margin-bottom: 10px;
 				color: #000;
@@ -153,7 +175,7 @@
 				}
 
 				&:hover {
-					color: #FF4000;
+					color: $hover_color;
 				}
 			}
 
@@ -168,63 +190,92 @@
 			.price {
                 display: flex;
                 align-items: center;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-				span {
-					font-size: 14px;
-				}
-
-				i, del {
-					color: #FF4000;
-					font-size: 16px;
-					font-style: normal;
-				}
+                margin-bottom: 10px;
+                .sale{
+                    i {
+                        font-size: $primary_text_size;
+                        color: $primary_color;
+                        font-style: normal;
+                    }
+                    span {
+                        font-size: $secondary_text_size;
+                    }
+                }
 
                 .retail {
                     margin-left: 10px;
                     del {
-                        color: #999;
+                        color: $secondary_text_color;
+                        font-size: $secondary_text_size;
                     }
                 }
 			}
 
-			&>p {
-				font-size: 14px;
-			}
+            .min-order {
+                font-size: $secondary_text_size;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                overflow: hidden;
+                margin-bottom: 10px;
+            }
+
+            .star_sale {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-bottom: 10px;
+                .star {
+                    height: 20px;
+                    ::v-deep .el-rate__text {
+                        display: inline-block;
+                        margin-top: 2px;
+                    }
+                }
+            }
 
 			.supplier {
-				display: flex;
-				align-items: center;
-				margin-top: 20px;
+                .year_name {
+                    display: flex;
+                    align-items: center;
+                    margin-bottom: 10px;
+                    .year {
+                        sup {
+                            margin-left: 5px;
+                        }
 
-				.year {
-					sup {
-						margin-left: 5px;
-					}
+                        margin-right: 20px;
+                    }
 
-                    margin-right: 20px;
-				}
-
-				.supplier-name {
-					cursor: pointer;
-					font-size: 14px;
-					overflow: hidden;
-					text-overflow: ellipsis;
-					white-space: nowrap;
-				}
+                    .supplier-name {
+                        cursor: pointer;
+                        font-size: $secondary_text_size;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                    }
+                }
+				.credentials {
+                    display: flex;
+                    align-items: center;
+                    flex-wrap: wrap;
+                    .cre {
+                        margin-right: 10px;
+                        .cre_image {
+                            img {
+                                width: 42px;
+                            }
+                        }
+                    }
+                }
 			}
 		}
 
 		.bottom {
             width: 100%;
-			font-size: 14px;
+			font-size: $secondary_text_size;
 			padding: 10px;
-			color: #333;
-			text-overflow: ellipsis;
-			white-space: nowrap;
-			overflow: hidden;
-
+			color: $regular_text_color;
+            border-top: 1px solid $line_color;
 			span {
 				cursor: pointer;
 			}

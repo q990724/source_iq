@@ -6,6 +6,8 @@
     margin-top: 40px;
 }
 
+$font_family: rubik,sans-serif,Arial,microsoft yahei;
+
 // 背景色
 $background_color: #EFEFF4;
 // 主色
@@ -36,27 +38,36 @@ $placeholder_text_size: 12px;
 
 
 // 内容区最大宽度
-$content_width_lg: 1392px;
+$content_width_lg: 1200px;
 // 内容区中屏幕宽度
 $content_width_md: 1114px;
 // 内容区小屏幕宽度
 $content_width_sm: 836px;
 
-// 媒体查询
-@media (min-width: 1420px) {
-    .media-content {
-        width: $content_width_lg;
-    }
+.media-content {
+    width: $content_width_lg;
+}
+.one-line {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
-@media (min-width: 1220px) and (max-width: 1419px) {
-    .media-content {
-        width: $content_width_md;
-    }
-}
-
-@media (max-width: 1219px) {
-    .media-content {
-        width: $content_width_sm;
-    }
-}
+//// 媒体查询
+//@media (min-width: 1420px) {
+//    .media-content {
+//        width: $content_width_lg;
+//    }
+//}
+//
+//@media (min-width: 1220px) and (max-width: 1419px) {
+//    .media-content {
+//        width: $content_width_md;
+//    }
+//}
+//
+//@media (max-width: 1219px) {
+//    .media-content {
+//        width: $content_width_sm;
+//    }
+//}

@@ -77,6 +77,24 @@ export function getFileFromBase64(base64Data) {
  * @returns Promise -> {Array}
  */
 export function getBase64FromCropImage(imagePath, regionList) {
+	function getImagePortion(imgObj, newWidth, newHeight, startX, startY, ratio) {
+		/* the parameters: - the image element - the new width - the new height - the x point we start taking pixels - the y point we start taking pixels - the ratio */
+		//set up canvas for thumbnail
+		var tnCanvas = document.createElement('canvas');
+		var tnCanvasContext = tnCanvas.getContext('2d');
+		tnCanvas.width = newWidth; tnCanvas.height = newHeight;
+
+		/* use the sourceCanvas to duplicate the entire image. This step was crucial for iOS4 and under devices. Follow the link at the end of this post to see what happens when you don’t do this */
+		var bufferCanvas = document.createElement('canvas');
+		var bufferContext = bufferCanvas.getContext('2d');
+		bufferCanvas.width = imgObj.width;
+		bufferCanvas.height = imgObj.height;
+		bufferContext.drawImage(imgObj, 0, 0);
+
+		/* now we use the drawImage method to take the pixels from our bufferCanvas and draw them into our thumbnail canvas */
+		tnCanvasContext.drawImage(bufferCanvas, startX, startY, newWidth * ratio, newHeight * ratio, 0, 0, newWidth, newHeight);
+		return tnCanvas.toDataURL();
+	}
 	return new Promise((resolve, reject) => {
 		try{
 			let imageList = [];
@@ -85,15 +103,9 @@ export function getBase64FromCropImage(imagePath, regionList) {
 			image.crossOrigin = '';
 			image.onload = function(o) {
 				for(let item of regionList) {
-					let arr = item.split(',');
-					let sx = arr[0], sy = arr[1], sw = arr[2], sh = arr[3];
-					let canvas = document.createElement('canvas');
-					let ctx = canvas.getContext('2d');
-					//TBD：此处region的xywh顺序可能错位
-					canvas.width = sy-sx
-					canvas.height = sh-sw
-					ctx.drawImage(image, sx, sw, sy, sh, 0, 0, image.width, image.height);
-					let base64 = canvas.toDataURL('image/jpg');
+					let region_arr = item.split(',');
+					let x1 = region_arr[0], y1 = region_arr[2], x2 = region_arr[1], y2 = region_arr[3];
+					let base64 = getImagePortion(image, x2 - x1, y2 - y1, x1, y1, 1);
 					let localItem = {
 						id: new Date().getTime(),
 						cover: base64,

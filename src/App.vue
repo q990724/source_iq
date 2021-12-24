@@ -206,11 +206,11 @@ export default {
 }
 
 body {
-    font-family: Microsoft YaHei, Heiti SC, tahoma, arial, Hiragino Sans GB,
-    "\5B8B\4F53", sans-serif;
+    font-family: $font_family;
     color: $regular_text_color;
     font-size: $regular_text_size;
     background-color: $background_color;
+    min-width: $content_width_sm;
 }
 
 #app {

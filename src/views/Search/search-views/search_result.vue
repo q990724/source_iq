@@ -620,6 +620,7 @@ export default {
 <style scoped lang="scss">
 .search-result-container {
     margin-bottom: 300px;
+    padding-right: 40px;
     .container {
         .main-container {
             margin: auto;
