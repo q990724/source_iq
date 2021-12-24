@@ -1,5 +1,6 @@
 <template>
-    <div id="app" v-infinite-scroll="load" infinite-scroll-immediate="false">
+    <!--<div id="app" v-infinite-scroll="load" infinite-scroll-immediate="false">-->
+    <div id="app">
         <router-view :key="key"></router-view>
         <div class="right-fixed-container">
             <!--返回顶部-->
@@ -206,19 +207,26 @@ body {
 }
 
 #app {
-    overflow-y: auto;
-    height: 100vh;
+    //overflow-y: auto;
+    //height: 100vh;
 }
 
 .right-fixed-container {
     position: fixed;
-    right: 5%;
-    bottom: 10%;
-
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 40px;
+    z-index: 1999;
+    background: #373737;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
     div {
+        width: 100%;
+        text-align: center;
         margin-bottom: 20px;
-        background: rgba(0, 0, 0, .3);
-        padding: 10px;
         box-sizing: border-box;
         border-radius: 4px;
         cursor: pointer;

@@ -132,7 +132,7 @@
 		.message {
             width: 100%;
 			padding: 10px 10px 20px 10px;
-			border-bottom: 1px solid #DEDEDE;
+			border-bottom: 1px solid $line_color;
 
 			.name {
 				display: -webkit-box;
@@ -147,7 +147,7 @@
 				text-decoration: none;
                 height: 45px;
 				&:visited {
-					color: #333333;
+					color: $regular_text_color;
 				}
 
 				&:hover {

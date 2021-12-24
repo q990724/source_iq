@@ -81,7 +81,8 @@ import bus from "@/assets/js/bus";
 import {getBase64FromCropImage, handleResponse, getFileFromBase64} from "@/assets/js/utils.js";
 import publicData from "../mixins/public.js";
 import {getSource} from "@/assets/js/source_map.js";
-
+let busy = true;
+let minAwayBtm = 0;
 export default {
     name: "view-",
     components: {
@@ -128,6 +129,16 @@ export default {
             console.log("mounted->onClickSearchButton");
             this.onClickSearchButton({searchText: this.$store.state.searchParams['searchText']});
         }
+
+
+        $(window).scroll(async ()=> {
+            let awayBtm = $(document).height() - $(window).scrollTop() - $(window).height();
+            if (awayBtm <= minAwayBtm && busy) {
+                busy=false;
+                await this.loadmore();
+                busy = true;
+            }
+        })
     },
     methods: {
         // 获取缓存查看是否继续搜索或是否为插件带图跳转过来
@@ -615,8 +626,6 @@ export default {
     margin-bottom: 300px;
     .container {
         .main-container {
-            //min-width: 1390px;
-            //width: 1390px;
             margin: auto;
             .header {
                 display: flex;
@@ -624,7 +633,7 @@ export default {
                 justify-content: space-between;
                 padding: 10px 0;
                 margin-bottom: 10px;
-                border-bottom: 1px solid #DDD;
+                border-bottom: 1px solid $line_color;
                 .logo {
                     img {
                         width: 150px;
@@ -639,7 +648,7 @@ export default {
                     .right-wrap_btn {
                         cursor: pointer;
                         &:hover {
-                            color: #FF4000;
+                            color: $hover_color;
                         }
                     }
                     .tags {
@@ -659,7 +668,7 @@ export default {
 
 .filter-container {
     border-radius: 10px;
-    border: 1px solid #DCDFE6;
+    border: 1px solid $line_color;
     background-color: #FFF;
     padding: 20px 10px;
 }
@@ -671,8 +680,8 @@ export default {
         padding: 4px 8px;
         border: 1px solid #CCC;
         &:hover {
-            color: #FF4000;
-            border-color: #FF4000;
+            color: $hover_color;
+            border-color: $primary_color;
         }
     }
 }

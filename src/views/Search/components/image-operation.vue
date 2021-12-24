@@ -158,7 +158,7 @@ export default {
     background-color: #FFF;
     padding: 20px 10px;
     border-radius: 10px;
-    border: 1px solid #DCDFE6;
+    border: 1px solid $line_color;
     .left {
         flex: 1;
         display: flex;
@@ -170,7 +170,7 @@ export default {
                 margin-right: 10px;
                 margin-bottom: 10px;
                 padding: 5px 8px;
-                border: 1px solid #FF4000;
+                border: 1px solid $active_color;
                 border-radius: 5px;
                 font-size: 14px;
             }
@@ -191,10 +191,10 @@ export default {
                 background-color: #FFF;
             }
             &:hover {
-                border-color: #FF4000;
+                border-color: $hover_color;
             }
             &.active {
-                border: 1px solid #FF4000;
+                border: 1px solid $active_color;
                 span.right-top-triangle, img.chose {
                     display: block;
                 }
@@ -208,8 +208,8 @@ export default {
                 height: 0;
                 border-width: 10px;
                 border-style: solid;
-                border-color: #FF4000 #FF4000 transparent transparent;
-                color: #FF4000;
+                border-color: $primary_color $primary_color transparent transparent;
+                color: $primary_color;
             }
             img.chose {
                 display: none;
@@ -241,7 +241,7 @@ export default {
                 position: absolute;
                 right: 0;
                 bottom: 0;
-                background-color: #FF4000;
+                background-color: $primary_color;
                 color: #FFF;
                 font-size: 12px;
                 padding: 2px 5px;
@@ -258,7 +258,7 @@ export default {
                 right: 0;
                 font-size: 18px;
                 &:hover {
-                    color: #FF4000;
+                    color: $hover_color;
                 }
             }
             &:hover > i.clear {
@@ -269,7 +269,7 @@ export default {
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 1px solid #DDD;
+            border: 1px solid $line_color;
         }
     }
     .right {
@@ -281,7 +281,7 @@ export default {
         cursor: pointer;
         margin-left: 20px;
         &:hover {
-            color: #FF4000;
+            color: $hover_color;
         }
     }
 
