@@ -132,4 +132,12 @@ export default {
         margin-bottom: 10px;
     }
 }
+
+::v-deep .el-input__suffix {
+    .el-input__suffix-inner {
+        .el-icon-circle-close:before {
+            content: "\e79d" !important;
+        }
+    }
+}
 </style>

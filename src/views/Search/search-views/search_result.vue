@@ -1,5 +1,5 @@
 <template>
-    <div class="search-result-container scrollable">
+    <div class="search-result-container" :style="$store.state.firstSearchState === 'success' ? 'margin-bottom:300px;' : ''">
         <div class="container">
             <div class="main-container">
                 <text-search ref="text_search" @onClickSearchButton="onClickSearchButton"
@@ -25,8 +25,8 @@
                     <group-filter v-if="filterList && filterList.length > 0" :filterList="filterList"
                                   @onFilterChange="onFilterChange" :collapse-filter-group="isCollapseFilterGroup" :collapse-filter-group-count="collapseFilterGroupCount"></group-filter>
                     <div class="collapse" v-if="(filterList && filterList.length > 0) || (exprList && exprList.length > 0) || (sortList && sortList.length > 0)">
-                        <span @click="onChangeCollapse(true)" v-if="!isCollapseFilterGroup">{{ $t('label.pack_more') }}</span>
-                        <span @click="onChangeCollapse(false)" v-else>{{ $t('label.spread_more') }}</span>
+                        <span @click="onChangeCollapse(true)" v-if="!isCollapseFilterGroup">{{ $t('label.pack_more') }} <i class="el-icon-arrow-up"></i></span>
+                        <span @click="onChangeCollapse(false)" v-else>{{ $t('label.spread_more') }} <i class="el-icon-arrow-down"></i></span>
                     </div>
                 </div>
                 <!--expr和排序-->
@@ -42,7 +42,7 @@
                 <h2 class="mt20" v-if="results && results.length > 0">{{ $t('message.findSource') }}</h2>
                 <!--  商品列表  -->
                 <product-list :offer_list="results" ref="product-list" :show-seller="!(resultInfo.showSeller !== undefined && resultInfo.showSeller == false)"></product-list>
-                <!-- <support-source-list v-show="$store.state.searchState === 'none' && !$store.state.mainImage && !$store.state.searchText"></support-source-list> -->
+                <support-source-list v-show="$store.state.searchState === 'none' && !$store.state.mainImage && !$store.state.searchText"></support-source-list>
             </div>
         </div>
 
@@ -602,7 +602,7 @@ export default {
 
 <style scoped lang="scss">
 .search-result-container {
-    margin-bottom: 300px;
+    //margin-bottom: 300px;
     //padding-right: 40px;
     .container {
         .main-container {

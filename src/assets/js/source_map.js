@@ -39,7 +39,7 @@ const SourceMap = {
         id: 3,
         loginPageUrl: 'https://login.taobao.com/?redirect_url=https://global.1688.com/',
         needCookie: true,
-        logo: require('@/assets/img/source/1688global.png'),
+        logo: require('@/assets/img/source/1688.png'),
         name: '1688跨境专供',
         hasUpload: true,
         hasSearchPic: true,
@@ -154,6 +154,7 @@ const SourceMap = {
         hasFirstSearchText: false,
         hasFirstSearchPic: false,
         getCountryLangCurrency: 'api/banggoodapp/getCountryLangCurrency',
+        comingSoon: true
     },
     'chinabrands': {
         id: 12,
@@ -166,6 +167,7 @@ const SourceMap = {
         hasFirstSearchText: false,
         hasFirstSearchPic: false,
         getCountryLangCurrency: 'api/chinabrands/getCountryLangCurrency',
+        comingSoon: true
     },
     'globalres': {
         id: 13,
@@ -178,6 +180,7 @@ const SourceMap = {
         hasFirstSearchText: false,
         hasFirstSearchPic: false,
         getCountryLangCurrency: 'api/globalresapp/getCountryLangCurrency',
+        comingSoon: true
     },
 }
 

@@ -102,7 +102,7 @@ export default {
     .title {
         width: 150px;
         word-break: break-all;
-        font-size: 18px;
+        font-size: $secondary_text_size;
         font-weight: bold;
         margin-right: 20px;
     }
@@ -113,6 +113,7 @@ export default {
         .list {
             flex: 1;
             overflow: hidden;
+            font-size: $secondary_text_size;
             .items {
                 display: flex;
                 align-items: center;
@@ -124,7 +125,7 @@ export default {
                 align-items: center;
                 flex-wrap: wrap;
                 flex: 1;
-                font-size: initial;
+                font-size: $regular_text_size;
                 .item {
                     line-height: 1.5;
                     color: #666666;

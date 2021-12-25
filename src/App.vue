@@ -3,6 +3,7 @@
     <div id="app">
         <router-view :key="key"></router-view>
         <feedback ref="feedback"></feedback>
+        <cookie-toast></cookie-toast>
     </div>
 </template>
 
@@ -10,6 +11,7 @@
 import bus from "@/assets/js/bus";
 import SoureMap from "@/assets/js/source_map.js";
 import {publicAPI} from "@/assets/js/apis";
+import cookieToast from '@/components/cookie-toast';
 import feedback from "@/components/feedback";
 let appElement = null;
 let minAwayBtm = 0;
@@ -20,7 +22,7 @@ export default {
         }
     },
     components: {
-        feedback
+        feedback, cookieToast
     },
     created() {
         console.log('app.vue created');
@@ -201,70 +203,4 @@ body {
     min-width: $content_width_sm;
 }
 
-#app {
-    //overflow-y: auto;
-    //height: 100vh;
-}
-
-.right-fixed-container {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    width: 40px;
-    z-index: 1999;
-    background: #373737;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-end;
-    div {
-        width: 100%;
-        text-align: center;
-        margin-bottom: 20px;
-        box-sizing: border-box;
-        border-radius: 4px;
-        cursor: pointer;
-
-        &:hover {
-            background: rgba(0, 0, 0, .5);
-        }
-    }
-
-    i {
-        font-size: 28px;
-        color: #FFF;
-    }
-}
-
-.scrollable::-webkit-scrollbar {
-    /*滚动条整体样式*/
-    width: 10px; /*高宽分别对应横竖滚动条的尺寸*/
-    height: 5px;
-}
-
-/*定义滚动条轨道 内阴影+圆角*/
-.scrollable::-webkit-scrollbar-track {
-    /*滚动条里面轨道*/
-    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
-    background: #ededed;
-    border-radius: 10px;
-}
-
-/*定义滑块 内阴影+圆角*/
-.scrollable::-webkit-scrollbar-thumb {
-    /*滚动条里面小方块*/
-    border-radius: 10px;
-    background-color: skyblue;
-    background-image: -webkit-linear-gradient(
-            45deg,
-            rgba(255, 255, 255, 0.2) 25%,
-            transparent 25%,
-            transparent 50%,
-            rgba(255, 255, 255, 0.2) 50%,
-            rgba(255, 255, 255, 0.2) 75%,
-            transparent 75%,
-            transparent
-    );
-}
 </style>

@@ -39,7 +39,7 @@
                             <div class="year_name">
                                 <div class="year" v-if="item.seller && item.seller.years">
                                     <span>{{item.seller.years}}</span>
-                                    <sup>YRS</sup>
+                                    <i>YRS</i>
                                 </div>
                                 <!-- 鲁棒性检查seller.homeUrl是否为NULL再增加点击事件 -->
                                 <div class="supplier-name" v-if="item.seller && item.seller.name && item.seller.homeUrl " @click="openHref(item.seller.homeUrl)" :title="item.seller.name">{{item.seller.name}}</div>
@@ -243,8 +243,10 @@
                     align-items: center;
                     margin-bottom: 10px;
                     .year {
-                        sup {
+                        i {
                             margin-left: 5px;
+                            font-style: normal;
+                            font-size: $placeholder_text_size;
                         }
 
                         margin-right: 20px;

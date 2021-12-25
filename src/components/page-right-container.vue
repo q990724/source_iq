@@ -1,5 +1,5 @@
 <template>
-    <div class="page-right-container">
+    <div class="page-right-container" v-show="!($store.state.searchState === 'none' && !$store.state.mainImage && !$store.state.searchText)">
         <!--返回顶部-->
         <div class="go-top" @click="onGoTop" v-show="$store.state.showRightFixed">
             <i class="el-icon-top"></i>
