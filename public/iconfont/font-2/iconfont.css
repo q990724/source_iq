@@ -1,0 +1,17 @@
+@font-face {
+  font-family: "iconfont2"; /* Project id  */
+  src: url('./iconfont.ttf?t=1640439223065') format('truetype');
+}
+
+.iconfont2 {
+  font-family: "iconfont2" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-zuanshi:before {
+  content: "\e6e6";
+}
+

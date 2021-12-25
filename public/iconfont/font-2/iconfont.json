@@ -1,0 +1,16 @@
+{
+  "id": "",
+  "name": "",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "15686673",
+      "name": "钻石会员",
+      "font_class": "zuanshihuiyuan",
+      "unicode": "e6e6",
+      "unicode_decimal": 59110
+    }
+  ]
+}

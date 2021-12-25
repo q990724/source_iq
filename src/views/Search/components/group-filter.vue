@@ -21,13 +21,16 @@
                     <div class="filter-item" :key="filterIndex" v-if="!(collapseFilterGroup && filterIndex >= collapseFilterGroupCount)">
                         <my-collapse :title="filter.title">
                             <!-- radioValue在public.js做了预处理，没有理解其必要性 -->
-                            <el-radio-group v-model="filter.radioValue" >
-                                <div class="item" v-for="(item,itemIndex) in filter.items" :key="item.id + item.name">
-                                    <el-radio :label="item.name" class="filter-item_option" @change="onFilterChange(filterIndex, itemIndex, $event)">
-                                        {{item.name}}
-                                    </el-radio>
-                                </div>
-                            </el-radio-group>
+                            <div class="item radio" v-for="(item,itemIndex) in filter.items" :key="item.id + item.name" @click="onFilterChange(filterIndex, itemIndex, $event)">
+                                <span>{{item.name}}</span>
+                            </div>
+                            <!--<el-radio-group v-model="filter.radioValue" >-->
+                            <!--    <div class="item radio" v-for="(item,itemIndex) in filter.items" :key="item.id + item.name">-->
+                            <!--        <el-radio :label="item.name" class="filter-item_option" @change="onFilterChange(filterIndex, itemIndex, $event)">-->
+                            <!--            {{item.name}}-->
+                            <!--        </el-radio>-->
+                            <!--    </div>-->
+                            <!--</el-radio-group>-->
                         </my-collapse>
                     </div>
                 </template>

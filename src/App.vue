@@ -2,16 +2,6 @@
     <!--<div id="app" v-infinite-scroll="load" infinite-scroll-immediate="false">-->
     <div id="app">
         <router-view :key="key"></router-view>
-        <div class="right-fixed-container">
-            <!--返回顶部-->
-            <div class="go-top" @click="onGoTop" v-show="showRightFixed">
-                <i class="el-icon-top"></i>
-            </div>
-            <!--留言-->
-            <div class="feedback" @click="onFeedback">
-                <i class="el-icon-edit-outline"></i>
-            </div>
-        </div>
         <feedback ref="feedback"></feedback>
     </div>
 </template>
@@ -26,7 +16,7 @@ let minAwayBtm = 0;
 export default {
     data() {
         return {
-            showRightFixed: false,
+
         }
     },
     components: {
@@ -56,10 +46,7 @@ export default {
             bus.$emit("loadmore");
         },
         onAppScrollEvent(top) {
-            this.showRightFixed = top >= 1500;
-        },
-        onGoTop() {
-            $(window).scrollTop(0);
+            this.$store.state.showRightFixed = top >= 1500;
         },
         onFeedback() {
             this.$refs['feedback'].open();
@@ -116,81 +103,82 @@ export default {
         async source_id() {
             console.log("app.vue watch source_id", this.$store.state.source_id);
             let current_path = this.$route.path;
+            console.log(current_path);
             switch (this.$store.state.source_id) {
                 case SoureMap['alibaba']['id']:
                     // await this.getCountryLangCurrency(SoureMap['alibaba']['getCountryLangCurrency']);
-                    if (current_path === '/view-alibaba') return;
-                    this.$router.push('/view-alibaba');
+                    if (current_path === '/layout/view-alibaba') return;
+                    this.$router.push('/layout/view-alibaba');
                     break;
                 case SoureMap['1688']['id']:
                     // await this.getCountryLangCurrency(SoureMap['1688']['getCountryLangCurrency']);
-                    if (current_path === '/view-1688') return;
-                    this.$router.push('/view-1688');
+                    if (current_path === '/layout/view-1688') return;
+                    this.$router.push('/layout/view-1688');
                     break;
                 case SoureMap['1688rapid']['id']:
                     // await this.getCountryLangCurrency(SoureMap['1688rapid']['getCountryLangCurrency']);
-                    if (current_path === '/view-1688rapid') return;
-                    this.$router.push('/view-1688rapid');
+                    if (current_path === '/layout/view-1688rapid') return;
+                    this.$router.push('/layout/view-1688rapid');
                     break;
                 case SoureMap['1688global']['id']:
                     // await this.getCountryLangCurrency(SoureMap['1688global']['getCountryLangCurrency']);
-                    if (current_path === '/view-1688global') return;
-                    this.$router.push('/view-1688global');
+                    if (current_path === '/layout/view-1688global') return;
+                    this.$router.push('/layout/view-1688global');
                     break;
                 case SoureMap['aliexpressDS']['id']:
                     // await this.getCountryLangCurrency(SoureMap['aliexpressDS']['getCountryLangCurrency']);
-                    if (current_path === '/view-aliexpressDS') return;
-                    this.$router.push('/view-aliexpressDS');
+                    if (current_path === '/layout/view-aliexpressDS') return;
+                    this.$router.push('/layout/view-aliexpressDS');
                     break;
                 case SoureMap['aliexpressZapieX']['id']:
                     // await this.getCountryLangCurrency(SoureMap['aliexpressZapieX']['getCountryLangCurrency']);
-                    if (current_path === '/view-aliexpressZapieX') return;
-                    this.$router.push('/view-aliexpressZapieX');
+                    if (current_path === '/layout/view-aliexpressZapieX') return;
+                    this.$router.push('/layout/view-aliexpressZapieX');
                     break;
                 case SoureMap['yiwugo']['id']:
                     // await this.getCountryLangCurrency(SoureMap['yiwugo']['getCountryLangCurrency']);
-                    if (current_path === '/view-yiwugo') return;
-                    this.$router.push('/view-yiwugo');
+                    if (current_path === '/layout/view-yiwugo') return;
+                    this.$router.push('/layout/view-yiwugo');
                     break;
                 case SoureMap['dhgate']['id']:
                     // await this.getCountryLangCurrency(SoureMap['dhgate']['getCountryLangCurrency']);
-                    if (current_path === '/view-dhgate') return;
-                    this.$router.push('/view-dhgate');
+                    if (current_path === '/layout/view-dhgate') return;
+                    this.$router.push('/layout/view-dhgate');
                     break;
                 case SoureMap['mic']['id']:
                     // await this.getCountryLangCurrency(SoureMap['mic']['getCountryLangCurrency']);
-                    if (current_path === '/view-mic') return;
-                    this.$router.push('/view-mic');
+                    if (current_path === '/layout/view-mic') return;
+                    this.$router.push('/layout/view-mic');
                     break;
                 case SoureMap['cjds']['id']:
                     // await this.getCountryLangCurrency(SoureMap['cjds']['getCountryLangCurrency']);
-                    if (current_path === '/view-cjds') return;
-                    this.$router.push('/view-cjds');
+                    if (current_path === '/layout/view-cjds') return;
+                    this.$router.push('/layout/view-cjds');
                     break;
                 case SoureMap['litbox']['id']:
                     // await this.getCountryLangCurrency(SoureMap['litbox']['getCountryLangCurrency']);
-                    if (current_path === '/view-litbox') return;
-                    this.$router.push('/view-litbox');
+                    if (current_path === '/layout/view-litbox') return;
+                    this.$router.push('/layout/view-litbox');
                     break;
                 case SoureMap['1688overseas']['id']:
                     // await this.getCountryLangCurrency(SoureMap['1688overseas']['getCountryLangCurrency']);
-                    if (current_path === '/view-1688overseas') return;
-                    this.$router.push('/view-1688overseas');
+                    if (current_path === '/layout/view-1688overseas') return;
+                    this.$router.push('/layout/view-1688overseas');
                     break;
                 case SoureMap['banggood']['id']:
                     // await this.getCountryLangCurrency(SoureMap['banggood']['getCountryLangCurrency']);
-                    if (current_path === '/view-banggood') return;
-                    this.$router.push('/view-banggood');
+                    if (current_path === '/layout/view-banggood') return;
+                    this.$router.push('/layout/view-banggood');
                     break;
                 case SoureMap['chinabrands']['id']:
                     // await this.getCountryLangCurrency(SoureMap['chinabrands']['getCountryLangCurrency']);
-                    if (current_path === '/view-chinabrands') return;
-                    this.$router.push('/view-chinabrands');
+                    if (current_path === '/layout/view-chinabrands') return;
+                    this.$router.push('/layout/view-chinabrands');
                     break;
                 case SoureMap['globalres']['id']:
                     // await this.getCountryLangCurrency(SoureMap['globalres']['getCountryLangCurrency']);
-                    if (current_path === '/view-globalres') return;
-                    this.$router.push('/view-globalres');
+                    if (current_path === '/layout/view-globalres') return;
+                    this.$router.push('/layout/view-globalres');
                     break;
             }
         }

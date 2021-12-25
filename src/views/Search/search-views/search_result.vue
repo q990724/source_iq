@@ -1,30 +1,10 @@
 <template>
     <div class="search-result-container scrollable">
         <div class="container">
-            <div class="main-container media-content">
-                <div class="header">
-                    <!--logo-->
-                    <div class="logo">
-                        <img src="@/assets/img/logo2.png" alt="logo">
-                    </div>
-                    <!--右侧区域-->
-                    <div class="right-wrap">
-                        <!--留言/意见反馈-->
-                        <span class="right-wrap_btn" @click="openFeedback()">Contact</span>
-                        <!--国家/语言/货币-->
-<!--                        <div class="right-wrap_btn tags" @click="onLanguagechange()"> -->
-                            <!--国家-->
-<!--                            <span>{{ $store.state.countryName }}</span>
-                            <i>/</i> -->
-<!--                            <span>{{ $store.state.languageName }}</span>
-                            <i>/</i>
-                            <span>{{ $store.state.currencyCode }}</span>
-                        </div> -->
-                    </div>
-                </div>
+            <div class="main-container">
                 <text-search ref="text_search" @onClickSearchButton="onClickSearchButton"
                              @onSelectImage="onSelectImage"></text-search>
-                <div class="filter-container mt40">
+                <div class="filter-container mt20">
                     <source-list @onSourceItemClick="onSourceItemClick"></source-list>
                 </div>
                 <!--  图片处理区域  -->
@@ -32,7 +12,7 @@
                                  @onClickMainImage="onClickMainImage" @onClickSearchText="onClickSearchText" @onClickClear="onClickClear"></image-operation>
                 <!--  筛选区域  -->
                 <!-- v-if="(categoryList && categoryList.items) || (filterList && filterList.length > 0) || $store.state.searchState !== 'none' || $store.state.mainImage || $store.state.searchText" -->
-                <div class="filter-container mt40" v-if="(categoryList && categoryList.items) || (filterList && filterList.length > 0) || (exprList && exprList.length > 0) || (sortList && sortList.length > 0)">
+                <div class="filter-container mt20" v-if="(categoryList && categoryList.items) || (filterList && filterList.length > 0)">
                     <!-- v-show="$store.state.searchState !== 'none' || $store.state.mainImage || $store.state.searchText" -->
 <!--                    <source-list @onSourceItemClick="onSourceItemClick"></source-list> -->
                     <!-- 商品分类 -->
@@ -44,22 +24,25 @@
                     <!--  筛选区域  -->
                     <group-filter v-if="filterList && filterList.length > 0" :filterList="filterList"
                                   @onFilterChange="onFilterChange" :collapse-filter-group="isCollapseFilterGroup" :collapse-filter-group-count="collapseFilterGroupCount"></group-filter>
-					<!--  表达式区域  -->
-                    <expr-list v-if="exprList && exprList.length > 0" :expr-list="exprList" 
-									@onExprChange="onExprChange" :collapse-filter-group="isCollapseFilterGroup" :collapse-filter-group-count="collapseFilterGroupCount"></expr-list>
-                    <sort-list v-if="sortList && sortList.length > 0" :sort-list="sortList"
-                                    @onSortChange="onSortChange" :collapse-filter-group="isCollapseFilterGroup" :collapse-filter-group-count="collapseFilterGroupCount"></sort-list>
                     <div class="collapse" v-if="(filterList && filterList.length > 0) || (exprList && exprList.length > 0) || (sortList && sortList.length > 0)">
                         <span @click="onChangeCollapse(true)" v-if="!isCollapseFilterGroup">{{ $t('label.pack_more') }}</span>
                         <span @click="onChangeCollapse(false)" v-else>{{ $t('label.spread_more') }}</span>
                     </div>
                 </div>
+                <!--expr和排序-->
+                <div class="filter-container mt20" v-if="(exprList && exprList.length > 0) || (sortList && sortList.length > 0)">
+                    <!--  表达式区域  -->
+                    <expr-list v-if="exprList && exprList.length > 0" :expr-list="exprList"
+                               @onExprChange="onExprChange" :collapse-filter-group="isCollapseFilterGroup" :collapse-filter-group-count="collapseFilterGroupCount"></expr-list>
+                    <sort-list v-if="sortList && sortList.length > 0" :sort-list="sortList"
+                               @onSortChange="onSortChange" :collapse-filter-group="isCollapseFilterGroup" :collapse-filter-group-count="collapseFilterGroupCount"></sort-list>
+                </div>
                 <!--商品高级筛选-->
                 <!--<high-filtration></high-filtration>-->
-                <h2 class="mt40" v-if="results && results.length > 0">{{ $t('message.findSource') }}</h2>
+                <h2 class="mt20" v-if="results && results.length > 0">{{ $t('message.findSource') }}</h2>
                 <!--  商品列表  -->
                 <product-list :offer_list="results" ref="product-list" :show-seller="!(resultInfo.showSeller !== undefined && resultInfo.showSeller == false)"></product-list>
-                <!--                <support-source-list v-show="$store.state.searchState === 'none' && !$store.state.mainImage && !$store.state.searchText"></support-source-list> -->
+                <!-- <support-source-list v-show="$store.state.searchState === 'none' && !$store.state.mainImage && !$store.state.searchText"></support-source-list> -->
             </div>
         </div>
 
@@ -378,7 +361,7 @@ export default {
                 console.log(e);
                 this.$store.commit('setSearchState', 'error');
                 this.$store.commit('setImageUploadState', 'error');
-                throw e;
+                // throw e;
             }
 
         },
@@ -620,7 +603,7 @@ export default {
 <style scoped lang="scss">
 .search-result-container {
     margin-bottom: 300px;
-    padding-right: 40px;
+    //padding-right: 40px;
     .container {
         .main-container {
             margin: auto;
@@ -664,22 +647,17 @@ export default {
 }
 
 .filter-container {
-    border-radius: 10px;
-    border: 1px solid $line_color;
+    border-radius: 5px;
     background-color: #FFF;
-    padding: 20px 10px;
+    padding: 20px;
 }
 
 .collapse {
     margin-top: 20px;
     span {
         cursor: pointer;
-        padding: 4px 8px;
-        border: 1px solid #CCC;
-        &:hover {
-            color: $hover_color;
-            border-color: $primary_color;
-        }
+        color: $link_color;
+        font-size: $regular_text_color;
     }
 }
 </style>

@@ -10,7 +10,7 @@
                 <input type="text" class="input" :placeholder="$t('label.input_placeholder')" v-model="input" autocomplete="off" @keypress="onKeyPress">
             </div>
              <div class="right">
-                 <i class="el-icon-circle-close clear" v-show="input" @click="onClickCloseButton"></i>
+                 <i class="el-icon-error clear" v-show="input" @click="onClickCloseButton"></i>
                  <i class="el-icon-camera camera" v-show="camera" @click="onClickCamera"></i>
              </div>
         </div>
@@ -116,21 +116,27 @@ export default {
     width: 100%;
     height: 100%;
     background-color: #FFF;
+    .right {
+        margin-right: 8px;
+    }
+
     i {
         display: block;
         text-align: center;
         width: 30px;
         &.camera, &.clear {
             cursor: pointer;
-            font-size: 18px;
         }
         &.camera {
-            right: 0;
+            font-size: 26px;
+            color: $regular_text_color;
         }
         &.clear {
-            right: 28px;
+            font-size: 18px;
+            color: $placeholder_text_color;
         }
     }
+
 }
 .input {
     flex: 1;
@@ -138,6 +144,9 @@ export default {
     height: 100%;
     border: none;
     margin: 10px 0;
+    font-family: $font_family;
+    font-size: $secondary_text_size;
+    color: $primary_text_color;
 }
 .input:focus{   
 	border:none;
@@ -152,7 +161,7 @@ export default {
     text-align: center;
     background-image: linear-gradient(90deg, #FF7E3E 0%, #FF4000 100%);
     border-radius: 0 6px 6px 0;
-    font: 16.5px/2.4 Tahoma,Arial,"\5b8b\4f53",sans-serif;
+    font: 16px/2.4 Tahoma,Arial,"\5b8b\4f53",sans-serif;
     font-weight: 600;
     letter-spacing: 1px;
     margin-left: -5px;

@@ -81,12 +81,12 @@ export default {
         align-items: center;
         flex-wrap: wrap;
         .item {
-            font-size: 20px;
-            margin-right: 50px;
+            font-size: $regular_text_size;
+            margin-right: 20px;
             padding: 5px 0;
+            font-weight: bold;
             &.active {
                 color: #FF4000;
-                font-weight: bold;
             }
             span {
                 cursor: pointer;

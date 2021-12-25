@@ -1,5 +1,5 @@
 <template>
-    <div class="image-operation mt40" v-if="$store.state.searchParams.originImage || $store.state.searchParams.searchText">
+    <div class="image-operation mt20" v-if="$store.state.searchParams.originImage || $store.state.searchParams.searchText">
         <div class="left" v-if="$store.state.searchType === 'image'">
             <div class="item main-item" :class="{'active': mainImageActive}">
                 <img :src="$store.state.searchParams.originImage" alt="" class="img" @click="onClickMainImage">
@@ -157,8 +157,7 @@ export default {
     justify-content: space-between;
     background-color: #FFF;
     padding: 20px 10px;
-    border-radius: 10px;
-    border: 1px solid $line_color;
+    border-radius: 5px;
     .left {
         flex: 1;
         display: flex;
@@ -168,11 +167,10 @@ export default {
             align-items: center;
             .text {
                 margin-right: 10px;
-                margin-bottom: 10px;
                 padding: 5px 8px;
                 border: 1px solid $active_color;
                 border-radius: 5px;
-                font-size: 14px;
+                font-size: $regular_text_size;
             }
         }
         .item {
@@ -280,6 +278,7 @@ export default {
         border-radius: 5px;
         cursor: pointer;
         margin-left: 20px;
+        font-size: $regular_text_size;
         &:hover {
             color: $hover_color;
         }

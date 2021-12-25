@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div class="product-list mt40" v-if="offer_list && offer_list.length > 0">
+		<div class="product-list mt20" v-if="offer_list && offer_list.length > 0">
 			<div class="product-item" v-for="(item, i) in offer_list" :key="item.product.displayTitle + Math.random()">
                 <div class="product-item_content">
                     <div class="banner" @click="openHref(item.product.productUrl)">
@@ -35,7 +35,7 @@
                             </div>
                         </div>
                         <!-- 如果卖家节点和年份都不存在时，就不渲染此div模块-->
-                        <div class="supplier" v-if="showSeller">
+                        <div class="supplier" v-if="showSeller && item.seller">
                             <div class="year_name">
                                 <div class="year" v-if="item.seller && item.seller.years">
                                     <span>{{item.seller.years}}</span>
@@ -48,8 +48,12 @@
                             <div class="credentials" v-if="item.seller.credentials && item.seller.credentials.length > 0">
                                 <div class="cre" v-for="(cre, cre_i) in item.seller.credentials" :key="cre_i">
                                     <div class="cre_image" v-if="cre.displayType === 'image'">
-                                        <img :src="cre.icon.value" alt="" v-if="cre.icon.type === 'url'">
-                                        <i v-if="cre.icon.type === 'font'" :style="{'color': cre.icon.value.color}" v-for="icon in cre.icon.value.repeatCount + 1">{{cre.icon.value.fontLabel}}</i>
+                                        <template v-if="cre.icon.type === 'url'">
+                                            <img :src="cre.icon.value" alt="">
+                                        </template>
+                                        <template v-if="cre.icon.type === 'font'">
+                                            <i :style="{'color': cre.icon.value.color}" class="iconfont2" :class="true ? 'icon-' + cre.icon.value.fontLabel : ''" v-for="icon in cre.icon.value.repeatCount + 1"></i>
+                                        </template>
                                     </div>
                                     <div class="cre_text" v-if="cre.displayType === 'text'"></div>
                                 </div>

@@ -6,6 +6,10 @@
     margin-top: 40px;
 }
 
+.mt20 {
+    margin-top: 20px;
+}
+
 $font_family: rubik,sans-serif,Arial,microsoft yahei;
 
 // 背景色
@@ -18,6 +22,11 @@ $active_color: $primary_color;
 $hover_color: $primary_color;
 // line色
 $line_color: #cdcaca;
+// 单选标签背景色
+$radio_label_bgcolor: #eef1f6;
+// link色
+$link_color: #009ee6;
+
 // 突出文字颜色
 $primary_text_color: #303133;
 // 普通文本颜色

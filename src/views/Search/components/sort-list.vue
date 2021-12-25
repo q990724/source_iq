@@ -1,7 +1,7 @@
 <template>
     <div class="sort-list">
-        <my-collapse :title="'Sort'">
-            <div class="item" v-for="(sort, index) in sortList" :key="index">
+        <my-collapse>
+            <div class="item radio" v-for="(sort, index) in sortList" :key="index">
                 <span @click="onClickItem(index, 'text')" :class="{'active': sort.selected}">{{ sort.title }}</span>
                 <div class="up-down" v-if="sort.items">
                     <i @click="onClickItem(index, 'asc')" :class="{'active': sort.items[0].selected}" class="el-icon-caret-top" v-if="sort.items[0] && sort.items[0]['order'] === 'asc'"></i>

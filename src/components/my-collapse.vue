@@ -1,6 +1,10 @@
 <template>
-    <div class="my-collapse" :style="{'align-items': isShowCollapse ? 'flex-start' : 'center'}">
-        <div class="title" v-if="title">{{ title }}</div>
+    <!-- :style="{'align-items': isShowCollapse ? 'flex-start' : 'center'}"-->
+    <div class="my-collapse">
+        <el-tooltip placement="top">
+            <div slot="content">Lorem ipsum dolor sit amet,<br/> consectetur adipisicing elit.<br/> Aperiam asperiores<br/>consequuntur deleniti fugit ipsa molestias</div>
+            <div class="title" v-if="title">{{ title }}</div>
+        </el-tooltip>
         <!--<div class="options" v-if="list">-->
         <div class="options">
             <div class="list" ref="list" :style="{'max-height': previewRow * rowHeight + 'px'}">
@@ -10,8 +14,8 @@
             </div>
             <div class="btns" v-if="isShowCollapse">
 				<!-- TBD：展开/收起改成图标，不用文字 -->
-                <span class="open" @click="open" v-if="!collapseStatus">{{$t('label.expand')}}</span>
-                <span class="close" @click="close" v-else>{{$t('label.collapse')}}</span>
+                <span class="open" @click="open" v-if="!collapseStatus"> <i class="el-icon-arrow-down"></i> </span>
+                <span class="close" @click="close" v-else> <i class="el-icon-arrow-up"></i> </span>
             </div>
         </div>
     </div>
@@ -96,6 +100,8 @@ export default {
     display: flex;
     //align-items: flex-start;
     .title {
+        width: 150px;
+        word-break: break-all;
         font-size: 18px;
         font-weight: bold;
         margin-right: 20px;
@@ -127,7 +133,7 @@ export default {
                     text-overflow: ellipsis;
                     cursor: pointer;
                     transition: color .4s;
-                    margin-right: 20px;
+                    margin: 0 5px 10px;
                     &:hover {
                         color: #FF4000;
                     }
@@ -144,22 +150,31 @@ export default {
                 text-overflow: ellipsis;
                 cursor: pointer;
                 transition: color .4s;
-                margin-right: 20px;
+                margin: 0 5px 10px;
+                border: 1px solid transparent;
                 &:hover {
-                    color: #FF4000;
+                    color: $hover_color;
                 }
                 &.active {
-                    color: #FF4000;
+                    color: $active_color;
+                }
+                &.radio {
+                    background-color: $radio_label_bgcolor;
+                    padding: 4px 18px;
+                    border-radius: 3px;
+                    font-size: $secondary_text_size;
+                    &:hover {
+                        color: $hover_color;
+                        background-color: #FFF;
+                        border-color: $hover_color;
+                    }
                 }
             }
         }
         .btns {
             span {
                 display: inline-block;
-                padding: 4px 8px;
-                border: 1px solid #AAA;
-                border-radius: 5px;
-                font-size: 14px;
+                font-size: $regular_text_size;
                 cursor: pointer;
             }
         }

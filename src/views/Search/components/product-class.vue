@@ -13,7 +13,7 @@
         <!--<div class="clear"></div>-->
 
         <my-collapse :title="class_list.title || $t('label.productClass')" :list="class_list.items">
-            <div class="item" v-for="(item,itemIndex) in class_list.items" :key="item.name + item.id" :class="{'active': item.selected}" @click="onItemClick(itemIndex, $event)">
+            <div class="item radio" v-for="(item,itemIndex) in class_list.items" :key="item.name + item.id" :class="{'active': item.selected}" @click="onItemClick(itemIndex, $event)">
                 <span>{{ item.name }}</span>
             </div>
         </my-collapse>
@@ -63,7 +63,6 @@ export default {
 
 <style scoped lang="scss">
 .product-class {
-
     margin-bottom: 10px;
     //.title {
     //    float: left;
