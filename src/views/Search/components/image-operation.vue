@@ -218,7 +218,7 @@ export default {
             }
         }
         .local-crop-list {
-            width: 100%;
+            flex: 1;
             overflow: hidden;
             .scroll {
                 white-space: nowrap;
