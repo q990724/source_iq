@@ -24,7 +24,7 @@
                     <!--  筛选区域  -->
                     <group-filter v-if="filterList && filterList.length > 0" :filterList="filterList"
                                   @onFilterChange="onFilterChange" :collapse-filter-group="isCollapseFilterGroup" :collapse-filter-group-count="collapseFilterGroupCount"></group-filter>
-                    <div class="collapse" v-if="((filterList && filterList.length > 0) || (exprList && exprList.length > 0) || (sortList && sortList.length > 0)) && (filterList.length >= 3)">
+                    <div class="collapse" v-if="(filterList && filterList.length >= 3)">
                         <span @click="onChangeCollapse(true)" v-if="!isCollapseFilterGroup">{{ $t('label.pack_more') }} <i class="el-icon-arrow-up"></i></span>
                         <span @click="onChangeCollapse(false)" v-else>{{ $t('label.spread_more') }} <i class="el-icon-arrow-down"></i></span>
                     </div>
