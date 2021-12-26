@@ -90,6 +90,7 @@ export default {
             i {
                 cursor: pointer;
                 font-size: 12px;
+                line-height: 0.8;
                 &.active {
                     color: #FF4000;
                 }

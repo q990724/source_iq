@@ -265,7 +265,8 @@
                         margin-right: 10px;
                         .cre_image {
                             img {
-                                width: 14px;
+                                max-width: 42px;
+                                max-height: 42px;
                             }
                         }
                     }

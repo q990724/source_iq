@@ -1,7 +1,7 @@
 <template>
     <div class="image-operation mt20" v-if="$store.state.searchParams.originImage || $store.state.searchParams.searchText">
         <div class="left" v-if="$store.state.searchType === 'image'">
-            <div class="item main-item" :class="{'active': mainImageActive}">
+            <div class="item main-item" :class="{'active': $store.state.searchParams.originImage === $store.state.searchParams.mainImage}">
                 <img :src="$store.state.searchParams.originImage" alt="" class="img" @click="onClickMainImage">
                 <span @click="chooseImageBox"><img src="@/assets/img/kuangxuan.png" alt="">{{ $t('label.chooseBox') }}</span>
             </div>

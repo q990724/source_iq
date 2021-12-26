@@ -133,11 +133,26 @@ export default {
     }
 }
 
+::v-deep .el-input__inner {
+    height: 31px;
+    line-height: 31px;
+    font-size: $secondary_text_size;
+}
+
 ::v-deep .el-input__suffix {
+    line-height: 31px;
     .el-input__suffix-inner {
+        .el-input__icon {
+            line-height: 31px;
+        }
         .el-icon-circle-close:before {
             content: "\e79d" !important;
         }
     }
+}
+
+::v-deep .el-button {
+    height: 31px;
+    padding: 8px 20px;
 }
 </style>
