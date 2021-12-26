@@ -52,7 +52,7 @@
                                             <img :src="cre.icon.value" alt="">
                                         </template>
                                         <template v-if="cre.icon.type === 'font'">
-                                            <i :style="{'color': cre.icon.value.color}" class="iconfont2" :class="true ? 'icon-' + cre.icon.value.fontLabel : ''" v-for="icon in cre.icon.value.repeatCount + 1"></i>
+                                            <i :style="{'color': cre.icon.value.color}" class="iconfont2" :class="true ? 'icon-' + cre.icon.value.fontLabel : ''" v-for="icon in cre.icon.value.repeatCount"></i>
                                         </template>
                                     </div>
                                     <div class="cre_text" v-if="cre.displayType === 'text'"></div>

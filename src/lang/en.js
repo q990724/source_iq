@@ -1,6 +1,6 @@
 module.exports = {
     message: {
-        findSource: 'Find the following resources for you',
+        findSource: 'Find the following products for you',
         no_login: 'Please login ',
         login_timeout: 'Current login expired, Please login ',
         un_login: 'Not logged',

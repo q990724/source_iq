@@ -1,12 +1,12 @@
 {
-    "name": "Image Search",
-    "description": "My Image Search",
+    "name": "Sourcefrom",
+    "description": "Sourcing, Greenly, Smartly",
     "version": "1.0.0",
     "manifest_version": 2,
     "browser_action": {
         "default_popup": "html/popup.html",
         "default_icon": "images/icon-64.png",
-        "default_title": "图片搜索"
+        "default_title": "Image Search"
     },
     "icons": {
         "32": "images/icon-32.png",
