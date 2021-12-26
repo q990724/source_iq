@@ -41,7 +41,6 @@ Service.interceptors.request.use(config => {
 })
 // 添加响应拦截器
 Service.interceptors.response.use(response => {
-    // loadingInstance.close()
     if(response.data) {
         if(response.data.retcode == 0 || response.data.retcode == 200 || response.data.code == 200) {
 			//TBD：如果当前请求成功返回，并且是“上传图片”，那么就先不关闭loading

@@ -503,7 +503,7 @@ export const publicAPI = {
 		let formData = new FormData();
 		let i = 1;
 		for (let file of filelist) {
-			formData.append(`file_${i}`, file.raw);
+			formData.append(`file_${i}`, file.file);
 			i++;
 		}
 		return axios.post('http://www.tripsters.cn/Publics/Index/imgUpload', formData, {

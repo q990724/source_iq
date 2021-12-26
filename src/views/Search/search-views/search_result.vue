@@ -24,7 +24,7 @@
                     <!--  筛选区域  -->
                     <group-filter v-if="filterList && filterList.length > 0" :filterList="filterList"
                                   @onFilterChange="onFilterChange" :collapse-filter-group="isCollapseFilterGroup" :collapse-filter-group-count="collapseFilterGroupCount"></group-filter>
-                    <div class="collapse" v-if="(filterList && filterList.length >= 3)">
+                    <div class="collapse" v-if="(filterList && filterList.length >= collapseFilterGroupCount)">
                         <span @click="onChangeCollapse(true)" v-if="!isCollapseFilterGroup">{{ $t('label.pack_more') }} <i class="el-icon-arrow-up"></i></span>
                         <span @click="onChangeCollapse(false)" v-else>{{ $t('label.spread_more') }} <i class="el-icon-arrow-down"></i></span>
                     </div>
@@ -90,7 +90,7 @@ export default {
             // 是否折叠筛选组 false: 展开 true: 收起
             isCollapseFilterGroup: true,
             // 每组显示行数
-            collapseFilterGroupCount: 2,
+            collapseFilterGroupCount: 3,
             // 点击view more 时记录当前scrollTop
             collapseScrollTop: 0,
         }

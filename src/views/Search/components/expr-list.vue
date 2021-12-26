@@ -11,24 +11,24 @@
                         <!--type=range-->
                         <div class="range" v-if="item.exprType === 'range'">
                             <span class="range_title">{{ item.name }}</span>
-                            <el-input style="width: 110px;margin-left: 8px;" clearable placeholder="min" v-if="item.params[0]['needInput']" v-model="item.params[0]['paramValue']"></el-input>
+                            <el-input type="number" style="width: 110px;margin-left: 8px;" clearable placeholder="min" v-if="item.params[0]['needInput']" v-model="item.params[0]['paramValue']"></el-input>
                             <i style="margin: 0 5px;" v-if="item.params[0]['needInput']">-</i>
-                            <el-input style="width: 110px;margin-right: 8px;" clearable placeholder="max" v-if="item.params[1]['needInput']" v-model="item.params[1]['paramValue']"></el-input>
+                            <el-input type="number" style="width: 110px;margin-right: 8px;" clearable placeholder="max" v-if="item.params[1]['needInput']" v-model="item.params[1]['paramValue']"></el-input>
                             <el-button @click="onRangeSubmit(index, i)">OK</el-button>
                         </div>
                         <div class="gt" v-if="item.exprType === 'gt'">
                             <span class="gt_title">{{ item.name }}</span>
-                            <el-input style="width: 130px;margin: 0 8px" clearable placeholder="greater than" v-model="item.params[0]['paramValue']"></el-input>
+                            <el-input type="number" style="width: 130px;margin: 0 8px" clearable placeholder="greater than" v-model="item.params[0]['paramValue']"></el-input>
                             <el-button @click="onGtSubmit(index, i)">OK</el-button>
                         </div>
                         <div class="lt" v-if="item.exprType === 'lt'">
                             <span class="gt_title">{{ item.name }}</span>
-                            <el-input style="width: 130px;margin: 0 8px" clearable placeholder="less than" v-model="item.params[0]['paramValue']"></el-input>
+                            <el-input type="number" style="width: 130px;margin: 0 8px" clearable placeholder="less than" v-model="item.params[0]['paramValue']"></el-input>
                             <el-button @click="onLtSubmit(index, i)">OK</el-button>
                         </div>
                         <div class="lt" v-if="item.exprType === 'le'">
                             <span class="gt_title">{{ item.name }}</span>
-                            <el-input style="width: 130px;margin: 0 8px" clearable placeholder="less than" v-model="item.params[0]['paramValue']"></el-input>
+                            <el-input type="number" style="width: 130px;margin: 0 8px" clearable placeholder="less than" v-model="item.params[0]['paramValue']"></el-input>
                             <el-button @click="onLtSubmit(index, i)">OK</el-button>
                         </div>
                     </div>
@@ -154,5 +154,10 @@ export default {
 ::v-deep .el-button {
     height: 31px;
     padding: 8px 20px;
+}
+
+::v-deep input::-webkit-outer-spin-button,
+::v-deep input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
 }
 </style>

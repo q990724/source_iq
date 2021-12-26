@@ -4,9 +4,9 @@
         <template v-for="(filter, filterIndex) in filterList">
             <template v-if="filter.selectUIType === 'checkbox'">
                 <template v-if="filter.items && filter.items.length > 0">
-                    <div class="filter-item" :key="filterIndex" v-if="!(collapseFilterGroup && filterIndex >= collapseFilterGroupCount)">
+                    <div class="filter-item" :key="filterIndex" v-if="!(collapseFilterGroup && filterIndex > collapseFilterGroupCount)">
                         <my-collapse :title="filter.title">
-                            <div class="item" v-for="(item,itemIndex) in filter.items" :key="item.id + item.name">
+                            <div class="item" v-for="(item,itemIndex) in filter.items" :key="item.id + item.name + Math.random()">
                                 <el-checkbox v-model="item.selected"
                                              @change="onFilterChange(filterIndex, itemIndex, $event)">
                                     {{ item.name }}
@@ -18,10 +18,10 @@
             </template>
             <template v-if="filter.selectUIType === 'radio'">
                 <template v-if="filter.items && filter.items.length > 0">
-                    <div class="filter-item" :key="filterIndex" v-if="!(collapseFilterGroup && filterIndex >= collapseFilterGroupCount)">
+                    <div class="filter-item" :key="filterIndex" v-if="!(collapseFilterGroup && filterIndex > collapseFilterGroupCount)">
                         <my-collapse :title="filter.title">
                             <!-- radioValue在public.js做了预处理，没有理解其必要性 -->
-                            <div class="item radio" v-for="(item,itemIndex) in filter.items" :key="item.id + item.name" @click="onFilterChange(filterIndex, itemIndex, $event)">
+                            <div class="item radio" v-for="(item,itemIndex) in filter.items" :key="item.id + item.name + Math.random()" @click="onFilterChange(filterIndex, itemIndex, $event)">
                                 <span>{{item.name}}</span>
                             </div>
                             <!--<el-radio-group v-model="filter.radioValue" >-->

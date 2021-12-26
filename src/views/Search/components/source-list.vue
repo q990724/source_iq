@@ -1,7 +1,7 @@
 <template>
     <div class="source-list">
         <div class="content" @click="onItemClick">
-            <my-collapse :preview-row="1">
+            <my-collapse :preview-row="1" :use-store-status="true">
                 <div class="item" v-for="(item,itemIndex) in list" :class="{'active': $store.state.source_id == itemIndex}">
                     <span :data-id="itemIndex">{{item.name}}</span>
                 </div>
@@ -67,7 +67,7 @@ export default {
         }
     },
     created() {
-            this.list = SourceMap;
+        this.list = SourceMap;
     },
     methods: {
         onItemClick(e) {

@@ -14,8 +14,8 @@
             </div>
             <div class="btns" v-if="isShowCollapse">
 				<!-- TBD：展开/收起改成图标，不用文字 -->
-                <span class="open" @click="open" v-if="!collapseStatus"> <i class="el-icon-arrow-down"></i> </span>
-                <span class="close" @click="close" v-else> <i class="el-icon-arrow-up"></i> </span>
+                <span class="open" @click="open" v-if="useStoreStatus ? !$store.state.myCollapseStatus : !collapseStatus"> <i class="el-icon-arrow-down"></i> </span>
+                <span class="close" @click="close" v-if="useStoreStatus ? $store.state.myCollapseStatus : collapseStatus"> <i class="el-icon-arrow-up"></i> </span>
             </div>
         </div>
     </div>
@@ -48,7 +48,15 @@ export default {
         },
         previewRow: {
             type: Number,
-            default: 1
+            default() {
+                return 1
+            }
+        },
+        useStoreStatus: {
+            type: Boolean,
+            default() {
+                return false
+            }
         }
     },
     mounted() {
@@ -76,15 +84,32 @@ export default {
             this.isShowCollapse = true;
         }
 
+        this.$nextTick(() => {
+            // 如果Store中myCollapseStatus = true，自动展开
+            if(this.$store.state.myCollapseStatus && this.useStoreStatus) {
+                this.open();
+            }else {
+                this.close();
+            }
+        })
+
     },
     methods: {
         open() {
-            this.collapseStatus = true;
+            if(this.useStoreStatus) {
+                this.$store.state.myCollapseStatus = true;
+            }else {
+                this.collapseStatus = true;
+            }
             $(this.$refs['list']).css('max-height', 'initial');
             $(this.$refs['list']).css('overflow', 'visible');
         },
         close() {
-            this.collapseStatus = false;
+            if(this.useStoreStatus) {
+                this.$store.state.myCollapseStatus = false;
+            }else {
+                this.collapseStatus = false;
+            }
             $(this.$refs['list']).css('max-height', `${this.previewRow * this.rowHeight}px`);
             $(this.$refs['list']).css('overflow', 'hidden');
         },

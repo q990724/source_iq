@@ -71,6 +71,8 @@ export default new Vuex.Store({
         api_error_msg: '',
         loadmore_busy: true,
         showRightFixed: false,
+        // my-collapse公共折叠状态
+        myCollapseStatus: false
     },
     mutations: {
 		// 重置全部，包括搜索模式、搜索参数、图片上传状态、搜索状态；“source_id"初始化责任在content和vue.mounted两处
