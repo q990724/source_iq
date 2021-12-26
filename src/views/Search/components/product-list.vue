@@ -38,8 +38,7 @@
                         <div class="supplier" v-if="showSeller && item.seller">
                             <div class="year_name">
                                 <div class="year" v-if="item.seller && item.seller.years">
-                                    <span>{{item.seller.years}}</span>
-                                    <i>YRS</i>
+                                    <span>{{item.seller.years}}YRS</span>
                                 </div>
                                 <!-- 鲁棒性检查seller.homeUrl是否为NULL再增加点击事件 -->
                                 <div class="supplier-name" v-if="item.seller && item.seller.name && item.seller.homeUrl " @click="openHref(item.seller.homeUrl)" :title="item.seller.name">{{item.seller.name}}</div>
@@ -243,13 +242,11 @@
                     align-items: center;
                     margin-bottom: 10px;
                     .year {
-                        i {
-                            margin-left: 5px;
-                            font-style: normal;
-                            font-size: $placeholder_text_size;
-                        }
-
-                        margin-right: 20px;
+                        background-color: $radio_label_bgcolor;
+                        border-radius: 3px;
+                        margin-right: 10px;
+                        padding: 2px 6px;
+                        font-size: $placeholder_text_size;
                     }
 
                     .supplier-name {
@@ -268,7 +265,7 @@
                         margin-right: 10px;
                         .cre_image {
                             img {
-                                width: 42px;
+                                width: 14px;
                             }
                         }
                     }
