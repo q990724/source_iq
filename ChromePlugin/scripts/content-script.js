@@ -170,7 +170,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             })
         });
     } else if (request.cmd == 'update-cookie') {
-        window.localStorage.setItem(`cookie-${request.value.source}`, request.value.cookie);
+        window.localStorage.setItem('cookie-'.${request.value.source}, request.value.cookie);
     }
     sendResponse({msg: 'get messsage'});
     return true;

@@ -538,15 +538,17 @@ export const publicAPI = {
 		formData.append('file', file);
 		if(Store.state.source_id == 6){ // 速卖通需要传token、cookie
 			return Service.post(SourceMap[Store.state.source_id].uploadPic, formData, {
-				params: param,
+				// params: param,
 				headers: {'token': cookie}
 			})
-		}
+		}else {
+			formData.append('cookie', cookie);
 			return Service.post(SourceMap[Store.state.source_id].uploadPic, formData, {
 				headers: {
 					'Content-Type': 'multipart/form-data'
 				}
 			})
+		}
 	},
 
 	//图片首次搜索
