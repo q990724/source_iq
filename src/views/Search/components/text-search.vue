@@ -20,7 +20,8 @@
 </template>
 
 <script>
-import { getSource } from "@/assets/js/source_map";
+// import { getSource } from "@/assets/js/source_map";
+import SourceMap from "@/assets/js/source_map.js";
 import {getBase64, getFileFromBase64} from "@/assets/js/utils.js";
 export default {
     name: 'text-search',
@@ -40,10 +41,10 @@ export default {
     computed: {
         getSourceId() {
             switch (this.$store.state.source_id) {
-                case 1:
+                case '1':
                     this.options = this.indexAareaOptions_alibaba;
                     break;
-                case 5:
+                case '5':
                     this.options = this.options_yiwugo;
                     break;
                 default:
@@ -52,8 +53,8 @@ export default {
             if(this.options && this.options.length > 0) {
                 this.index_area = this.options[0].value;
             }
-            let source = getSource(this.$store.state.source_id);
-            if (source.hasSearchPic === false) {
+            // let source = getSource(this.$store.state.source_id);
+            if (SourceMap[this.$store.state.source_id].hasSearchPic === false) {
                 this.camera = false
             }
             return this.$store.state.source_id;

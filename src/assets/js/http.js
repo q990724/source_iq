@@ -53,15 +53,17 @@ Service.interceptors.response.use(response => {
         {
             // cookie过期后，清除当前站点的cookie
             clearCookie(Store.state.source_id);
-            let sourceName = '',
-                loginPageUrl = '';
-            for (let key in SourceMap) {
-                if(SourceMap[key]['id'] == Store.state.source_id) {
-                    sourceName = key;
-                    loginPageUrl = SourceMap[key]['loginPageUrl']
-                    break;
-                }
-            }
+            // let sourceName = '',
+            //     loginPageUrl = '';
+            let	sourceName = SourceMap[Store.state.source_id].petName;
+            let	loginPageUrl = SourceMap[Store.state.source_id].loginPageUrl
+            // for (let key in SourceMap) {
+            //     if(SourceMap[key]['id'] == Store.state.source_id) {
+            //         sourceName = key;
+            //         loginPageUrl = SourceMap[key]['loginPageUrl']
+            //         break;
+            //     }
+            // }
             MessageBox.confirm(i18n.t('message.login_timeout') + sourceName, i18n.t('message.un_login'), {
                 confirmButtonText: i18n.t('message.go_login'),
                 cancelButtonText: i18n.t('button.cancel'),

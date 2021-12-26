@@ -1,6 +1,7 @@
 const SourceMap = {
-    'alibaba': {
-        id: 1,
+    1: {
+        petName: 'alibaba',
+        currentPath: '/layout/view-alibaba',
         loginPageUrl: 'https://passport.alibaba.com/icbu_login.htm?spm=a2700.8293689.scGlobalHomeHeader.6.2ce267afQnDloI&tracelog=hd_signin',
         needCookie: false,
         logo: require('@/assets/img/source/alibaba.png'),
@@ -10,11 +11,16 @@ const SourceMap = {
         hasFirstSearchText: false,
         hasFirstSearchPic: false,
         getCountryLangCurrency: 'api/aliintersite/getCountryLangCurrency',
+        uploadPic: 'api/aliintersite/uploadPic',
+        searchGoodsByPic: {method: 'get', path:'api/aliintersite/searchGoodsByPic'},
+        searchGoodsByText: {method: 'get', path: 'api/aliintersite/searchGoodsByText2'}
     },
-    '1688': {
-        id: 2,
+    2: {
+        petName: '1688',
+        currentPath: '/layout/view-1688',
         loginPageUrl: 'https://login.taobao.com/?redirect_url=https%3A%2F%2Flogin.1688.com%2Fmember%2Fjump.htm%3Ftarget%3Dhttps%253A%252F%252Flogin.1688.com%252Fmember%252FmarketSigninJump.htm%253FDone%253D%25252F%25252Fwww.1688.com%25252F&style=tao_custom&from=1688web',
         needCookie: false,
+        cookieKey: 'cookie-1688',
         logo: require('@/assets/img/source/1688.png'),
         name: "1688",
         hasUpload: true,
@@ -22,11 +28,18 @@ const SourceMap = {
         hasFirstSearchText: true,
         hasFirstSearchPic: true,
         getCountryLangCurrency: 'api/goods/getCountryLangCurrency',
+        uploadPic: 'api/goods/uploadPicH5',
+        searchGoodsByPic: {method: 'get', path:'api/goods/imgSearch'},
+        searchGoodsByPicFirst: {method: 'get', path:'api/goods/imgSearchFirst'},
+        searchGoodsByText: {method: 'get', path:'api/goods/searchGoods'},
+        searchGoodsByTextFirst: {method: 'get', path:'api/goods/searchGoodsFirst'},
     },
-    '1688rapid': {
-        id: 15,
+    3: {
+        petName: '1688rapid',
+        currentPath: '/layout/view-1688rapid',
         loginPageUrl: 'https://login.taobao.com/?redirect_url=https%3A%2F%2Flogin.1688.com%2Fmember%2Fjump.htm%3Ftarget%3Dhttps%253A%252F%252Flogin.1688.com%252Fmember%252FmarketSigninJump.htm%253FDone%253D%25252F%25252Fwww.1688.com%25252F&style=tao_custom&from=1688web',
         needCookie: true,
+        cookieKey: 'cookie-1688',
         logo: require('@/assets/img/source/1688.png'),
         name: "1688 Rapid",
         hasUpload: false,
@@ -34,23 +47,34 @@ const SourceMap = {
         hasFirstSearchText: false,
         hasFirstSearchPic: false,
         getCountryLangCurrency: 'api/goods/getCountryLangCurrency',
+        searchGoodsByPic: {method: 'post', path:'api/1688/rapidUploadPicUrl'},
+        searchGoodsByPicFirst: {method: 'post', path:'api/1688/rapidUploadPic'},
+        searchGoodsByText: {method: 'get', path:'api/1688/rapidSearchGoods'},
     },
-    '1688global': {
-        id: 3,
+    4: {
+        petName: '1688global',
+        currentPath: '/layout/view-1688global',
         loginPageUrl: 'https://login.taobao.com/?redirect_url=https://global.1688.com/',
         needCookie: true,
         logo: require('@/assets/img/source/1688.png'),
-        name: '1688跨境专供',
+        cookieKey: 'cookie-1688global',
+        name: '1688Global',
         hasUpload: true,
         hasSearchPic: true,
         hasFirstSearchText: true,
         hasFirstSearchPic: false,
         getCountryLangCurrency: 'api/goods/getCountryLangCurrency',
+        uploadPic: 'api/goods/uploadPicKj',
+        searchGoodsByPic: {method: 'get', path:'api/goods/imgSearchKj'},
+        searchGoodsByText: {method: 'get', path:'api/goods/searchGoodsKj'},
+        searchGoodsByTextFirst: {method: 'get', path:'api/goods/searchGoodsFirstKj'},
     },
-	'1688overseas': {
-	    id: 10,
+	5: {
+        petName: '1688overseas',
+        currentPath: '/layout/view-1688overseas',
 	    loginPageUrl: 'https://login.taobao.com/?redirect_url=https%3A%2F%2Flogin.1688.com%2Fmember%2Fjump.htm%3Ftarget%3Dhttps%253A%252F%252Flogin.1688.com%252Fmember%252FmarketSigninJump.htm%253FDone%253D%25252F%25252Fwww.1688.com%25252F&style=tao_custom&from=1688web',
 	    needCookie: true,
+        cookieKey: 'cookie-1688',
 	    logo: require('@/assets/img/source/1688.png'),
 	    name: "1688overseas",
 	    hasUpload: true,
@@ -58,11 +82,18 @@ const SourceMap = {
 	    hasFirstSearchText: true,
 	    hasFirstSearchPic: true,
         getCountryLangCurrency: 'api/goods/getCountryLangCurrency',
+        uploadPic: 'api/goods/uploadPicH5',
+        searchGoodsByPic: {method: 'get', path:'api/goods/imgSearch'},
+        searchGoodsByPicFirst: {method: 'get', path:'api/goods/imgSearchFirst'},
+        searchGoodsByText: {method: 'get', path:'api/goods/searchGoods'},
+        searchGoodsByTextFirst: {method: 'get', path:'api/goods/searchGoodsFirst'},
 	},
-    'aliexpressDS': {
-        id: 4,
+    6: {
+        petName: 'aliexpressDS',
+        currentPath: '/layout/view-aliexpressDS',
         loginPageUrl: 'https://www.aliexpress.com/',
         needCookie: true,
+        cookieKey: 'cookie-aliexpress',
         logo: require('@/assets/img/source/aliexpress.png'),
         name: "Aliexpress DS",
         hasUpload: true,
@@ -70,11 +101,15 @@ const SourceMap = {
         hasFirstSearchText: false,
         hasFirstSearchPic: false,
         getCountryLangCurrency: 'api/aliexpress/getCountryLangCurrency',
+        uploadPic: 'api/aliexpress/uploadPic',
+        searchGoodsByPic: {method: 'get', path:'api/aliexpress/searchGoodsByPic'},
+        searchGoodsByText: {method: 'get', path:'api/aliexpress/searchGoodsByText'},
     },
-    'aliexpressZapieX': {
-        id: 14,
+    7: {
+        petName: 'aliexpressZapieX',
+        currentPath: '/layout/view-aliexpressZapieX',
         loginPageUrl: 'https://www.aliexpress.com/',
-        needCookie: true,
+        needCookie: false,
         logo: require('@/assets/img/source/aliexpress.png'),
         name: "Aliexpress ZapieX",
         hasUpload: true,
@@ -82,21 +117,29 @@ const SourceMap = {
         hasFirstSearchText: false,
         hasFirstSearchPic: false,
         getCountryLangCurrency: 'api/aliexpress/zapiexGetCountryLangCurrency',
+        uploadPic: 'api/aliexpress/zapiexUploadPic',
+        searchGoodsByPic: {method: 'get', path:'api/aliexpress/zapiexImgSearch'},
+        searchGoodsByText: {method: 'get', path:'api/aliexpress/zapiexSearchGoods'},
     },
-    'yiwugo': {
-        id: 5,
+    8: {
+        petName: 'yiwugo',
+        currentPath: '/layout/view-yiwugo',
         loginPageUrl: 'https://cas.yiwugo.com/cas/login?service=http%3A%2F%2Fwork.yiwugo.com%2Findex.htm%3Fspm%3Dd3d3Lnlpd3Vnby5jb20v',
         needCookie: false,
         logo: require('@/assets/img/source/yiwugo.png'),
-        name: '义乌购',
+        name: 'YiWuGo',
         hasUpload: true,
         hasSearchPic: true,
         hasFirstSearchText: false,
         hasFirstSearchPic: false,
         getCountryLangCurrency: 'api/yiwugoapp/getCountryLangCurrency',
+        uploadPic: 'api/yiwugoapp/uploadPic',
+        searchGoodsByPic: {method: 'get', path:'api/yiwugoapp/searchGoodsByPic'},
+        searchGoodsByText: {method: 'get', path:'api/yiwugoapp/searchGoodsByText'},
     },
-    'dhgate': {
-        id: 6,
+    9: {
+        petName: 'dhgate',
+        currentPath: '/layout/view-dhgate',
         loginPageUrl: 'https://secure.dhgate.com/passport/login?service=http%3A%2F%2Fseller.dhgate.com%2Fmerchant%2Flogin%2Fssologin.do%3FreturnUrl%3DaHR0cDovL3NlbGxlci5kaGdhdGUuY29tL21lcmNoYW50L2xvZ2luL2xvZ2luc2lnbi5kbw..#hp-head-1',
         needCookie: false,
         logo: require('@/assets/img/source/dhgate.png'),
@@ -106,9 +149,13 @@ const SourceMap = {
         hasFirstSearchText: false,
         hasFirstSearchPic: false,
         getCountryLangCurrency: 'api/dhgateapp/getCountryLangCurrency',
+        uploadPic: 'api/aliintersite/uploadPic',
+        searchGoodsByPic: {method: 'post', path:'api/dhgateapp/searchGoodsByPic'},
+        searchGoodsByText: {method: 'post', path: 'api/dhgateapp/searchGoodsByText'}
     },
-	'cjds': {
-	    id: 8,
+	10: {
+        petName: 'cjds',
+        currentPath: '/layout/view-cjds',
 	    loginPageUrl: 'https://cjdropshipping.com/login.html?target=aHR0cHM6Ly9jamRyb3BzaGlwcGluZy5jb20v',
 	    needCookie: false,
 	    logo: require('@/assets/img/source/cjds.png'),
@@ -118,9 +165,12 @@ const SourceMap = {
 	    hasFirstSearchText: false,
 	    hasFirstSearchPic: false,
         getCountryLangCurrency: 'api/cjdsapp/getCountryLangCurrency',
+        searchGoodsByPic: {method: 'post', path:'api/cjdsapp/searchGoodsByPic'},
+        searchGoodsByText: {method: 'post', path: 'api/cjdsapp/searchGoodsByText'}
 	},
-    'mic': {
-        id: 7,
+    11: {
+        petName: 'mic',
+        currentPath: '/layout/view-mic',
         loginPageUrl: 'https://login.made-in-china.com/sign-in/?baseNextPage=http%3A%2F%2Fwww.made-in-china.com%2F',
         needCookie: false,
         logo: require('@/assets/img/source/mic.png'),
@@ -130,9 +180,12 @@ const SourceMap = {
         hasFirstSearchText: false,
         hasFirstSearchPic: false,
         getCountryLangCurrency: 'api/micapp/getCountryLangCurrency',
+        searchGoodsByPic: {method: 'post', path:'api/micapp/searchGoodsByPic'},
+        searchGoodsByText: {method: 'get', path: 'api/micapp/searchGoodsByText'}
     },
-    'litbox': {
-        id: 9,
+    12: {
+        petName: 'litbox',
+        currentPath: '/layout/view-litbox',
         loginPageUrl: 'https://gw.lightinthebox.com/index.php?main_page=login&src=mainLoginLink&targetUrl=https%3A%2F%2Fgw.lightinthebox.com%2Findex.php%3Fmain_page%3Daccount%26prm%3D1.1.177.0&prm=1.1.74.0&prm=1.1.177.0&_ga=2.43912865.564672115.1638637091-371976819.1635928539',
         needCookie: false,
         logo: require('@/assets/img/source/litbox.jpg'),
@@ -142,9 +195,11 @@ const SourceMap = {
         hasFirstSearchText: false,
         hasFirstSearchPic: false,
         getCountryLangCurrency: 'api/litboxapp/getCountryLangCurrency',
+        searchGoodsByText: {method: 'get', path: 'api/litboxapp/searchGoodsByText'}
     },
-    'banggood': {
-        id: 11,
+    13: {
+        petName: 'banggood',
+        currentPath: '/layout/view-banggood',
         loginPageUrl: 'https://gw.lightinthebox.com/index.php?main_page=login&src=mainLoginLink&targetUrl=https%3A%2F%2Fgw.lightinthebox.com%2Findex.php%3Fmain_page%3Daccount%26prm%3D1.1.177.0&prm=1.1.74.0&prm=1.1.177.0&_ga=2.43912865.564672115.1638637091-371976819.1635928539',
         needCookie: false,
         logo: require('@/assets/img/source/banggood.png'),
@@ -154,10 +209,12 @@ const SourceMap = {
         hasFirstSearchText: false,
         hasFirstSearchPic: false,
         getCountryLangCurrency: 'api/banggoodapp/getCountryLangCurrency',
+        searchGoodsByText: {method: 'get', path: 'api/banggoodapp/searchGoodsByText'},
         comingSoon: false
     },
-    'chinabrands': {
-        id: 12,
+    14: {
+        petName: 'chinabrands',
+        currentPath: '/layout/view-chinabrands',
         loginPageUrl: 'https://gw.lightinthebox.com/index.php?main_page=login&src=mainLoginLink&targetUrl=https%3A%2F%2Fgw.lightinthebox.com%2Findex.php%3Fmain_page%3Daccount%26prm%3D1.1.177.0&prm=1.1.74.0&prm=1.1.177.0&_ga=2.43912865.564672115.1638637091-371976819.1635928539',
         needCookie: false,
         logo: require('@/assets/img/source/chinabrands.png'),
@@ -167,10 +224,12 @@ const SourceMap = {
         hasFirstSearchText: false,
         hasFirstSearchPic: false,
         getCountryLangCurrency: 'api/chinabrands/getCountryLangCurrency',
+        searchGoodsByText: {method: 'get', path: 'api/chinabrands/searchGoodsByText'},
         comingSoon: false
     },
-    'globalres': {
-        id: 13,
+    15: {
+        petName: 'globalres',
+        currentPath: '/layout/view-globalres',
         loginPageUrl: 'https://gw.lightinthebox.com/index.php?main_page=login&src=mainLoginLink&targetUrl=https%3A%2F%2Fgw.lightinthebox.com%2Findex.php%3Fmain_page%3Daccount%26prm%3D1.1.177.0&prm=1.1.74.0&prm=1.1.177.0&_ga=2.43912865.564672115.1638637091-371976819.1635928539',
         needCookie: false,
         logo: require('@/assets/img/source/globalsources.jpg'),
@@ -180,18 +239,19 @@ const SourceMap = {
         hasFirstSearchText: false,
         hasFirstSearchPic: false,
         getCountryLangCurrency: 'api/globalresapp/getCountryLangCurrency',
+        searchGoodsByText: {method: 'get', path: 'api/globalresapp/searchGoodsByText'},
         comingSoon: true
     },
 }
 
 export default SourceMap;
 
-export function getSource(sourceId){
-    var res = [];
-    for (let key in SourceMap) {
-        if (SourceMap[key]['id'] === sourceId){
-            res = SourceMap[key];
-        }
-    }
-    return res;
-}
+// export function getSource(sourceId){
+//     var res = [];
+//     for (let key in SourceMap) {
+//         if (SourceMap[key]['id'] === sourceId){
+//             res = SourceMap[key];
+//         }
+//     }
+//     return res;
+// }

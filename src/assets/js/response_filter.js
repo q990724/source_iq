@@ -14,14 +14,14 @@ function buildRenderData() {
 
 function getRenderedData(original_result, source_id) {
     let renderResult = buildRenderData();
-    switch (source_id) {
-        case SourceMap['alibaba']:
-            break;
-        case SourceMap['1688']:
-            break;
-        case SourceMap['1688global']:
-            break;
-        case SourceMap['aliexpress']:
-            break;
-    }
+    // switch (source_id) {
+    //     case SourceMap['alibaba']:
+    //         break;
+    //     case SourceMap['1688']:
+    //         break;
+    //     case SourceMap['1688global']:
+    //         break;
+    //     case SourceMap['aliexpress']:
+    //         break;
+    // }
 }

@@ -66,7 +66,7 @@ import LanguagePopupComponent from "@/components/language-popup";
 import bus from "@/assets/js/bus";
 import {getBase64FromCropImage, handleResponse, getFileFromBase64, debounce} from "@/assets/js/utils.js";
 import publicData from "../mixins/public.js";
-import {getSource} from "@/assets/js/source_map.js";
+import SourceMap from "@/assets/js/source_map.js";
 
 export default {
     name: "view-",
@@ -327,8 +327,8 @@ export default {
         // reUpload：true 需要重新上传图片；false 不需要重新上传图片，可以复用当前的imageAddress
         async imageSearch(base64, reUpload = true) {
             // 如果当前站点接口配置不支持图片搜索，就直接提示用户并返回
-            let source = getSource(this.$store.state.source_id);
-            if (source.hasSearchPic == false) {
+            // let source = getSource(this.$store.state.source_id);
+            if (SourceMap[this.$store.state.source_id].hasSearchPic == false) {
                 this.$message.error(this.$t('message.no_search_image_api'));
                 return;
             }
@@ -340,7 +340,7 @@ export default {
             this.$store.commit('dumpAll', "发起imageSearch前：");
             try {
                 // 如果当前站点有单独的图品上传接口，并且图片当前=没有上传成功状态，就上传图片
-                if (source.hasUpload !== false && this.$store.state.imageUploadState !== 'uploaded') {
+                if (SourceMap[this.$store.state.source_id].hasUpload !== false && this.$store.state.imageUploadState !== 'uploaded') {
                     console.log('hasUpload');
                     let file = getFileFromBase64(base64);
                     let uploadImageResult = await this.$store.dispatch('uploadPic', file);
@@ -357,7 +357,7 @@ export default {
                     this.$store.commit('dumpAll', "发起uploadPic后：");
                 }
                 // 只有图片上传成功，或者原站没有单独的上传图片接口，才会继续调用searchGoods接口
-                if (!source.hasUpload || this.$store.state.imageUploadState == 'uploaded')
+                if (!SourceMap[this.$store.state.source_id].hasUpload || this.$store.state.imageUploadState == 'uploaded')
                     this.getDataFromImage(base64, false);
 
             } catch (e) {
@@ -376,7 +376,7 @@ export default {
             // console.log(this);
             // this.$refs['product-list'].changeShowNoList(false);
             try {
-                let source = getSource(this.$store.state.source_id);
+                // let source = getSource(this.$store.state.source_id);
                 // let imageAddr = null;
                 // if (source.hasUpload == false && this.$store.state.imageUploadState !== 'uploaded') {
                 //     imageAddr = base64;
@@ -385,7 +385,7 @@ export default {
                 // }
                 //TBD: 切换筛选发起搜索时没有传参
                 let result = null;
-                if (!loadmore && source.hasFirstSearchPic === true) {
+                if (!loadmore && SourceMap[this.$store.state.source_id].hasFirstSearchPic === true) {
                     // result = await this.$store.dispatch('firstSearchPic', {
                     //     imageAddress: imageAddr,
                     //     yoloRegionSelected: this.$store.state.yoloCropRegion && this.$store.state.region,
@@ -417,7 +417,7 @@ export default {
                         sessionId: this.$store.state.session['sessionId'],
                     });
                 }
-                if (!source.hasUpload && !loadmore) {
+                if (!SourceMap[this.$store.state.source_id].hasUpload && !loadmore) {
                     if (result.data && result.data.searchImage && result.data.searchImage.imageAddress) {
                         this.$store.commit('setImageAddress', result.data.searchImage.imageAddress);
                         this.$store.commit('setImageUploadState', 'uploaded');
@@ -493,8 +493,8 @@ export default {
                 }
                 this.results = loadmore ? [...this.results, ...[]] : [];
             } catch (e) {
-                let source = getSource(this.$store.state.source_id);
-                if (!source.hasUpload && !loadmore) { this.$store.commit('setImageUploadState', 'error') }
+                // let source = getSource(this.$store.state.source_id);
+                if (!SourceMap[this.$store.state.source_id].hasUpload && !loadmore) { this.$store.commit('setImageUploadState', 'error') }
                 this.$store.commit('setSearchState', 'error');
                 if (!loadmore) { this.$store.commit('setFirstSearchState', 'error') }
                 this.$message.error(this.$t('message.search_result_from_image_error') + e);
@@ -510,10 +510,10 @@ export default {
             this.$store.commit('dumpAll', "发起getDataFromText前：");
             try {
                 console.log(this.$store.state.searchParams);
-                let source = getSource(this.$store.state.source_id);
+                // let source = getSource(this.$store.state.source_id);
                 let result = null;
 
-                if (!loadmore && source.hasFirstSearchText === true) {
+                if (!loadmore && SourceMap[this.$store.state.source_id].hasFirstSearchText === true) {
                     result = await this.$store.dispatch('firstSearchText', {
                         searchTextParams: this.$store.state.searchParams,
                         page: this.page

@@ -105,84 +105,90 @@ export default {
         async source_id() {
             console.log("app.vue watch source_id", this.$store.state.source_id);
             let current_path = this.$route.path;
-            console.log(current_path);
-            switch (this.$store.state.source_id) {
-                case SoureMap['alibaba']['id']:
-                    // await this.getCountryLangCurrency(SoureMap['alibaba']['getCountryLangCurrency']);
-                    if (current_path === '/layout/view-alibaba') return;
-                    this.$router.push('/layout/view-alibaba');
-                    break;
-                case SoureMap['1688']['id']:
-                    // await this.getCountryLangCurrency(SoureMap['1688']['getCountryLangCurrency']);
-                    if (current_path === '/layout/view-1688') return;
-                    this.$router.push('/layout/view-1688');
-                    break;
-                case SoureMap['1688rapid']['id']:
-                    // await this.getCountryLangCurrency(SoureMap['1688rapid']['getCountryLangCurrency']);
-                    if (current_path === '/layout/view-1688rapid') return;
-                    this.$router.push('/layout/view-1688rapid');
-                    break;
-                case SoureMap['1688global']['id']:
-                    // await this.getCountryLangCurrency(SoureMap['1688global']['getCountryLangCurrency']);
-                    if (current_path === '/layout/view-1688global') return;
-                    this.$router.push('/layout/view-1688global');
-                    break;
-                case SoureMap['aliexpressDS']['id']:
-                    // await this.getCountryLangCurrency(SoureMap['aliexpressDS']['getCountryLangCurrency']);
-                    if (current_path === '/layout/view-aliexpressDS') return;
-                    this.$router.push('/layout/view-aliexpressDS');
-                    break;
-                case SoureMap['aliexpressZapieX']['id']:
-                    // await this.getCountryLangCurrency(SoureMap['aliexpressZapieX']['getCountryLangCurrency']);
-                    if (current_path === '/layout/view-aliexpressZapieX') return;
-                    this.$router.push('/layout/view-aliexpressZapieX');
-                    break;
-                case SoureMap['yiwugo']['id']:
-                    // await this.getCountryLangCurrency(SoureMap['yiwugo']['getCountryLangCurrency']);
-                    if (current_path === '/layout/view-yiwugo') return;
-                    this.$router.push('/layout/view-yiwugo');
-                    break;
-                case SoureMap['dhgate']['id']:
-                    // await this.getCountryLangCurrency(SoureMap['dhgate']['getCountryLangCurrency']);
-                    if (current_path === '/layout/view-dhgate') return;
-                    this.$router.push('/layout/view-dhgate');
-                    break;
-                case SoureMap['mic']['id']:
-                    // await this.getCountryLangCurrency(SoureMap['mic']['getCountryLangCurrency']);
-                    if (current_path === '/layout/view-mic') return;
-                    this.$router.push('/layout/view-mic');
-                    break;
-                case SoureMap['cjds']['id']:
-                    // await this.getCountryLangCurrency(SoureMap['cjds']['getCountryLangCurrency']);
-                    if (current_path === '/layout/view-cjds') return;
-                    this.$router.push('/layout/view-cjds');
-                    break;
-                case SoureMap['litbox']['id']:
-                    // await this.getCountryLangCurrency(SoureMap['litbox']['getCountryLangCurrency']);
-                    if (current_path === '/layout/view-litbox') return;
-                    this.$router.push('/layout/view-litbox');
-                    break;
-                case SoureMap['1688overseas']['id']:
-                    // await this.getCountryLangCurrency(SoureMap['1688overseas']['getCountryLangCurrency']);
-                    if (current_path === '/layout/view-1688overseas') return;
-                    this.$router.push('/layout/view-1688overseas');
-                    break;
-                case SoureMap['banggood']['id']:
-                    // await this.getCountryLangCurrency(SoureMap['banggood']['getCountryLangCurrency']);
-                    if (current_path === '/layout/view-banggood') return;
-                    this.$router.push('/layout/view-banggood');
-                    break;
-                case SoureMap['chinabrands']['id']:
-                    // await this.getCountryLangCurrency(SoureMap['chinabrands']['getCountryLangCurrency']);
-                    if (current_path === '/layout/view-chinabrands') return;
-                    this.$router.push('/layout/view-chinabrands');
-                    break;
-                case SoureMap['globalres']['id']:
-                    // await this.getCountryLangCurrency(SoureMap['globalres']['getCountryLangCurrency']);
-                    if (current_path === '/layout/view-globalres') return;
-                    this.$router.push('/layout/view-globalres');
-                    break;
-            }
+            // for(let i = 1; i <= Object.keys(SoureMap).length; i++){
+            //     if(this.$store.state.source_id == i){
+                    if (current_path === SoureMap[this.$store.state.source_id].currentPath) return;
+                    await this.$router.push(SoureMap[this.$store.state.source_id].currentPath);
+            //         break;
+            //     }
+            // }
+            // switch (this.$store.state.source_id) {
+            //     case SoureMap['alibaba']['id']:
+            //         await this.getCountryLangCurrency(SoureMap['alibaba']['getCountryLangCurrency']);
+            //         if (current_path === '/view-alibaba') return;
+            //         this.$router.push('/view-alibaba');
+            //         break;
+            //     case SoureMap['1688']['id']:
+            //         // await this.getCountryLangCurrency(SoureMap['1688']['getCountryLangCurrency']);
+            //         if (current_path === '/view-1688') return;
+            //         this.$router.push('/view-1688');
+            //         break;
+            //     case SoureMap['1688rapid']['id']:
+            //         // await this.getCountryLangCurrency(SoureMap['1688rapid']['getCountryLangCurrency']);
+            //         if (current_path === '/view-1688rapid') return;
+            //         this.$router.push('/view-1688rapid');
+            //         break;
+            //     case SoureMap['1688global']['id']:
+            //         // await this.getCountryLangCurrency(SoureMap['1688global']['getCountryLangCurrency']);
+            //         if (current_path === '/view-1688global') return;
+            //         this.$router.push('/view-1688global');
+            //         break;
+            //     case SoureMap['aliexpressDS']['id']:
+            //         // await this.getCountryLangCurrency(SoureMap['aliexpressDS']['getCountryLangCurrency']);
+            //         if (current_path === '/view-aliexpressDS') return;
+            //         this.$router.push('/view-aliexpressDS');
+            //         break;
+            //     case SoureMap['aliexpressZapieX']['id']:
+            //         // await this.getCountryLangCurrency(SoureMap['aliexpressZapieX']['getCountryLangCurrency']);
+            //         if (current_path === '/view-aliexpressZapieX') return;
+            //         this.$router.push('/view-aliexpressZapieX');
+            //         break;
+            //     case SoureMap['yiwugo']['id']:
+            //         // await this.getCountryLangCurrency(SoureMap['yiwugo']['getCountryLangCurrency']);
+            //         if (current_path === '/view-yiwugo') return;
+            //         this.$router.push('/view-yiwugo');
+            //         break;
+            //     case SoureMap['dhgate']['id']:
+            //         // await this.getCountryLangCurrency(SoureMap['dhgate']['getCountryLangCurrency']);
+            //         if (current_path === '/view-dhgate') return;
+            //         this.$router.push('/view-dhgate');
+            //         break;
+            //     case SoureMap['mic']['id']:
+            //         // await this.getCountryLangCurrency(SoureMap['mic']['getCountryLangCurrency']);
+            //         if (current_path === '/view-mic') return;
+            //         this.$router.push('/view-mic');
+            //         break;
+            //     case SoureMap['cjds']['id']:
+            //         // await this.getCountryLangCurrency(SoureMap['cjds']['getCountryLangCurrency']);
+            //         if (current_path === '/view-cjds') return;
+            //         this.$router.push('/view-cjds');
+            //         break;
+            //     case SoureMap['litbox']['id']:
+            //         // await this.getCountryLangCurrency(SoureMap['litbox']['getCountryLangCurrency']);
+            //         if (current_path === '/view-litbox') return;
+            //         this.$router.push('/view-litbox');
+            //         break;
+            //     case SoureMap['1688overseas']['id']:
+            //         // await this.getCountryLangCurrency(SoureMap['1688overseas']['getCountryLangCurrency']);
+            //         if (current_path === '/view-1688overseas') return;
+            //         this.$router.push('/view-1688overseas');
+            //         break;
+            //     case SoureMap['banggood']['id']:
+            //         // await this.getCountryLangCurrency(SoureMap['banggood']['getCountryLangCurrency']);
+            //         if (current_path === '/view-banggood') return;
+            //         this.$router.push('/view-banggood');
+            //         break;
+            //     case SoureMap['chinabrands']['id']:
+            //         // await this.getCountryLangCurrency(SoureMap['chinabrands']['getCountryLangCurrency']);
+            //         if (current_path === '/view-chinabrands') return;
+            //         this.$router.push('/view-chinabrands');
+            //         break;
+            //     case SoureMap['globalres']['id']:
+            //         // await this.getCountryLangCurrency(SoureMap['globalres']['getCountryLangCurrency']);
+            //         if (current_path === '/view-globalres') return;
+            //         this.$router.push('/view-globalres');
+            //         break;
+            // }
         }
     }
 }
