@@ -1,6 +1,7 @@
 const server_url = 'http://eurotransit.acuteberry.com/';
 // const server_url = 'http://artpic.la.com/';
 const client_url = 'http://127.0.0.1:8080/';
+const projectName = 'Sourcefrom'
 
 //将远程图片转化为base64
 function getBase64(img) {
@@ -56,7 +57,9 @@ function getFile(base64Data) {
 // 发送图片base64到content_script
 function uploadImage(base64) {
 	//TBD：目前依赖“title”值判断是否为搜索页，而且“多选一”挑选某个搜索页；这2条规则都不够鲁棒需要改进
-    chrome.tabs.query({title: 'SourceIQ'}, tabs => {
+    // 这里因为chrome插件的当前语言是根据chrome浏览器决定的，但是Vue搜索页是自己设置的默认英文，导致这里不能用多语言去获取项目名称
+    //title: chrome.i18n.getMessage('projectName'
+    chrome.tabs.query({title: projectName}, tabs => {
         console.log('获取项目页面', tabs);
         // 1.将base64直接存储到chrome缓存中
         chrome.storage.local.set({'upload-file': base64}, function () {
@@ -129,7 +132,7 @@ function sendMessageToActiveTabContentScript(message, callback) {
 }
 // 发送消息给项目窗口的ContentScript.js
 function sendMessageToContentScript(message, callback) {
-    chrome.tabs.query({title: 'SourceIQ'}, function (tabs) {
+    chrome.tabs.query({title: projectName}, function (tabs) {
         for (let tab of tabs) {
             chrome.tabs.sendMessage(tab.id, message, function (response) {
                 if (callback) callback(response);

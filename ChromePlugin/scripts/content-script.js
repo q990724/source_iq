@@ -1,3 +1,5 @@
+const projectName = 'Sourcefrom';
+
 function coverImage(e) {
     return new Promise((resolve, reject) => {
         let path = $("#ele").attr("src");
@@ -146,7 +148,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         // 将新的设置写入到window缓存中
         window.localStorage.setItem('app-setting', JSON.stringify(request.value.appSetting));
         // 如果当前window的title=SourceIQ，则刷新页面
-        if (window.document.title === 'SourceIQ') {
+        if (window.document.title === projectName) {
             window.location.reload();
         }
     } else if (request.cmd == 'image-file') {
@@ -160,7 +162,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                 // 存储到window缓存中
                 window.localStorage.setItem('upload-file', o['upload-file']);
                 // 如果当前window的title=SourceIQ，则刷新页面
-                if (window.document.title === 'SourceIQ') {
+                console.log(window.document.title);
+                if (window.document.title === projectName) {
                     console.log("content收到upload-file，马上reload");
                     window.location.reload();
                 }
