@@ -90,7 +90,7 @@ export default {
             font-size: $regular_text_size;
             margin-right: 20px;
             //padding: 5px 0;
-            font-weight: bold;
+            // font-weight: bold;
             &.active {
                 color: #FF4000;
             }

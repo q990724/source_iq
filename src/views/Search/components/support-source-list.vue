@@ -2,7 +2,7 @@
     <div class="suppor-sourcec-list mt20">
         <transition name="el-zoom-in-bottom">
             <div class="no-list">
-                <h4>{{$t('label.no_result')}}</h4>
+                <h4>{{$t('label.slogan')}}</h4>
                 <div class="list">
                     <div class="item" v-for="item in list" :key="item.name">
                         <div class="item_content">

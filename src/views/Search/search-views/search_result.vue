@@ -42,7 +42,7 @@
                 <h2 class="mt20" v-if="results && results.length > 0">{{ $t('message.findSource') }}</h2>
                 <!--  商品列表  -->
                 <product-list :offer_list="results" ref="product-list" :show-seller="!(resultInfo.showSeller !== undefined && resultInfo.showSeller == false)"></product-list>
-                <support-source-list v-show="$store.state.searchState === 'none' && !$store.state.mainImage && !$store.state.searchText"></support-source-list>
+                <support-source-list v-show="$store.state.searchState === 'none' && !$store.state.searchParams.mainImage && !$store.state.searchParams.searchText"></support-source-list>
             </div>
         </div>
 
