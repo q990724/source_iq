@@ -34,8 +34,11 @@
                                 <div v-else style="height: 20px;"></div>
                             </div>
                         </div>
+                    </div>
+                    <!-- 鲁棒性检查seller.homeUrl是否为NULL再增加点击事件 -->
+                    <div class="bottom" v-if="showSeller && item.seller">
                         <!-- 如果卖家节点和年份都不存在时，就不渲染此div模块-->
-                        <div class="supplier" v-if="showSeller && item.seller">
+                        <div class="supplier">
                             <div class="year_name">
                                 <div class="year" v-if="item.seller && item.seller.years">
                                     <span>{{item.seller.years}} YRS</span>
@@ -58,14 +61,6 @@
                                 </div>
                             </div>
                         </div>
-
-                    </div>
-                    <!-- 鲁棒性检查seller.homeUrl是否为NULL再增加点击事件 -->
-                    <div class="bottom one-line" v-if="showSeller && item.seller && item.seller.homeUrl && item.seller.name">
-                        <span @click="openHref(item.seller.homeUrl)" :title="item.seller.name">{{item.seller.name}}</span>
-                    </div>
-                    <div class="bottom one-line" v-else-if="showSeller && item.seller">
-                        <span :title="item.seller.name">{{item.seller.name}}</span>
                     </div>
                 </div>
 			</div>
@@ -158,7 +153,7 @@
 
 		.message {
             width: 100%;
-			padding: 10px 10px 20px 10px;
+			padding: 10px;
 			//border-bottom: 1px solid $line_color;
 
 			.name {
@@ -234,9 +229,20 @@
                         margin-top: 2px;
                     }
                 }
+                .sale_count {
+                    font-size: $secondary_text_size;
+                }
             }
 
-			.supplier {
+		}
+
+		.bottom {
+            width: 100%;
+			font-size: $secondary_text_size;
+			padding: 10px;
+			color: $regular_text_color;
+            border-top: 1px solid $line_color;
+            .supplier {
                 .year_name {
                     display: flex;
                     align-items: center;
@@ -246,7 +252,7 @@
                         border-radius: 3px;
                         margin-right: 10px;
                         padding: 2px 6px;
-						white-space: nowrap;
+                        white-space: nowrap;
                         font-size: $placeholder_text_size;
                     }
 
@@ -258,7 +264,7 @@
                         white-space: nowrap;
                     }
                 }
-				.credentials {
+                .credentials {
                     display: flex;
                     align-items: center;
                     flex-wrap: wrap;
@@ -272,22 +278,22 @@
                         }
                     }
                 }
-			}
-		}
-
-		.bottom {
-            width: 100%;
-			font-size: $secondary_text_size;
-			padding: 10px;
-			color: $regular_text_color;
-            border-top: 1px solid $line_color;
-			span {
-				cursor: pointer;
-			}
+            }
 		}
 	}
     .no-result {
         text-align: center;
         margin: 40px 0;
+    }
+
+    ::v-deep .el-rate {
+        .el-rate__item {
+            .el-rate__icon, .el-rate__text {
+                font-size: $secondary_text_size;
+            }
+            .el-rate__icon {
+                margin-right: 3px;
+            }
+        }
     }
 </style>

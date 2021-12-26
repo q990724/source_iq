@@ -3,9 +3,12 @@ import { Message, Loading, MessageBox } from 'element-ui'
 import SourceMap from "@/assets/js/source_map";
 import Store from "@/store/index";
 import {i18n} from "@/main";
+import {clear} from "core-js/internals/task";
 
 const ConfigBaseURL = 'http://eurotransit.acuteberry.com/' //默认路径，这里也可以使用env来判断环境
+const timeout = 1000 * 60;
 let loadingInstance = null //这里是loading
+let loadingInstanceTimer = null;
 
 function clearCookie(source_id) {
 	switch (source_id) {
@@ -21,9 +24,26 @@ function clearCookie(source_id) {
 	}
 }
 
+function startLoading() {
+    if(loadingInstance) loadingInstance.close();
+    loadingInstance = Loading.service({
+        lock: true,
+        text: 'loading...'
+    })
+    loadingInstanceTimer = window.setTimeout(() => {
+        stopLoading();
+    }, timeout);
+}
+
+function stopLoading() {
+    window.clearTimeout(loadingInstanceTimer)
+    loadingInstanceTimer = null;
+    loadingInstance.close();
+}
+
 //使用create方法创建axios实例
 export const Service = axios.create({
-    timeout: 60000, // 请求超时时间
+    timeout: timeout, // 请求超时时间
     baseURL: ConfigBaseURL,
     headers: {
         'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -33,10 +53,7 @@ export const Service = axios.create({
 Service.withCredentials = true;
 // 添加请求拦截器
 Service.interceptors.request.use(config => {
-    loadingInstance = Loading.service({
-        lock: true,
-        text: 'loading...'
-    })
+    startLoading();
     return config
 })
 // 添加响应拦截器
@@ -44,7 +61,7 @@ Service.interceptors.response.use(response => {
     if(response.data) {
         if(response.data.retcode == 0 || response.data.retcode == 200 || response.data.code == 200) {
 			//TBD：如果当前请求成功返回，并且是“上传图片”，那么就先不关闭loading
-			if (response.config.url.indexOf('uploadPic') == -1) loadingInstance.close()
+			if (response.config.url.indexOf('uploadPic') == -1) stopLoading();
             return response.data
         }else if(
             response.data.retcode == 40000 ||
@@ -52,7 +69,7 @@ Service.interceptors.response.use(response => {
             (response.data.data && response.data.data.error == 'require login') ||
             (response.data.ret && response.data.ret[0].indexOf('令牌过期') != -1))
         {
-			loadingInstance.close()
+            stopLoading();
             // cookie过期后，清除当前站点的cookie
             clearCookie(Store.state.source_id);
             // let sourceName = '',
@@ -79,7 +96,7 @@ Service.interceptors.response.use(response => {
             // if(response.data.message) {
             //     Message.error(response.data.message);
             // }
-			loadingInstance.close()
+            stopLoading();
             return Promise.reject(response.data.message || response.data.msg || i18n.t('unknown_error'));
         }
     }
@@ -91,6 +108,6 @@ Service.interceptors.response.use(response => {
         type: 'error',
         duration: 3 * 1000
     })
-    loadingInstance.close()
+    stopLoading();
     return Promise.reject(error)
 })

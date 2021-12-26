@@ -12,7 +12,7 @@
                                  @onClickMainImage="onClickMainImage" @onClickSearchText="onClickSearchText" @onClickClear="onClickClear"></image-operation>
                 <!--  筛选区域  -->
                 <!-- v-if="(categoryList && categoryList.items) || (filterList && filterList.length > 0) || $store.state.searchState !== 'none' || $store.state.mainImage || $store.state.searchText" -->
-                <div class="filter-container mt20" v-if="(categoryList && categoryList.items) || (filterList && filterList.length > 0)">
+                <div class="filter-container mt20" :style="(filterList && filterList.length > (collapseFilterGroupCount+1)) ? 'padding-bottom: 20px;' : 'padding-bottom:0;'" v-if="(categoryList && categoryList.items) || (filterList && filterList.length > 0)">
                     <!-- v-show="$store.state.searchState !== 'none' || $store.state.mainImage || $store.state.searchText" -->
 <!--                    <source-list @onSourceItemClick="onSourceItemClick"></source-list> -->
                     <!-- 商品分类 -->
@@ -657,7 +657,7 @@ export default {
 .filter-container {
     border-radius: 5px;
     background-color: #FFF;
-    padding: 20px;
+    padding: 20px 20px 10px 20px;
 }
 
 .collapse {
