@@ -71,7 +71,9 @@ export default {
     },
     methods: {
         onItemClick(e) {
+            // 判断是否是span标签并不鲁棒，最好再判断一下是否有货源id，或者包含data-id属性，我这里是判断的货源id是否存在。
             if(e.target.nodeName == "SPAN") {
+                if(e.target.dataset.id === undefined) return;
                 let source_id = e.target.dataset.id;
                 this.$store.state.sourceName = source_id;
                 this.$emit('onSourceItemClick', source_id*1);
