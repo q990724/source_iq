@@ -1,7 +1,7 @@
 <template>
     <div class="source-list">
         <div class="content" @click="onItemClick">
-            <my-collapse>
+            <my-collapse :preview-row="1">
                 <div class="item" v-for="(item,itemIndex) in list" :class="{'active': $store.state.source_id == itemIndex}">
                     <span :data-id="itemIndex">{{item.name}}</span>
                 </div>

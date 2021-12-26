@@ -41,9 +41,11 @@ Service.interceptors.request.use(config => {
 })
 // 添加响应拦截器
 Service.interceptors.response.use(response => {
-    loadingInstance.close()
+    // loadingInstance.close()
     if(response.data) {
         if(response.data.retcode == 0 || response.data.retcode == 200 || response.data.code == 200) {
+			//TBD：如果当前请求成功返回，并且是“上传图片”，那么就先不关闭loading
+			if (response.config.url.indexOf('uploadPic') == -1) loadingInstance.close()
             return response.data
         }else if(
             response.data.retcode == 40000 ||
@@ -51,6 +53,7 @@ Service.interceptors.response.use(response => {
             (response.data.data && response.data.data.error == 'require login') ||
             (response.data.ret && response.data.ret[0].indexOf('令牌过期') != -1))
         {
+			loadingInstance.close()
             // cookie过期后，清除当前站点的cookie
             clearCookie(Store.state.source_id);
             // let sourceName = '',
@@ -77,6 +80,7 @@ Service.interceptors.response.use(response => {
             // if(response.data.message) {
             //     Message.error(response.data.message);
             // }
+			loadingInstance.close()
             return Promise.reject(response.data.message || response.data.msg || i18n.t('unknown_error'));
         }
     }
