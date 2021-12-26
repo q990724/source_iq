@@ -33,6 +33,9 @@ export default {
     background-color: #FFFFFF;
     padding: 0;
 }
+.el-main {
+    min-height: calc(100vh - 40px);
+}
 .right-content {
     position: relative;
 }
