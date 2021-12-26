@@ -15,6 +15,7 @@ module.exports = {
         unknown_error: 'Unknown error occurred ',
         no_search_image_api: 'Image Search not supported!',
 		empty_message_not_allowed: "Message can't be empty!",
+		feedback_sent: "Feedback sent",
     },
     label: {
         chooseBox: 'Crop',

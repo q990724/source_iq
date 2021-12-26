@@ -2,6 +2,7 @@ module.exports = {
     message: {
         findSource: '为您找到以下资源',
 		empty_message_not_allowed: '留言信息不能为空！',
+		feedback_sent: "反馈已发送",
     },
     label: {
         chooseBox: '框选主体',

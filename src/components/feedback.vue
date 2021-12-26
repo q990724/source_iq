@@ -80,7 +80,7 @@ export default {
                 img_path: image_json || null
             });
             if(result.data.status == 200) {
-                this.$message.success('反馈成功！');
+                this.$message.success(this.$t('message.feedback_sent'));
                 this.close();
             }else {
                 this.$message.error(result.data.message);
