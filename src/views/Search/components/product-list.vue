@@ -47,7 +47,7 @@
                             </div>
                             <div class="credentials" v-if="item.seller.credentials && item.seller.credentials.length > 0">
                                 <div class="cre" v-for="(cre, cre_i) in item.seller.credentials" :key="cre_i">
-                                    <div class="cre_image" v-if="cre.displayType === 'image'">
+                                    <div class="cre_image" v-if="cre.displayType === 'image' && cre.icon">
                                         <template v-if="cre.icon.type === 'url'">
                                             <img :src="cre.icon.value" alt="">
                                         </template>
@@ -55,7 +55,7 @@
                                             <i :style="{'color': cre.icon.value.color}" class="iconfont2" :class="true ? 'icon-' + cre.icon.value.fontLabel : ''" v-for="icon in cre.icon.value.repeatCount"></i>
                                         </template>
                                     </div>
-                                    <div class="cre_text" v-if="cre.displayType === 'text'"></div>
+                                    <div class="cre_text" v-if="cre.displayType === 'text' && cre.text">{{cre.text}}</div>
                                 </div>
                             </div>
                         </div>
