@@ -18,19 +18,20 @@ function coverImage(e) {
 }
 
 $(document.body).append(`
-    <div id="source_iq_app">
-        <div class="cover-image">
-            <img src="#" alt="" id="ele" width="100%">
-            <div class="mark"></div>
-            <div class="confirm">
-                <span>${chrome.i18n.getMessage('confirm')}</span>
-                <i>${chrome.i18n.getMessage('cancle')}</i>
+        <div id="source_iq_app">
+            <div class="cover-image">
+                <img src="#" alt="" id="ele" width="100%">
+                <div class="mark"></div>
+                <div class="confirm">
+                    <span>${chrome.i18n.getMessage('confirm')}</span>
+                    <i>${chrome.i18n.getMessage('cancle')}</i>
+                </div>
             </div>
         </div>
-    </div>
-`);
+    `);
 
 $(function () {
+
     $('.confirm').hide();
     let coverImageRes = '';
     $('#ele').Jcrop({
