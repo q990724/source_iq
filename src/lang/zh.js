@@ -10,6 +10,7 @@ module.exports = {
         synthesize: '综合',
         volumeOfTransaction: '成交额',
         price: '价格',
+		negotiable: '询价',
         currentAddress: '所在地区',
         allAddress: '所有地区',
         purchaseFrom: '采购距离',

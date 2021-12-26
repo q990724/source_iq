@@ -13,10 +13,10 @@
                                 <template v-for="price in item.product.tradePrice">
                                     <!-- 正常价 -->
                                     <div class="sale" v-if="price.type === 'wholesale' || price.type === 'sale'">
-                                        <i>{{ price.priceText }}</i> <span v-if="item.product.tradePrice[0].unit"> / {{item.product.tradePrice[0].unit}}</span>
+                                        <i>{{ price.priceText ? price.priceText: $t('label.negotiable')}}</i> <span v-if="item.product.tradePrice[0].unit"> / {{item.product.tradePrice[0].unit}}</span>
                                     </div>
                                     <!-- 划线价 -->
-                                    <div class="retail" v-if="price.type === 'retail'">
+                                    <div class="retail" v-if="price.type === 'retail' && price.priceText">
                                         <del>{{ price.priceText }}</del>
                                     </div>
                                 </template>
@@ -38,7 +38,7 @@
                         <div class="supplier" v-if="showSeller && item.seller">
                             <div class="year_name">
                                 <div class="year" v-if="item.seller && item.seller.years">
-                                    <span>{{item.seller.years}}YRS</span>
+                                    <span>{{item.seller.years}} YRS</span>
                                 </div>
                                 <!-- 鲁棒性检查seller.homeUrl是否为NULL再增加点击事件 -->
                                 <div class="supplier-name" v-if="item.seller && item.seller.name && item.seller.homeUrl " @click="openHref(item.seller.homeUrl)" :title="item.seller.name">{{item.seller.name}}</div>
@@ -246,6 +246,7 @@
                         border-radius: 3px;
                         margin-right: 10px;
                         padding: 2px 6px;
+						white-space: nowrap;
                         font-size: $placeholder_text_size;
                     }
 
