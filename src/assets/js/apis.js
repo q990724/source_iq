@@ -527,7 +527,7 @@ export const publicAPI = {
 	},
 
 	// 上传图片
-	uploadPic(file){
+	uploadImage(file){
 		let cookie = null;
 		if(SourceMap[Store.state.source_id].needCookie === true) {
 			cookie = getCookie();
@@ -537,7 +537,7 @@ export const publicAPI = {
 		let formData = new FormData();
 		formData.append('file', file);
 		formData.append('cookie', cookie);
-		return Service.post(SourceMap[Store.state.source_id].uploadPic, formData, {
+		return Service.post(SourceMap[Store.state.source_id].uploadImage, formData, {
 			headers: {
 				'Content-Type': 'multipart/form-data'
 			}
@@ -545,92 +545,97 @@ export const publicAPI = {
 	},
 
 	//图片首次搜索
-	searchGoodsByPicFirst(params){
-		let param = {},cookie = null;
+	imageSearchFirst(params){
+		delete params.originImage; delete params.mainImage;
+		let cookie = null;
 		if(SourceMap[Store.state.source_id].needCookie === true) {
 			cookie = getCookie();
 			if(!cookie) return Promise.reject('no cookie');
 		}
-		let searchtype = (Store.state.source_id == 2) ? 0 : 1;
-		param = {
-			imageId: params.imageAddress, yoloRegionSelected: params.yoloRegionSelected ?? null, yoloCropRegion: params.yoloCropRegion ?? null, region: params.region ?? null, cookie: cookie, searchtype: searchtype, pailitaoCategoryId: params.pailitaoCategoryId ?? null, sortField: params.sortField ?? 'normal', sortType: params.sortType ?? 'asc', priceStart: params.priceStart ?? null, priceEnd: params.priceEnd ?? null, quantityBegin: params.quantityBegin ?? null, extendProperties: params.extendProperties ?? null, memberTags: params.memberTags ?? null, isImgPkg: params.isImgPkg ?? null, isMainShortVideo: params.isMainShortVideo ?? null, isAuthentication: params.isAuthentication ?? null, isPatent: params.isPatent ?? null, isSrcFactoryItm: params.isSrcFactoryItm ?? null, holidayTagId: params.holidayTagId ?? null, isZhangqiSelect: params.isZhangqiSelect ?? null, gmtCreate: params.gmtCreate ?? null, province: params.province ?? null, city: params.city ?? null, dis: params.dis ?? null};
-		return Service.get(SourceMap[Store.state.source_id].searchGoodsByPicFirst.path, {
-			params: param
+		let searchtype = (SourceMap[Store.state.source_id].name == '1688') ? 0 : 1;
+		// param = {
+		// 	imageId: params.imageAddress, yoloRegionSelected: params.yoloRegionSelected ?? null, yoloCropRegion: params.yoloCropRegion ?? null, region: params.region ?? null, cookie: cookie, searchtype: searchtype, pailitaoCategoryId: params.pailitaoCategoryId ?? null, sortField: params.sortField ?? 'normal', sortType: params.sortType ?? 'asc', priceStart: params.priceStart ?? null, priceEnd: params.priceEnd ?? null, quantityBegin: params.quantityBegin ?? null, extendProperties: params.extendProperties ?? null, memberTags: params.memberTags ?? null, isImgPkg: params.isImgPkg ?? null, isMainShortVideo: params.isMainShortVideo ?? null, isAuthentication: params.isAuthentication ?? null, isPatent: params.isPatent ?? null, isSrcFactoryItm: params.isSrcFactoryItm ?? null, holidayTagId: params.holidayTagId ?? null, isZhangqiSelect: params.isZhangqiSelect ?? null, gmtCreate: params.gmtCreate ?? null, province: params.province ?? null, city: params.city ?? null, dis: params.dis ?? null};
+		return Service.get(SourceMap[Store.state.source_id].imageSearchFirst.path, {
+			params: {...params, cookie: cookie, searchtype: searchtype }
 		})
 	},
 
 	//图片搜索
-	searchGoodsByPic(params) {
-		let param = {},cookie = null, file = null, formData = new FormData();
+	imageSearch(params) {
+		delete params.originImage; delete params.mainImage;
+		let cookie = null, file = null, formData = new FormData();
 		if(SourceMap[Store.state.source_id].needCookie === true) {
 			cookie = getCookie();
 			if(!cookie) return Promise.reject('no cookie');
 		}
+		let searchtype = (SourceMap[Store.state.source_id].name == '1688') ? 0 : 1;
 		// 如果没有上传图片成功的状态，就base64转文件
 		if( Store.state.imageUploadState !== 'uploaded') {
 			file = getFileFromBase64(Store.state.searchParams.mainImage);
 		}
-		switch (Store.state.source_id) {
-			case 1: // Alibaba
-				param = {
-					imageAddress: params.imageAddress, beginPage: params.page, language: params.language ?? null, currency: params.currency ?? null, categoryId: params.categoryId ?? null};
-				break;
-			case 2: case 5: // 1688 1688overseas
-				let searchtype = (Store.state.source_id == '2') ? 0 : 1;
-				param = {
-					imageId: params.imageAddress, page: params.page, yoloRegionSelected: params.yoloRegionSelected ?? null, yoloCropRegion: params.yoloCropRegion ?? null, region: params.region ?? null, sessionId: params.sessionId ?? null, requestId: params.requestId ?? null, cookie: cookie, searchtype: searchtype, pailitaoCategoryId: params.pailitaoCategoryId ?? null, sortField: params.sortField ?? 'normal', sortType: params.sortType ?? 'asc', priceStart: params.priceStart ?? null, priceEnd: params.priceEnd ?? null, quantityBegin: params.quantityBegin ?? null, extendProperties: params.extendProperties ?? null, memberTags: params.memberTags ?? null, isImgPkg: params.isImgPkg ?? null, isMainShortVideo: params.isMainShortVideo ?? null, isAuthentication: params.isAuthentication ?? null, isPatent: params.isPatent ?? null, isSrcFactoryItm: params.isSrcFactoryItm ?? null, holidayTagId: params.holidayTagId ?? null, isZhangqiSelect: params.isZhangqiSelect ?? null, gmtCreate: params.gmtCreate ?? null, province: params.province ?? null, city: params.city ?? null, dis: params.dis ?? null};
-				break;
-			case 3: // 1688 Rapid
-				// 如果没有上传图片成功的状态，就走上传文件逻辑
-				if( Store.state.imageUploadState !== 'uploaded'){
-					formData.append('file', file); formData.append('page', params.page);
-				}else{
-					param = Qs.stringify({
-						url: params.imageAddress, page: params.page, page_size: params.page_size ?? null, attr_id: params.attr_id ?? null});
-				}
-				break;
-			case 4: // 1688Global
-				param = {
-					imgUrl: params.imageAddress, pageNo: params.page, cookie: cookie, region: params.region ?? null, keyword: params.keyword ?? null, categoryId: params.categoryId ?? null, location: params.location ?? null, tags: params.tags ?? null};
-				break;
-			case 6: // Aliexpress DS
-				param = {
-					filename: params.imageAddress, categoryId: params.categoryId ?? null};
-				break;
-			case 7: // Aliexpress ZapieX
-				param = {
-					uploadKey: params.imageAddress, lang: params.language ?? null, currency: params.currency ?? null, sort: params.sort ?? null, filter: params.filter ?? null};
-				break;
-			case 8: // YiWuGo
-				param = {
-					file_url: params.imageAddress, page: params.page ?? null, page_size: params.page_size ?? null, lang: params.language ?? null};
-				break;
-			case 9: // DHgate
-				if( Store.state.imageUploadState !== 'uploaded'){
-					formData.append('image', file); formData.append('page_num', params.page); formData.append('lang', params.language ?? null); formData.append('currency', params.currency ?? null);
-				}else{
-					param = Qs.stringify({
-						imgUrl: params.imageAddress, page_num: params.page, page_size: params.page_size ?? null, lang: params.language ?? null, currency: params.currency ?? null, category: params.category ?? null});
-				}
-				break;
-			case 10: // CJdropshipping
-				if( Store.state.imageUploadState !== 'uploaded'){
-					formData.append('image', file);
-				}
-				break;
-			case 11: // Made-in-China
-				if( Store.state.imageUploadState !== 'uploaded'){
-					formData.append('image', file); formData.append('page_num', params.page); formData.append('page_size', params.page_size ?? null); formData.append('lang', params.language ?? null); formData.append('currency', params.currency ?? null);
-				}else{
-					param = Qs.stringify({
-						imgId: params.imageAddress, page_num: params.page, page_size: params.page_size ?? null, lang: params.language ?? null, currency: params.currency ?? null, category: params.category ?? null, color: params.color ?? null});
-				}
-				break;
-		}
+		// switch (Store.state.source_id) {
+		// 	case 1: // Alibaba
+		// 		param = {
+		// 			imageAddress: params.imageAddress, beginPage: params.page, language: params.language ?? null, currency: params.currency ?? null, categoryId: params.categoryId ?? null};
+		// 		break;
+		// 	case 2: case 5: // 1688 1688overseas
+		// 		let searchtype = (Store.state.source_id == '2') ? 0 : 1;
+		// 		param = {
+		// 			imageId: params.imageAddress, page: params.page, yoloRegionSelected: params.yoloRegionSelected ?? null, yoloCropRegion: params.yoloCropRegion ?? null, region: params.region ?? null, sessionId: params.sessionId ?? null, requestId: params.requestId ?? null, cookie: cookie, searchtype: searchtype, pailitaoCategoryId: params.pailitaoCategoryId ?? null, sortField: params.sortField ?? 'normal', sortType: params.sortType ?? 'asc', priceStart: params.priceStart ?? null, priceEnd: params.priceEnd ?? null, quantityBegin: params.quantityBegin ?? null, extendProperties: params.extendProperties ?? null, memberTags: params.memberTags ?? null, isImgPkg: params.isImgPkg ?? null, isMainShortVideo: params.isMainShortVideo ?? null, isAuthentication: params.isAuthentication ?? null, isPatent: params.isPatent ?? null, isSrcFactoryItm: params.isSrcFactoryItm ?? null, holidayTagId: params.holidayTagId ?? null, isZhangqiSelect: params.isZhangqiSelect ?? null, gmtCreate: params.gmtCreate ?? null, province: params.province ?? null, city: params.city ?? null, dis: params.dis ?? null};
+		// 		break;
+		// 	case 3: // 1688 Rapid
+		// 		// 如果没有上传图片成功的状态，就走上传文件逻辑
+		// 		if( Store.state.imageUploadState !== 'uploaded'){
+		// 			formData.append('file', file); formData.append('page', params.page);
+		// 		}else{
+		// 			param = Qs.stringify({
+		// 				url: params.imageAddress, page: params.page, page_size: params.page_size ?? null, attr_id: params.attr_id ?? null});
+		// 		}
+		// 		break;
+		// 	case 4: // 1688Global
+		// 		param = {
+		// 			imgUrl: params.imageAddress, pageNo: params.page, cookie: cookie, region: params.region ?? null, keyword: params.keyword ?? null, categoryId: params.categoryId ?? null, location: params.location ?? null, tags: params.tags ?? null};
+		// 		break;
+		// 	case 6: // Aliexpress DS
+		// 		param = {
+		// 			filename: params.imageAddress, categoryId: params.categoryId ?? null};
+		// 		break;
+		// 	case 7: // Aliexpress ZapieX
+		// 		param = {
+		// 			uploadKey: params.imageAddress, lang: params.language ?? null, currency: params.currency ?? null, sort: params.sort ?? null, filter: params.filter ?? null};
+		// 		break;
+		// 	case 8: // YiWuGo
+		// 		param = {
+		// 			file_url: params.imageAddress, page: params.page ?? null, page_size: params.page_size ?? null, lang: params.language ?? null};
+		// 		break;
+		// 	case 9: // DHgate
+		// 		if( Store.state.imageUploadState !== 'uploaded'){
+		// 			formData.append('image', file); formData.append('page_num', params.page); formData.append('lang', params.language ?? null); formData.append('currency', params.currency ?? null);
+		// 		}else{
+		// 			param = Qs.stringify({
+		// 				imgUrl: params.imageAddress, page_num: params.page, page_size: params.page_size ?? null, lang: params.language ?? null, currency: params.currency ?? null, category: params.category ?? null});
+		// 		}
+		// 		break;
+		// 	case 10: // CJdropshipping
+		// 		if( Store.state.imageUploadState !== 'uploaded'){
+		// 			formData.append('image', file);
+		// 		}
+		// 		break;
+		// 	case 11: // Made-in-China
+		// 		if( Store.state.imageUploadState !== 'uploaded'){
+		// 			formData.append('image', file); formData.append('page_num', params.page); formData.append('page_size', params.page_size ?? null); formData.append('lang', params.language ?? null); formData.append('currency', params.currency ?? null);
+		// 		}else{
+		// 			param = Qs.stringify({
+		// 				imgId: params.imageAddress, page_num: params.page, page_size: params.page_size ?? null, lang: params.language ?? null, currency: params.currency ?? null, category: params.category ?? null, color: params.color ?? null});
+		// 		}
+		// 		break;
+		// }
+
 		// 如果没有上传图片，并且当前没有上传图片成功的状态，就走上传文件逻辑
 		if(SourceMap[Store.state.source_id].hasUpload == false && Store.state.imageUploadState !== 'uploaded'){
-			//如果当前站点为 1688rapid
-			let path = (Store.state.source_id == 3) ? SourceMap[Store.state.source_id].searchGoodsByPicFirst.path : SourceMap[Store.state.source_id].searchGoodsByPic.path;
+			formData.append('file', file); formData.append('page', params.page);
+			//如果当前站点为 1688rapid path用1688 rapid图片上传接口，否则，都用图片搜索接口
+			let path = (SourceMap[Store.state.source_id].name == '1688 Rapid') ? SourceMap[Store.state.source_id].imageSearchFirst.path : SourceMap[Store.state.source_id].imageSearch.path;
 			return Service.post(path, formData, {
 				headers: {
 					'Content-Type': 'multipart/form-data'
@@ -638,18 +643,12 @@ export const publicAPI = {
 			})
 		}
 
-		if(SourceMap[Store.state.source_id].searchGoodsByPic.method === 'get') {
-			if(Store.state.source_id == 6){ // 速卖通需要传token、cookie
-				return Service.get(SourceMap[Store.state.source_id].searchGoodsByPic.path, {
-					params: param,
-					headers: {'token': cookie}
-				})
-			}
-				return Service.get(SourceMap[Store.state.source_id].searchGoodsByPic.path, {
-					params: param
+		if(SourceMap[Store.state.source_id].imageSearch.method === 'get') {
+				return Service.get(SourceMap[Store.state.source_id].imageSearch.path, {
+					params: {...params, cookie: cookie, searchtype: searchtype }
 				})
 		}
-				return Service.post(SourceMap[Store.state.source_id].searchGoodsByPic.path, param, {
+				return Service.post(SourceMap[Store.state.source_id].imageSearch.path, Qs.stringify({...params}), {
 					headers: {
 						'Content-Type': 'application/x-www-form-urlencoded'
 					},
@@ -657,7 +656,7 @@ export const publicAPI = {
 	},
 
 	//文字首次搜索
-	searchGoodsByTextFirst(params){
+	keywordSearchFirst(params){
 		let cookie = null;
 		if(SourceMap[Store.state.source_id].needCookie === true) {
 			cookie = getCookie();
@@ -674,13 +673,13 @@ export const publicAPI = {
 		// 		break;
 		// }
 
-		return Service.get(SourceMap[Store.state.source_id].searchGoodsByTextFirst.path, {
+		return Service.get(SourceMap[Store.state.source_id].keywordSearchFirst.path, {
 			params: {...params, cookie: cookie}
 		})
 	},
 
 	// 文字搜索
-	searchGoodsByText(params) {
+	keywordSearch(params) {
 		let cookie = null;
 		if(SourceMap[Store.state.source_id].needCookie === true) {
 			cookie = getCookie();
@@ -746,13 +745,13 @@ export const publicAPI = {
 		// 		break;
 		// }
 
-		if(SourceMap[Store.state.source_id].searchGoodsByText.method === 'get') {
-			return Service.get(SourceMap[Store.state.source_id].searchGoodsByText.path, {
+		if(SourceMap[Store.state.source_id].keywordSearch.method === 'get') {
+			return Service.get(SourceMap[Store.state.source_id].keywordSearch.path, {
 				params: {...params, cookie: cookie}
 			})
 		}
 		// param = Qs.stringify({...params});
-			return Service.post(SourceMap[Store.state.source_id].searchGoodsByText.path, Qs.stringify({...params}), {
+			return Service.post(SourceMap[Store.state.source_id].keywordSearch.path, Qs.stringify({...params}), {
 				headers: {
 					'Content-Type': 'application/x-www-form-urlencoded'
 				},

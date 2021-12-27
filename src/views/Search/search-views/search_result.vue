@@ -349,7 +349,7 @@ export default {
                 if (SourceMap[this.$store.state.source_id].hasUpload !== false && this.$store.state.imageUploadState !== 'uploaded') {
                     console.log('hasUpload');
                     let file = getFileFromBase64(base64);
-                    let uploadImageResult = await this.$store.dispatch('uploadPic', file);
+                    let uploadImageResult = await this.$store.dispatch('uploadImage', file);
                     console.log(uploadImageResult);
                     //TBD：需要对上传图片异常（错误代码或者data=null，或者imageId=“0”等容错处理）
                     if (uploadImageResult.data && uploadImageResult.data.imageAddress && uploadImageResult.data.imageAddress !== '0') {
@@ -399,7 +399,7 @@ export default {
                     //     region: this.$store.state.region || null,
                     //     cid: this.cid,
                     // });
-                    result = await this.$store.dispatch('firstSearchPic', {
+                    result = await this.$store.dispatch('imageSearchFirst', {
                         searchPicParams: this.$store.state.searchParams,
 						// TBD：是否需要传page，跟文字搜索统一？
                     });
@@ -416,7 +416,7 @@ export default {
                     //     sessionId: this.$store.state.session['sessionId'],
                     //     color: this.color
                     // });
-                    result = await this.$store.dispatch('searchPic', {
+                    result = await this.$store.dispatch('imageSearch', {
                         searchPicParams: this.$store.state.searchParams,
                         page: this.page,
                         requestId: this.$store.state.session['requestId'],
@@ -520,12 +520,12 @@ export default {
                 let result = null;
 
                 if (!loadmore && SourceMap[this.$store.state.source_id].hasFirstSearchText === true) {
-                    result = await this.$store.dispatch('firstSearchText', {
+                    result = await this.$store.dispatch('keywordSearchFirst', {
                         searchTextParams: this.$store.state.searchParams,
                         page: this.page
                     });
                 } else {
-                    result = await this.$store.dispatch('searchText', {
+                    result = await this.$store.dispatch('keywordSearch', {
                         searchTextParams: this.$store.state.searchParams,
                         page: this.page,
                         requestId: this.$store.state.session['requestId'],

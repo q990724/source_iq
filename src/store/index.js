@@ -464,13 +464,13 @@ export default new Vuex.Store({
             })
         },
 
-        searchText(content,payload){
+        keywordSearch(content,payload){
             content.state.searchState = 'none';
             let params = {};
             return new Promise(async(resolve)=>{
                 params = collapse({...payload.searchTextParams});
                 try {
-                        resolve(await publicAPI.searchGoodsByText({ ...params,page: payload.page,language:content.state.languageCode,currency:content.state.currencyCode, sessionId: payload.sessionId, }))
+                        resolve(await publicAPI.keywordSearch({ ...params,page: payload.page,language:content.state.languageCode,currency:content.state.currencyCode, sessionId: payload.sessionId, }))
                     // switch (this.state.source_id) {
                     //     case SourceMap['alibaba']['id']:
                     //         resolve(await alibaba.searchGoodsByText({ ...params,page: payload.page,language:content.state.languageCode,currency:content.state.currencyCode }))
@@ -528,13 +528,13 @@ export default new Vuex.Store({
             })
         },
 
-        firstSearchText(content,payload){
+        keywordSearchFirst(content,payload){
             content.state.searchState = 'none';
             let params = {};
             return new Promise(async (resolve)=>{
                 params = collapse({...payload.searchTextParams});
                 try {
-                    resolve(await publicAPI.searchGoodsByTextFirst({ ...params,page: payload.page,language:content.state.languageCode,currency:content.state.currencyCode }));
+                    resolve(await publicAPI.keywordSearchFirst({ ...params,page: payload.page,language:content.state.languageCode,currency:content.state.currencyCode }));
                     // switch (this.state.source_id) {
                     //     case SourceMap['1688']['id']:
                     //         resolve(await _1688.searchGoodsFirst({ ...params,page: payload.page,language:content.state.languageCode,currency:content.state.currencyCode }))
@@ -556,12 +556,12 @@ export default new Vuex.Store({
             })
         },
 
-        uploadPic(content,payload){
+        uploadImage(content,payload){
             content.state.imageUploadState = 'none';
             // let res = null, result = {};
              return new Promise(async (resolve)=>{
                  try {
-                     resolve(await publicAPI.uploadPic( payload ))
+                     resolve(await publicAPI.uploadImage( payload ))
                      // switch (this.state.source_id) {
                      //     case SourceMap['alibaba']['id']:
                      //         res = await alibaba.uploadPic( payload )
@@ -627,7 +627,7 @@ export default new Vuex.Store({
             })
         },
 
-        searchPic(content,payload){
+        imageSearch(content,payload){
             content.state.searchState = 'none';
             console.log(payload);
             let params = {};
@@ -646,7 +646,7 @@ export default new Vuex.Store({
             return new Promise(async (resolve)=>{
                 params = collapse({...payload.searchPicParams});
                 try {
-                    resolve(await publicAPI.searchGoodsByPic({...params, page:payload.page, sessionId:payload.sessionId, requestId:payload.requestId, language:content.state.languageCode,currency:content.state.currencyCode} ))
+                    resolve(await publicAPI.imageSearch({...params, page:payload.page, sessionId:payload.sessionId, requestId:payload.requestId, language:content.state.languageCode,currency:content.state.currencyCode} ))
                     // switch (this.state.source_id) {
                     //     case SourceMap['alibaba']['id']:
                     //         res = await alibaba.searchGoodsByPic({...params, page:payload.page,language:content.state.languageCode,currency:content.state.currencyCode} )
@@ -712,14 +712,14 @@ export default new Vuex.Store({
             })
         },
 
-        firstSearchPic(content,payload){
+        imageSearchFirst(content,payload){
             content.state.searchState = 'none';
             console.log(payload.searchPicParams)
             let params = {};
             return new Promise(async (resolve)=>{
                 params = collapse({...payload.searchPicParams});
                 try {
-                    resolve(await publicAPI.searchGoodsByPicFirst({...params, language:content.state.languageCode,currency:content.state.currencyCode } ));
+                    resolve(await publicAPI.imageSearchFirst({...params, language:content.state.languageCode,currency:content.state.currencyCode } ));
                     // switch (this.state.source_id) {
                     //     case SourceMap['1688']['id']:
                     //         resolve(await _1688.searchGoodsByPicFirst( {...params, searchtype:0,language:content.state.languageCode,currency:content.state.currencyCode } ))
