@@ -3,7 +3,7 @@
         <div class="cookie-toast" v-show="!cookieToast">
             <div class="row">
                 <p>{{ $t('label.cookieToast') }} <a href="http://www.acuteberry.com/Themeparkwaittimes/privacy_policy.html" target="_blank">{{ $t('label.detail') }}</a></p>
-                <div class="btn" @click="agree">同意</div>
+                <div class="btn" @click="agree">{{$t('button.agree')}}</div>
             </div>
         </div>
     </transition>

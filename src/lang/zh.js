@@ -35,5 +35,7 @@ module.exports = {
 		confirm: '确认',
 		submit: '提交',
 		clearSearch: "清空搜索",
+		save: '保存',
+		agree: '同意',
     }
 }
