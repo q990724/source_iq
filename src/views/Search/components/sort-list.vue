@@ -11,7 +11,7 @@
                 </template>
                 <template v-else>
                     <span>{{sort.title}}</span>
-                    <el-select v-model="sort.paramValue" @change="onClickItem(index, 'select')">
+                    <el-select v-model="sort.paramValue" @change="onClickItem(index, 'select')" :placeholder="sort.title || ''">
                         <el-option v-for="item in sort.items" :key="item.paramValue" :label="item.name" :value="item.paramValue">
                         </el-option>
                     </el-select>

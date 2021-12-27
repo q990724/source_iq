@@ -33,6 +33,14 @@
                                 </div>
                                 <div v-else style="height: 20px;"></div>
                             </div>
+                            <div v-else style="height: 20px;margin-bottom: 10px;"></div>
+                            <!--卖点-->
+                            <div class="sellingPoints offerMiddle" v-if="item.product.sellingPoints && item.product.sellingPoints.length > 0">
+                                <div class="selling-points-item" v-for="(point, point_index) in item.product.sellingPoints" :key="point_index">
+                                    <span v-if="point.displayType === 'text'">{{point.value}}</span>
+                                </div>
+                            </div>
+                            <div v-else style="height: 23px;"></div>
                         </div>
                     </div>
                     <!-- 鲁棒性检查seller.homeUrl是否为NULL再增加点击事件 -->
@@ -234,6 +242,20 @@
                 }
             }
 
+            .sellingPoints {
+                display: flex;
+                align-items: center;
+                flex-wrap: wrap;
+                .selling-points-item {
+                    cursor: pointer;
+                    padding: 0 6px;
+                    border: 1px solid $primary_color;
+                    color: $primary_color;
+                    font-size: $placeholder-text_size;
+                    margin-right: 4px;
+                    margin-bottom: 4px;
+                }
+            }
 		}
 
 		.bottom {
