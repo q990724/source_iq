@@ -89,6 +89,7 @@
                                         </template>
                                     </div>
                                     <div class="cre_text" v-if="cre.displayType === 'text' && cre.text">{{cre.text}}</div>
+                                    <div class="cre_image_text" v-if="cre.displayType === 'image_text' && cre.text">{{cre.text}}</div>
                                 </div>
                             </div>
                         </div>
@@ -324,8 +325,9 @@
                         margin-right: 10px;
                         .cre_image {
                             img {
-                                max-width: 42px;
-                                max-height: 42px;
+                                display: block;
+                                height: 18px;
+                                width: auto;
                             }
                         }
                     }
