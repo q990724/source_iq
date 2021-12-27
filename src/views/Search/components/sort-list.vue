@@ -89,7 +89,7 @@ export default {
             margin-left: 8px;
             i {
                 cursor: pointer;
-                font-size: 12px;
+                font-size: $placeholder_text_size;
                 line-height: 0.8;
                 &.active {
                     color: $active_color;

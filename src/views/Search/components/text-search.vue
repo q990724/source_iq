@@ -133,7 +133,7 @@ export default {
             color: $regular_text_color;
         }
         &.clear {
-            font-size: 18px;
+            font-size: $primary_text_size;
             color: $placeholder_text_color;
         }
     }
