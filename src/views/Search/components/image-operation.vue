@@ -310,11 +310,11 @@ export default {
             cursor: pointer;
             &:first-child {
                 color: #FFF;
-                background-color: #FF4000;
+                background-color: $primary_color;
             }
             &:last-child {
                 color: #000;
-                background-color: #EFEFF4;
+                background-color: $primary_color;
             }
         }
     }

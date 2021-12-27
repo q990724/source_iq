@@ -161,10 +161,10 @@ export default {
                     transition: color .4s;
                     margin: 0 5px 10px;
                     &:hover {
-                        color: #FF4000;
+                        color: $hover_color;
                     }
                     &.active {
-                        color: #FF4000;
+                        color: $active_color;
                     }
                 }
             }

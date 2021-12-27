@@ -75,10 +75,10 @@ export default {
         & > span {
             cursor: pointer;
             &:hover {
-                color: #FF4000;
+                color: $hover_color;
             }
             &.active {
-                color: #FF4000;
+                color: $active_color;
             }
         }
 
@@ -92,10 +92,10 @@ export default {
                 font-size: 12px;
                 line-height: 0.8;
                 &.active {
-                    color: #FF4000;
+                    color: $active_color;
                 }
                 &:hover {
-                    color: #FF4000;
+                    color: $hover_color;
                 }
             }
         }

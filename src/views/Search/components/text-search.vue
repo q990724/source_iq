@@ -112,7 +112,7 @@ export default {
     position: relative;
     display: flex;
     align-items: center;
-    border: 2px solid #ff4000;
+    border: 2px solid $primary_color;
     border-radius: 5px 0 0 5px;
     width: 100%;
     height: 100%;
@@ -160,7 +160,7 @@ export default {
     height: 100%;
     color: #fff;
     text-align: center;
-    background-image: linear-gradient(90deg, #FF7E3E 0%, #FF4000 100%);
+    background-image: linear-gradient(90deg, #FF7E3E 0%, $primary_color 100%);
     border-radius: 0 6px 6px 0;
     font: 16px/2.4 Tahoma,Arial,"\5b8b\4f53",sans-serif;
     font-weight: 600;

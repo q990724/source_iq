@@ -102,12 +102,12 @@ export default {
             //padding: 5px 0;
             // font-weight: bold;
             &.active {
-                color: #FF4000;
+                color: $active_color;
             }
             span {
                 cursor: pointer;
                 &:hover {
-                    color: #FF4000;
+                    color: $hover_color;
                 }
             }
         }
