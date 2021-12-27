@@ -190,6 +190,9 @@ export default {
                         background-color: #FFF;
                         border-color: $hover_color;
                     }
+                    &.active {
+                        border-color: $active_color;
+                    }
                 }
             }
         }

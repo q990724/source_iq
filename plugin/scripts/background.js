@@ -202,7 +202,10 @@ chrome.tabs.onUpdated.addListener(function(id, info, tab) {
     }
 })
 
+// 当tab发生高亮事件时触发
 chrome.tabs.onHighlighted.addListener(function (obj) {
+    // obj返回一个数组，因为高亮一个，所以直接取0
+    if(obj['tabIds'].length <= 0) return;
     let id = obj['tabIds'][0];
     chrome.tabs.get(id, function (tab) {
         let url = tab.url;

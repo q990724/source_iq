@@ -24,6 +24,7 @@ function clearCookie(source_id) {
 	}
 }
 
+// 创建loading，同时开始定时器
 function startLoading() {
     if(loadingInstance) loadingInstance.close();
     loadingInstance = Loading.service({
@@ -35,6 +36,7 @@ function startLoading() {
     }, timeout);
 }
 
+// 停止并销毁loading
 function stopLoading() {
     window.clearTimeout(loadingInstanceTimer)
     loadingInstanceTimer = null;
