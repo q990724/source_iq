@@ -536,19 +536,12 @@ export const publicAPI = {
 
 		let formData = new FormData();
 		formData.append('file', file);
-		if(Store.state.source_id == 6){ // 速卖通需要传token、cookie
-			return Service.post(SourceMap[Store.state.source_id].uploadPic, formData, {
-				// params: param,
-				headers: {'token': cookie}
-			})
-		}else {
-			formData.append('cookie', cookie);
-			return Service.post(SourceMap[Store.state.source_id].uploadPic, formData, {
-				headers: {
-					'Content-Type': 'multipart/form-data'
-				}
-			})
-		}
+		formData.append('cookie', cookie);
+		return Service.post(SourceMap[Store.state.source_id].uploadPic, formData, {
+			headers: {
+				'Content-Type': 'multipart/form-data'
+			}
+		})
 	},
 
 	//图片首次搜索
@@ -665,106 +658,101 @@ export const publicAPI = {
 
 	//文字首次搜索
 	searchGoodsByTextFirst(params){
-		let param = {},cookie = null;
+		let cookie = null;
 		if(SourceMap[Store.state.source_id].needCookie === true) {
 			cookie = getCookie();
 			if(!cookie) return Promise.reject('no cookie');
 		}
-		switch (Store.state.source_id) {
-			case 2: case 5: // 1688 1688overseas
-				param = {
-					type: 1, keyword:params.searchText, cookie:cookie, featurePair:params.featurePair ?? null, sortType:params.sortType ?? null, descendOrder:params.descendOrder ?? null, priceStart:params.priceStart ?? null, priceEnd:params.priceEnd ?? null, quantityBegin:params.quantityBegin ?? null,province:params.province ?? null, city:params.city ?? null, biztype:params.biztype ?? null, tagsZ:params.tagsZ ?? null, offerTags:params.offerTags ?? null, filtHolidayTagId:params.filtHolidayTagId ?? null, extendProperties:params.extendProperties ?? null, memberTags:params.memberTags ?? null, commonSort:params.commonSort ?? null, tese:params.tese ?? null, filt:params.filt ?? null, factorySize:params.factorySize ?? null, employeesCount:params.employeesCount ?? null};
-				break;
-			case 4: // 1688Global
-				param = {
-					keywords:params.searchText, cookie:cookie ?? null, category:params.category ?? null, featurePair:params.featurePair ?? null, sortType:params.sortType ?? null, descendOrder:params.descendOrder ?? null, priceStart:params.priceStart ?? null, priceEnd:params.priceEnd ?? null, quantityBegin:params.quantityBegin ?? null,province:params.province ?? null, city:params.city ?? null, biztype:params.biztype ?? null, tagsZ:params.tagsZ ?? null, extendProperties:params.extendProperties ?? null, commonSort:params.commonSort ?? null, filtMemberTags:params.filtMemberTags ?? null, filtOfferTags:params.filtOfferTags ?? null, holidayTagId:params.holidayTagId ?? null, tese:params.tese ?? null, filt:params.filt ?? null, factorySize:params.factorySize ?? null, employeesCount:params.employeesCount ?? null};
-				break;
-		}
+		// switch (Store.state.source_id) {
+		// 	case 2: case 5: // 1688 1688overseas
+		// 		param = {
+		// 			type: 1, keyword:params.searchText, cookie:cookie, featurePair:params.featurePair ?? null, sortType:params.sortType ?? null, descendOrder:params.descendOrder ?? null, priceStart:params.priceStart ?? null, priceEnd:params.priceEnd ?? null, quantityBegin:params.quantityBegin ?? null,province:params.province ?? null, city:params.city ?? null, biztype:params.biztype ?? null, tagsZ:params.tagsZ ?? null, offerTags:params.offerTags ?? null, filtHolidayTagId:params.filtHolidayTagId ?? null, extendProperties:params.extendProperties ?? null, memberTags:params.memberTags ?? null, commonSort:params.commonSort ?? null, tese:params.tese ?? null, filt:params.filt ?? null, factorySize:params.factorySize ?? null, employeesCount:params.employeesCount ?? null};
+		// 		break;
+		// 	case 4: // 1688Global
+		// 		param = {
+		// 			keywords:params.searchText, cookie:cookie ?? null, category:params.category ?? null, featurePair:params.featurePair ?? null, sortType:params.sortType ?? null, descendOrder:params.descendOrder ?? null, priceStart:params.priceStart ?? null, priceEnd:params.priceEnd ?? null, quantityBegin:params.quantityBegin ?? null,province:params.province ?? null, city:params.city ?? null, biztype:params.biztype ?? null, tagsZ:params.tagsZ ?? null, extendProperties:params.extendProperties ?? null, commonSort:params.commonSort ?? null, filtMemberTags:params.filtMemberTags ?? null, filtOfferTags:params.filtOfferTags ?? null, holidayTagId:params.holidayTagId ?? null, tese:params.tese ?? null, filt:params.filt ?? null, factorySize:params.factorySize ?? null, employeesCount:params.employeesCount ?? null};
+		// 		break;
+		// }
 
 		return Service.get(SourceMap[Store.state.source_id].searchGoodsByTextFirst.path, {
-			params: param
+			params: {...params, cookie: cookie}
 		})
 	},
 
 	// 文字搜索
 	searchGoodsByText(params) {
-		let param = {}, cookie = null;
+		let cookie = null;
 		if(SourceMap[Store.state.source_id].needCookie === true) {
 			cookie = getCookie();
 			if(!cookie) return Promise.reject('no cookie');
 		}
-		switch (Store.state.source_id) {
-			case 1: // Alibaba
-				param = {
-					search_text:params.searchText, page:params.page, index_area: params.index_area ?? 'product_en', language:params.language ?? null, currency:params.currency ?? null, Category:params.Category ?? null, supplierType:params.supplierType ?? null, ta:params.ta ?? null, assessment_company:params.assessment_company ?? null, replyAvgTime:params.replyAvgTime ?? null, param_order:params.param_order ?? null, freeSample:params.freeSample ?? null, productTag:params.productTag ?? null, moqf:params.moqf ?? null,moqt:params.moqt ?? null, pricef:params.pricef ?? null, pricet:params.pricet ?? null, Country:params.Country ?? null, exportCountry:params.exportCountry ?? null, companyAuthTag:params.companyAuthTag ?? null, productAuthTag:params.productAuthTag ?? null, refine_attr_value:params.refine_attr_value ?? null};
-				break;
-			case 2: case 5: // 1688 1688overseas
-				param = {
-					type: 1,keyword:params.searchText, page:params.page, sessionId:params.sessionId ?? null, category:params.category ?? null, featurePair:params.featurePair ?? null, sortType:params.sortType ?? null, descendOrder:params.descendOrder ?? null, priceStart:params.priceStart ?? null, priceEnd:params.priceEnd ?? null, quantityBegin:params.quantityBegin ?? null,province:params.province ?? null, city:params.city ?? null, biztype:params.biztype ?? null, tagsZ:params.tagsZ ?? null, offerTags:params.offerTags ?? null, filtHolidayTagId:params.filtHolidayTagId ?? null, extendProperties:params.extendProperties ?? null, memberTags:params.memberTags ?? null, commonSort:params.commonSort ?? null, tese:params.tese ?? null, filt:params.filt ?? null, factorySize:params.factorySize ?? null, employeesCount:params.employeesCount ?? null, startIndex:params.startIndex ?? null,};
-				break;
-			case 3: // 1688 Rapid
-				param = {
-					search_text:params.searchText, page:params.page, page_size:params.page_size ?? null, attr_id:params.attr_id ?? null, sort:params.sort ?? '0', min_price:params.min_price ?? null, max_price:params.max_price ?? null};
-				break;
-			case 4: // 1688Global
-				param = {
-					keywords:params.searchText, page:params.page, cookie:cookie ?? null, sessionId:params.sessionId ?? null, requestId:params.requestId ?? null, category:params.category ?? null, featurePair:params.featurePair ?? null, sortType:params.sortType ?? null, descendOrder:params.descendOrder ?? null, priceStart:params.priceStart ?? null, priceEnd:params.priceEnd ?? null, quantityBegin:params.quantityBegin ?? null,province:params.province ?? null, city:params.city ?? null, biztype:params.biztype ?? null, tagsZ:params.tagsZ ?? null, extendProperties:params.extendProperties ?? null, commonSort:params.commonSort ?? null, filtMemberTags:params.filtMemberTags ?? null, filtOfferTags:params.filtOfferTags ?? null, holidayTagId:params.holidayTagId ?? null, tese:params.tese ?? null, filt:params.filt ?? null, factorySize:params.factorySize ?? null, employeesCount:params.employeesCount ?? null};
-				break;
-			case 6: // Aliexpress DS
-				param = {
-					search_text:params.searchText, page:params.page, language:params.language ?? null, currency:params.currency ?? null, country:params.country ?? null, cat_id:params.cat_id ?? null, brand_id:params.brand_id ?? null, pvid:params.pvid ?? null, ship_from_country:params.ship_from_country ?? null, isBigSale:params.isBigSale ?? null, hasCoupon:params.hasCoupon ?? null, isFreeShip:params.isFreeShip ?? null, isFavorite:params.isFavorite ?? null, sort_type:params.sort_type ?? null,min_price:params.min_price ?? null, max_price:params.max_price ?? null};
-				break;
-			case 7: // Aliexpress ZapieX
-				param = {
-					search_text:params.searchText, page:params.page, language:params.language ?? null, currency:params.currency ?? null, categoryId:params.categoryId ?? null, attr_id_value:params.attr_id_value ?? null, shipFrom:params.shipFrom ?? null, shipTo:params.shipTo ?? null, freeShippingOnly:params.freeShippingOnly ?? null, fastShippingOnly:params.fastShippingOnly ?? null, moreThanFourStarsOnly:params.moreThanFourStarsOnly ?? null, sort:params.sort ?? null, min_price:params.min_price ?? null, max_price:params.max_price ?? null};
-				break;
-			case 8: // YiWuGo
-				param = {
-					search_text:params.searchText, page:params.page, lang:params.language ?? null, category:params.category ?? null, sub_market:params.sub_market ?? null, set_yiwu_market:params.set_yiwu_market ?? '0', sort:params.sort ?? '0', min_price:params.min_price ?? null, max_price:params.max_price ?? null};
-				break;
-			case 9: // DHgate
-				param = Qs.stringify({
-					search_text:params.searchText, page:params.page, page_size:params.page_size ?? null, lang:params.language ?? null, currency:params.currency ?? null, category:params.category ?? null, at:params.at ?? null, freeShipping:params.freeShipping ?? null, inventoryLocation:params.inventoryLocation ?? null, sort:params.sort ?? null, price_sort:params.price_sort ?? null, min_price:params.min_price ?? null, max_price:params.max_price ?? null, minOrder:params.minOrder ?? null,
-				});
-				break;
-			case 10: // CJdropshipping
-				param = Qs.stringify({
-					search_text:params.searchText, page:params.page, page_size:params.page_size ?? null, lang:params.language ?? null, currency:params.currency ?? null, country:params.country ?? null, category:params.category ?? null,  productType:params.productType ?? null, addMarkStatus:params.addMarkStatus ?? null, sort:params.sort ?? null, price_sort:params.price_sort ?? null, min_price:params.min_price ?? null, max_price:params.max_price ?? null});
-				break;
-			case 11: // Made-in-China
-				param = {
-					search_text:params.searchText, page:params.page, page_size:params.page_size, lang:params.language ?? null, currency:params.currency ?? null, location:params.location ?? null,category:params.category ?? null, memberType:params.memberType ?? null, property:params.property ?? null, min_price:params.min_price ?? null, max_price:params.max_price ?? null};
-				break;
-			case 12: // LightInTheBox
-				param = {
-					search_text:params.searchText, page:params.page, lang:params.language ?? null, currency:params.currency ?? null, country_code:params.country_code ?? null, country:params.country ?? null,category:params.category ?? null, searchType:params.searchType ?? '3', brand:params.brand ?? '0', sort:params.sort ?? '6d', fourStars:params.fourStars ?? null, min_price:params.min_price ?? null, max_price:params.max_price ?? null};
-				break;
-			case 13: // Banggood
-				param = {
-					search_text:params.searchText, page:params.page, lang:params.language ?? null, currency:params.currency ?? null, country:params.country ?? null,category:params.category ?? null, warehouse:params.warehouse ?? null, special_options:params.special_options ?? null, sort:params.sort ?? '0', min_price:params.min_price ?? null, max_price:params.max_price ?? null};
-				break;
-			case 14: // Chinabrands
-				param = {
-					search_text:params.searchText, page:params.page, lang:params.language ?? null, country:params.country ?? null, brand_id:params.brand_id ?? null, sort:params.sort ?? null, canReserve:params.canReserve ?? null, type:params.type ?? '0', sale_time:params.sale_time ?? null, min_price:params.min_price ?? null, max_price:params.max_price ?? null, min_stock:params.min_stock ?? null, max_stock:params.max_stock ?? null,};
-				break;
-			case 15: // Globalres
-				param = {
-					search_text:params.searchText, page:params.page, lang:params.language ?? null, currency:params.currency ?? null, country:params.country ?? null, category:params.category ?? null,  busType:params.busType ?? null, directOrderFlag:params.directOrderFlag ?? null, min_price:params.min_price ?? null, max_price:params.max_price ?? null, minOrder:params.minOrder ?? null,};
-				break;
-		}
+		// switch (Store.state.source_id) {
+		// 	case 1: // Alibaba
+		// 		param = {
+		// 			search_text:params.searchText, page:params.page, index_area: params.index_area ?? 'product_en', language:params.language ?? null, currency:params.currency ?? null, Category:params.Category ?? null, supplierType:params.supplierType ?? null, ta:params.ta ?? null, assessment_company:params.assessment_company ?? null, replyAvgTime:params.replyAvgTime ?? null, param_order:params.param_order ?? null, freeSample:params.freeSample ?? null, productTag:params.productTag ?? null, moqf:params.moqf ?? null,moqt:params.moqt ?? null, pricef:params.pricef ?? null, pricet:params.pricet ?? null, Country:params.Country ?? null, exportCountry:params.exportCountry ?? null, companyAuthTag:params.companyAuthTag ?? null, productAuthTag:params.productAuthTag ?? null, refine_attr_value:params.refine_attr_value ?? null};
+		// 		break;
+		// 	case 2: case 5: // 1688 1688overseas
+		// 		param = {
+		// 			type: 1,keyword:params.searchText, page:params.page, sessionId:params.sessionId ?? null, category:params.category ?? null, featurePair:params.featurePair ?? null, sortType:params.sortType ?? null, descendOrder:params.descendOrder ?? null, priceStart:params.priceStart ?? null, priceEnd:params.priceEnd ?? null, quantityBegin:params.quantityBegin ?? null,province:params.province ?? null, city:params.city ?? null, biztype:params.biztype ?? null, tagsZ:params.tagsZ ?? null, offerTags:params.offerTags ?? null, filtHolidayTagId:params.filtHolidayTagId ?? null, extendProperties:params.extendProperties ?? null, memberTags:params.memberTags ?? null, commonSort:params.commonSort ?? null, tese:params.tese ?? null, filt:params.filt ?? null, factorySize:params.factorySize ?? null, employeesCount:params.employeesCount ?? null, startIndex:params.startIndex ?? null,};
+		// 		break;
+		// 	case 3: // 1688 Rapid
+		// 		param = {
+		// 			search_text:params.searchText, page:params.page, page_size:params.page_size ?? null, attr_id:params.attr_id ?? null, sort:params.sort ?? '0', min_price:params.min_price ?? null, max_price:params.max_price ?? null};
+		// 		break;
+		// 	case 4: // 1688Global
+		// 		param = {
+		// 			keywords:params.searchText, page:params.page, cookie:cookie ?? null, sessionId:params.sessionId ?? null, requestId:params.requestId ?? null, category:params.category ?? null, featurePair:params.featurePair ?? null, sortType:params.sortType ?? null, descendOrder:params.descendOrder ?? null, priceStart:params.priceStart ?? null, priceEnd:params.priceEnd ?? null, quantityBegin:params.quantityBegin ?? null,province:params.province ?? null, city:params.city ?? null, biztype:params.biztype ?? null, tagsZ:params.tagsZ ?? null, extendProperties:params.extendProperties ?? null, commonSort:params.commonSort ?? null, filtMemberTags:params.filtMemberTags ?? null, filtOfferTags:params.filtOfferTags ?? null, holidayTagId:params.holidayTagId ?? null, tese:params.tese ?? null, filt:params.filt ?? null, factorySize:params.factorySize ?? null, employeesCount:params.employeesCount ?? null};
+		// 		break;
+		// 	case 6: // Aliexpress DS
+		// 		param = {
+		// 			search_text:params.searchText, page:params.page, language:params.language ?? null, currency:params.currency ?? null, country:params.country ?? null, cat_id:params.cat_id ?? null, brand_id:params.brand_id ?? null, pvid:params.pvid ?? null, ship_from_country:params.ship_from_country ?? null, isBigSale:params.isBigSale ?? null, hasCoupon:params.hasCoupon ?? null, isFreeShip:params.isFreeShip ?? null, isFavorite:params.isFavorite ?? null, sort_type:params.sort_type ?? null,min_price:params.min_price ?? null, max_price:params.max_price ?? null};
+		// 		break;
+		// 	case 7: // Aliexpress ZapieX
+		// 		param = {
+		// 			search_text:params.searchText, page:params.page, language:params.language ?? null, currency:params.currency ?? null, categoryId:params.categoryId ?? null, attr_id_value:params.attr_id_value ?? null, shipFrom:params.shipFrom ?? null, shipTo:params.shipTo ?? null, freeShippingOnly:params.freeShippingOnly ?? null, fastShippingOnly:params.fastShippingOnly ?? null, moreThanFourStarsOnly:params.moreThanFourStarsOnly ?? null, sort:params.sort ?? null, min_price:params.min_price ?? null, max_price:params.max_price ?? null};
+		// 		break;
+		// 	case 8: // YiWuGo
+		// 		param = {
+		// 			search_text:params.searchText, page:params.page, lang:params.language ?? null, category:params.category ?? null, sub_market:params.sub_market ?? null, set_yiwu_market:params.set_yiwu_market ?? '0', sort:params.sort ?? '0', min_price:params.min_price ?? null, max_price:params.max_price ?? null};
+		// 		break;
+		// 	case 9: // DHgate
+		// 		param = Qs.stringify({
+		// 			search_text:params.searchText, page:params.page, page_size:params.page_size ?? null, lang:params.language ?? null, currency:params.currency ?? null, category:params.category ?? null, at:params.at ?? null, freeShipping:params.freeShipping ?? null, inventoryLocation:params.inventoryLocation ?? null, sort:params.sort ?? null, price_sort:params.price_sort ?? null, min_price:params.min_price ?? null, max_price:params.max_price ?? null, minOrder:params.minOrder ?? null,
+		// 		});
+		// 		break;
+		// 	case 10: // CJdropshipping
+		// 		param = Qs.stringify({
+		// 			search_text:params.searchText, page:params.page, page_size:params.page_size ?? null, lang:params.language ?? null, currency:params.currency ?? null, country:params.country ?? null, category:params.category ?? null,  productType:params.productType ?? null, addMarkStatus:params.addMarkStatus ?? null, sort:params.sort ?? null, price_sort:params.price_sort ?? null, min_price:params.min_price ?? null, max_price:params.max_price ?? null});
+		// 		break;
+		// 	case 11: // Made-in-China
+		// 		param = {
+		// 			search_text:params.searchText, page:params.page, page_size:params.page_size, lang:params.language ?? null, currency:params.currency ?? null, location:params.location ?? null,category:params.category ?? null, memberType:params.memberType ?? null, property:params.property ?? null, min_price:params.min_price ?? null, max_price:params.max_price ?? null};
+		// 		break;
+		// 	case 12: // LightInTheBox
+		// 		param = {
+		// 			search_text:params.searchText, page:params.page, lang:params.language ?? null, currency:params.currency ?? null, country_code:params.country_code ?? null, country:params.country ?? null,category:params.category ?? null, searchType:params.searchType ?? '3', brand:params.brand ?? '0', sort:params.sort ?? '6d', fourStars:params.fourStars ?? null, min_price:params.min_price ?? null, max_price:params.max_price ?? null};
+		// 		break;
+		// 	case 13: // Banggood
+		// 		param = {
+		// 			search_text:params.searchText, page:params.page, lang:params.language ?? null, currency:params.currency ?? null, country:params.country ?? null,category:params.category ?? null, warehouse:params.warehouse ?? null, special_options:params.special_options ?? null, sort:params.sort ?? '0', min_price:params.min_price ?? null, max_price:params.max_price ?? null};
+		// 		break;
+		// 	case 14: // Chinabrands
+		// 		param = {
+		// 			search_text:params.searchText, page:params.page, lang:params.language ?? null, country:params.country ?? null, brand_id:params.brand_id ?? null, sort:params.sort ?? null, canReserve:params.canReserve ?? null, type:params.type ?? '0', sale_time:params.sale_time ?? null, min_price:params.min_price ?? null, max_price:params.max_price ?? null, min_stock:params.min_stock ?? null, max_stock:params.max_stock ?? null,};
+		// 		break;
+		// 	case 15: // Globalres
+		// 		param = {
+		// 			search_text:params.searchText, page:params.page, lang:params.language ?? null, currency:params.currency ?? null, country:params.country ?? null, category:params.category ?? null,  busType:params.busType ?? null, directOrderFlag:params.directOrderFlag ?? null, min_price:params.min_price ?? null, max_price:params.max_price ?? null, minOrder:params.minOrder ?? null,};
+		// 		break;
+		// }
 
 		if(SourceMap[Store.state.source_id].searchGoodsByText.method === 'get') {
-			if(Store.state.source_id == 6){// 速卖通需要传token、cookie
-				return Service.get(SourceMap[Store.state.source_id].searchGoodsByText.path, {
-					params: param,
-					headers: {'token': cookie}
-				})
-			}
 			return Service.get(SourceMap[Store.state.source_id].searchGoodsByText.path, {
-				params: param
+				params: {...params, cookie: cookie}
 			})
 		}
-			return Service.post(SourceMap[Store.state.source_id].searchGoodsByText.path, param, {
+		// param = Qs.stringify({...params});
+			return Service.post(SourceMap[Store.state.source_id].searchGoodsByText.path, Qs.stringify({...params}), {
 				headers: {
 					'Content-Type': 'application/x-www-form-urlencoded'
 				},

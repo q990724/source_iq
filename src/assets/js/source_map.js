@@ -10,10 +10,10 @@ const SourceMap = {
         hasSearchPic: true,
         hasFirstSearchText: false,
         hasFirstSearchPic: false,
-        getCountryLangCurrency: 'api/aliintersite/getCountryLangCurrency',
-        uploadPic: 'api/aliintersite/uploadPic',
-        searchGoodsByPic: {method: 'get', path:'api/aliintersite/searchGoodsByPic'},
-        searchGoodsByText: {method: 'get', path: 'api/aliintersite/searchGoodsByText2'}
+        getCountryLangCurrency: 'api/alibaba/getCountryLangCurrency',
+        uploadPic: 'api/alibaba/uploadImage',
+        searchGoodsByPic: {method: 'get', path:'api/alibaba/product/imageSearch'},
+        searchGoodsByText: {method: 'get', path: 'api/alibaba/product/keywordSearch'}
     },
     2: {
         petName: '1688',
@@ -27,12 +27,12 @@ const SourceMap = {
         hasSearchPic: true,
         hasFirstSearchText: true,
         hasFirstSearchPic: true,
-        getCountryLangCurrency: 'api/goods/getCountryLangCurrency',
-        uploadPic: 'api/goods/uploadPicH5',
-        searchGoodsByPic: {method: 'get', path:'api/goods/imgSearch'},
-        searchGoodsByPicFirst: {method: 'get', path:'api/goods/imgSearchFirst'},
-        searchGoodsByText: {method: 'get', path:'api/goods/searchGoods'},
-        searchGoodsByTextFirst: {method: 'get', path:'api/goods/searchGoodsFirst'},
+        getCountryLangCurrency: 'api/1688/domestic/getCountryLangCurrency',
+        uploadPic: 'api/1688/domestic/uploadImage',
+        searchGoodsByPic: {method: 'get', path:'api/1688/domestic/product/imageSearch'},
+        searchGoodsByPicFirst: {method: 'get', path:'api/1688/domestic/product/imageSearchFirst'},
+        searchGoodsByText: {method: 'get', path:'api/1688/domestic/product/keywordSearch'},
+        searchGoodsByTextFirst: {method: 'get', path:'api/1688/domestic/product/keywordSearchFirst'},
     },
     3: {
         petName: '1688rapid',
@@ -46,10 +46,10 @@ const SourceMap = {
         hasSearchPic: true,
         hasFirstSearchText: false,
         hasFirstSearchPic: false,
-        getCountryLangCurrency: 'api/goods/getCountryLangCurrency',
-        searchGoodsByPic: {method: 'post', path:'api/1688/rapidUploadPicUrl'},
-        searchGoodsByPicFirst: {method: 'post', path:'api/1688/rapidUploadPic'},
-        searchGoodsByText: {method: 'get', path:'api/1688/rapidSearchGoods'},
+        getCountryLangCurrency: 'api/1688/domestic/getCountryLangCurrency',
+        searchGoodsByPic: {method: 'post', path:'api/1688/domestic/rapidUploadPicUrl'},
+        searchGoodsByPicFirst: {method: 'post', path:'api/1688/domestic/rapidUploadPic'},
+        searchGoodsByText: {method: 'get', path:'api/1688/domestic/v2/product/keywordSearch'},
     },
     4: {
         petName: '1688global',
@@ -64,10 +64,10 @@ const SourceMap = {
         hasFirstSearchText: true,
         hasFirstSearchPic: false,
         getCountryLangCurrency: 'api/goods/getCountryLangCurrency',
-        uploadPic: 'api/goods/uploadPicKj',
-        searchGoodsByPic: {method: 'get', path:'api/goods/imgSearchKj'},
-        searchGoodsByText: {method: 'get', path:'api/goods/searchGoodsKj'},
-        searchGoodsByTextFirst: {method: 'get', path:'api/goods/searchGoodsFirstKj'},
+        uploadPic: 'api/1688/global/uploadImage',
+        searchGoodsByPic: {method: 'get', path:'api/1688/global/imgSearchKj'},
+        searchGoodsByText: {method: 'get', path:'api/1688/global/product/keywordSearch'},
+        searchGoodsByTextFirst: {method: 'get', path:'api/1688/global/product/keywordSearchFirst'},
     },
 	5: {
         petName: '1688overseas',
@@ -82,11 +82,11 @@ const SourceMap = {
 	    hasFirstSearchText: true,
 	    hasFirstSearchPic: true,
         getCountryLangCurrency: 'api/goods/getCountryLangCurrency',
-        uploadPic: 'api/goods/uploadPicH5',
-        searchGoodsByPic: {method: 'get', path:'api/goods/imgSearch'},
-        searchGoodsByPicFirst: {method: 'get', path:'api/goods/imgSearchFirst'},
-        searchGoodsByText: {method: 'get', path:'api/goods/searchGoods'},
-        searchGoodsByTextFirst: {method: 'get', path:'api/goods/searchGoodsFirst'},
+        uploadPic: 'api/1688/domestic/uploadImage',
+        searchGoodsByPic: {method: 'get', path:'api/1688/domestic/product/imageSearch'},
+        searchGoodsByPicFirst: {method: 'get', path:'api/1688/domestic/product/imageSearchFirst'},
+        searchGoodsByText: {method: 'get', path:'api/1688/domestic/product/keywordSearch'},
+        searchGoodsByTextFirst: {method: 'get', path:'api/1688/domestic/product/keywordSearchFirst'},
 	},
     6: {
         petName: 'aliexpressDS',
@@ -101,9 +101,9 @@ const SourceMap = {
         hasFirstSearchText: false,
         hasFirstSearchPic: false,
         getCountryLangCurrency: 'api/aliexpress/getCountryLangCurrency',
-        uploadPic: 'api/aliexpress/uploadPic',
-        searchGoodsByPic: {method: 'get', path:'api/aliexpress/searchGoodsByPic'},
-        searchGoodsByText: {method: 'get', path:'api/aliexpress/searchGoodsByText'},
+        uploadPic: 'api/aliexpress/uploadImage',
+        searchGoodsByPic: {method: 'get', path:'api/aliexpress/product/imageSearch'},
+        searchGoodsByText: {method: 'get', path:'api/aliexpress/product/keywordSearch'},
     },
     7: {
         petName: 'aliexpressZapieX',
@@ -117,9 +117,9 @@ const SourceMap = {
         hasFirstSearchText: false,
         hasFirstSearchPic: false,
         getCountryLangCurrency: 'api/aliexpress/zapiexGetCountryLangCurrency',
-        uploadPic: 'api/aliexpress/zapiexUploadPic',
-        searchGoodsByPic: {method: 'get', path:'api/aliexpress/zapiexImgSearch'},
-        searchGoodsByText: {method: 'get', path:'api/aliexpress/zapiexSearchGoods'},
+        uploadPic: 'api/aliexpress/v2/uploadImage',
+        searchGoodsByPic: {method: 'get', path:'api/aliexpress/v2/product/imageSearch'},
+        searchGoodsByText: {method: 'get', path:'api/aliexpress/v2/product/keywordSearch'},
     },
     8: {
         petName: 'yiwugo',
@@ -133,9 +133,9 @@ const SourceMap = {
         hasFirstSearchText: false,
         hasFirstSearchPic: false,
         getCountryLangCurrency: 'api/yiwugoapp/getCountryLangCurrency',
-        uploadPic: 'api/yiwugoapp/uploadPic',
-        searchGoodsByPic: {method: 'get', path:'api/yiwugoapp/searchGoodsByPic'},
-        searchGoodsByText: {method: 'get', path:'api/yiwugoapp/searchGoodsByText'},
+        uploadPic: 'api/yiwugo/uploadImage',
+        searchGoodsByPic: {method: 'get', path:'api/yiwugo/product/imageSearch'},
+        searchGoodsByText: {method: 'get', path:'api/yiwugo/product/keywordSearch'},
     },
     9: {
         petName: 'dhgate',
@@ -148,10 +148,9 @@ const SourceMap = {
         hasSearchPic: true,
         hasFirstSearchText: false,
         hasFirstSearchPic: false,
-        getCountryLangCurrency: 'api/dhgateapp/getCountryLangCurrency',
-        uploadPic: 'api/aliintersite/uploadPic',
-        searchGoodsByPic: {method: 'post', path:'api/dhgateapp/searchGoodsByPic'},
-        searchGoodsByText: {method: 'post', path: 'api/dhgateapp/searchGoodsByText'}
+        getCountryLangCurrency: 'api/dhgate/getCountryLangCurrency',
+        searchGoodsByPic: {method: 'post', path:'api/dhgate/product/imageSearch'},
+        searchGoodsByText: {method: 'post', path: 'api/dhgate/product/keywordSearch'}
     },
 	10: {
         petName: 'cjds',
@@ -165,8 +164,8 @@ const SourceMap = {
 	    hasFirstSearchText: false,
 	    hasFirstSearchPic: false,
         getCountryLangCurrency: 'api/cjdsapp/getCountryLangCurrency',
-        searchGoodsByPic: {method: 'post', path:'api/cjdsapp/searchGoodsByPic'},
-        searchGoodsByText: {method: 'post', path: 'api/cjdsapp/searchGoodsByText'}
+        searchGoodsByPic: {method: 'post', path:'api/cjds/product/imageSearch'},
+        searchGoodsByText: {method: 'post', path: 'api/cjds/product/keywordSearch'}
 	},
     11: {
         petName: 'mic',
@@ -180,8 +179,8 @@ const SourceMap = {
         hasFirstSearchText: false,
         hasFirstSearchPic: false,
         getCountryLangCurrency: 'api/micapp/getCountryLangCurrency',
-        searchGoodsByPic: {method: 'post', path:'api/micapp/searchGoodsByPic'},
-        searchGoodsByText: {method: 'get', path: 'api/micapp/searchGoodsByText'}
+        searchGoodsByPic: {method: 'post', path:'api/mic/product/imageSearch'},
+        searchGoodsByText: {method: 'get', path: 'api/mic/product/keywordSearch'}
     },
     12: {
         petName: 'litbox',
@@ -194,8 +193,8 @@ const SourceMap = {
         hasSearchPic: false,
         hasFirstSearchText: false,
         hasFirstSearchPic: false,
-        getCountryLangCurrency: 'api/litboxapp/getCountryLangCurrency',
-        searchGoodsByText: {method: 'get', path: 'api/litboxapp/searchGoodsByText'}
+        getCountryLangCurrency: 'api/litbox/getCountryLangCurrency',
+        searchGoodsByText: {method: 'get', path: 'api/litbox/product/keywordSearch'}
     },
     13: {
         petName: 'banggood',
@@ -208,8 +207,8 @@ const SourceMap = {
         hasSearchPic: false,
         hasFirstSearchText: false,
         hasFirstSearchPic: false,
-        getCountryLangCurrency: 'api/banggoodapp/getCountryLangCurrency',
-        searchGoodsByText: {method: 'get', path: 'api/banggoodapp/searchGoodsByText'},
+        getCountryLangCurrency: 'api/banggood/getCountryLangCurrency',
+        searchGoodsByText: {method: 'get', path: 'api/banggood/product/keywordSearch'},
         comingSoon: false
     },
     14: {
@@ -224,7 +223,7 @@ const SourceMap = {
         hasFirstSearchText: false,
         hasFirstSearchPic: false,
         getCountryLangCurrency: 'api/chinabrands/getCountryLangCurrency',
-        searchGoodsByText: {method: 'get', path: 'api/chinabrands/searchGoodsByText'},
+        searchGoodsByText: {method: 'get', path: 'api/chinabrands/product/keywordSearch'},
         comingSoon: false
     },
     15: {
@@ -238,8 +237,8 @@ const SourceMap = {
         hasSearchPic: false,
         hasFirstSearchText: false,
         hasFirstSearchPic: false,
-        getCountryLangCurrency: 'api/globalresapp/getCountryLangCurrency',
-        searchGoodsByText: {method: 'get', path: 'api/globalresapp/searchGoodsByText'},
+        getCountryLangCurrency: 'api/globalres/getCountryLangCurrency',
+        searchGoodsByText: {method: 'get', path: 'api/globalres/product/keywordSearch'},
         comingSoon: true
     },
 }
