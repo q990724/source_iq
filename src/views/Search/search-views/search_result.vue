@@ -275,6 +275,7 @@ export default {
             sortItemClone.title = 'sort';
             //如果item不存在，初始化一个子级的paramValue
             if(!sortItemClone.items) sortItemClone.items = [[paramValue=> '']];
+            //克隆一份排序，拿到最外层（父级）的传值paramValue
             sortItemClone.items[itemIndex].paramValue = sortItemClone.paramValue;
             console.log(sortItemClone)
             this.$store.dispatch('onFilterChange', {
@@ -283,17 +284,22 @@ export default {
                 e: event,
 				filterType: 'SORT',
             })
-            let sortItemClone2 = JSON.parse(JSON.stringify(this.sortList[sortIndex]));
-            sortItemClone2.title = 'sort';
-            if(sortItemClone2.items && Array.isArray(sortItemClone2.items) && sortItemClone2.items.length > 0){
-                sortItemClone2.paramName = sortItemClone2.items[itemIndex].paramName;
-                this.$store.dispatch('onFilterChange', {
-                    filterItem: sortItemClone2,
-                    option: sortItemClone2.items[itemIndex],
-                    e: event,
-					filterType: 'SORT',
-                })
+            // 下拉框不需要这一步
+            if(type !== 'select'){
+                //克隆一份排序，拿到子级中的paramName
+                let sortItemClone2 = JSON.parse(JSON.stringify(this.sortList[sortIndex]));
+                sortItemClone2.title = 'sort';
+                if(sortItemClone2.items && Array.isArray(sortItemClone2.items) && sortItemClone2.items.length > 0){
+                    sortItemClone2.paramName = sortItemClone2.items[itemIndex].paramName;
+                    this.$store.dispatch('onFilterChange', {
+                        filterItem: sortItemClone2,
+                        option: sortItemClone2.items[itemIndex],
+                        e: event,
+                        filterType: 'SORT',
+                    })
+                }
             }
+
             if (this.$store.state.searchType === 'image') {
                 // 切换筛选条件，不需要重新发起图片上传
                 this.imageSearch(this.$store.state.searchParams.mainImage, false);

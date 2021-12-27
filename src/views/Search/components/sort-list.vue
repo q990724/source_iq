@@ -61,8 +61,6 @@ export default {
         // type=text/asc/desc/select
         onClickItem(sortIndex, type) {
             // 当值为select的时候，用户选中的值在sortList[sortIndex]['paramValue']里
-            console.log(this.sortList[sortIndex]['paramValue']);
-            return;
             this.$emit("onSortChange", {sortIndex, type, event:true});
         }
     }
