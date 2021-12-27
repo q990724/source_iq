@@ -22,7 +22,7 @@ export default {
     },
     methods: {
         agree() {
-            window.localStorage.setItem('cookie-toast', true);
+            window.localStorage.setItem('cookie-toast', 'true');
             this.cookieToast = true;
         }
     }

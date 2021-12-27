@@ -29,10 +29,6 @@ export default {
             isShowCollapse: false,
             collapseStatus: false,
             rowHeight: 0,
-            items: [
-                'Lorem ipsum dolor sit amet', 'consectetur adipisicing elit', 'Delectus', 'adipisicing elit', 'Delectus', 'dolor sit amet', 'consectetur adipisicing',
-                'consectetur adipisicing'
-            ]
         }
     },
     props: {
