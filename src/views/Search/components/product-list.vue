@@ -13,8 +13,8 @@
                                 <template v-for="(point, point_index) in item.product.sellingPoints">
                                     <div class="selling-points-item" :key="point_index" v-if="point.displayPosition === 'beforeTitle'">
                                         <span v-if="point.displayType === 'text'">{{point.text}}</span>
-                                        <img v-if="point.displayType === 'image' && point.icon.type === 'url'" :src="point.icon.value" alt="">
-                                        <i v-if="point.displayType === 'image' && point.icon.type === 'font'" class="iconfont2">{{point.icon.value}}</i>
+                                        <img v-if="point.displayType === 'image' && point.icon && point.icon.type === 'url'" :src="point.icon.value" alt="">
+                                        <i v-if="point.displayType === 'image' && point.icon && point.icon.type === 'font'" class="iconfont2">{{point.icon.value}}</i>
                                     </div>
                                 </template>
                             </div>
@@ -24,8 +24,8 @@
                                 <template v-for="(point, point_index) in item.product.sellingPoints">
                                     <div class="selling-points-item" :key="point_index" v-if="point.displayPosition === 'afterTitle' || point.displayPosition === 'offerMiddle'">
                                         <span v-if="point.displayType === 'text'">{{point.text}}</span>
-                                        <img v-if="point.displayType === 'image' && point.icon.type === 'url'" :src="point.icon.value" alt="">
-                                        <i v-if="point.displayType === 'image' && point.icon.type === 'font'" class="iconfont2">{{point.icon.value}}</i>
+                                        <img v-if="point.displayType === 'image' && point.icon && point.icon.type === 'url'" :src="point.icon.value" alt="">
+                                        <i v-if="point.displayType === 'image' && point.icon && point.icon.type === 'font'" class="iconfont2">{{point.icon.value}}</i>
                                     </div>
                                 </template>
                             </div>
@@ -59,8 +59,8 @@
                                 <template v-for="(point, point_index) in item.product.sellingPoints">
                                     <div class="selling-points-item" :key="point_index" v-if="point.displayPosition === 'leftBottom'">
                                         <span v-if="point.displayType === 'text'">{{point.text}}</span>
-                                        <img v-if="point.displayType === 'image' && point.icon.type === 'url'" :src="point.icon.value" alt="">
-                                        <i v-if="point.displayType === 'image' && point.icon.type === 'font'" class="iconfont2">{{point.icon.value}}</i>
+                                        <img v-if="point.displayType === 'image' && point.icon && point.icon.type === 'url'" :src="point.icon.value" alt="">
+                                        <i v-if="point.displayType === 'image' && point.icon && point.icon.type === 'font'" class="iconfont2">{{point.icon.value}}</i>
                                     </div>
                                 </template>
                             </div>
