@@ -8,7 +8,27 @@
                     </div>
                     <div class="message">
                         <div class="product">
+                            <!--卖点-->
+                            <div class="sellingPoints beforeTitle" v-if="item.product.sellingPoints && item.product.sellingPoints.length > 0">
+                                <template v-for="(point, point_index) in item.product.sellingPoints">
+                                    <div class="selling-points-item" :key="point_index" v-if="point.displayPosition === 'beforeTitle'">
+                                        <span v-if="point.displayType === 'text'">{{point.text}}</span>
+                                        <img v-if="point.displayType === 'image' && point.icon.type === 'url'" :src="point.icon.value" alt="">
+                                        <i v-if="point.displayType === 'image' && point.icon.type === 'font'" class="iconfont2">{{point.icon.value}}</i>
+                                    </div>
+                                </template>
+                            </div>
                             <a class="name" :href="item.product.productUrl" target="_blank" v-html="item.product.displayTitle"></a>
+                            <!--卖点-->
+                            <div class="sellingPoints offerMiddle afterTitle" v-if="item.product.sellingPoints && item.product.sellingPoints.length > 0">
+                                <template v-for="(point, point_index) in item.product.sellingPoints">
+                                    <div class="selling-points-item" :key="point_index" v-if="point.displayPosition === 'afterTitle' || point.displayPosition === 'offerMiddle'">
+                                        <span v-if="point.displayType === 'text'">{{point.text}}</span>
+                                        <img v-if="point.displayType === 'image' && point.icon.type === 'url'" :src="point.icon.value" alt="">
+                                        <i v-if="point.displayType === 'image' && point.icon.type === 'font'" class="iconfont2">{{point.icon.value}}</i>
+                                    </div>
+                                </template>
+                            </div>
                             <h2 class="price one-line" v-if="item.product.tradePrice && item.product.tradePrice.length > 0">
                                 <template v-for="price in item.product.tradePrice">
                                     <!-- 正常价 -->
@@ -33,14 +53,17 @@
                                 </div>
                                 <div v-else style="height: 20px;"></div>
                             </div>
-                            <div v-else style="height: 20px;margin-bottom: 10px;"></div>
+                            <!--<div v-else style="height: 20px;margin-bottom: 10px;"></div>-->
                             <!--卖点-->
-                            <div class="sellingPoints offerMiddle" v-if="item.product.sellingPoints && item.product.sellingPoints.length > 0">
-                                <div class="selling-points-item" v-for="(point, point_index) in item.product.sellingPoints" :key="point_index">
-                                    <span v-if="point.displayType === 'text'">{{point.value || point.text}}</span>
-                                </div>
+                            <div class="sellingPoints leftBottom" v-if="item.product.sellingPoints && item.product.sellingPoints.length > 0">
+                                <template v-for="(point, point_index) in item.product.sellingPoints">
+                                    <div class="selling-points-item" :key="point_index" v-if="point.displayPosition === 'leftBottom'">
+                                        <span v-if="point.displayType === 'text'">{{point.text}}</span>
+                                        <img v-if="point.displayType === 'image' && point.icon.type === 'url'" :src="point.icon.value" alt="">
+                                        <i v-if="point.displayType === 'image' && point.icon.type === 'font'" class="iconfont2">{{point.icon.value}}</i>
+                                    </div>
+                                </template>
                             </div>
-                            <div v-else style="height: 23px;"></div>
                         </div>
                     </div>
                     <!-- 鲁棒性检查seller.homeUrl是否为NULL再增加点击事件 -->
@@ -246,14 +269,21 @@
                 display: flex;
                 align-items: center;
                 flex-wrap: wrap;
+                margin-bottom: 10px;
                 .selling-points-item {
                     cursor: pointer;
-                    padding: 0 6px;
-                    border: 1px solid $primary_color;
-                    color: $primary_color;
+                    color: #0089FD;
                     font-size: $placeholder-text_size;
-                    margin-right: 4px;
-                    margin-bottom: 4px;
+                    margin-right: 5px;
+                    margin-bottom: 5px;
+                    span {
+                        padding: 2px 6px;
+                        border: 1px solid rgba(0,137,253,0.3);
+                    }
+                    img {
+                        max-width: 20px;
+                        max-height: 20px;
+                    }
                 }
             }
 		}
