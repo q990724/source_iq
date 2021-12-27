@@ -26,7 +26,7 @@
                             <!--评分和销量-->
                             <div class="star_sale" v-if="item.product.rating || item.product.salesHistory">
                                 <div class="star" v-if="item.product.rating && item.product.rating.score && item.product.rating.score > 0">
-                                    <el-rate v-model="item.product.rating.score" disabled show-score text-color="#ff9900" score-template="{value}"></el-rate>
+                                    <el-rate v-model="typeof item.product.rating.score === 'string' ? Number(item.product.rating.score) : item.product.rating.score" disabled show-score text-color="#ff9900" score-template="{value}"></el-rate>
                                 </div>
                                 <div class="sale_count one-line" v-if="item.product.salesHistory">
                                     <span>{{item.product.salesHistory.totalSalesAmountText}}</span>
