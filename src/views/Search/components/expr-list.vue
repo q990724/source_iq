@@ -1,7 +1,7 @@
 <template>
     <div class="expr-list" v-if="exprList && exprList.length > 0">
         <template v-for="(expr, index) in exprList">
-            <div class="expr-item" :style="exprList.length > 1 ? 'margin-bottom:10px;' : 'margin-bottom:0px;'" :key="expr.title" v-if="!(collapseFilterGroup && index >= collapseFilterGroupCount)">
+            <div class="expr-item" :style="exprList.length > 1 ? 'margin-bottom:10px;' : 'margin-bottom:0px;'" :key="expr.title">
                 <my-collapse :title="expr.title">
                     <div class="item" v-for="(item, i) in expr.items" :key="i">
                         <!--type=bool-->
