@@ -44,7 +44,7 @@ module.exports = {
         spread_more: 'View More',
         pack_more: 'View Less',
         projectName: 'Sourcefrom',
-        cookieToast: 'This website uses cookies to improve your experience. We'll assume you're ok with this, but you can opt-out if you wish.',
+        cookieToast: "This website uses cookies to improve your experience. We'll assume you're ok with this, but you can opt-out if you wish.",
         detail: 'Detail'
     },
     button: {
