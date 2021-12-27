@@ -281,8 +281,8 @@
                         border: 1px solid rgba(0,137,253,0.3);
                     }
                     img {
-                        max-width: 20px;
-                        max-height: 20px;
+                        width: auto;
+                        height: 18px;
                     }
                 }
             }
