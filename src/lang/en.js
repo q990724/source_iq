@@ -44,7 +44,7 @@ module.exports = {
         spread_more: 'View More',
         pack_more: 'View Less',
         projectName: 'Sourcefrom',
-        cookieToast: '我们使用cookie来确保我们为您提供最佳的网站体验。如果您想更改自己的偏好，可以按照此处的说明进行。',
+        cookieToast: "This website uses cookies to improve your experience. We'll assume you're ok with this, but you can opt-out if you wish.",
         detail: 'Detail'
     },
     button: {
