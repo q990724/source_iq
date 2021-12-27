@@ -37,7 +37,7 @@
                             <!--卖点-->
                             <div class="sellingPoints offerMiddle" v-if="item.product.sellingPoints && item.product.sellingPoints.length > 0">
                                 <div class="selling-points-item" v-for="(point, point_index) in item.product.sellingPoints" :key="point_index">
-                                    <span v-if="point.displayType === 'text'">{{point.value}}</span>
+                                    <span v-if="point.displayType === 'text'">{{point.value || point.text}}</span>
                                 </div>
                             </div>
                             <div v-else style="height: 23px;"></div>
