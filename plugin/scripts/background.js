@@ -172,6 +172,7 @@ function parseUrl(url) {
 }
 // 获取并更新cookie
 function updateCookie(domain, source) {
+    // 将对象解析为cookie
     let obj2cookie = function (obj, step) {
         if (obj.constructor == Object) {
             let cssStr = '';
@@ -181,13 +182,16 @@ function updateCookie(domain, source) {
             return cssStr.substr(0, cssStr.length - 1);
         }
     }
+    // 获取所有cookie
     chrome.cookies.getAll({domain: domain}, function(res) {
         if(res && Array.isArray(res) && res.length > 0) {
             let cookie_obj = {};
             for(let item of res) {
                 if(item.name) cookie_obj[item.name] = item.value || '';
             }
+            // 将获取到的对象格式cookie转为字符串
             let cookie = obj2cookie(cookie_obj, ';') || '';
+            // 将字符串cookie和货源发送给content-script
             sendMessageToContentScript({cmd: 'update-cookie', value: {cookie: cookie, source: source}});
         }
     })
@@ -197,6 +201,7 @@ function updateCookie(domain, source) {
 // 监听页面变化
 chrome.tabs.onUpdated.addListener(function(id, info, tab) {
 	let url = tab.url;
+	// 防止cookie获取不到或不完整，在status=complete才获取
     if(info.status === 'complete') {
         parseUrl(url);
     }
