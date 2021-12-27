@@ -194,6 +194,13 @@ export default {
                         border-color: $active_color;
                     }
                 }
+                &.is-select {
+                    &:hover {
+                        color: inherit;
+                        background-color: $radio_label_bgcolor;
+                        border-color: transparent;
+                    }
+                }
             }
         }
         .btns {

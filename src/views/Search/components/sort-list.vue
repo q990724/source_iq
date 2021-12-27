@@ -1,12 +1,21 @@
 <template>
     <div class="sort-list">
         <my-collapse>
-            <div class="item radio" v-for="(sort, index) in sortList" :key="index" :style="index === 0 ? 'margin-left:0' : ''">
-                <span @click="onClickItem(index, 'text')" :class="{'active': sort.selected}">{{ sort.title }}</span>
-                <div class="up-down" v-if="sort.items">
-                    <i @click="onClickItem(index, 'asc')" :class="{'active': sort.items[0].selected}" class="el-icon-caret-top" v-if="sort.items[0] && sort.items[0]['order'] === 'asc'"></i>
-                    <i @click="onClickItem(index, 'desc')" :class="{'active': sort.items[1].selected}" class="el-icon-caret-bottom" v-if="sort.items[1] && sort.items[1]['order'] === 'desc'"></i>
-                </div>
+            <div class="item radio" :class="{'is-select': !(!sort.items || (sort.items && sort.items.length <= 2))}" v-for="(sort, index) in sortList" :key="index" :style="index === 0 ? 'margin-left:0' : ''">
+                <template v-if="!sort.items || (sort.items && sort.items.length <= 2)">
+                    <span @click="onClickItem(index, 'text')" :class="{'active': sort.selected}">{{ sort.title }}</span>
+                    <div class="up-down" v-if="sort.items">
+                        <i @click="onClickItem(index, 'asc')" :class="{'active': sort.items[0].selected}" class="el-icon-caret-top" v-if="sort.items[0] && sort.items[0]['order'] === 'asc'"></i>
+                        <i @click="onClickItem(index, 'desc')" :class="{'active': sort.items[1].selected}" class="el-icon-caret-bottom" v-if="sort.items[1] && sort.items[1]['order'] === 'desc'"></i>
+                    </div>
+                </template>
+                <template v-else>
+                    <span>{{sort.title}}</span>
+                    <el-select v-model="sort.paramValue" @change="onClickItem(index, 'select')">
+                        <el-option v-for="item in sort.items" :key="item.paramValue" :label="item.name" :value="item.paramValue">
+                        </el-option>
+                    </el-select>
+                </template>
             </div>
         </my-collapse>
         <!--<el-collapse>-->
@@ -49,8 +58,11 @@ export default {
         MyCollapse: MyCollapseCompntent
     },
     methods: {
-        // type=text/asc/desc
+        // type=text/asc/desc/select
         onClickItem(sortIndex, type) {
+            // 当值为select的时候，用户选中的值在sortList[sortIndex]['paramValue']里
+            console.log(this.sortList[sortIndex]['paramValue']);
+            return;
             this.$emit("onSortChange", {sortIndex, type, event:true});
         }
     }
@@ -98,6 +110,26 @@ export default {
                     color: $hover_color;
                 }
             }
+        }
+    }
+}
+
+.is-select {
+    & > span {
+        margin-right: 10px;
+    }
+}
+
+::v-deep .el-select {
+    width: 120px;
+    .el-input {
+        .el-input__inner {
+            height: 21px;
+            line-height: 21px;
+            font-size: $placeholder_text_size;
+        }
+        .el-input__icon {
+            line-height: 21px;
         }
     }
 }
