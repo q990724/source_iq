@@ -47,6 +47,8 @@ module.exports = {
         cookieToast: "This website uses cookies to improve your experience. We'll assume you're ok with this, but you can opt-out if you wish.",
         detail: 'Detail',
 		comingSoon: 'NEW',
+		inventory: 'Inventory',
+		downloads: 'Downloads',
     },
     button: {
         more: 'More',

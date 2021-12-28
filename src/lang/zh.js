@@ -28,6 +28,8 @@ module.exports = {
         cookieToast: '我们使用cookie来确保我们为您提供最佳的网站体验。如果您想更改自己的偏好，可以按照此处的说明进行。',
         detail: '详情',
 		comingSoon: '新上',
+		inventory: '库存',
+		downloads: '下载次数',
     },
     button: {
         more: '更多',
