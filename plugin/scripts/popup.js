@@ -1,5 +1,6 @@
 // import {Container as SourceMap} from "postcss-selector-parser";
 // import SourceMap from "../../src/assets/js/source_map";
+const projectName = 'Sourcefrom';
 
 window.onload = function() {
     // 循环渲染选项
@@ -22,8 +23,7 @@ window.onload = function() {
 
     function sendMessageToContentScript(message, callback) {
 		//TBD: 改成定向消息，避免广播给第三方页面
-        chrome.tabs.query({ }, function (tabs) {
-            console.log(tabs);
+        chrome.tabs.query({title: projectName}, function (tabs) {
             for (let tab of tabs) {
                 chrome.tabs.sendMessage(tab.id, message, function (response) {
                     if (callback) callback(response);
