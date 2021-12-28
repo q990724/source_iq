@@ -7,7 +7,7 @@
                     <div class="item" v-for="item in list" :key="item.name">
                         <div class="item_content">
                             <img :src="item.logo" :alt="item.name" :title="item.name">
-                            <span class="soon" v-if="item.comingSoon">Soon</span>
+                            <span class="soon" v-if="item.comingSoon">{{$t('label.comingSoon')}}</span>
                         </div>
                     </div>
                 </div>

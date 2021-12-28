@@ -26,7 +26,8 @@ module.exports = {
 		message:'留言内容',
         projectName: '搜货源',
         cookieToast: '我们使用cookie来确保我们为您提供最佳的网站体验。如果您想更改自己的偏好，可以按照此处的说明进行。',
-        detail: '详情'
+        detail: '详情',
+		comingSoon: '新上',
     },
     button: {
         more: '更多',
@@ -37,5 +38,6 @@ module.exports = {
 		clearSearch: "清空搜索",
 		save: '保存',
 		agree: '同意',
+		ok: '确认',
     }
 }

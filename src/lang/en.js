@@ -45,7 +45,8 @@ module.exports = {
         pack_more: 'View Less',
         projectName: 'Sourcefrom',
         cookieToast: "This website uses cookies to improve your experience. We'll assume you're ok with this, but you can opt-out if you wish.",
-        detail: 'Detail'
+        detail: 'Detail',
+		comingSoon: 'NEW',
     },
     button: {
         more: 'More',
@@ -56,5 +57,6 @@ module.exports = {
 		clearSearch: "Clear",
         save: 'Save',
 		agree: 'Agree',
+		ok: 'OK',
     }
 }
