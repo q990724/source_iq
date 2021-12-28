@@ -73,11 +73,32 @@ export default {
     align-items: center;
     flex-wrap: wrap;
     .item {
+        position: relative;
         display: flex;
         align-items: center;
-        margin-right: 20px;
+        //margin-right: 20px;
         border: 1px solid #CCC;
         padding: 5px 8px;
+        margin-right: 2px !important;
+        margin-left: 0 !important;
+        border-radius: 0 !important;
+        overflow: initial !important;
+        &:after {
+            position: absolute;
+            content: "";
+            display: block;
+            height: 31px;
+            width: 2px;
+            right: -3px;
+            background-color: $line-color;
+        }
+
+        &:last-child {
+            &:after {
+                display: none;
+            }
+        }
+
         &:hover {
             color: inherit !important;
         }
