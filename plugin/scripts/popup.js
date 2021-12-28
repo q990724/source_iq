@@ -64,7 +64,7 @@ window.onload = function() {
         window.close();
     });
 
-    $('#default').click(() => {
+    $('#reset').click(() => {
         setting.source = 0;
         chrome.storage.local.set({app_setting: setting}, function() {})
         message.value.appSetting = setting;

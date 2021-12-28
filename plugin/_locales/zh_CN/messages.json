@@ -1,9 +1,9 @@
 {
-  "confirm": {
+  "ok": {
     "message": "确认",
     "description": "确认"
   },
-  "cancle": {
+  "cancel": {
     "message": "取消",
     "description": "取消"
   },
@@ -11,9 +11,9 @@
     "message": "保存",
     "description": "保存"
   },
-  "default": {
-    "message": "默认",
-    "description": "默认"
+  "reset": {
+    "message": "重置",
+    "description": "重置"
   },
   "contextMenusButton": {
     "message": "搜货源",

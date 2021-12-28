@@ -25,8 +25,8 @@ $(document.body).append(`
                 <img src="#" alt="" id="ele" width="100%">
                 <div class="mark"></div>
                 <div class="confirm">
-                    <span>${chrome.i18n.getMessage('confirm')}</span>
-                    <i>${chrome.i18n.getMessage('cancle')}</i>
+                    <span>${chrome.i18n.getMessage('ok')}</span>
+                    <i>${chrome.i18n.getMessage('cancel')}</i>
                 </div>
             </div>
         </div>

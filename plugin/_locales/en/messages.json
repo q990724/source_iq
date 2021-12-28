@@ -1,19 +1,19 @@
 {
-  "confirm": {
-    "message": "Confirm",
+  "ok": {
+    "message": "Ok",
     "description": "确认"
   },
-  "cancle": {
-    "message": "Cancle",
+  "cancel": {
+    "message": "Cancel",
     "description": "取消"
   },
   "save": {
     "message": "Save",
     "description": "保存"
   },
-  "default": {
-    "message": "Default",
-    "description": "默认"
+  "reset": {
+    "message": "Reset",
+    "description": "重置"
   },
   "contextMenusButton": {
     "message": "Sourcefrom",
