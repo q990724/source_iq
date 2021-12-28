@@ -17,6 +17,7 @@ const SourceMap = [
     },
     {
         sourceName: '1688',
+		hoverText: '1688 domestic wholesalers',
         // currentPath: '/layout/view-1688',
         loginPageUrl: 'https://login.taobao.com/?redirect_url=https%3A%2F%2Flogin.1688.com%2Fmember%2Fjump.htm%3Ftarget%3Dhttps%253A%252F%252Flogin.1688.com%252Fmember%252FmarketSigninJump.htm%253FDone%253D%25252F%25252Fwww.1688.com%25252F&style=tao_custom&from=1688web',
         loginDomain: '1688.com',
@@ -37,6 +38,7 @@ const SourceMap = [
     },
     {
         sourceName: '1688global',
+		hoverText: '1688 export wholesalers',
         // currentPath: '/layout/view-1688global',
         loginPageUrl: 'https://login.taobao.com/?redirect_url=https://global.1688.com/',
         loginDomain: 'global.1688.com',
@@ -93,7 +95,7 @@ const SourceMap = [
         // currentPath: '/layout/view-yiwugo',
         loginPageUrl: 'https://cas.yiwugo.com/cas/login?service=http%3A%2F%2Fwork.yiwugo.com%2Findex.htm%3Fspm%3Dd3d3Lnlpd3Vnby5jb20v',
         needCookie: false,
-        logo: require('@/assets/img/source/yiwugo.png'),
+        logo: require('@/assets/img/source/yiwugo-logo.png'),
         // name: 'YiWuGo',
         hasUploadImage: true,
         hasImageSearch: true,
@@ -151,6 +153,7 @@ const SourceMap = [
     },
     {
         sourceName: 'LightInTheBox',
+		hoverText: 'Image search not available',
         // currentPath: '/layout/view-litbox',
         loginPageUrl: 'https://gw.lightinthebox.com/index.php?main_page=login&src=mainLoginLink&targetUrl=https%3A%2F%2Fgw.lightinthebox.com%2Findex.php%3Fmain_page%3Daccount%26prm%3D1.1.177.0&prm=1.1.74.0&prm=1.1.177.0&_ga=2.43912865.564672115.1638637091-371976819.1635928539',
         needCookie: false,
@@ -165,6 +168,7 @@ const SourceMap = [
     },
     {
         sourceName: 'Banggood',
+		hoverText: 'Image search not available',
         // currentPath: '/layout/view-banggood',
         loginPageUrl: 'https://gw.lightinthebox.com/index.php?main_page=login&src=mainLoginLink&targetUrl=https%3A%2F%2Fgw.lightinthebox.com%2Findex.php%3Fmain_page%3Daccount%26prm%3D1.1.177.0&prm=1.1.74.0&prm=1.1.177.0&_ga=2.43912865.564672115.1638637091-371976819.1635928539',
         needCookie: false,
@@ -180,6 +184,7 @@ const SourceMap = [
     },
     {
         sourceName: 'Chinabrands',
+		hoverText: 'Image search not available',
         // currentPath: '/layout/view-chinabrands',
         loginPageUrl: 'https://gw.lightinthebox.com/index.php?main_page=login&src=mainLoginLink&targetUrl=https%3A%2F%2Fgw.lightinthebox.com%2Findex.php%3Fmain_page%3Daccount%26prm%3D1.1.177.0&prm=1.1.74.0&prm=1.1.177.0&_ga=2.43912865.564672115.1638637091-371976819.1635928539',
         needCookie: false,
@@ -195,6 +200,7 @@ const SourceMap = [
     },
     {
         sourceName: 'GlobalResources',
+		hoverText: 'Image search not available',
         // currentPath: '/layout/view-globalres',
         loginPageUrl: 'https://gw.lightinthebox.com/index.php?main_page=login&src=mainLoginLink&targetUrl=https%3A%2F%2Fgw.lightinthebox.com%2Findex.php%3Fmain_page%3Daccount%26prm%3D1.1.177.0&prm=1.1.74.0&prm=1.1.177.0&_ga=2.43912865.564672115.1638637091-371976819.1635928539',
         needCookie: false,

@@ -3,7 +3,15 @@
         <div class="content" @click="onItemClick">
             <my-collapse :preview-row="1" :use-store-status="true">
                 <div class="item" v-for="(item,itemIndex) in list" :class="{'active': $store.state.source_id == itemIndex}">
-                    <span :data-id="itemIndex">{{item.sourceName}}</span>
+					<template v-if="item.hoverText">
+					<el-tooltip placement="top">
+					         <div slot="content">{{item.hoverText}}</div>
+					        <span :data-id="itemIndex">{{item.sourceName}}</span>
+					</el-tooltip>
+					</template>
+					<template v-else>
+							<span :data-id="itemIndex">{{item.sourceName}}</span>
+					</template>
                 </div>
             </my-collapse>
 

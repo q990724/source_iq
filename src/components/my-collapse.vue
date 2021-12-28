@@ -1,10 +1,10 @@
 <template>
     <!-- :style="{'align-items': isShowCollapse ? 'flex-start' : 'center'}"-->
     <div class="my-collapse">
-        <el-tooltip placement="top">
-            <div slot="content">Lorem ipsum dolor sit amet,<br/> consectetur adipisicing elit.<br/> Aperiam asperiores<br/>consequuntur deleniti fugit ipsa molestias</div>
+<!--        <el-tooltip placement="top">
+            <div slot="content">Lorem ipsum dolor sit amet,<br/> consectetur adipisicing elit.<br/> Aperiam asperiores<br/>consequuntur deleniti fugit ipsa molestias</div> -->
             <div class="title" v-if="title">{{ title }}</div>
-        </el-tooltip>
+<!--        </el-tooltip> -->
         <!--<div class="options" v-if="list">-->
         <div class="options">
             <div class="list" ref="list" :style="{'max-height': previewRow * rowHeight + 'px'}">
