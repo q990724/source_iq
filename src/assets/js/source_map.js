@@ -65,7 +65,7 @@ const SourceMap = [
         hasFirstSearchPic: false,
         getCountryLangCurrency: 'api/goods/getCountryLangCurrency',
         uploadImage: 'api/1688/global/uploadImage',
-        imgSearchKj: {method: 'get', path:'api/1688/global/imgSearchKj'},
+        imageSearch: {method: 'get', path:'api/1688/global/product/imageSearch'},
         keywordSearch: {method: 'get', path:'api/1688/global/product/keywordSearch'},
         keywordSearchFirst: {method: 'get', path:'api/1688/global/product/keywordSearchFirst'},
     },
