@@ -633,7 +633,7 @@ export default new Vuex.Store({
             let params = {};
             // let file = null, resImg = '', is_file = true, res = null, result = {};
             // let source = getSource(this.state.source_id);
-            // if (source.hasUpload === false) {
+            // if (source.hasUploadImage === false) {
             //     //如果没有上传图片成功的状态就先将base64转图片传递，否则直接传上传成功后的返回值
             //     if(this.state.imageUploadState !== 'uploaded') {
             //         file = getFileFromBase64(payload.imageAddress);

@@ -54,7 +54,7 @@ export default {
                 this.index_area = this.options[0].value;
             }
             // let source = getSource(this.$store.state.source_id);
-            if (SourceMap[this.$store.state.source_id].hasSearchPic === false) {
+            if (SourceMap[this.$store.state.source_id].hasImageSearch === false) {
                 this.camera = false
             }
             return this.$store.state.source_id;

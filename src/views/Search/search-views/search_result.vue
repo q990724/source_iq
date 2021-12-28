@@ -334,7 +334,7 @@ export default {
         async imageSearch(base64, reUpload = true) {
             // 如果当前站点接口配置不支持图片搜索，就直接提示用户并返回
             // let source = getSource(this.$store.state.source_id);
-            if (SourceMap[this.$store.state.source_id].hasSearchPic == false) {
+            if (SourceMap[this.$store.state.source_id].hasImageSearch == false) {
                 this.$message.error(this.$t('message.no_search_image_api'));
                 return;
             }
@@ -346,8 +346,8 @@ export default {
             this.$store.commit('dumpAll', "发起imageSearch前：");
             try {
                 // 如果当前站点有单独的图品上传接口，并且图片当前=没有上传成功状态，就上传图片
-                if (SourceMap[this.$store.state.source_id].hasUpload !== false && this.$store.state.imageUploadState !== 'uploaded') {
-                    console.log('hasUpload');
+                if (SourceMap[this.$store.state.source_id].hasUploadImage !== false && this.$store.state.imageUploadState !== 'uploaded') {
+                    console.log('hasUploadImage');
                     let file = getFileFromBase64(base64);
                     let uploadImageResult = await this.$store.dispatch('uploadImage', file);
                     console.log(uploadImageResult);
@@ -363,7 +363,7 @@ export default {
                     this.$store.commit('dumpAll', "发起uploadPic后：");
                 }
                 // 只有图片上传成功，或者原站没有单独的上传图片接口，才会继续调用searchGoods接口
-                if (!SourceMap[this.$store.state.source_id].hasUpload || this.$store.state.imageUploadState == 'uploaded')
+                if (!SourceMap[this.$store.state.source_id].hasUploadImage || this.$store.state.imageUploadState == 'uploaded')
                     this.getDataFromImage(base64, false);
 
             } catch (e) {
@@ -384,14 +384,14 @@ export default {
             try {
                 // let source = getSource(this.$store.state.source_id);
                 // let imageAddr = null;
-                // if (source.hasUpload == false && this.$store.state.imageUploadState !== 'uploaded') {
+                // if (source.hasUploadImage == false && this.$store.state.imageUploadState !== 'uploaded') {
                 //     imageAddr = base64;
                 // } else {
                 //     imageAddr = this.$store.state.searchParams.imageAddress;
                 // }
                 //TBD: 切换筛选发起搜索时没有传参
                 let result = null;
-                if (!loadmore && SourceMap[this.$store.state.source_id].hasFirstSearchPic === true) {
+                if (!loadmore && SourceMap[this.$store.state.source_id].hasImageSearchFirst === true) {
                     // result = await this.$store.dispatch('firstSearchPic', {
                     //     imageAddress: imageAddr,
                     //     yoloRegionSelected: this.$store.state.yoloCropRegion && this.$store.state.region,
@@ -423,7 +423,7 @@ export default {
                         sessionId: this.$store.state.session['sessionId'],
                     });
                 }
-                if (!SourceMap[this.$store.state.source_id].hasUpload && !loadmore) {
+                if (!SourceMap[this.$store.state.source_id].hasUploadImage && !loadmore) {
                     if (result.data && result.data.searchImage && result.data.searchImage.imageAddress) {
                         this.$store.commit('setImageAddress', result.data.searchImage.imageAddress);
                         this.$store.commit('setImageUploadState', 'uploaded');
@@ -482,7 +482,7 @@ export default {
                         }
                         this.$store.commit('setSearchState', 'success');
                         // 只要搜索成功，页码就++（原站如果有单独的首次搜索接口，分页请求页码从2开始）
-                        // if(loadmore || (!loadmore&&source.hasFirstSearchPic === false))
+                        // if(loadmore || (!loadmore&&source.hasImageSearchFirst === false))
                         this.page++;
                         this.$store.commit('dumpAll', "发起getDataFromImage后：");
                         return this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
@@ -500,7 +500,7 @@ export default {
                 this.results = loadmore ? [...this.results, ...[]] : [];
             } catch (e) {
                 // let source = getSource(this.$store.state.source_id);
-                if (!SourceMap[this.$store.state.source_id].hasUpload && !loadmore) { this.$store.commit('setImageUploadState', 'error') }
+                if (!SourceMap[this.$store.state.source_id].hasUploadImage && !loadmore) { this.$store.commit('setImageUploadState', 'error') }
                 this.$store.commit('setSearchState', 'error');
                 if (!loadmore) { this.$store.commit('setFirstSearchState', 'error') }
                 this.$message.error(this.$t('message.search_result_from_image_error') + e);
@@ -519,7 +519,7 @@ export default {
                 // let source = getSource(this.$store.state.source_id);
                 let result = null;
 
-                if (!loadmore && SourceMap[this.$store.state.source_id].hasFirstSearchText === true) {
+                if (!loadmore && SourceMap[this.$store.state.source_id].hasKeywordSearchFirst === true) {
                     result = await this.$store.dispatch('keywordSearchFirst', {
                         searchTextParams: this.$store.state.searchParams,
                         page: this.page
@@ -574,7 +574,7 @@ export default {
                         if (!loadmore) {this.$store.commit('setFirstSearchState', 'success')}
                         this.$store.commit('setSearchState', 'success');
                         // 只要搜索成功，页码就++（原站如果有单独的首次搜索接口，分页请求页码从2开始）
-                        // if(loadmore || (!loadmore&&source.hasFirstSearchText === false))
+                        // if(loadmore || (!loadmore&&source.hasKeywordSearchFirst === false))
                         this.page++;
                         this.$store.commit('dumpAll', "发起getDataFromText后：");
                         return this.results = loadmore ? [...this.results, ...result.data.results] : result.data.results;
@@ -589,7 +589,7 @@ export default {
                 this.results = loadmore ? [...this.results, ...[]] : [];
             } catch (error) {
                 // let source = getSource(this.$store.state.source_id);
-                // if(!source.hasUpload&&!loadmore) {this.$store.commit('setImageUploadState', 'error')};
+                // if(!source.hasUploadImage&&!loadmore) {this.$store.commit('setImageUploadState', 'error')};
                 this.$store.commit('setSearchState', 'error');
                 if (!loadmore) {this.$store.commit('setFirstSearchState', 'error')}
                 this.$message.error(this.$t('message.search_result_from_image_error') + e);

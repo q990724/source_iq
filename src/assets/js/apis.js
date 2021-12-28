@@ -625,7 +625,7 @@ export const publicAPI = {
 		// }
 
 		// 如果没有上传图片，并且当前没有上传图片成功的状态，就走上传文件逻辑
-		if(SourceMap[Store.state.source_id].hasUpload == false && Store.state.imageUploadState !== 'uploaded'){
+		if(SourceMap[Store.state.source_id].hasUploadImage == false && Store.state.imageUploadState !== 'uploaded'){
 			file = getFileFromBase64(params.mainImage);
 			formData.append('file', file); formData.append('page', params.page);
 			//如果当前站点为 1688rapid path用1688 rapid图片上传接口，否则，都用图片搜索接口
