@@ -49,6 +49,12 @@ module.exports = {
 		comingSoon: 'NEW',
 		inventory: 'Inventory',
 		downloads: 'Downloads',
+		minValue: 'min',
+		maxValue: 'max',
+		lt: 'less than',
+		le: 'less or equal',
+		gt: 'greater than',
+		ge: 'greater or equal',
     },
     button: {
         more: 'More',

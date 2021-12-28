@@ -30,6 +30,12 @@ module.exports = {
 		comingSoon: '新上',
 		inventory: '库存',
 		downloads: '下载次数',
+		minValue: '最低',
+		maxValue: '最高',
+		lt: '小于',
+		le: '小于等于',
+		gt: '大于',
+		ge: '大于等于',
     },
     button: {
         more: '更多',
