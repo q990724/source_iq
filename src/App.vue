@@ -15,6 +15,13 @@ import cookieToast from '@/components/cookie-toast';
 import feedback from "@/components/feedback";
 let appElement = null;
 let minAwayBtm = 0;
+
+function getAbsPath(router, source_id) {
+  let name = SoureMap[source_id]['petName'];
+  let layout = router.options.routes.filter(e => e.name === 'Layout')[0];
+  return layout.children.filter(e => e.name === name)[0]['meta']['absPath'];
+}
+
 export default {
     data() {
         return {
@@ -105,10 +112,13 @@ export default {
         async source_id() {
             console.log("app.vue watch source_id", this.$store.state.source_id);
             let current_path = this.$route.path;
+            let asb_path = getAbsPath(this.$router, this.$store.state.source_id);
             // for(let i = 1; i <= Object.keys(SoureMap).length; i++){
             //     if(this.$store.state.source_id == i){
-                    if (current_path === SoureMap[this.$store.state.source_id].currentPath) return;
-                    await this.$router.push(SoureMap[this.$store.state.source_id].currentPath);
+            //         if (current_path === SoureMap[this.$store.state.source_id].currentPath) return;
+            //         await this.$router.push(SoureMap[this.$store.state.source_id].currentPath);
+                       if (current_path === asb_path) return;
+                        await this.$router.push(asb_path);
             //         break;
             //     }
             // }

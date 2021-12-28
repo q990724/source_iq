@@ -1,7 +1,7 @@
 const SourceMap = [
     {
         petName: 'alibaba',
-        currentPath: '/layout/view-alibaba',
+        // currentPath: '/layout/view-alibaba',
         loginPageUrl: 'https://passport.alibaba.com/icbu_login.htm?spm=a2700.8293689.scGlobalHomeHeader.6.2ce267afQnDloI&tracelog=hd_signin',
         needCookie: false,
         logo: require('@/assets/img/source/alibaba.png'),
@@ -17,7 +17,7 @@ const SourceMap = [
     },
     {
         petName: '1688',
-        currentPath: '/layout/view-1688',
+        // currentPath: '/layout/view-1688',
         loginPageUrl: 'https://login.taobao.com/?redirect_url=https%3A%2F%2Flogin.1688.com%2Fmember%2Fjump.htm%3Ftarget%3Dhttps%253A%252F%252Flogin.1688.com%252Fmember%252FmarketSigninJump.htm%253FDone%253D%25252F%25252Fwww.1688.com%25252F&style=tao_custom&from=1688web',
         needCookie: false,
         cookieKey: 'cookie-1688',
@@ -36,7 +36,7 @@ const SourceMap = [
     },
     {
         petName: '1688rapid',
-        currentPath: '/layout/view-1688rapid',
+        // currentPath: '/layout/view-1688rapid',
         loginPageUrl: 'https://login.taobao.com/?redirect_url=https%3A%2F%2Flogin.1688.com%2Fmember%2Fjump.htm%3Ftarget%3Dhttps%253A%252F%252Flogin.1688.com%252Fmember%252FmarketSigninJump.htm%253FDone%253D%25252F%25252Fwww.1688.com%25252F&style=tao_custom&from=1688web',
         needCookie: false,
         cookieKey: 'cookie-1688',
@@ -52,7 +52,7 @@ const SourceMap = [
     },
     {
         petName: '1688global',
-        currentPath: '/layout/view-1688global',
+        // currentPath: '/layout/view-1688global',
         loginPageUrl: 'https://login.taobao.com/?redirect_url=https://global.1688.com/',
         needCookie: true,
         logo: require('@/assets/img/source/1688.png'),
@@ -70,7 +70,7 @@ const SourceMap = [
     },
 	{
         petName: '1688overseas',
-        currentPath: '/layout/view-1688overseas',
+        // currentPath: '/layout/view-1688overseas',
 	    loginPageUrl: 'https://login.taobao.com/?redirect_url=https%3A%2F%2Flogin.1688.com%2Fmember%2Fjump.htm%3Ftarget%3Dhttps%253A%252F%252Flogin.1688.com%252Fmember%252FmarketSigninJump.htm%253FDone%253D%25252F%25252Fwww.1688.com%25252F&style=tao_custom&from=1688web',
 	    needCookie: true,
         cookieKey: 'cookie-1688',
@@ -89,7 +89,7 @@ const SourceMap = [
 	},
     {
         petName: 'aliexpressDS',
-        currentPath: '/layout/view-aliexpressDS',
+        // currentPath: '/layout/view-aliexpressDS',
         loginPageUrl: 'https://www.aliexpress.com/',
         needCookie: true,
         cookieKey: 'cookie-aliexpress',
@@ -106,7 +106,7 @@ const SourceMap = [
     },
     {
         petName: 'aliexpressZapieX',
-        currentPath: '/layout/view-aliexpressZapieX',
+        // currentPath: '/layout/view-aliexpressZapieX',
         loginPageUrl: 'https://www.aliexpress.com/',
         needCookie: false,
         logo: require('@/assets/img/source/aliexpress.png'),
@@ -122,7 +122,7 @@ const SourceMap = [
     },
     {
         petName: 'yiwugo',
-        currentPath: '/layout/view-yiwugo',
+        // currentPath: '/layout/view-yiwugo',
         loginPageUrl: 'https://cas.yiwugo.com/cas/login?service=http%3A%2F%2Fwork.yiwugo.com%2Findex.htm%3Fspm%3Dd3d3Lnlpd3Vnby5jb20v',
         needCookie: false,
         logo: require('@/assets/img/source/yiwugo.png'),
@@ -138,7 +138,7 @@ const SourceMap = [
     },
     {
         petName: 'dhgate',
-        currentPath: '/layout/view-dhgate',
+        // currentPath: '/layout/view-dhgate',
         loginPageUrl: 'https://secure.dhgate.com/passport/login?service=http%3A%2F%2Fseller.dhgate.com%2Fmerchant%2Flogin%2Fssologin.do%3FreturnUrl%3DaHR0cDovL3NlbGxlci5kaGdhdGUuY29tL21lcmNoYW50L2xvZ2luL2xvZ2luc2lnbi5kbw..#hp-head-1',
         needCookie: false,
         logo: require('@/assets/img/source/dhgate.png'),
@@ -153,7 +153,7 @@ const SourceMap = [
     },
 	{
         petName: 'cjds',
-        currentPath: '/layout/view-cjds',
+        // currentPath: '/layout/view-cjds',
 	    loginPageUrl: 'https://cjdropshipping.com/login.html?target=aHR0cHM6Ly9jamRyb3BzaGlwcGluZy5jb20v',
 	    needCookie: false,
 	    logo: require('@/assets/img/source/cjds.png'),
@@ -168,7 +168,7 @@ const SourceMap = [
 	},
     {
         petName: 'mic',
-        currentPath: '/layout/view-mic',
+        // currentPath: '/layout/view-mic',
         loginPageUrl: 'https://login.made-in-china.com/sign-in/?baseNextPage=http%3A%2F%2Fwww.made-in-china.com%2F',
         needCookie: false,
         logo: require('@/assets/img/source/mic.png'),
@@ -183,7 +183,7 @@ const SourceMap = [
     },
     {
         petName: 'litbox',
-        currentPath: '/layout/view-litbox',
+        // currentPath: '/layout/view-litbox',
         loginPageUrl: 'https://gw.lightinthebox.com/index.php?main_page=login&src=mainLoginLink&targetUrl=https%3A%2F%2Fgw.lightinthebox.com%2Findex.php%3Fmain_page%3Daccount%26prm%3D1.1.177.0&prm=1.1.74.0&prm=1.1.177.0&_ga=2.43912865.564672115.1638637091-371976819.1635928539',
         needCookie: false,
         logo: require('@/assets/img/source/litbox.jpg'),
@@ -197,7 +197,7 @@ const SourceMap = [
     },
     {
         petName: 'banggood',
-        currentPath: '/layout/view-banggood',
+        // currentPath: '/layout/view-banggood',
         loginPageUrl: 'https://gw.lightinthebox.com/index.php?main_page=login&src=mainLoginLink&targetUrl=https%3A%2F%2Fgw.lightinthebox.com%2Findex.php%3Fmain_page%3Daccount%26prm%3D1.1.177.0&prm=1.1.74.0&prm=1.1.177.0&_ga=2.43912865.564672115.1638637091-371976819.1635928539',
         needCookie: false,
         logo: require('@/assets/img/source/banggood.png'),
@@ -212,7 +212,7 @@ const SourceMap = [
     },
     {
         petName: 'chinabrands',
-        currentPath: '/layout/view-chinabrands',
+        // currentPath: '/layout/view-chinabrands',
         loginPageUrl: 'https://gw.lightinthebox.com/index.php?main_page=login&src=mainLoginLink&targetUrl=https%3A%2F%2Fgw.lightinthebox.com%2Findex.php%3Fmain_page%3Daccount%26prm%3D1.1.177.0&prm=1.1.74.0&prm=1.1.177.0&_ga=2.43912865.564672115.1638637091-371976819.1635928539',
         needCookie: false,
         logo: require('@/assets/img/source/chinabrands.png'),
@@ -227,7 +227,7 @@ const SourceMap = [
     },
     {
         petName: 'globalres',
-        currentPath: '/layout/view-globalres',
+        // currentPath: '/layout/view-globalres',
         loginPageUrl: 'https://gw.lightinthebox.com/index.php?main_page=login&src=mainLoginLink&targetUrl=https%3A%2F%2Fgw.lightinthebox.com%2Findex.php%3Fmain_page%3Daccount%26prm%3D1.1.177.0&prm=1.1.74.0&prm=1.1.177.0&_ga=2.43912865.564672115.1638637091-371976819.1635928539',
         needCookie: false,
         logo: require('@/assets/img/source/globalsources.jpg'),

@@ -108,23 +108,24 @@ let layout = {
 }
 SourceMap.forEach(e=>{
     let route = {
-        path: `view-${e.petName}`,
-        name: `${e.name}`,
-        component: () => import('@/views/Search/search-views/search_result')
+        path: `${e.petName}`,
+        name: `${e.petName}`,
+        component: () => import('@/views/Search/search-views/search_result'),
+        meta: {
+            absPath: `/layout/${e.petName}`
+        }
     }
     layout.children.push(route);
 })
 routes[0] = {
     path: '/',
     name: 'Index',
-    redirect: `/layout/${layout.children[0].path}`
+    redirect: layout.children[0]['meta'].absPath
 }
 routes[1] = layout;
 
 const router = new VueRouter({
     routes: routes
 })
-
-console.log(router);
 
 export default router
