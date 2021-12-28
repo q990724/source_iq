@@ -3,7 +3,7 @@
         <div class="content" @click="onItemClick">
             <my-collapse :preview-row="1" :use-store-status="true">
                 <div class="item" v-for="(item,itemIndex) in list" :class="{'active': $store.state.source_id == itemIndex}">
-                    <span :data-id="itemIndex">{{item.name}}</span>
+                    <span :data-id="itemIndex">{{item.sourceName}}</span>
                 </div>
             </my-collapse>
 
@@ -75,7 +75,7 @@ export default {
             if(e.target.nodeName == "SPAN") {
                 if(e.target.dataset.id === undefined) return;
                 let source_id = e.target.dataset.id;
-                this.$store.state.sourceName = source_id;
+                // this.$store.state.sourceName = source_id;
                 this.$emit('onSourceItemClick', source_id*1);
             }
         }

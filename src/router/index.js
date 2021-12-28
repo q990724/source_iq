@@ -108,11 +108,11 @@ let layout = {
 }
 SourceMap.forEach(e=>{
     let route = {
-        path: `${e.petName}`,
-        name: `${e.petName}`,
+        path: `${e.sourceName}`,
+        name: `${e.sourceName}`,
         component: () => import('@/views/Search/search-views/search_result'),
         meta: {
-            absPath: `/layout/${e.petName}`
+            absPath: `/layout/${e.sourceName}`
         }
     }
     layout.children.push(route);

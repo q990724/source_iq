@@ -11,7 +11,7 @@ function getCookie() {
 	let cookie = '';
 	cookie = window.localStorage.getItem(SourceMap[Store.state.source_id].cookieKey) ? window.localStorage.getItem(SourceMap[Store.state.source_id].cookieKey) : null;
 	if(!cookie) {
-		let	sourceName = SourceMap[Store.state.source_id].petName;
+		let	sourceName = SourceMap[Store.state.source_id].sourceName;
 		let	loginPageUrl = SourceMap[Store.state.source_id].loginPageUrl
 		MessageBox.confirm(i18n.t('message.no_login') + sourceName, i18n.t('message.un_login'), {
 			confirmButtonText: i18n.t('message.go_login'),

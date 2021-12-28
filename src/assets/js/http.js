@@ -77,7 +77,7 @@ Service.interceptors.response.use(response => {
             clearCookie();
             // let sourceName = '',
             //     loginPageUrl = '';
-            let	sourceName = SourceMap[Store.state.source_id].petName;
+            let	sourceName = SourceMap[Store.state.source_id].sourceName;
             let	loginPageUrl = SourceMap[Store.state.source_id].loginPageUrl
             // for (let key in SourceMap) {
             //     if(SourceMap[key]['id'] == Store.state.source_id) {

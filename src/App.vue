@@ -17,7 +17,7 @@ let appElement = null;
 let minAwayBtm = 0;
 
 function getAbsPath(router, source_id) {
-  let name = SoureMap[source_id]['petName'];
+  let name = SoureMap[source_id]['sourceName'];
   let layout = router.options.routes.filter(e => e.name === 'Layout')[0];
   return layout.children.filter(e => e.name === name)[0]['meta']['absPath'];
 }
