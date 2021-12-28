@@ -10,18 +10,19 @@ const timeout = 1000 * 60;
 let loadingInstance = null //这里是loading
 let loadingInstanceTimer = null;
 
-function clearCookie(source_id) {
-	switch (source_id) {
-		case 2:
-			window.localStorage.removeItem('cookie-1688');
-			break;
-		case 3:
-			window.localStorage.removeItem('cookie-1688global');
-			break;
-		case 4:
-			window.localStorage.removeItem('cookie-aliexpress');
-			break;
-	}
+function clearCookie() {
+	// switch (source_id) {
+	// 	case 2:
+	// 		window.localStorage.removeItem('cookie-1688');
+	// 		break;
+	// 	case 3:
+	// 		window.localStorage.removeItem('cookie-1688global');
+	// 		break;
+	// 	case 4:
+	// 		window.localStorage.removeItem('cookie-aliexpress');
+	// 		break;
+	// }
+    window.localStorage.removeItem(SourceMap[Store.state.source_id].cookieKey)
 }
 
 // 创建loading，同时开始定时器
@@ -73,7 +74,7 @@ Service.interceptors.response.use(response => {
         {
             stopLoading();
             // cookie过期后，清除当前站点的cookie
-            clearCookie(Store.state.source_id);
+            clearCookie();
             // let sourceName = '',
             //     loginPageUrl = '';
             let	sourceName = SourceMap[Store.state.source_id].petName;

@@ -552,26 +552,19 @@ export const publicAPI = {
 			cookie = getCookie();
 			if(!cookie) return Promise.reject('no cookie');
 		}
-		let searchtype = (SourceMap[Store.state.source_id].name == '1688') ? 0 : 1;
 		// param = {
 		// 	imageId: params.imageAddress, yoloRegionSelected: params.yoloRegionSelected ?? null, yoloCropRegion: params.yoloCropRegion ?? null, region: params.region ?? null, cookie: cookie, searchtype: searchtype, pailitaoCategoryId: params.pailitaoCategoryId ?? null, sortField: params.sortField ?? 'normal', sortType: params.sortType ?? 'asc', priceStart: params.priceStart ?? null, priceEnd: params.priceEnd ?? null, quantityBegin: params.quantityBegin ?? null, extendProperties: params.extendProperties ?? null, memberTags: params.memberTags ?? null, isImgPkg: params.isImgPkg ?? null, isMainShortVideo: params.isMainShortVideo ?? null, isAuthentication: params.isAuthentication ?? null, isPatent: params.isPatent ?? null, isSrcFactoryItm: params.isSrcFactoryItm ?? null, holidayTagId: params.holidayTagId ?? null, isZhangqiSelect: params.isZhangqiSelect ?? null, gmtCreate: params.gmtCreate ?? null, province: params.province ?? null, city: params.city ?? null, dis: params.dis ?? null};
 		return Service.get(SourceMap[Store.state.source_id].imageSearchFirst.path, {
-			params: {...params, cookie: cookie, searchtype: searchtype }
+			params: {...params, cookie: cookie}
 		})
 	},
 
 	//图片搜索
 	imageSearch(params) {
-		delete params.originImage; delete params.mainImage;
 		let cookie = null, file = null, formData = new FormData();
 		if(SourceMap[Store.state.source_id].needCookie === true) {
 			cookie = getCookie();
 			if(!cookie) return Promise.reject('no cookie');
-		}
-		let searchtype = (SourceMap[Store.state.source_id].name == '1688') ? 0 : 1;
-		// 如果没有上传图片成功的状态，就base64转文件
-		if( Store.state.imageUploadState !== 'uploaded') {
-			file = getFileFromBase64(Store.state.searchParams.mainImage);
 		}
 		// switch (Store.state.source_id) {
 		// 	case 1: // Alibaba
@@ -633,26 +626,29 @@ export const publicAPI = {
 
 		// 如果没有上传图片，并且当前没有上传图片成功的状态，就走上传文件逻辑
 		if(SourceMap[Store.state.source_id].hasUpload == false && Store.state.imageUploadState !== 'uploaded'){
+			file = getFileFromBase64(params.mainImage);
 			formData.append('file', file); formData.append('page', params.page);
 			//如果当前站点为 1688rapid path用1688 rapid图片上传接口，否则，都用图片搜索接口
-			let path = (SourceMap[Store.state.source_id].name == '1688 Rapid') ? SourceMap[Store.state.source_id].imageSearchFirst.path : SourceMap[Store.state.source_id].imageSearch.path;
-			return Service.post(path, formData, {
+			// let path = (SourceMap[Store.state.source_id].name == '1688 Rapid') ? SourceMap[Store.state.source_id].imageSearchFirst.path : SourceMap[Store.state.source_id].imageSearch.path;
+			return Service.post(SourceMap[Store.state.source_id].imageSearch.path, formData, {
 				headers: {
 					'Content-Type': 'multipart/form-data'
 				}
 			})
-		}
-
-		if(SourceMap[Store.state.source_id].imageSearch.method === 'get') {
+		}else{
+			delete params.originImage; delete params.mainImage;
+			if(SourceMap[Store.state.source_id].imageSearch.method === 'get') {
 				return Service.get(SourceMap[Store.state.source_id].imageSearch.path, {
-					params: {...params, cookie: cookie, searchtype: searchtype }
+					params: {...params, cookie: cookie, }
 				})
-		}
+			}else{
 				return Service.post(SourceMap[Store.state.source_id].imageSearch.path, Qs.stringify({...params}), {
 					headers: {
 						'Content-Type': 'application/x-www-form-urlencoded'
 					},
 				})
+			}
+		}
 	},
 
 	//文字首次搜索
