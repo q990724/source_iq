@@ -160,14 +160,19 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
 
 // 解析不同url
 function parseUrl(url) {
-
-    if(url.indexOf('aliexpress.com') !== -1 ) {
-        updateCookie('aliexpress.com', 'aliexpress');
-    }else if(url.indexOf('global.1688.com') !== -1) {
-        updateCookie('1688.com', '1688global');
-    }else if(url.indexOf('1688.com') !== -1) {
-        updateCookie('1688.com', '1688');
+    for (let item of SourceMap) {
+        if(item.domain && url.indexOf(item.domain) !== -1){
+            updateCookie(item.loginDomain, item.sourceName);
+        }
     }
+    // if(url.indexOf('aliexpress.com') !== -1 ) {
+    //     updateCookie('aliexpress.com', 'aliexpress');
+    // }else if(url.indexOf('global.1688.com') !== -1) {
+    //     updateCookie('1688.com', '1688global');
+    // }else if(url.indexOf('1688.com') !== -1) {
+    //     updateCookie('1688.com', '1688');
+    // }
+
     return true;
 }
 // 获取并更新cookie
