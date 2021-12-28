@@ -161,8 +161,8 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
 // 解析不同url
 function parseUrl(url) {
     for (let item of SourceMap) {
-        if(item.domain && url.indexOf(item.domain) !== -1){
-            updateCookie(item.loginDomain, item.sourceName);
+        if(item.loginDomain && url.indexOf(item.loginDomain) !== -1){
+            updateCookie(item.loginDomain, item.cookieKey);
         }
     }
     // if(url.indexOf('aliexpress.com') !== -1 ) {
@@ -176,7 +176,7 @@ function parseUrl(url) {
     return true;
 }
 // 获取并更新cookie
-function updateCookie(domain, source) {
+function updateCookie(cookieDomain, cookieKey) {
     // 将对象解析为cookie
     let obj2cookie = function (obj, step) {
         if (obj.constructor == Object) {
@@ -188,7 +188,7 @@ function updateCookie(domain, source) {
         }
     }
     // 获取所有cookie
-    chrome.cookies.getAll({domain: domain}, function(res) {
+    chrome.cookies.getAll({domain: cookieDomain}, function(res) {
         if(res && Array.isArray(res) && res.length > 0) {
             let cookie_obj = {};
             for(let item of res) {
@@ -197,7 +197,7 @@ function updateCookie(domain, source) {
             // 将获取到的对象格式cookie转为字符串
             let cookie = obj2cookie(cookie_obj, ';') || '';
             // 将字符串cookie和货源发送给content-script
-            sendMessageToContentScript({cmd: 'update-cookie', value: {cookie: cookie, source: source}});
+            sendMessageToContentScript({cmd: 'update-cookie', value: {cookieKey: cookieKey,cookieValue: cookie}});
         }
     })
 }
