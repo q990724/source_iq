@@ -1,4 +1,19 @@
+// import {Container as SourceMap} from "postcss-selector-parser";
+// import SourceMap from "../../src/assets/js/source_map";
+
 window.onload = function() {
+    // 循环渲染选项
+    var str = '';
+    str += "<select class='form-control' id='select-source'>";
+    SourceMap.forEach(function(item,index){
+        if(index == 0){
+            str += "<option value='"+ index +"' selected>" + item.sourceName + "</option>";
+        } else{
+            str += "<option value='"+ index +"'>" + item.sourceName + "</option>";
+        }
+    })
+    str += '</select>';
+    $('#select-source').replaceWith(str);
 
     // 设置多语言
     document.querySelectorAll('[data-locale]').forEach(elem => {
@@ -50,7 +65,7 @@ window.onload = function() {
     });
 
     $('#default').click(() => {
-        setting.source = 1;
+        setting.source = 0;
         chrome.storage.local.set({app_setting: setting}, function() {})
         message.value.appSetting = setting;
         sendMessageToContentScript(message);
