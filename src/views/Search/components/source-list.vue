@@ -110,13 +110,13 @@ export default {
             //padding: 5px 0;
             // font-weight: bold;
             &.active {
-                color: $active_color;
+                color: $deputy_color !important;
+            }
+            &:hover {
+                color: $link_color !important;
             }
             span {
                 cursor: pointer;
-                &:hover {
-                    color: $hover_color;
-                }
             }
         }
     }

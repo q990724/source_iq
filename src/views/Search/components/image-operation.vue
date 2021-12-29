@@ -168,9 +168,10 @@ export default {
             .text {
                 margin-right: 10px;
                 padding: 5px 8px;
-                border: 1px solid $active_color;
+                //border: 1px solid $active_color;
                 border-radius: 5px;
                 font-size: $regular_text_size;
+                background-color: $primary_color;
             }
         }
         .item {

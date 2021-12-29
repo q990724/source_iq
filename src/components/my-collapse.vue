@@ -208,6 +208,7 @@ export default {
                 display: inline-block;
                 font-size: $regular_text_size;
                 cursor: pointer;
+                color: $primary-color;
             }
         }
     }
