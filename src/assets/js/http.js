@@ -5,7 +5,10 @@ import Store from "@/store/index";
 import {i18n} from "@/main";
 import {clear} from "core-js/internals/task";
 
-const ConfigBaseURL = 'http://eurotransit.acuteberry.com/' //默认路径，这里也可以使用env来判断环境
+// 测试服务器环境
+// const ConfigBaseURL = 'http://eurotransit.acuteberry.com/' //默认路径，这里也可以使用env来判断环境
+// 正式服务器环境
+const ConfigBaseURL = 'https://www.sourcefrom.me/' //默认路径，这里也可以使用env来判断环境
 const timeout = 1000 * 60;
 let loadingInstance = null //这里是loading
 let loadingInstanceTimer = null;

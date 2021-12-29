@@ -1,4 +1,7 @@
-const server_url = 'http://eurotransit.acuteberry.com/';
+// 测试服务器环境
+// const server_url = 'http://eurotransit.acuteberry.com/';
+// 正式服务器环境
+const server_url = 'https://www.sourcefrom.me/';
 // const server_url = 'http://artpic.la.com/';
 const client_url = 'http://127.0.0.1:8080/';
 const projectName = 'Sourcefrom'
