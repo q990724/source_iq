@@ -23,6 +23,9 @@
     "permissions": [
         "contextMenus",
         "tabs",
+        "notifications",
+        "webRequest",
+        "webRequestBlocking",
         "storage",
         "http://*/*",
         "https://*/*",
@@ -30,6 +33,10 @@
          "activeTab",
 		 "cookies"
     ],
+    "homepage_url": "https://www.baidu.com",
+    "omnibox": {
+        "keyword": "go"
+    },
     "content_scripts": [
         {
             "matches": ["http://*/*", "https://*/*"],
