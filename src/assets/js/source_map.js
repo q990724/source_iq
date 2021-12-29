@@ -41,7 +41,7 @@ const SourceMap = [
 		hoverText: '1688 export wholesalers',
         // currentPath: '/layout/view-1688global',
         loginPageUrl: 'https://login.taobao.com/?redirect_url=https://global.1688.com/',
-        loginDomain: 'global.1688.com',
+        loginDomain: '1688.com',
         needCookie: true,
         logo: require('@/assets/img/source/1688-global.png'),
         cookieKey: 'cookie-1688global',
@@ -55,6 +55,7 @@ const SourceMap = [
         imageSearch: {method: 'get', path:'api/1688/global/product/imageSearch'},
         keywordSearch: {method: 'get', path:'api/1688/global/product/keywordSearch'},
         keywordSearchFirst: {method: 'get', path:'api/1688/global/product/keywordSearchFirst'},
+		comingSoon: true,
     },
     {
         sourceName: 'AliExpress',
@@ -194,7 +195,6 @@ const SourceMap = [
         hasImageSearchFirst: false,
         getCountryLangCurrency: 'api/globalres/getCountryLangCurrency',
         keywordSearch: {method: 'get', path: 'api/globalres/product/keywordSearch'},
-        comingSoon: true
     },
 	{
 	    sourceName: '1688rapid',
